@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+
+        <!-- Privilege = remplacement de category_id en Odoo 19 -->
+        <record model="res.groups.privilege" id="privilege_transport_energy">
+            <field name="name">Énergie Transport</field>
+            <field name="sequence">50</field>
+            <field name="category_id" ref="base.module_category_transport"/>
+        </record>
+
+        <record id="group_agent_pompiste" model="res.groups">
+            <field name="name">Agent Pompiste</field>
+            <field name="sequence">10</field>
+            <field name="privilege_id" ref="privilege_transport_energy"/>
+            <field name="comment">Peut créer et modifier les bons BGI/BGE et bons lubrifiants.</field>
+        </record>
+
+        <record id="group_responsable_energie" model="res.groups">
+            <field name="name">Responsable Énergie</field>
+            <field name="sequence">20</field>
+            <field name="privilege_id" ref="privilege_transport_energy"/>
+            <field name="implied_ids" eval="[(4, ref('group_agent_pompiste'))]"/>
+            <field name="comment">Accès complet : validation, jaugeage, rapports, factures.</field>
+        </record>
+
+        <record id="group_directeur_energie" model="res.groups">
+            <field name="name">Directeur</field>
+            <field name="sequence">30</field>
+            <field name="privilege_id" ref="privilege_transport_energy"/>
+            <field name="implied_ids" eval="[(4, ref('group_responsable_energie'))]"/>
+            <field name="comment">Accès total : approbation jaugeage critique, tous les rapports.</field>
+        </record>
+
+    </data>
+</odoo>

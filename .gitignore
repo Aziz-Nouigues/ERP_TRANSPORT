@@ -1,0 +1,23 @@
+# Python
+__pycache__/
+*.pyc
+*.pyo
+
+# Virtual environment
+venv/
+venv19/
+
+# IDE
+.vscode/
+.idea/
+
+# Logs
+*.log
+
+# Odoo runtime
+*.pid
+*.db
+*.sqlite3
+
+# Node
+node_modules/

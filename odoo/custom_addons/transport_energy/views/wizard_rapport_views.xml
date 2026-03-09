@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <!-- ================= VUE WIZARD ================= -->
+    <record id="view_wizard_rapport_form" model="ir.ui.view">
+        <field name="name">transport.wizard.rapport.form</field>
+        <field name="model">transport.wizard.rapport</field>
+        <field name="arch" type="xml">
+            <form string="Générer un Rapport">
+                <group>
+                    <group string="Type de rapport">
+                        <field name="type_rapport" widget="radio"/>
+                        <field name="seuil_excessif"
+                               invisible="type_rapport != 'excessif'"/>
+                    </group>
+                    <group string="Filtres">
+                        <field name="date_debut"/>
+                        <field name="date_fin"/>
+                        <field name="station_id"/>
+                    </group>
+                </group>
+                <footer>
+                    <button name="action_generer_rapport"
+                            string="📊 Générer le Rapport"
+                            type="object"
+                            class="btn-primary"/>
+                    <button string="Annuler"
+                            class="btn-secondary"
+                            special="cancel"/>
+                </footer>
+            </form>
+        </field>
+    </record>
+
+    <!-- ===== ACTION RAPPORT CARBURANT (récapitulatif) ===== -->
+    <record id="action_rapport_carburant" model="ir.actions.act_window">
+        <field name="name">Rapport Consommation Carburant</field>
+        <field name="res_model">transport.wizard.rapport</field>
+        <field name="view_mode">form</field>
+        <field name="target">new</field>
+        <field name="context">{'default_type_rapport': 'recap'}</field>
+    </record>
+
+    <!-- ===== ACTION RAPPORT BUS EXCESSIFS ===== -->
+    <record id="action_wizard_rapport_excessif" model="ir.actions.act_window">
+        <field name="name">Rapport Bus à Consommation Excessive</field>
+        <field name="res_model">transport.wizard.rapport</field>
+        <field name="view_mode">form</field>
+        <field name="target">new</field>
+        <field name="context">{'default_type_rapport': 'excessif'}</field>
+    </record>
+
+    <!-- ===== MENU RAPPORT SOUS ⛽ CARBURANT ===== -->
+    <menuitem
+        id="menu_rapport_carburant"
+        name="📊 Rapport Consommation"
+        parent="menu_fuel_vouchers"
+        action="action_rapport_carburant"
+        sequence="30"/>
+
+    <menuitem
+        id="menu_rapport_excessif"
+        name="📊 Bus Consommation Excessive"
+        parent="menu_fuel_vouchers"
+        action="action_wizard_rapport_excessif"
+        sequence="40"/>
+
+</odoo>

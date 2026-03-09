@@ -1,0 +1,253 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <!-- ═══════════════════════════════════════════════════
+         RAPPORT 1 : RÉCAPITULATIF CONSOMMATION
+    ═══════════════════════════════════════════════════ -->
+
+    <record id="action_rapport_recap" model="ir.actions.report">
+        <field name="name">Récapitulatif Consommation Carburant</field>
+        <field name="model">transport.wizard.rapport</field>
+        <field name="report_type">qweb-pdf</field>
+        <field name="report_name">transport_energy.template_recap</field>
+        <field name="report_file">transport_energy.template_recap</field>
+    </record>
+
+    <template id="template_recap">
+        <t t-call="web.html_container">
+            <t t-foreach="docs" t-as="wizard">
+                <t t-call="web.external_layout">
+                    <div class="page">
+
+                        <!-- EN-TÊTE -->
+                        <div style="text-align:center; margin-bottom:20px;">
+                            <h2 style="color:#1F4E79; font-size:18px;">
+                                حوصلة للكمية المستهلكة من محروقات
+                            </h2>
+                            <h3 style="color:#1F4E79; font-size:14px;">
+                                Récapitulatif de Consommation de Carburant
+                            </h3>
+                            <p style="color:#666; font-size:11px;">
+                                Période :
+                                <t t-esc="wizard.date_debut"/> →
+                                <t t-esc="wizard.date_fin"/>
+                                <t t-if="wizard.station_id">
+                                    | Station : <t t-esc="wizard.station_id.name"/>
+                                </t>
+                            </p>
+                        </div>
+
+                        <!-- TABLEAU RÉCAPITULATIF -->
+                        <t t-set="donnees" t-value="wizard._get_donnees_recap()"/>
+                        <table style="width:100%; border-collapse:collapse; font-size:11px;">
+                            <thead>
+                                <tr style="background-color:#1F4E79; color:white;">
+                                    <th style="border:1px solid #ccc; padding:7px; text-align:center;">
+                                        نوع الحافلة<br/>Type de Bus
+                                    </th>
+                                    <th style="border:1px solid #ccc; padding:7px; text-align:center;">
+                                        عدد الحافلات<br/>Nb Véhicules
+                                    </th>
+                                    <th style="border:1px solid #ccc; padding:7px; text-align:center;">
+                                        عدد التزودات<br/>Nb Bons
+                                    </th>
+                                    <th style="border:1px solid #ccc; padding:7px; text-align:center;">
+                                        المسافة (km)<br/>Distance
+                                    </th>
+                                    <th style="border:1px solid #ccc; padding:7px; text-align:center;">
+                                        الكمية المستهلكة (L)<br/>Quantité
+                                    </th>
+                                    <th style="border:1px solid #ccc; padding:7px; text-align:center;">
+                                        المعدل (L/100km)<br/>Conso Moy.
+                                    </th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <t t-foreach="donnees" t-as="ligne">
+                                    <tr t-att-style="'background-color:#f9f9f9;' if ligne_index % 2 == 0 else ''">
+                                        <td style="border:1px solid #ccc; padding:6px; text-align:center; font-weight:bold;">
+                                            <t t-esc="ligne['bus_type']"/>
+                                        </td>
+                                        <td style="border:1px solid #ccc; padding:6px; text-align:center;">
+                                            <t t-esc="ligne['nb_vehicules']"/>
+                                        </td>
+                                        <td style="border:1px solid #ccc; padding:6px; text-align:center;">
+                                            <t t-esc="ligne['nb_bons']"/>
+                                        </td>
+                                        <td style="border:1px solid #ccc; padding:6px; text-align:center;">
+                                            <t t-esc="ligne['total_km']"/>
+                                        </td>
+                                        <td style="border:1px solid #ccc; padding:6px; text-align:center; font-weight:bold; color:#C00000;">
+                                            <t t-esc="ligne['total_litres']"/>
+                                        </td>
+                                        <td style="border:1px solid #ccc; padding:6px; text-align:center;">
+                                            <t t-esc="ligne['conso_moy']"/>
+                                        </td>
+                                    </tr>
+                                </t>
+                            </tbody>
+                            <tfoot>
+                                <tr style="background-color:#D6E4F0; font-weight:bold;">
+                                    <td colspan="4" style="border:1px solid #ccc; padding:7px; text-align:right;">
+                                        الجملة / Total :
+                                    </td>
+                                    <td style="border:1px solid #ccc; padding:7px; text-align:center; color:#C00000; font-size:13px;">
+                                        <t t-esc="sum(l['total_litres'] for l in donnees)"/> L
+                                    </td>
+                                    <td style="border:1px solid #ccc; padding:7px;"/>
+                                </tr>
+                            </tfoot>
+                        </table>
+
+                        <!-- SIGNATURE -->
+                        <table style="width:100%; margin-top:50px;">
+                            <tr>
+                                <td style="width:50%; text-align:center;">
+                                    <strong>Responsable Énergie</strong>
+                                    <br/><br/><br/>___________________
+                                </td>
+                                <td style="width:50%; text-align:center;">
+                                    <strong>Directeur Technique</strong>
+                                    <br/><br/><br/>___________________
+                                </td>
+                            </tr>
+                        </table>
+
+                    </div>
+                </t>
+            </t>
+        </t>
+    </template>
+
+    <!-- ═══════════════════════════════════════════════════
+         RAPPORT 2 : BUS À CONSOMMATION EXCESSIVE
+    ═══════════════════════════════════════════════════ -->
+
+    <record id="action_rapport_excessif" model="ir.actions.report">
+        <field name="name">Bus à Consommation Excessive</field>
+        <field name="model">transport.wizard.rapport</field>
+        <field name="report_type">qweb-pdf</field>
+        <field name="report_name">transport_energy.template_excessif</field>
+        <field name="report_file">transport_energy.template_excessif</field>
+    </record>
+
+    <template id="template_excessif">
+        <t t-call="web.html_container">
+            <t t-foreach="docs" t-as="wizard">
+                <t t-call="web.external_layout">
+                    <div class="page">
+
+                        <!-- EN-TÊTE -->
+                        <div style="text-align:center; margin-bottom:20px;">
+                            <h2 style="color:#C00000; font-size:18px;">
+                                الحافلات ذات الاستهلاك المفرط
+                            </h2>
+                            <h3 style="color:#C00000; font-size:14px;">
+                                Rapport des Bus à Consommation Excessive
+                            </h3>
+                            <p style="color:#666; font-size:11px;">
+                                Période :
+                                <t t-esc="wizard.date_debut"/> →
+                                <t t-esc="wizard.date_fin"/>
+                                | Seuil : <t t-esc="wizard.seuil_excessif"/> L/100km
+                            </p>
+                        </div>
+
+                        <!-- TABLEAU -->
+                        <t t-set="donnees" t-value="wizard._get_donnees_excessif()"/>
+
+                        <t t-if="not donnees">
+                            <div style="text-align:center; padding:30px;
+                                        color:green; font-size:14px;">
+                                ✅ Aucun bus avec consommation excessive détecté !
+                            </div>
+                        </t>
+
+                        <t t-if="donnees">
+                            <table style="width:100%; border-collapse:collapse; font-size:10px;">
+                                <thead>
+                                    <tr style="background-color:#C00000; color:white;">
+                                        <th style="border:1px solid #ccc; padding:6px; text-align:center;">
+                                            العربة<br/>Bus
+                                        </th>
+                                        <th style="border:1px solid #ccc; padding:6px; text-align:center;">
+                                            النوع<br/>Type
+                                        </th>
+                                        <th style="border:1px solid #ccc; padding:6px; text-align:center;">
+                                            عدد الخروج<br/>Nb Sorties
+                                        </th>
+                                        <th style="border:1px solid #ccc; padding:6px; text-align:center;">
+                                            المسافة (km)<br/>Distance
+                                        </th>
+                                        <th style="border:1px solid #ccc; padding:6px; text-align:center;">
+                                            الكمية (L)<br/>Quantité
+                                        </th>
+                                        <th style="border:1px solid #ccc; padding:6px; text-align:center;">
+                                            النظري (L/100km)<br/>Théorique
+                                        </th>
+                                        <th style="border:1px solid #ccc; padding:6px; text-align:center;">
+                                            الفعلي (L/100km)<br/>Réelle
+                                        </th>
+                                        <th style="border:1px solid #ccc; padding:6px; text-align:center;">
+                                            الفارق<br/>Écart
+                                        </th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <t t-foreach="donnees" t-as="ligne">
+                                        <tr style="background-color:#FFF2F2;">
+                                            <td style="border:1px solid #ccc; padding:5px; text-align:center; font-weight:bold;">
+                                                <t t-esc="ligne['bus_name']"/>
+                                            </td>
+                                            <td style="border:1px solid #ccc; padding:5px; text-align:center;">
+                                                <t t-esc="ligne['bus_type']"/>
+                                            </td>
+                                            <td style="border:1px solid #ccc; padding:5px; text-align:center;">
+                                                <t t-esc="ligne['nb_sorties']"/>
+                                            </td>
+                                            <td style="border:1px solid #ccc; padding:5px; text-align:center;">
+                                                <t t-esc="ligne['total_km']"/>
+                                            </td>
+                                            <td style="border:1px solid #ccc; padding:5px; text-align:center;">
+                                                <t t-esc="ligne['total_litres']"/>
+                                            </td>
+                                            <td style="border:1px solid #ccc; padding:5px; text-align:center;">
+                                                <t t-esc="ligne['conso_theorique']"/>
+                                            </td>
+                                            <td style="border:1px solid #ccc; padding:5px; text-align:center; font-weight:bold; color:#C00000;">
+                                                <t t-esc="ligne['conso_reelle']"/>
+                                            </td>
+                                            <td style="border:1px solid #ccc; padding:5px; text-align:center; color:#C00000;">
+                                                +<t t-esc="ligne['ecart']"/>
+                                            </td>
+                                        </tr>
+                                    </t>
+                                </tbody>
+                            </table>
+
+                            <p style="margin-top:15px; font-size:11px; color:#666;">
+                                Total : <t t-esc="len(donnees)"/> bus détectés avec consommation excessive.
+                            </p>
+                        </t>
+
+                        <!-- SIGNATURE -->
+                        <table style="width:100%; margin-top:40px;">
+                            <tr>
+                                <td style="width:50%; text-align:center;">
+                                    <strong>Responsable Énergie</strong>
+                                    <br/><br/><br/>___________________
+                                </td>
+                                <td style="width:50%; text-align:center;">
+                                    <strong>Directeur Technique</strong>
+                                    <br/><br/><br/>___________________
+                                </td>
+                            </tr>
+                        </table>
+
+                    </div>
+                </t>
+            </t>
+        </t>
+    </template>
+
+</odoo>

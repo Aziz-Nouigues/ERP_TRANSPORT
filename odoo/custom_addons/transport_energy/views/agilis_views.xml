@@ -1,0 +1,227 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+
+        <!-- ═══ VUE CARTE AGILIS ═══ -->
+        <record id="view_agilis_carte_form" model="ir.ui.view">
+            <field name="name">transport.agilis.carte.form</field>
+            <field name="model">transport.agilis.carte</field>
+            <field name="arch" type="xml">
+                <form string="Carte AGILIS">
+                    <header>
+                        <button name="action_bloquer"
+                                string="🔴 Bloquer"
+                                type="object"
+                                invisible="statut != 'active'"
+                                groups="transport_energy.group_responsable_energie"/>
+                        <button name="action_activer"
+                                string="✅ Activer"
+                                type="object"
+                                invisible="statut != 'bloquee'"
+                                groups="transport_energy.group_responsable_energie"/>
+                        <field name="statut" widget="statusbar"
+                               statusbar_visible="active,bloquee,expiree"/>
+                    </header>
+
+                    <sheet>
+                        <field name="alerte_solde" invisible="1"/>
+
+                        <div class="alert alert-warning" role="alert"
+                             invisible="not alerte_solde">
+                            ⚠️ Solde bas ! Rechargement nécessaire.
+                        </div>
+
+                        <div class="oe_title">
+                            <h1>
+                                <field name="name"
+                                       placeholder="Numéro de carte..."/>
+                            </h1>
+                        </div>
+
+                        <group>
+                            <group string="Informations">
+                                <field name="vehicle_id"/>
+                                <field name="chauffeur_principal"/>
+                                <field name="date_emission"/>
+                                <field name="date_expiration"/>
+                            </group>
+                            <group string="Solde">
+                                <field name="total_recharge"/>
+                                <field name="total_utilise"/>
+                                <field name="solde_actuel"/>
+                                <field name="solde_minimum"/>
+                                <field name="nb_utilisations"/>
+                            </group>
+                        </group>
+
+                        <notebook>
+                            <page string="💰 Rechargements">
+                                <field name="recharge_ids">
+                                    <list editable="bottom">
+                                        <field name="date"/>
+                                        <field name="montant"/>
+                                        <field name="reference"/>
+                                        <field name="notes"/>
+                                    </list>
+                                </field>
+                            </page>
+                            <page string="⛽ Utilisations">
+                                <field name="utilisation_ids">
+                                    <list>
+                                        <field name="name"/>
+                                        <field name="date"/>
+                                        <field name="station_externe"/>
+                                        <field name="chauffeur"/>
+                                        <field name="quantite"/>
+                                        <field name="prix_unitaire"/>
+                                        <field name="montant"/>
+                                        <field name="odometer_value"/>
+                                    </list>
+                                </field>
+                            </page>
+                            <page string="Notes">
+                                <field name="notes"/>
+                            </page>
+                        </notebook>
+                    </sheet>
+
+                    <chatter/>
+                </form>
+            </field>
+        </record>
+
+        <!-- ═══ VUE LISTE CARTES ═══ -->
+        <record id="view_agilis_carte_list" model="ir.ui.view">
+            <field name="name">transport.agilis.carte.list</field>
+            <field name="model">transport.agilis.carte</field>
+            <field name="arch" type="xml">
+                <list string="Cartes AGILIS"
+                      decoration-danger="alerte_solde == True"
+                      decoration-muted="statut == 'bloquee'">
+                    <field name="name"/>
+                    <field name="vehicle_id"/>
+                    <field name="chauffeur_principal"/>
+                    <field name="statut"/>
+                    <field name="total_recharge"/>
+                    <field name="total_utilise"/>
+                    <field name="solde_actuel"/>
+                    <field name="nb_utilisations"/>
+                    <field name="alerte_solde" invisible="1"/>
+                </list>
+            </field>
+        </record>
+
+        <!-- ═══ VUE LISTE UTILISATIONS ═══ -->
+        <record id="view_agilis_utilisation_list" model="ir.ui.view">
+            <field name="name">transport.agilis.utilisation.list</field>
+            <field name="model">transport.agilis.utilisation</field>
+            <field name="arch" type="xml">
+                <list string="Utilisations AGILIS">
+                    <field name="name"/>
+                    <field name="date"/>
+                    <field name="carte_id"/>
+                    <field name="vehicle_id"/>
+                    <field name="station_externe"/>
+                    <field name="chauffeur"/>
+                    <field name="quantite"/>
+                    <field name="montant"/>
+                </list>
+            </field>
+        </record>
+
+        <!-- ═══ VUE FORMULAIRE UTILISATION ═══ -->
+        <record id="view_agilis_utilisation_form" model="ir.ui.view">
+            <field name="name">transport.agilis.utilisation.form</field>
+            <field name="model">transport.agilis.utilisation</field>
+            <field name="arch" type="xml">
+                <form string="Utilisation Carte AGILIS">
+                    <sheet>
+                        <div class="oe_title">
+                            <h1>
+                                <field name="name" readonly="1"/>
+                            </h1>
+                        </div>
+                        <group>
+                            <group string="Carte &amp; Véhicule">
+                                <field name="carte_id"/>
+                                <field name="vehicle_id" readonly="1"/>
+                                <field name="chauffeur"/>
+                            </group>
+                            <group string="Station">
+                                <field name="date"/>
+                                <field name="station_externe"/>
+                                <field name="fuel_type_id"/>
+                            </group>
+                        </group>
+                        <group>
+                            <group string="Consommation">
+                                <field name="quantite"/>
+                                <field name="odometer_value"/>
+                            </group>
+                            <group string="Montant">
+                                <field name="prix_unitaire"/>
+                                <field name="montant" readonly="1"/>
+                            </group>
+                        </group>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+
+        <!-- ═══ RECHERCHE ═══ -->
+        <record id="view_agilis_carte_search" model="ir.ui.view">
+            <field name="name">transport.agilis.carte.search</field>
+            <field name="model">transport.agilis.carte</field>
+            <field name="arch" type="xml">
+                <search>
+
+                    <filter name="active" string="✅ Actives"
+                            domain="[('statut','=','active')]"/>
+                    <filter name="alerte" string="⚠️ Solde bas"
+                            domain="[('alerte_solde','=',True)]"/>
+                    <filter name="bloquee" string="🔴 Bloquées"
+                            domain="[('statut','=','bloquee')]"/>
+                    <group>
+                        <filter name="groupe_statut" string="Statut"
+                                context="{'group_by': 'statut'}"/>
+                        <filter name="groupe_vehicle" string="Véhicule"
+                                context="{'group_by': 'vehicle_id'}"/>
+                    </group>
+                </search>
+            </field>
+        </record>
+
+        <!-- ═══ ACTIONS ═══ -->
+        <record id="action_agilis_carte" model="ir.actions.act_window">
+            <field name="name">Cartes AGILIS</field>
+            <field name="res_model">transport.agilis.carte</field>
+            <field name="view_mode">list,form</field>
+            <field name="search_view_id" ref="view_agilis_carte_search"/>
+        </record>
+
+        <record id="action_agilis_utilisation" model="ir.actions.act_window">
+            <field name="name">Utilisations AGILIS</field>
+            <field name="res_model">transport.agilis.utilisation</field>
+            <field name="view_mode">list,form</field>
+        </record>
+
+        <!-- ═══ MENUS ═══ -->
+        <menuitem id="menu_agilis_root"
+                  name="💳 AGILIS"
+                  parent="menu_transport_energy_root"
+                  sequence="25"/>
+
+        <menuitem id="menu_agilis_cartes"
+                  name="Cartes AGILIS"
+                  parent="menu_agilis_root"
+                  action="action_agilis_carte"
+                  sequence="10"/>
+
+        <menuitem id="menu_agilis_utilisations"
+                  name="Utilisations"
+                  parent="menu_agilis_root"
+                  action="action_agilis_utilisation"
+                  sequence="20"/>
+
+    </data>
+</odoo>

@@ -1,0 +1,6 @@
+addons
+debian
+doc
+odoo
+setup
+venv19

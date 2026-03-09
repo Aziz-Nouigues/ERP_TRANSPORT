@@ -1,0 +1,33 @@
+{
+    'name': 'Transport - Gestion Énergie',
+    'author': 'Aziz Nouigues',
+    'category': 'Transport',
+    'version': '19.0.1.0.0',
+    'license': 'LGPL-3',
+    'depends': [
+        'base',
+        'fleet',
+        'stock',
+        'mail',
+        'hr',
+    ],
+    'data': [
+        'security/groups.xml',
+        'security/ir.model.access.csv',
+        'data/sequences.xml',
+        'views/energy_type_views.xml',
+        'views/fuel_station_views.xml',
+        'views/vehicle_extension_views.xml',
+        'views/fuel_voucher_views.xml',
+        'views/bon_lubrifiant_views.xml',
+        'views/facture_energie_views.xml',
+        'views/jaugeage_views.xml',
+        'views/wizard_rapport_views.xml',
+        'reports/rapport_bgi.xml',
+        'reports/rapport_consommation.xml',
+        'views/agilis_views.xml',
+
+    ],
+    'installable': True,
+    'application': True,
+}

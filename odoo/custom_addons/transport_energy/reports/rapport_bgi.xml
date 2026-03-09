@@ -1,0 +1,368 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <!-- ═══ ACTION RAPPORT BGI (seulement internes) ═══ -->
+    <record id="action_rapport_bgi" model="ir.actions.report">
+    <field name="name">Bon de Ravitaillement Interne (BGI)</field>
+    <field name="model">transport.fuel.voucher</field>
+    <field name="report_type">qweb-pdf</field>
+    <field name="report_name">transport_energy.template_bgi</field>
+    <field name="report_file">transport_energy.template_bgi</field>
+    <field name="binding_model_id" ref="model_transport_fuel_voucher"/>
+    <field name="binding_type">report</field>
+</record>
+
+    <!-- ═══ TEMPLATE BGI ═══ -->
+    <template id="template_bgi">
+        <t t-call="web.html_container">
+            <t t-foreach="docs" t-as="bon">
+                <t t-call="web.external_layout">
+                    <div class="page">
+
+                        <!-- ── EN-TÊTE ── -->
+                        <div style="text-align: center; margin-bottom: 20px;">
+                            <h2 style="color: #1F4E79; font-size: 18px;">
+                                جدول إخراج المحروقات
+                            </h2>
+                            <h3 style="color: #1F4E79; font-size: 14px;">
+                                Tableau de Distribution du Carburant
+                            </h3>
+                        </div>
+
+                        <!-- ── INFORMATIONS BON ── -->
+                        <table style="width:100%; margin-bottom:15px;
+                                      border-collapse: collapse;">
+                            <tr>
+                                <td style="width:33%; padding:4px;">
+                                    <strong>السنة / Année :</strong>
+                                    <t t-esc="bon.date.year"/>
+                                </td>
+                                <td style="width:33%; padding:4px;">
+                                    <strong>رقم الجدول / N° Bon :</strong>
+                                    <t t-esc="bon.name"/>
+                                </td>
+                                <td style="width:33%; padding:4px;">
+                                    <strong>تاريخ التوزيع / Date :</strong>
+                                    <t t-esc="bon.date"/>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td style="padding:4px;">
+                                    <strong>التدرج الرئيسي :</strong>
+                                    <t t-esc="bon.agency_main_code or ''"/>
+                                </td>
+                                <td style="padding:4px;">
+                                    <strong>الفرعي :</strong>
+                                    <t t-esc="bon.agency_sub_code or ''"/>
+                                </td>
+                                <td style="padding:4px;">
+                                    <strong>المادة :</strong>
+                                    <t t-esc="bon.fuel_type_id.name or ''"/>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td style="padding:4px;">
+                                    <strong>العون الموزع :</strong>
+                                    <t t-esc="bon.distributor_code or ''"/>
+                                    -
+                                    <t t-esc="bon.distributor_name or ''"/>
+                                </td>
+                                <td style="padding:4px;">
+                                    <strong>بداية العمل :</strong>
+                                    <t t-esc="'%02d:%02d' % (int(bon.time_start), int((bon.time_start % 1) * 60))"/>
+                                </td>
+                                <td style="padding:4px;">
+                                    <strong>نهاية العمل :</strong>
+                                    <t t-esc="'%02d:%02d' % (int(bon.time_end), int((bon.time_end % 1) * 60))"/>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td style="padding:4px;">
+                                    <strong>بداية عداد المضخة :</strong>
+                                    <t t-esc="int(bon.pump_counter_start)"/>
+                                </td>
+                                <td style="padding:4px;">
+                                    <strong>نهاية عداد المضخة :</strong>
+                                    <t t-esc="int(bon.pump_counter_end)"/>
+                                </td>
+                                <td style="padding:4px;">
+                                    <strong>Station :</strong>
+                                    <t t-esc="bon.station_id.name or ''"/>
+                                </td>
+                            </tr>
+                        </table>
+
+                        <!-- ── LIGNES DE RAVITAILLEMENT ── -->
+                        <table style="width:100%; border-collapse:collapse;
+                                      font-size:11px;">
+                            <thead>
+                                <tr style="background-color:#1F4E79; color:white;">
+                                    <th style="border:1px solid #ccc; padding:6px; text-align:center;">
+                                        المصلحة<br/>Service
+                                    </th>
+                                    <th style="border:1px solid #ccc; padding:6px; text-align:center;">
+                                        العربة<br/>Bus N°
+                                    </th>
+                                    <th style="border:1px solid #ccc; padding:6px; text-align:center;">
+                                        التوقيت<br/>Heure
+                                    </th>
+                                    <th style="border:1px solid #ccc; padding:6px; text-align:center;">
+                                        عداد العربة<br/>Compteur
+                                    </th>
+                                    <th style="border:1px solid #ccc; padding:6px; text-align:center;">
+                                        الكمية الموزعة<br/>Quantité (L)
+                                    </th>
+                                    <th style="border:1px solid #ccc; padding:6px; text-align:center;">
+                                        المعرف<br/>Code
+                                    </th>
+                                    <th style="border:1px solid #ccc; padding:6px; text-align:center;">
+                                        إسم السائق<br/>Chauffeur
+                                    </th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <t t-foreach="bon.line_ids" t-as="ligne">
+                                    <tr>
+                                        <td style="border:1px solid #ccc; padding:5px; text-align:center;">
+                                            <t t-esc="ligne.service_code or ''"/>
+                                        </td>
+                                        <td style="border:1px solid #ccc; padding:5px; text-align:center;">
+                                            <t t-esc="ligne.vehicle_id.name or ''"/>
+                                        </td>
+                                        <td style="border:1px solid #ccc; padding:5px; text-align:center;">
+                                            <t t-esc="'%02d:%02d' % (int(ligne.time), int((ligne.time % 1) * 60))"/>
+                                        </td>
+                                        <td style="border:1px solid #ccc; padding:5px; text-align:center;">
+                                            <t t-esc="int(ligne.odometer_value)"/>
+                                        </td>
+                                        <td style="border:1px solid #ccc; padding:5px; text-align:center; font-weight:bold;">
+                                            <t t-esc="ligne.quantity"/>
+                                        </td>
+                                        <td style="border:1px solid #ccc; padding:5px; text-align:center;">
+                                            <t t-esc="ligne.driver_code or ''"/>
+                                        </td>
+                                        <td style="border:1px solid #ccc; padding:5px; text-align:center;">
+                                            <t t-esc="ligne.driver_name or ''"/>
+                                        </td>
+                                    </tr>
+                                </t>
+                            </tbody>
+                            <tfoot>
+                                <tr style="background-color:#D6E4F0; font-weight:bold;">
+                                    <td colspan="4" style="border:1px solid #ccc; padding:6px; text-align:right;">
+                                        الجملة / Total :
+                                    </td>
+                                    <td style="border:1px solid #ccc; padding:6px; text-align:center; color:#C00000;">
+                                        <t t-esc="bon.total_quantity"/> L
+                                    </td>
+                                    <td colspan="2" style="border:1px solid #ccc; padding:6px;"/>
+                                </tr>
+                            </tfoot>
+                        </table>
+
+                        <!-- ── RÉSUMÉ BAS DE PAGE ── -->
+                        <table style="width:100%; margin-top:15px; border-collapse:collapse;">
+                            <tr>
+                                <td style="width:33%; padding:6px;">
+                                    <strong>الكمية الموزعة :</strong>
+                                    <t t-esc="bon.total_quantity"/> L
+                                </td>
+                                <td style="width:33%; padding:6px;">
+                                    <strong>الكمية المتبقية :</strong>
+                                    <t t-esc="bon.remaining_stock"/> L
+                                </td>
+                                <td style="width:33%; padding:6px;">
+                                    <strong>مصادق / Validé :</strong>
+                                    <t t-if="bon.is_validated">نعم / Oui</t>
+                                    <t t-else="">لا / Non</t>
+                                </td>
+                            </tr>
+                        </table>
+
+                        <!-- ── SIGNATURES ── -->
+                        <table style="width:100%; margin-top:40px;">
+                            <tr>
+                                <td style="width:33%; text-align:center;">
+                                    <strong>Agent Distributeur</strong>
+                                    <br/><br/><br/>___________________
+                                </td>
+                                <td style="width:33%; text-align:center;">
+                                    <strong>Responsable Station</strong>
+                                    <br/><br/><br/>___________________
+                                </td>
+                                <td style="width:33%; text-align:center;">
+                                    <strong>Chef de Dépôt</strong>
+                                    <br/><br/><br/>___________________
+                                </td>
+                            </tr>
+                        </table>
+
+                    </div>
+                </t>
+            </t>
+        </t>
+    </template>
+
+    <!-- ═══ ACTION RAPPORT BGE (seulement externes) ═══ -->
+   <record id="action_rapport_bge" model="ir.actions.report">
+    <field name="name">Bon de Ravitaillement Externe (BGE)</field>
+    <field name="model">transport.fuel.voucher</field>
+    <field name="report_type">qweb-pdf</field>
+    <field name="report_name">transport_energy.template_bge</field>
+    <field name="report_file">transport_energy.template_bge</field>
+    <field name="binding_model_id" ref="model_transport_fuel_voucher"/>
+    <field name="binding_type">report</field>
+</record>
+
+    <!-- ═══ TEMPLATE BGE ═══ -->
+    <template id="template_bge">
+        <t t-call="web.html_container">
+            <t t-foreach="docs" t-as="bon">
+                <t t-call="web.external_layout">
+                    <div class="page">
+
+                        <!-- ── EN-TÊTE ── -->
+                        <div style="text-align:center; margin-bottom:20px;">
+                            <h2 style="color:#C55A11; font-size:18px;">
+                                بطاقة التزود بالوقود الخارجي
+                            </h2>
+                            <h3 style="color:#C55A11; font-size:14px;">
+                                Bon de Gasoil Externe (BGE)
+                            </h3>
+                        </div>
+
+                        <!-- ── INFORMATIONS BON ── -->
+                        <table style="width:100%; margin-bottom:15px;
+                                      border-collapse:collapse;
+                                      border:1px solid #C55A11;">
+                            <tr style="background-color:#FCE4D6;">
+                                <td style="padding:6px; width:33%;">
+                                    <strong>N° Bon :</strong>
+                                    <t t-esc="bon.name"/>
+                                </td>
+                                <td style="padding:6px; width:33%;">
+                                    <strong>Date :</strong>
+                                    <t t-esc="bon.date"/>
+                                </td>
+                                <td style="padding:6px; width:33%;">
+                                    <strong>Station :</strong>
+                                    <t t-esc="bon.station_id.name or ''"/>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td style="padding:6px;">
+                                    <strong>Type carburant :</strong>
+                                    <t t-esc="bon.fuel_type_id.name or ''"/>
+                                </td>
+                                <td style="padding:6px;">
+                                    <strong>Heure début :</strong>
+                                    <t t-esc="'%02d:%02d' % (int(bon.time_start), int((bon.time_start % 1) * 60))"/>
+                                </td>
+                                <td style="padding:6px;">
+                                    <strong>Heure fin :</strong>
+                                    <t t-esc="'%02d:%02d' % (int(bon.time_end), int((bon.time_end % 1) * 60))"/>
+                                </td>
+                            </tr>
+                        </table>
+
+                        <!-- ── LIGNES ── -->
+                        <table style="width:100%; border-collapse:collapse; font-size:11px;">
+                            <thead>
+                                <tr style="background-color:#C55A11; color:white;">
+                                    <th style="border:1px solid #ccc; padding:6px; text-align:center;">
+                                        المصلحة<br/>Service
+                                    </th>
+                                    <th style="border:1px solid #ccc; padding:6px; text-align:center;">
+                                        العربة<br/>Bus N°
+                                    </th>
+                                    <th style="border:1px solid #ccc; padding:6px; text-align:center;">
+                                        التوقيت<br/>Heure
+                                    </th>
+                                    <th style="border:1px solid #ccc; padding:6px; text-align:center;">
+                                        عداد العربة<br/>Compteur
+                                    </th>
+                                    <th style="border:1px solid #ccc; padding:6px; text-align:center;">
+                                        الكمية<br/>Quantité (L)
+                                    </th>
+                                    <th style="border:1px solid #ccc; padding:6px; text-align:center;">
+                                        إسم السائق<br/>Chauffeur
+                                    </th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <t t-foreach="bon.line_ids" t-as="ligne">
+                                    <tr>
+                                        <td style="border:1px solid #ccc; padding:5px; text-align:center;">
+                                            <t t-esc="ligne.service_code or ''"/>
+                                        </td>
+                                        <td style="border:1px solid #ccc; padding:5px; text-align:center;">
+                                            <t t-esc="ligne.vehicle_id.name or ''"/>
+                                        </td>
+                                        <td style="border:1px solid #ccc; padding:5px; text-align:center;">
+                                            <t t-esc="'%02d:%02d' % (int(ligne.time), int((ligne.time % 1) * 60))"/>
+                                        </td>
+                                        <td style="border:1px solid #ccc; padding:5px; text-align:center;">
+                                            <t t-esc="int(ligne.odometer_value)"/>
+                                        </td>
+                                        <td style="border:1px solid #ccc; padding:5px; text-align:center; font-weight:bold;">
+                                            <t t-esc="ligne.quantity"/>
+                                        </td>
+                                        <td style="border:1px solid #ccc; padding:5px; text-align:center;">
+                                            <t t-esc="ligne.driver_name or ''"/>
+                                        </td>
+                                    </tr>
+                                </t>
+                            </tbody>
+                            <tfoot>
+                                <tr style="background-color:#FCE4D6; font-weight:bold;">
+                                    <td colspan="4" style="border:1px solid #ccc; padding:6px; text-align:right;">
+                                        الجملة / Total :
+                                    </td>
+                                    <td style="border:1px solid #ccc; padding:6px; text-align:center; color:#C55A11;">
+                                        <t t-esc="bon.total_quantity"/> L
+                                    </td>
+                                    <td style="border:1px solid #ccc; padding:6px;"/>
+                                </tr>
+                            </tfoot>
+                        </table>
+
+                        <!-- ── RÉSUMÉ ── -->
+                        <table style="width:100%; margin-top:15px; border-collapse:collapse;">
+                            <tr>
+                                <td style="width:33%; padding:6px;">
+                                    <strong>الكمية الموزعة :</strong>
+                                    <t t-esc="bon.total_quantity"/> L
+                                </td>
+                                <td style="width:33%; padding:6px;">
+                                    <strong>الكمية المتبقية :</strong>
+                                    <t t-esc="bon.remaining_stock"/> L
+                                </td>
+                                <td style="width:33%; padding:6px;">
+                                    <strong>مصادق / Validé :</strong>
+                                    <t t-if="bon.is_validated">نعم / Oui</t>
+                                    <t t-else="">لا / Non</t>
+                                </td>
+                            </tr>
+                        </table>
+
+                        <!-- ── SIGNATURES ── -->
+                        <table style="width:100%; margin-top:40px;">
+                            <tr>
+                                <td style="width:50%; text-align:center;">
+                                    <strong>Chauffeur / السائق</strong>
+                                    <br/><br/><br/>___________________
+                                </td>
+                                <td style="width:50%; text-align:center;">
+                                    <strong>Responsable / المسؤول</strong>
+                                    <br/><br/><br/>___________________
+                                </td>
+                            </tr>
+                        </table>
+
+                    </div>
+                </t>
+            </t>
+        </t>
+    </template>
+
+</odoo>
