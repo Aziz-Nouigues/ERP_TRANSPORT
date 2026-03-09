@@ -6,7 +6,7 @@
         <field name="name">transport.wizard.rapport.form</field>
         <field name="model">transport.wizard.rapport</field>
         <field name="arch" type="xml">
-            <form string="Générer un Rapport">
+            <form string="Rapports Carburant">
                 <group>
                     <group string="Type de rapport">
                         <field name="type_rapport" widget="radio"/>
@@ -21,7 +21,7 @@
                 </group>
                 <footer>
                     <button name="action_generer_rapport"
-                            string="📊 Générer le Rapport"
+                            string="Generer le Rapport"
                             type="object"
                             class="btn-primary"/>
                     <button string="Annuler"
@@ -32,37 +32,30 @@
         </field>
     </record>
 
-    <!-- ===== ACTION RAPPORT CARBURANT (récapitulatif) ===== -->
+    <!-- ===== ACTION WIZARD RAPPORTS CARBURANT ===== -->
     <record id="action_rapport_carburant" model="ir.actions.act_window">
-        <field name="name">Rapport Consommation Carburant</field>
+        <field name="name">Rapports Carburant</field>
         <field name="res_model">transport.wizard.rapport</field>
         <field name="view_mode">form</field>
         <field name="target">new</field>
         <field name="context">{'default_type_rapport': 'recap'}</field>
     </record>
 
-    <!-- ===== ACTION RAPPORT BUS EXCESSIFS ===== -->
+    <!-- ===== ACTION WIZARD BUS EXCESSIFS (garde pour compatibilite) ===== -->
     <record id="action_wizard_rapport_excessif" model="ir.actions.act_window">
-        <field name="name">Rapport Bus à Consommation Excessive</field>
+        <field name="name">Rapports Carburant</field>
         <field name="res_model">transport.wizard.rapport</field>
         <field name="view_mode">form</field>
         <field name="target">new</field>
         <field name="context">{'default_type_rapport': 'excessif'}</field>
     </record>
 
-    <!-- ===== MENU RAPPORT SOUS ⛽ CARBURANT ===== -->
+    <!-- ===== UN SEUL MENU SOUS Carburant ===== -->
     <menuitem
         id="menu_rapport_carburant"
-        name="📊 Rapport Consommation"
+        name="Rapports Carburant"
         parent="menu_fuel_vouchers"
         action="action_rapport_carburant"
         sequence="30"/>
-
-    <menuitem
-        id="menu_rapport_excessif"
-        name="📊 Bus Consommation Excessive"
-        parent="menu_fuel_vouchers"
-        action="action_wizard_rapport_excessif"
-        sequence="40"/>
 
 </odoo>
