@@ -1,17 +1,17 @@
 <?xml version="1.0" encoding="utf-8"?>
 <odoo>
 
-    <!-- ================= VUE WIZARD ================= -->
-    <record id="view_wizard_rapport_form" model="ir.ui.view">
-        <field name="name">transport.wizard.rapport.form</field>
+    <!-- ================= VUE WIZARD CARBURANT ================= -->
+    <record id="view_wizard_rapport_carburant_form" model="ir.ui.view">
+        <field name="name">transport.wizard.rapport.carburant.form</field>
         <field name="model">transport.wizard.rapport</field>
         <field name="arch" type="xml">
             <form string="Rapports Carburant">
                 <group>
                     <group string="Type de rapport">
-                        <field name="type_rapport" widget="radio"/>
+                        <field name="type_rapport_carburant" widget="radio"/>
                         <field name="seuil_excessif"
-                               invisible="type_rapport != 'excessif'"/>
+                               invisible="type_rapport_carburant != 'excessif'"/>
                     </group>
                     <group string="Filtres">
                         <field name="date_debut"/>
@@ -20,7 +20,7 @@
                     </group>
                 </group>
                 <footer>
-                    <button name="action_generer_rapport"
+                    <button name="action_generer_rapport_carburant"
                             string="Generer le Rapport"
                             type="object"
                             class="btn-primary"/>
@@ -32,30 +32,74 @@
         </field>
     </record>
 
-    <!-- ===== ACTION WIZARD RAPPORTS CARBURANT ===== -->
+    <!-- ================= VUE WIZARD LUBRIFIANT ================= -->
+    <record id="view_wizard_rapport_lubrifiant_form" model="ir.ui.view">
+        <field name="name">transport.wizard.rapport.lubrifiant.form</field>
+        <field name="model">transport.wizard.rapport</field>
+        <field name="arch" type="xml">
+            <form string="Rapports Lubrifiants">
+                <group>
+                    <group string="Type de rapport">
+                        <field name="type_rapport_lubrifiant" widget="radio"/>
+                    </group>
+                    <group string="Filtres">
+                        <field name="date_debut"/>
+                        <field name="date_fin"/>
+                        <field name="atelier_filtre"/>
+                    </group>
+                </group>
+                <footer>
+                    <button name="action_generer_rapport_lubrifiant"
+                            string="Generer le Rapport"
+                            type="object"
+                            class="btn-primary"/>
+                    <button string="Annuler"
+                            class="btn-secondary"
+                            special="cancel"/>
+                </footer>
+            </form>
+        </field>
+    </record>
+
+    <!-- ===== ACTIONS ===== -->
     <record id="action_rapport_carburant" model="ir.actions.act_window">
         <field name="name">Rapports Carburant</field>
         <field name="res_model">transport.wizard.rapport</field>
+        <field name="view_id" ref="view_wizard_rapport_carburant_form"/>
         <field name="view_mode">form</field>
         <field name="target">new</field>
-        <field name="context">{'default_type_rapport': 'recap'}</field>
     </record>
 
-    <!-- ===== ACTION WIZARD BUS EXCESSIFS (garde pour compatibilite) ===== -->
     <record id="action_wizard_rapport_excessif" model="ir.actions.act_window">
         <field name="name">Rapports Carburant</field>
         <field name="res_model">transport.wizard.rapport</field>
+        <field name="view_id" ref="view_wizard_rapport_carburant_form"/>
         <field name="view_mode">form</field>
         <field name="target">new</field>
-        <field name="context">{'default_type_rapport': 'excessif'}</field>
     </record>
 
-    <!-- ===== UN SEUL MENU SOUS Carburant ===== -->
+    <record id="action_rapport_lubrifiant_wizard" model="ir.actions.act_window">
+        <field name="name">Rapports Lubrifiants</field>
+        <field name="res_model">transport.wizard.rapport</field>
+        <field name="view_id" ref="view_wizard_rapport_lubrifiant_form"/>
+        <field name="view_mode">form</field>
+        <field name="target">new</field>
+    </record>
+
+    <!-- ===== MENU SOUS Carburant ===== -->
     <menuitem
         id="menu_rapport_carburant"
-        name="Rapports Carburant"
+        name="Rapports"
         parent="menu_fuel_vouchers"
         action="action_rapport_carburant"
+        sequence="30"/>
+
+    <!-- ===== MENU SOUS Lubrifiants ===== -->
+    <menuitem
+        id="menu_rapport_lubrifiant_menu"
+        name="Rapports"
+        parent="menu_lubrifiants"
+        action="action_rapport_lubrifiant_wizard"
         sequence="30"/>
 
 </odoo>

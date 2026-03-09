@@ -2,70 +2,91 @@ from odoo import models, fields, api
 
 
 class WizardRapportConsommation(models.TransientModel):
-    """Wizard pour générer les rapports de consommation"""
     _name = 'transport.wizard.rapport'
     _description = 'Assistant Rapport Consommation'
 
-    # ── FILTRES ─────────────────────────────────────────────
+    # ── FILTRES COMMUNS ──────────────────────────────────────
     date_debut = fields.Date(
-        string='Date début',
-        required=True,
+        string='Date debut',
         default=fields.Date.context_today
     )
-
     date_fin = fields.Date(
         string='Date fin',
-        required=True,
         default=fields.Date.context_today
     )
-
     station_id = fields.Many2one(
         'transport.fuel.station',
         string='Station (optionnel)'
     )
-
-    type_rapport = fields.Selection([
-        ('recap',        'حوصلة للكمية المستهلكة - Récapitulatif'),
-        ('excessif',     'Bus à consommation excessive'),
-        ('par_vehicule', 'جدول توزيع السوائل حسب العربة - Distribution par véhicule'),
-        ('par_station',  'جدول توزيع السوائل حسب المغّازة - Distribution par station'),
-    ], string='Type de rapport',
-       required=True,
-       default='recap'
+    atelier_filtre = fields.Char(
+        string='Atelier / Magasin (optionnel)'
     )
-
     seuil_excessif = fields.Float(
         string='Seuil consommation excessive (L/100km)',
         default=35.0,
     )
 
+    # ── TYPE RAPPORT CARBURANT ───────────────────────────────
+    type_rapport_carburant = fields.Selection([
+        ('recap',        'حوصلة للكمية المستهلكة - Recapitulatif'),
+        ('excessif',     'Bus a consommation excessive'),
+        ('par_vehicule', 'جدول توزيع السوائل حسب العربة - Distribution par vehicule'),
+        ('par_station',  'جدول توزيع السوائل حسب المغازة - Distribution par station'),
+    ], string='Type de rapport',
+       default='recap'
+    )
+
+    # ── TYPE RAPPORT LUBRIFIANT ──────────────────────────────
+    type_rapport_lubrifiant = fields.Selection([
+        ('lubrifiant', 'كشف استهلاك المزيتات - Consommation par vehicule'),
+    ], string='Type de rapport',
+       default='lubrifiant'
+    )
+
+    # garde pour compatibilite anciens rapports
+    type_rapport = fields.Selection([
+        ('recap',        'Recapitulatif'),
+        ('excessif',     'Bus a consommation excessive'),
+        ('par_vehicule', 'Distribution par vehicule'),
+        ('par_station',  'Distribution par station'),
+        ('lubrifiant',   'Rapport Lubrifiants'),
+    ], default='recap')
+
     # ── ACTIONS ─────────────────────────────────────────────
+    def action_generer_rapport_carburant(self):
+        self.ensure_one()
+        refs = {
+            'recap':        'transport_energy.action_rapport_recap',
+            'excessif':     'transport_energy.action_rapport_excessif',
+            'par_vehicule': 'transport_energy.action_rapport_par_vehicule',
+            'par_station':  'transport_energy.action_rapport_par_station',
+        }
+        return self.env.ref(refs[self.type_rapport_carburant]).report_action(self)
+
+    def action_generer_rapport_lubrifiant(self):
+        self.ensure_one()
+        return self.env.ref(
+            'transport_energy.action_rapport_lubrifiant'
+        ).report_action(self)
+
     def action_generer_rapport(self):
         self.ensure_one()
-        if self.type_rapport == 'recap':
-            return self.env.ref(
-                'transport_energy.action_rapport_recap'
-            ).report_action(self)
-        elif self.type_rapport == 'excessif':
-            return self.env.ref(
-                'transport_energy.action_rapport_excessif'
-            ).report_action(self)
-        elif self.type_rapport == 'par_vehicule':
-            return self.env.ref(
-                'transport_energy.action_rapport_par_vehicule'
-            ).report_action(self)
-        elif self.type_rapport == 'par_station':
-            return self.env.ref(
-                'transport_energy.action_rapport_par_station'
-            ).report_action(self)
+        refs = {
+            'recap':        'transport_energy.action_rapport_recap',
+            'excessif':     'transport_energy.action_rapport_excessif',
+            'par_vehicule': 'transport_energy.action_rapport_par_vehicule',
+            'par_station':  'transport_energy.action_rapport_par_station',
+            'lubrifiant':   'transport_energy.action_rapport_lubrifiant',
+        }
+        return self.env.ref(refs[self.type_rapport]).report_action(self)
 
     # ── DONNÉES RÉCAPITULATIF ────────────────────────────────
     def _get_donnees_recap(self):
-        domain = [
-            ('date', '>=', self.date_debut),
-            ('date', '<=', self.date_fin),
-            ('state', '=', 'done'),
-        ]
+        domain = [('state', '=', 'done')]
+        if self.date_debut:
+            domain.append(('date', '>=', self.date_debut))
+        if self.date_fin:
+            domain.append(('date', '<=', self.date_fin))
         if self.station_id:
             domain.append(('station_id', '=', self.station_id.id))
 
@@ -76,31 +97,29 @@ class WizardRapportConsommation(models.TransientModel):
                 bus = ligne.vehicle_id
                 if not bus:
                     continue
-                bus_type = bus.bus_type or 'Non défini'
-                key = bus_type
-                if key not in data:
-                    data[key] = {
+                bus_type = bus.bus_type or 'Non defini'
+                if bus_type not in data:
+                    data[bus_type] = {
                         'bus_type':     bus_type,
                         'nb_bons':      0,
                         'nb_vehicules': set(),
                         'total_litres': 0,
                         'total_km':     0,
                     }
-                data[key]['nb_bons'] += 1
-                data[key]['nb_vehicules'].add(bus.id)
-                data[key]['total_litres'] += ligne.quantity
-                data[key]['total_km'] += ligne.distance_estimated or 0
+                data[bus_type]['nb_bons'] += 1
+                data[bus_type]['nb_vehicules'].add(bus.id)
+                data[bus_type]['total_litres'] += ligne.quantity
+                data[bus_type]['total_km'] += ligne.distance_estimated or 0
 
         result = []
         for key, val in data.items():
-            nb_v = len(val['nb_vehicules'])
             total_km = val['total_km']
             total_l = val['total_litres']
             conso_moy = (total_l / total_km * 100) if total_km > 0 else 0
             result.append({
                 'bus_type':     val['bus_type'],
                 'nb_bons':      val['nb_bons'],
-                'nb_vehicules': nb_v,
+                'nb_vehicules': len(val['nb_vehicules']),
                 'total_litres': round(total_l, 2),
                 'total_km':     round(total_km, 2),
                 'conso_moy':    round(conso_moy, 2),
@@ -109,11 +128,11 @@ class WizardRapportConsommation(models.TransientModel):
 
     # ── DONNÉES BUS EXCESSIFS ────────────────────────────────
     def _get_donnees_excessif(self):
-        domain = [
-            ('date', '>=', self.date_debut),
-            ('date', '<=', self.date_fin),
-            ('state', '=', 'done'),
-        ]
+        domain = [('state', '=', 'done')]
+        if self.date_debut:
+            domain.append(('date', '>=', self.date_debut))
+        if self.date_fin:
+            domain.append(('date', '<=', self.date_fin))
         if self.station_id:
             domain.append(('station_id', '=', self.station_id.id))
 
@@ -127,7 +146,6 @@ class WizardRapportConsommation(models.TransientModel):
                 key = bus.id
                 if key not in data:
                     data[key] = {
-                        'vehicle':         bus,
                         'bus_name':        bus.name,
                         'bus_type':        bus.bus_type or '-',
                         'conso_theorique': bus.theoretical_fuel_consumption or 0,
@@ -160,11 +178,11 @@ class WizardRapportConsommation(models.TransientModel):
 
     # ── DONNÉES DISTRIBUTION PAR VÉHICULE ────────────────────
     def _get_donnees_par_vehicule(self):
-        domain = [
-            ('date', '>=', self.date_debut),
-            ('date', '<=', self.date_fin),
-            ('state', '=', 'done'),
-        ]
+        domain = [('state', '=', 'done')]
+        if self.date_debut:
+            domain.append(('date', '>=', self.date_debut))
+        if self.date_fin:
+            domain.append(('date', '<=', self.date_fin))
         if self.station_id:
             domain.append(('station_id', '=', self.station_id.id))
 
@@ -187,23 +205,12 @@ class WizardRapportConsommation(models.TransientModel):
                         'chauffeurs':      set(),
                         'total_litres':    0,
                         'total_km':        0,
-                        'details':         [],
                     }
                 data[key]['nb_sorties'] += 1
                 data[key]['total_litres'] += ligne.quantity
                 data[key]['total_km'] += ligne.distance_estimated or 0
                 if ligne.driver_code:
                     data[key]['chauffeurs'].add(ligne.driver_code)
-                data[key]['details'].append({
-                    'date':          bon.date,
-                    'bon_name':      bon.name,
-                    'station':       bon.station_id.name if bon.station_id else '-',
-                    'driver_code':   ligne.driver_code or '-',
-                    'driver_name':   ligne.driver_name or '-',
-                    'odometer':      ligne.odometer_value,
-                    'quantity':      ligne.quantity,
-                    'distance_est':  ligne.distance_estimated or 0,
-                })
 
         result = []
         for key, val in data.items():
@@ -224,17 +231,16 @@ class WizardRapportConsommation(models.TransientModel):
                 'conso_theorique': round(conso_theorique, 2),
                 'conso_reelle':    round(conso_reelle, 2),
                 'ecart':           round(ecart, 2),
-                'details':         sorted(val['details'], key=lambda x: x['date']),
             })
         return sorted(result, key=lambda x: x['total_litres'], reverse=True)
 
     # ── DONNÉES DISTRIBUTION PAR STATION ─────────────────────
     def _get_donnees_par_station(self):
-        domain = [
-            ('date', '>=', self.date_debut),
-            ('date', '<=', self.date_fin),
-            ('state', '=', 'done'),
-        ]
+        domain = [('state', '=', 'done')]
+        if self.date_debut:
+            domain.append(('date', '>=', self.date_debut))
+        if self.date_fin:
+            domain.append(('date', '<=', self.date_fin))
         if self.station_id:
             domain.append(('station_id', '=', self.station_id.id))
 
@@ -245,15 +251,15 @@ class WizardRapportConsommation(models.TransientModel):
             key = station.id if station else 0
             if key not in data:
                 data[key] = {
-                    'station_name':   station.name if station else 'Sans station',
-                    'station_code':   station.code if station else '-',
-                    'fuel_type':      bon.fuel_type_id.name if bon.fuel_type_id else '-',
-                    'nb_bons':        0,
-                    'nb_vehicules':   set(),
-                    'total_litres':   0,
-                    'stock_initial':  station.capacity if station else 0,
-                    'stock_restant':  station.current_stock if station else 0,
-                    'bons':           [],
+                    'station_name':  station.name if station else 'Sans station',
+                    'station_code':  station.code if station else '-',
+                    'fuel_type':     bon.fuel_type_id.name if bon.fuel_type_id else '-',
+                    'nb_bons':       0,
+                    'nb_vehicules':  set(),
+                    'total_litres':  0,
+                    'stock_initial': station.capacity if station else 0,
+                    'stock_restant': station.current_stock if station else 0,
+                    'bons':          [],
                 }
             data[key]['nb_bons'] += 1
             data[key]['total_litres'] += bon.total_quantity
@@ -261,12 +267,12 @@ class WizardRapportConsommation(models.TransientModel):
                 if ligne.vehicle_id:
                     data[key]['nb_vehicules'].add(ligne.vehicle_id.id)
             data[key]['bons'].append({
-                'date':       bon.date,
-                'bon_name':   bon.name,
-                'type':       dict(bon._fields['voucher_type'].selection).get(bon.voucher_type, '-'),
-                'agent':      bon.distributor_name or '-',
-                'quantite':   bon.total_quantity,
-                'nb_lignes':  len(bon.line_ids),
+                'date':      bon.date,
+                'bon_name':  bon.name,
+                'type':      dict(bon._fields['voucher_type'].selection).get(bon.voucher_type, '-'),
+                'agent':     bon.distributor_name or '-',
+                'quantite':  bon.total_quantity,
+                'nb_lignes': len(bon.line_ids),
             })
 
         result = []
@@ -283,3 +289,60 @@ class WizardRapportConsommation(models.TransientModel):
                 'bons':          sorted(val['bons'], key=lambda x: x['date']),
             })
         return sorted(result, key=lambda x: x['total_litres'], reverse=True)
+
+    # ── DONNÉES LUBRIFIANTS ──────────────────────────────────
+    def _get_donnees_lubrifiant(self):
+        domain = [('statut', '=', 'valide')]
+        if self.date_debut:
+            domain.append(('date', '>=', self.date_debut))
+        if self.date_fin:
+            domain.append(('date', '<=', self.date_fin))
+        if self.atelier_filtre:
+            domain.append(('atelier', 'ilike', self.atelier_filtre))
+
+        bons = self.env['transport.bon.lubrifiant'].search(domain)
+        data = {}
+        for bon in bons:
+            bus = bon.vehicule_id
+            if not bus:
+                continue
+            for ligne in bon.ligne_ids:
+                key = (bus.id, ligne.type_lubrifiant_id.id)
+                if key not in data:
+                    data[key] = {
+                        'bus_name':        bus.name,
+                        'bus_type':        bus.bus_type or '-',
+                        'atelier':         bon.atelier or '-',
+                        'type_lubrifiant': ligne.type_lubrifiant_id.name if ligne.type_lubrifiant_id else '-',
+                        'nb_vidanges':     0,
+                        'qte_vidange':     0,
+                        'nb_additions':    0,
+                        'qte_addition':    0,
+                        'total_quantite':  0,
+                        'kilometrage':     0,
+                    }
+                if ligne.type_operation == 'vidange':
+                    data[key]['nb_vidanges'] += 1
+                    data[key]['qte_vidange'] += ligne.quantite_videe or 0
+                else:
+                    data[key]['nb_additions'] += 1
+                    data[key]['qte_addition'] += ligne.quantite
+                data[key]['total_quantite'] += ligne.quantite
+                if bon.kilometrage > data[key]['kilometrage']:
+                    data[key]['kilometrage'] = bon.kilometrage
+
+        result = []
+        for key, val in data.items():
+            result.append({
+                'bus_name':        val['bus_name'],
+                'bus_type':        val['bus_type'],
+                'atelier':         val['atelier'],
+                'type_lubrifiant': val['type_lubrifiant'],
+                'nb_vidanges':     val['nb_vidanges'],
+                'qte_vidange':     round(val['qte_vidange'], 2),
+                'nb_additions':    val['nb_additions'],
+                'qte_addition':    round(val['qte_addition'], 2),
+                'total_quantite':  round(val['total_quantite'], 2),
+                'kilometrage':     round(val['kilometrage'], 1),
+            })
+        return sorted(result, key=lambda x: x['bus_name'])
