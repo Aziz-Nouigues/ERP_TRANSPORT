@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+
+        <!-- Privilege = catégorie Odoo 19 -->
+        <record model="res.groups.privilege" id="privilege_transport_boc">
+            <field name="name">Bureau d'Ordre</field>
+            <field name="sequence">60</field>
+            <field name="category_id" ref="base.module_category_transport"/>
+        </record>
+
+        <!-- Agent BOC : saisie courrier arrivée/départ -->
+        <record id="group_agent_boc" model="res.groups">
+            <field name="name">Agent BOC</field>
+            <field name="sequence">10</field>
+            <field name="privilege_id" ref="privilege_transport_boc"/>
+            <field name="comment">Peut créer et gérer les courriers arrivée et départ.</field>
+        </record>
+
+        <!-- Responsable BOC : validation + diffusion -->
+        <record id="group_responsable_boc" model="res.groups">
+            <field name="name">Responsable BOC</field>
+            <field name="sequence">20</field>
+            <field name="privilege_id" ref="privilege_transport_boc"/>
+            <field name="implied_ids" eval="[(4, ref('group_agent_boc'))]"/>
+            <field name="comment">Peut valider, diffuser et accéder aux rapports.</field>
+        </record>
+
+        <!-- Directeur : accès complet -->
+        <record id="group_directeur_boc" model="res.groups">
+            <field name="name">Directeur BOC</field>
+            <field name="sequence">30</field>
+            <field name="privilege_id" ref="privilege_transport_boc"/>
+            <field name="implied_ids" eval="[(4, ref('group_responsable_boc'))]"/>
+            <field name="comment">Accès total au module Bureau d'Ordre.</field>
+        </record>
+
+    </data>
+</odoo>

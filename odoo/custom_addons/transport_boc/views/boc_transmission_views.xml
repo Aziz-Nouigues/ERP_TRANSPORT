@@ -1,0 +1,129 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <!-- ══════════════════════════════════════════════════
+         TRANSMISSION — LISTE PRINCIPALE
+    ══════════════════════════════════════════════════ -->
+    <record id="view_boc_transmission_list" model="ir.ui.view">
+        <field name="name">boc.transmission.list</field>
+        <field name="model">boc.transmission</field>
+        <field name="arch" type="xml">
+            <list string="Transmissions"
+                  decoration-warning="state == 'en_attente'"
+                  decoration-success="state == 'traite'">
+                <field name="arrivee_id"/>
+                <field name="type_transmission"/>
+                <field name="organisme_id"/>
+                <field name="destinataire_nom"/>
+                <field name="instruction"/>
+                <field name="date_transmission"/>
+                <field name="date_echeance"/>
+                <field name="state" widget="badge"
+                       decoration-warning="state == 'en_attente'"
+                       decoration-info="state == 'transfere'"
+                       decoration-success="state == 'traite'"/>
+            </list>
+        </field>
+    </record>
+
+    <!-- ══════════════════════════════════════════════════
+         TRANSMISSION — FORMULAIRE
+    ══════════════════════════════════════════════════ -->
+    <record id="view_boc_transmission_form" model="ir.ui.view">
+        <field name="name">boc.transmission.form</field>
+        <field name="model">boc.transmission</field>
+        <field name="arch" type="xml">
+            <form string="Transmission">
+                <header>
+                    <button name="action_transferer" string="Transférer"
+                            type="object" class="btn-primary"
+                            invisible="state != 'en_attente'"/>
+                    <button name="action_accuser" string="Accuser réception"
+                            type="object"
+                            invisible="state != 'transfere'"/>
+                    <button name="action_traiter" string="Marquer Traité"
+                            type="object" class="btn-success"
+                            invisible="state == 'traite'"/>
+                    <field name="state" widget="statusbar"
+                           statusbar_visible="en_attente,transfere,accuse,traite"/>
+                </header>
+                <sheet>
+                    <group>
+                        <group string="Courrier">
+                            <field name="arrivee_id"/>
+                            <field name="type_transmission" readonly="1"/>
+                        </group>
+                        <group string="Destinataire">
+                            <field name="organisme_id"
+                                   domain="[('type_organisme','=','interne')]"/>
+                            <field name="destinataire_nom"/>
+                            <field name="responsable_id"/>
+                        </group>
+                    </group>
+                    <group>
+                        <group string="Instruction">
+                            <field name="instruction_id"/>
+                            <field name="instruction"/>
+                        </group>
+                        <group string="Dates">
+                            <field name="date_transmission"/>
+                            <field name="date_echeance"/>
+                        </group>
+                    </group>
+                    <field name="notes" placeholder="Notes..."/>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <!-- ══════════════════════════════════════════════════
+         TRANSMISSION — RECHERCHE
+    ══════════════════════════════════════════════════ -->
+    <record id="view_boc_transmission_search" model="ir.ui.view">
+        <field name="name">boc.transmission.search</field>
+        <field name="model">boc.transmission</field>
+        <field name="arch" type="xml">
+            <search>
+                <filter name="en_attente" string="En attente"
+                        domain="[('state','=','en_attente')]"/>
+                <filter name="transfere" string="Transferee"
+                        domain="[('state','=','transfere')]"/>
+                <filter name="traite" string="Traitee"
+                        domain="[('state','=','traite')]"/>
+                <filter name="interne" string="Interne"
+                        domain="[('type_transmission','=','interne')]"/>
+                <filter name="externe" string="Externe"
+                        domain="[('type_transmission','=','externe')]"/>
+                <group>
+                    <filter name="group_state" string="Etat" context="{'group_by':'state'}"/>
+                    <filter name="group_organisme" string="Service" context="{'group_by':'organisme_id'}"/>
+                </group>
+            </search>
+        </field>
+    </record>
+
+    <!-- ══════════════════════════════════════════════════
+         ACTIONS TRANSMISSIONS
+    ══════════════════════════════════════════════════ -->
+    <record id="action_boc_transmission" model="ir.actions.act_window">
+        <field name="name">Toutes les transmissions</field>
+        <field name="res_model">boc.transmission</field>
+        <field name="view_mode">list,form</field>
+        <field name="search_view_id" ref="view_boc_transmission_search"/>
+    </record>
+
+    <record id="action_boc_transmission_non_transferees" model="ir.actions.act_window">
+        <field name="name">Transmissions non transférées</field>
+        <field name="res_model">boc.transmission</field>
+        <field name="view_mode">list,form</field>
+        <field name="domain">[('state','=','en_attente')]</field>
+    </record>
+
+    <record id="action_boc_transmission_transferees" model="ir.actions.act_window">
+        <field name="name">Transmissions transférées</field>
+        <field name="res_model">boc.transmission</field>
+        <field name="view_mode">list,form</field>
+        <field name="domain">[('state','in',['transfere','accuse','traite'])]</field>
+    </record>
+
+</odoo>

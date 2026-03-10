@@ -1,0 +1,130 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <!-- ══════════════════════════════════════════════════
+         MENU RACINE
+    ══════════════════════════════════════════════════ -->
+    <menuitem id="menu_boc_root"
+              name="Bureau d'Ordre"
+              sequence="20"
+              web_icon="transport_boc,static/description/icon.png"/>
+
+    <!-- ══════════════════════════════════════════════════
+         COURRIER ARRIVÉE
+    ══════════════════════════════════════════════════ -->
+    <menuitem id="menu_boc_arrivee_root"
+              name="📥 Courrier Arrivée"
+              parent="menu_boc_root"
+              sequence="10"/>
+
+    <menuitem id="menu_boc_arrivee"
+              name="Tous les courriers"
+              parent="menu_boc_arrivee_root"
+              action="action_boc_arrivee"
+              sequence="10"/>
+
+    <menuitem id="menu_boc_arrivee_sans_suite"
+              name="⚠️ Sans suite / En retard"
+              parent="menu_boc_arrivee_root"
+              action="action_boc_arrivee_sans_suite"
+              sequence="20"/>
+
+    <!-- ══════════════════════════════════════════════════
+         COURRIER DÉPART
+    ══════════════════════════════════════════════════ -->
+    <menuitem id="menu_boc_depart_root"
+              name="📤 Courrier Départ"
+              parent="menu_boc_root"
+              sequence="20"/>
+
+    <menuitem id="menu_boc_depart"
+              name="Tous les courriers"
+              parent="menu_boc_depart_root"
+              action="action_boc_depart"
+              sequence="10"/>
+
+    <!-- ══════════════════════════════════════════════════
+         TRANSMISSIONS
+    ══════════════════════════════════════════════════ -->
+    <menuitem id="menu_boc_transmission_root"
+              name="🔄 Transmissions"
+              parent="menu_boc_root"
+              sequence="30"/>
+
+    <menuitem id="menu_boc_transmission_all"
+              name="Toutes les transmissions"
+              parent="menu_boc_transmission_root"
+              action="action_boc_transmission"
+              sequence="10"/>
+
+    <menuitem id="menu_boc_transmission_non_transferees"
+              name="Non transférées"
+              parent="menu_boc_transmission_root"
+              action="action_boc_transmission_non_transferees"
+              sequence="20"/>
+
+    <menuitem id="menu_boc_transmission_transferees"
+              name="Transférées"
+              parent="menu_boc_transmission_root"
+              action="action_boc_transmission_transferees"
+              sequence="30"/>
+
+    <!-- ══════════════════════════════════════════════════
+         RAPPORTS
+    ══════════════════════════════════════════════════ -->
+    <menuitem id="menu_boc_rapports"
+              name="📄 Rapports"
+              parent="menu_boc_root"
+              sequence="40"/>
+
+    <menuitem id="menu_boc_rapport_arrivee"
+              name="Bordereau courrier arrivée"
+              parent="menu_boc_rapports"
+              action="action_boc_arrivee"
+              sequence="10"/>
+
+    <menuitem id="menu_boc_rapport_depart"
+              name="Bordereau courrier départ"
+              parent="menu_boc_rapports"
+              action="action_boc_depart"
+              sequence="20"/>
+
+    <!-- ══════════════════════════════════════════════════
+         CONFIGURATION
+    ══════════════════════════════════════════════════ -->
+    <menuitem id="menu_boc_config"
+              name="⚙️ Configuration"
+              parent="menu_boc_root"
+              sequence="99"/>
+
+    <menuitem id="menu_boc_type_courrier"
+              name="Types de courrier"
+              parent="menu_boc_config"
+              action="action_boc_type_courrier"
+              sequence="10"/>
+
+    <menuitem id="menu_boc_organisme"
+              name="Organismes"
+              parent="menu_boc_config"
+              action="action_boc_organisme"
+              sequence="20"/>
+
+    <menuitem id="menu_boc_sujet"
+              name="Sujets prédéfinis"
+              parent="menu_boc_config"
+              action="action_boc_sujet"
+              sequence="30"/>
+
+    <menuitem id="menu_boc_instruction"
+              name="Instructions prédéfinies"
+              parent="menu_boc_config"
+              action="action_boc_instruction"
+              sequence="40"/>
+
+    <menuitem id="menu_boc_annotation"
+              name="Annotations"
+              parent="menu_boc_config"
+              action="action_boc_annotation"
+              sequence="50"/>
+
+</odoo>

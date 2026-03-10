@@ -1,0 +1,216 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <!-- ══════════════════════════════════════════════════
+         COURRIER ARRIVÉE — FORMULAIRE
+    ══════════════════════════════════════════════════ -->
+    <record id="view_boc_arrivee_form" model="ir.ui.view">
+        <field name="name">boc.courrier.arrivee.form</field>
+        <field name="model">boc.courrier.arrivee</field>
+        <field name="arch" type="xml">
+            <form string="Courrier Arrivée">
+
+                <!-- Barre de statut -->
+                <header>
+                    <button name="action_enregistrer" string="✅ Enregistrer"
+                            type="object" class="btn-primary"
+                            invisible="state != 'brouillon'"/>
+                    <button name="action_diffuser" string="📤 Diffuser"
+                            type="object" class="btn-primary"
+                            invisible="state != 'enregistre'"/>
+                    <button name="action_traiter" string="✔️ Marquer Traité"
+                            type="object" class="btn-success"
+                            invisible="state not in ('enregistre','diffuse')"/>
+                    <button name="action_classer" string="🗂️ Classer"
+                            type="object"
+                            invisible="state != 'traite'"/>
+                    <button name="action_reset" string="Remettre en brouillon"
+                            type="object"
+                            invisible="state == 'brouillon'"/>
+                    <field name="state" widget="statusbar"
+                           statusbar_visible="brouillon,enregistre,diffuse,traite,classe"/>
+                </header>
+
+                <sheet>
+                    <!-- Alerte retard -->
+                    <div class="alert alert-danger" role="alert"
+                         invisible="not en_retard">
+                        ⚠️ Ce courrier est <strong>en retard</strong> !
+                        Échéance dépassée de <field name="jours_restants" nolabel="1"/> jour(s).
+                    </div>
+
+                    <!-- Entête -->
+                    <div class="oe_title">
+                        <h1>
+                            <field name="name" readonly="1"/>
+                        </h1>
+                    </div>
+
+                    <group>
+                        <group string="Identification">
+                            <field name="type_arrivee" widget="radio" options="{'horizontal': true}"/>
+                            <field name="type_courrier_id"/>
+                            <field name="annee_exercice"/>
+                        </group>
+                        <group string="Dates">
+                            <field name="date_arrivee"/>
+                            <field name="date_courrier"/>
+                            <field name="date_echeance"/>
+                            <field name="date_rappel" readonly="1"/>
+                        </group>
+                    </group>
+
+                    <group>
+                        <group string="Expéditeur">
+                            <field name="organisme_id"/>
+                            <field name="expediteur_nom"
+                                   invisible="organisme_id != False"/>
+                            <field name="reference_expediteur"/>
+                        </group>
+                        <group string="Suivi">
+                            <field name="necessite_reponse"/>
+                            <field name="reponse_fournie"
+                                   invisible="not necessite_reponse"/>
+                            <field name="date_reponse"
+                                   invisible="not reponse_fournie"/>
+                            <field name="depart_reponse_id"
+                                   invisible="not reponse_fournie"/>
+                        </group>
+                    </group>
+
+                    <group string="Contenu">
+                        <field name="sujet_id"/>
+                        <field name="sujet" placeholder="Objet du courrier..."/>
+                        <field name="annotation_id"/>
+                    </group>
+                    <field name="description" placeholder="Description / Remarques..."/>
+
+                    <!-- Section Facture -->
+                    <group string="Informations Facture" invisible="not est_facture">
+                        <group>
+                            <field name="reference_facture"/>
+                            <field name="fournisseur"/>
+                        </group>
+                        <group>
+                            <field name="montant_facture"/>
+                        </group>
+                    </group>
+
+                    <!-- Diffusions -->
+                    <notebook>
+                        <page string="Diffusions">
+                            <field name="transmission_ids">
+                                <list editable="bottom">
+                                    <field name="organisme_id"
+                                           domain="[('type_organisme','=','interne')]"/>
+                                    <field name="destinataire_nom"/>
+                                    <field name="instruction_id"/>
+                                    <field name="instruction"/>
+                                    <field name="date_transmission"/>
+                                    <field name="date_echeance"/>
+                                    <field name="state"/>
+                                </list>
+                            </field>
+                        </page>
+                    </notebook>
+
+                </sheet>
+
+                <!-- Chatter -->
+                <chatter/>
+            </form>
+        </field>
+    </record>
+
+    <!-- ══════════════════════════════════════════════════
+         COURRIER ARRIVÉE — LISTE
+    ══════════════════════════════════════════════════ -->
+    <record id="view_boc_arrivee_list" model="ir.ui.view">
+        <field name="name">boc.courrier.arrivee.list</field>
+        <field name="model">boc.courrier.arrivee</field>
+        <field name="arch" type="xml">
+            <list string="Courriers Arrivée"
+                  decoration-danger="en_retard == True"
+                  decoration-warning="necessite_reponse == True and reponse_fournie == False and en_retard == False">
+                <field name="name"/>
+                <field name="date_arrivee"/>
+                <field name="type_arrivee"/>
+                <field name="type_courrier_id"/>
+                <field name="organisme_id"/>
+                <field name="sujet"/>
+                <field name="date_echeance"/>
+                <field name="necessite_reponse" optional="show"/>
+                <field name="reponse_fournie" optional="show"/>
+                <field name="state" widget="badge"
+                       decoration-success="state == 'traite'"
+                       decoration-info="state == 'diffuse'"
+                       decoration-warning="state == 'enregistre'"
+                       decoration-muted="state == 'classe'"/>
+                <field name="en_retard" invisible="1"/>
+            </list>
+        </field>
+    </record>
+
+    <!-- ══════════════════════════════════════════════════
+         COURRIER ARRIVÉE — RECHERCHE
+    ══════════════════════════════════════════════════ -->
+    <record id="view_boc_arrivee_search" model="ir.ui.view">
+        <field name="name">boc.courrier.arrivee.search</field>
+        <field name="model">boc.courrier.arrivee</field>
+        <field name="arch" type="xml">
+            <search>
+                <filter name="en_retard" string="En retard"
+                        domain="[('en_retard','=',True)]"/>
+                <filter name="necessite_reponse" string="Necessite reponse"
+                        domain="[('necessite_reponse','=',True),('reponse_fournie','=',False)]"/>
+                <separator/>
+                <filter name="externe" string="Externe"
+                        domain="[('type_arrivee','=','externe')]"/>
+                <filter name="interne" string="Interne"
+                        domain="[('type_arrivee','=','interne')]"/>
+                <separator/>
+                <filter name="brouillon" string="Brouillon"
+                        domain="[('state','=','brouillon')]"/>
+                <filter name="enregistre" string="Enregistre"
+                        domain="[('state','=','enregistre')]"/>
+                <filter name="diffuse" string="Diffuse"
+                        domain="[('state','=','diffuse')]"/>
+                <filter name="traite" string="Traite"
+                        domain="[('state','=','traite')]"/>
+                <group>
+                    <filter name="group_type" string="Type" context="{'group_by':'type_courrier_id'}"/>
+                    <filter name="group_state" string="Etat" context="{'group_by':'state'}"/>
+                    <filter name="group_organisme" string="Expediteur" context="{'group_by':'organisme_id'}"/>
+                    <filter name="group_mois" string="Mois" context="{'group_by':'date_arrivee:month'}"/>
+                </group>
+            </search>
+        </field>
+    </record>
+
+    <!-- ══════════════════════════════════════════════════
+         ACTION COURRIER ARRIVÉE
+    ══════════════════════════════════════════════════ -->
+    <record id="action_boc_arrivee" model="ir.actions.act_window">
+        <field name="name">Courrier Arrivée</field>
+        <field name="res_model">boc.courrier.arrivee</field>
+        <field name="view_mode">list,form</field>
+        <field name="search_view_id" ref="view_boc_arrivee_search"/>
+        <field name="context">{'search_default_enregistre': 0}</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                Aucun courrier arrivée pour le moment.
+            </p>
+            <p>Cliquez sur <strong>Nouveau</strong> pour enregistrer un courrier.</p>
+        </field>
+    </record>
+
+    <!-- Action filtrée : courriers nécessitant une réponse -->
+    <record id="action_boc_arrivee_sans_suite" model="ir.actions.act_window">
+        <field name="name">Courriers sans suite</field>
+        <field name="res_model">boc.courrier.arrivee</field>
+        <field name="view_mode">list,form</field>
+        <field name="domain">[('necessite_reponse','=',True),('reponse_fournie','=',False)]</field>
+        <field name="context">{'search_default_en_retard': 1}</field>
+    </record>
+
+</odoo>

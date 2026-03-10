@@ -1,0 +1,157 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <!-- ══════════════════════════════════════════════════
+         TYPE DE COURRIER
+    ══════════════════════════════════════════════════ -->
+    <record id="view_boc_type_courrier_list" model="ir.ui.view">
+        <field name="name">boc.type.courrier.list</field>
+        <field name="model">boc.type.courrier</field>
+        <field name="arch" type="xml">
+            <list string="Types de courrier">
+                <field name="code"/>
+                <field name="name"/>
+                <field name="actif"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="view_boc_type_courrier_form" model="ir.ui.view">
+        <field name="name">boc.type.courrier.form</field>
+        <field name="model">boc.type.courrier</field>
+        <field name="arch" type="xml">
+            <form string="Type de Courrier">
+                <sheet>
+                    <group>
+                        <field name="code"/>
+                        <field name="name"/>
+                        <field name="actif"/>
+                    </group>
+                    <field name="notes" placeholder="Notes..."/>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="action_boc_type_courrier" model="ir.actions.act_window">
+        <field name="name">Types de courrier</field>
+        <field name="res_model">boc.type.courrier</field>
+        <field name="view_mode">list,form</field>
+    </record>
+
+    <!-- ══════════════════════════════════════════════════
+         ORGANISME
+    ══════════════════════════════════════════════════ -->
+    <record id="view_boc_organisme_list" model="ir.ui.view">
+        <field name="name">boc.organisme.list</field>
+        <field name="model">boc.organisme</field>
+        <field name="arch" type="xml">
+            <list string="Organismes">
+                <field name="name"/>
+                <field name="type_organisme"/>
+                <field name="code"/>
+                <field name="direction"/>
+                <field name="service"/>
+                <field name="telephone"/>
+                <field name="email"/>
+                <field name="actif"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="view_boc_organisme_form" model="ir.ui.view">
+        <field name="name">boc.organisme.form</field>
+        <field name="model">boc.organisme</field>
+        <field name="arch" type="xml">
+            <form string="Organisme">
+                <sheet>
+                    <group>
+                        <group string="Identification">
+                            <field name="name"/>
+                            <field name="type_organisme"/>
+                            <field name="code"/>
+                            <field name="actif"/>
+                        </group>
+                        <group string="Contact">
+                            <field name="telephone"/>
+                            <field name="email"/>
+                        </group>
+                    </group>
+                    <group string="Interne" invisible="type_organisme != 'interne'">
+                        <field name="direction"/>
+                        <field name="service"/>
+                        <field name="section"/>
+                    </group>
+                    <field name="adresse" placeholder="Adresse..."/>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="action_boc_organisme" model="ir.actions.act_window">
+        <field name="name">Organismes</field>
+        <field name="res_model">boc.organisme</field>
+        <field name="view_mode">list,form</field>
+    </record>
+
+    <!-- ══════════════════════════════════════════════════
+         SUJET
+    ══════════════════════════════════════════════════ -->
+    <record id="view_boc_sujet_list" model="ir.ui.view">
+        <field name="name">boc.sujet.list</field>
+        <field name="model">boc.sujet</field>
+        <field name="arch" type="xml">
+            <list string="Sujets prédéfinis" editable="bottom">
+                <field name="name"/>
+                <field name="actif"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="action_boc_sujet" model="ir.actions.act_window">
+        <field name="name">Sujets prédéfinis</field>
+        <field name="res_model">boc.sujet</field>
+        <field name="view_mode">list,form</field>
+    </record>
+
+    <!-- ══════════════════════════════════════════════════
+         INSTRUCTION
+    ══════════════════════════════════════════════════ -->
+    <record id="view_boc_instruction_list" model="ir.ui.view">
+        <field name="name">boc.instruction.list</field>
+        <field name="model">boc.instruction</field>
+        <field name="arch" type="xml">
+            <list string="Instructions prédéfinies" editable="bottom">
+                <field name="name"/>
+                <field name="actif"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="action_boc_instruction" model="ir.actions.act_window">
+        <field name="name">Instructions prédéfinies</field>
+        <field name="res_model">boc.instruction</field>
+        <field name="view_mode">list,form</field>
+    </record>
+
+    <!-- ══════════════════════════════════════════════════
+         ANNOTATION
+    ══════════════════════════════════════════════════ -->
+    <record id="view_boc_annotation_list" model="ir.ui.view">
+        <field name="name">boc.annotation.list</field>
+        <field name="model">boc.annotation</field>
+        <field name="arch" type="xml">
+            <list string="Annotations prédéfinies" editable="bottom">
+                <field name="name"/>
+                <field name="actif"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="action_boc_annotation" model="ir.actions.act_window">
+        <field name="name">Annotations prédéfinies</field>
+        <field name="res_model">boc.annotation</field>
+        <field name="view_mode">list,form</field>
+    </record>
+
+</odoo>
