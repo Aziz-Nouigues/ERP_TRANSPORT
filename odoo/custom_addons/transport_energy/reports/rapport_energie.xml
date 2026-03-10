@@ -1,0 +1,179 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <!-- ═══════════════════════════════════════════════════════
+         WIZARD RAPPORT ENERGIE
+    ═══════════════════════════════════════════════════════ -->
+
+    <record id="view_wizard_rapport_energie_form" model="ir.ui.view">
+        <field name="name">transport.wizard.rapport.energie.form</field>
+        <field name="model">transport.wizard.rapport.energie</field>
+        <field name="arch" type="xml">
+            <form string="Rapport Energie STEG/SONEDE">
+                <group>
+                    <group string="Type de rapport">
+                        <field name="type_energie" widget="radio"/>
+                    </group>
+                    <group string="Filtres">
+                        <field name="annee"/>
+                        <field name="site_filtre"/>
+                    </group>
+                </group>
+                <footer>
+                    <button name="action_generer"
+                            string="Generer le Rapport"
+                            type="object"
+                            class="btn-primary"/>
+                    <button string="Annuler"
+                            class="btn-secondary"
+                            special="cancel"/>
+                </footer>
+            </form>
+        </field>
+    </record>
+
+    <record id="action_wizard_rapport_energie" model="ir.actions.act_window">
+        <field name="name">Rapport STEG/SONEDE</field>
+        <field name="res_model">transport.wizard.rapport.energie</field>
+        <field name="view_mode">form</field>
+        <field name="target">new</field>
+    </record>
+
+    <!-- MENUS -->
+    <menuitem
+        id="menu_rapport_steg"
+        name="Rapports STEG/SONEDE"
+        parent="menu_energie_eau"
+        action="action_wizard_rapport_energie"
+        sequence="30"/>
+
+    <!-- ═══════════════════════════════════════════════════════
+         TEMPLATE PDF COMPARAISON N vs N-1
+    ═══════════════════════════════════════════════════════ -->
+
+    <template id="rapport_energie_template">
+        <t t-call="web.html_container">
+            <t t-foreach="docs" t-as="wizard">
+                <t t-call="web.external_layout">
+                    <div class="page" style="direction:rtl; font-family: Arial, sans-serif;">
+
+                        <!-- TITRE -->
+                        <div style="text-align:center; margin-bottom:20px;">
+                            <h2 style="color:#1a5276; border-bottom:3px solid #1a5276; padding-bottom:8px;">
+                                <t t-if="wizard.type_energie == 'steg'">
+                                    مقارنة استهلاك الكهرباء (STEG) - N / N-1
+                                </t>
+                                <t t-elif="wizard.type_energie == 'sonede'">
+                                    مقارنة استهلاك الماء (SONEDE) - N / N-1
+                                </t>
+                                <t t-else="">
+                                    مقارنة استهلاك الطاقة STEG و SONEDE - N / N-1
+                                </t>
+                            </h2>
+                            <h4 style="color:#555;">
+                                Comparaison Consommation Energie N vs N-1
+                            </h4>
+                            <p>
+                                <strong>السنة:</strong> <t t-esc="wizard.annee"/>
+                                <t t-if="wizard.site_filtre">
+                                    | <strong>الموقع:</strong> <t t-esc="wizard.site_filtre"/>
+                                </t>
+                            </p>
+                        </div>
+
+                        <t t-set="donnees" t-value="wizard._get_donnees()"/>
+
+                        <!-- RÉSUMÉ GLOBAL -->
+                        <div style="background:#eaf2ff; padding:10px; border-radius:5px; margin-bottom:15px;">
+                            <strong>ملخص: </strong>
+                            عدد الفواتير: <strong><t t-esc="donnees['nb_factures']"/></strong>
+                            | اجمالي الاستهلاك N: <strong><t t-esc="donnees['total_n']"/> <t t-esc="donnees['unite']"/></strong>
+                            | اجمالي الاستهلاك N-1: <strong><t t-esc="donnees['total_n1']"/> <t t-esc="donnees['unite']"/></strong>
+                            | الفارق: <strong
+                                t-attf-style="color: {{ 'red' if donnees['total_ecart'] > 0 else 'green' }}">
+                                <t t-esc="donnees['total_ecart']"/> <t t-esc="donnees['unite']"/>
+                                (<t t-esc="donnees['ecart_pct']"/>%)
+                            </strong>
+                        </div>
+
+                        <!-- TABLEAU PAR SITE -->
+                        <table class="table table-sm table-bordered" style="width:100%; font-size:11px; direction:rtl;">
+                            <thead style="background:#1a5276; color:white;">
+                                <tr>
+                                    <th style="text-align:center;">الموقع</th>
+                                    <th style="text-align:center;">رقم العداد</th>
+                                    <th style="text-align:center;">النوع</th>
+                                    <th style="text-align:center;">الفترة</th>
+                                    <th style="text-align:center;">الاستهلاك N</th>
+                                    <th style="text-align:center;">المبلغ N (TND)</th>
+                                    <th style="text-align:center;">الاستهلاك N-1</th>
+                                    <th style="text-align:center;">المبلغ N-1 (TND)</th>
+                                    <th style="text-align:center;">الفارق</th>
+                                    <th style="text-align:center;">النسبة %</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <t t-foreach="donnees['lignes']" t-as="ligne">
+                                    <tr t-attf-style="background: {{ '#fdecea' if ligne['ecart_pct'] > 10 else '#eafaf1' if ligne['ecart_pct'] &lt; -5 else 'white' }}">
+                                        <td style="font-weight:bold;"><t t-esc="ligne['site']"/></td>
+                                        <td style="text-align:center;"><t t-esc="ligne['compteur']"/></td>
+                                        <td style="text-align:center;"><t t-esc="ligne['type']"/></td>
+                                        <td style="text-align:center; font-size:10px;"><t t-esc="ligne['periode']"/></td>
+                                        <td style="text-align:center; font-weight:bold;"><t t-esc="ligne['qte_n']"/></td>
+                                        <td style="text-align:center;"><t t-esc="ligne['montant_n']"/></td>
+                                        <td style="text-align:center;"><t t-esc="ligne['qte_n1']"/></td>
+                                        <td style="text-align:center;"><t t-esc="ligne['montant_n1']"/></td>
+                                        <td t-attf-style="text-align:center; color: {{ 'red' if ligne['ecart'] > 0 else 'green' }}; font-weight:bold;">
+                                            <t t-esc="ligne['ecart']"/>
+                                        </td>
+                                        <td t-attf-style="text-align:center; color: {{ 'red' if ligne['ecart_pct'] > 0 else 'green' }}; font-weight:bold;">
+                                            <t t-esc="ligne['ecart_pct']"/>%
+                                        </td>
+                                    </tr>
+                                </t>
+                            </tbody>
+                            <tfoot style="background:#d5e8d4; font-weight:bold;">
+                                <tr>
+                                    <td colspan="4" style="text-align:right;">الجملة</td>
+                                    <td style="text-align:center;"><t t-esc="donnees['total_n']"/></td>
+                                    <td style="text-align:center;"><t t-esc="donnees['total_montant_n']"/></td>
+                                    <td style="text-align:center;"><t t-esc="donnees['total_n1']"/></td>
+                                    <td style="text-align:center;"><t t-esc="donnees['total_montant_n1']"/></td>
+                                    <td style="text-align:center;"><t t-esc="donnees['total_ecart']"/></td>
+                                    <td style="text-align:center;"><t t-esc="donnees['ecart_pct']"/>%</td>
+                                </tr>
+                            </tfoot>
+                        </table>
+
+                        <!-- GRAPHIQUE TEXTUEL PAR SITE -->
+                        <div style="margin-top:20px;">
+                            <h4 style="color:#1a5276;">مقارنة حسب الموقع</h4>
+                            <t t-foreach="donnees['par_site']" t-as="site">
+                                <div style="margin-bottom:8px; border:1px solid #ddd; padding:8px; border-radius:4px;">
+                                    <strong><t t-esc="site['site']"/></strong>
+                                    <span style="margin-right:10px; color:#1a5276;">
+                                        N: <t t-esc="site['total_n']"/> | N-1: <t t-esc="site['total_n1']"/>
+                                    </span>
+                                    <span t-attf-style="color: {{ 'red' if site['ecart'] > 0 else 'green' }}; font-weight:bold;">
+                                        فارق: <t t-esc="site['ecart']"/> (<t t-esc="site['ecart_pct']"/>%)
+                                    </span>
+                                </div>
+                            </t>
+                        </div>
+
+                    </div>
+                </t>
+            </t>
+        </t>
+    </template>
+
+    <record id="action_rapport_energie_pdf" model="ir.actions.report">
+        <field name="name">Rapport STEG/SONEDE N vs N-1</field>
+        <field name="model">transport.wizard.rapport.energie</field>
+        <field name="report_type">qweb-pdf</field>
+        <field name="report_name">transport_energy.rapport_energie_template</field>
+        <field name="report_file">transport_energy.rapport_energie_template</field>
+        <field name="binding_model_id" ref="model_transport_wizard_rapport_energie"/>
+    </record>
+
+</odoo>

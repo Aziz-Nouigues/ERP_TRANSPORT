@@ -23,6 +23,7 @@
         'views/facture_energie_views.xml',
         'views/jaugeage_views.xml',
         'reports/rapport_lubrifiant.xml',
+        'reports/rapport_energie.xml',
         'reports/rapport_distribution.xml',
         'views/wizard_rapport_views.xml',
         'reports/rapport_bgi.xml',

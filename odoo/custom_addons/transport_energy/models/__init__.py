@@ -7,3 +7,4 @@ from . import facture_energie
 from . import jaugeage
 from . import wizard_rapport
 from . import agilis_carte
+from . import wizard_rapport_energie
