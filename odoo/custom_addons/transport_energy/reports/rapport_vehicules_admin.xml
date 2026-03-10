@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <!-- ═══════════════════════════════════════════════════════
+         RAPPORT CONSOMMATION VEHICULES ADMINISTRATIFS
+    ═══════════════════════════════════════════════════════ -->
+
+    <template id="rapport_vehicules_admin_template">
+        <t t-call="web.html_container">
+            <t t-foreach="docs" t-as="wizard">
+                <t t-call="web.external_layout">
+                    <div class="page" style="direction:rtl; font-family: Arial, sans-serif;">
+
+                        <div style="text-align:center; margin-bottom:20px;">
+                            <h2 style="color:#1a5276; border-bottom:3px solid #1a5276; padding-bottom:8px;">
+                                استهلاك المحروقات للسيارات الادارية
+                            </h2>
+                            <h4 style="color:#555;">Consommation Carburant - Vehicules Administratifs</h4>
+                            <p>
+                                <strong>من</strong> <t t-esc="wizard.date_debut"/>
+                                <strong> الى </strong> <t t-esc="wizard.date_fin"/>
+                            </p>
+                        </div>
+
+                        <t t-set="donnees" t-value="wizard._get_donnees_vehicules_admin()"/>
+
+                        <div style="background:#eaf2ff; padding:10px; border-radius:5px; margin-bottom:15px;">
+                            <strong>ملخص: </strong>
+                            عدد السيارات: <strong><t t-esc="donnees['nb_vehicules']"/></strong>
+                            | اجمالي الاستهلاك: <strong><t t-esc="donnees['total_litres']"/> L</strong>
+                            | اجمالي المسافة: <strong><t t-esc="donnees['total_km']"/> km</strong>
+                        </div>
+
+                        <table class="table table-sm table-bordered" style="width:100%; font-size:11px; direction:rtl;">
+                            <thead style="background:#1a5276; color:white;">
+                                <tr>
+                                    <th>السيارة</th>
+                                    <th>رقم التسجيل</th>
+                                    <th>الصنف</th>
+                                    <th>المركز</th>
+                                    <th>عدد التزودات</th>
+                                    <th>الكمية (L)</th>
+                                    <th>المسافة (km)</th>
+                                    <th>الاستهلاك (L/100)</th>
+                                    <th>الاستهلاك النظري</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <t t-foreach="donnees['lignes']" t-as="ligne">
+                                    <tr>
+                                        <td style="font-weight:bold;"><t t-esc="ligne['nom']"/></td>
+                                        <td style="text-align:center;"><t t-esc="ligne['immatriculation']"/></td>
+                                        <td><t t-esc="ligne['type']"/></td>
+                                        <td><t t-esc="ligne['centre']"/></td>
+                                        <td style="text-align:center;"><t t-esc="ligne['nb_sorties']"/></td>
+                                        <td style="text-align:center; font-weight:bold;"><t t-esc="ligne['total_litres']"/></td>
+                                        <td style="text-align:center;"><t t-esc="ligne['total_km']"/></td>
+                                        <td style="text-align:center;"><t t-esc="ligne['conso_reelle']"/></td>
+                                        <td style="text-align:center;"><t t-esc="ligne['conso_theorique']"/></td>
+                                    </tr>
+                                </t>
+                            </tbody>
+                            <tfoot style="background:#d5e8d4; font-weight:bold;">
+                                <tr>
+                                    <td colspan="5" style="text-align:right;">الجملة</td>
+                                    <td style="text-align:center;"><t t-esc="donnees['total_litres']"/></td>
+                                    <td style="text-align:center;"><t t-esc="donnees['total_km']"/></td>
+                                    <td colspan="2"></td>
+                                </tr>
+                            </tfoot>
+                        </table>
+
+                    </div>
+                </t>
+            </t>
+        </t>
+    </template>
+
+    <record id="action_rapport_vehicules_admin" model="ir.actions.report">
+        <field name="name">Consommation Vehicules Administratifs</field>
+        <field name="model">transport.wizard.rapport</field>
+        <field name="report_type">qweb-pdf</field>
+        <field name="report_name">transport_energy.rapport_vehicules_admin_template</field>
+        <field name="report_file">transport_energy.rapport_vehicules_admin_template</field>
+        <field name="binding_model_id" ref="model_transport_wizard_rapport"/>
+    </record>
+
+</odoo>

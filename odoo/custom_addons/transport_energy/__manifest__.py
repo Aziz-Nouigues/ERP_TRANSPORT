@@ -27,8 +27,9 @@
         'reports/rapport_distribution.xml',
         'views/wizard_rapport_views.xml',
         'reports/rapport_rotation_chauffeurs.xml',
+        'reports/rapport_vehicules_admin.xml',
         'reports/rapport_bgi.xml',
-        'reports/rapport_consommation.xml',
+        'reports/rapport_consommation.xml',g
         'views/agilis_views.xml',
 
     ],

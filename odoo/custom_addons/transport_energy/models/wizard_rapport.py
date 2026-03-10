@@ -28,6 +28,7 @@ class WizardRapportConsommation(models.TransientModel):
         ('par_vehicule', 'جدول توزيع السوائل حسب العربة - Distribution par vehicule'),
         ('par_station',  'جدول توزيع السوائل حسب المغازة - Distribution par station'),
         ('rotation',     'تقرير دوران السائقين - Rotation Chauffeurs'),
+        ('admin',        'سيارات ادارية - Vehicules Administratifs'),
     ], string='Type de rapport', default='recap')
 
     # ── TYPE RAPPORT LUBRIFIANT ──────────────────────────────
@@ -42,54 +43,35 @@ class WizardRapportConsommation(models.TransientModel):
         ('par_station', 'Distribution par station'),
         ('lubrifiant', 'Rapport Lubrifiants'),
         ('rotation', 'Rotation Chauffeurs'),
+        ('admin', 'Vehicules Administratifs'),
     ], default='recap')
 
     # ── HELPER XLSX ──────────────────────────────────────────
     def _make_xlsx_response(self, filename, callback):
-        """Cree un fichier Excel et retourne l'action de telechargement"""
         if not xlsxwriter:
             raise UserError("Le module xlsxwriter n'est pas installe !")
         output = io.BytesIO()
         workbook = xlsxwriter.Workbook(output, {'in_memory': True})
-
-        # Formats communs
-        fmt_title = workbook.add_format({'bold': True, 'font_size': 14, 'align': 'center', 'valign': 'vcenter', 'bg_color': '#1a5276', 'font_color': 'white'})
-        fmt_header = workbook.add_format({'bold': True, 'bg_color': '#2e86c1', 'font_color': 'white', 'border': 1, 'align': 'center', 'valign': 'vcenter', 'text_wrap': True})
-        fmt_data = workbook.add_format({'border': 1, 'align': 'center', 'valign': 'vcenter'})
-        fmt_data_left = workbook.add_format({'border': 1, 'align': 'left', 'valign': 'vcenter'})
-        fmt_total = workbook.add_format({'bold': True, 'bg_color': '#d5e8d4', 'border': 1, 'align': 'center'})
-        fmt_red = workbook.add_format({'border': 1, 'align': 'center', 'font_color': 'red', 'bold': True})
-        fmt_green = workbook.add_format({'border': 1, 'align': 'center', 'font_color': 'green', 'bold': True})
-        fmt_orange = workbook.add_format({'border': 1, 'align': 'center', 'font_color': '#e67e22', 'bold': True})
-
-        formats = {
-            'title': fmt_title,
-            'header': fmt_header,
-            'data': fmt_data,
-            'data_left': fmt_data_left,
-            'total': fmt_total,
-            'red': fmt_red,
-            'green': fmt_green,
-            'orange': fmt_orange,
-        }
-
+        fmt_title    = workbook.add_format({'bold': True, 'font_size': 14, 'align': 'center', 'valign': 'vcenter', 'bg_color': '#1a5276', 'font_color': 'white'})
+        fmt_header   = workbook.add_format({'bold': True, 'bg_color': '#2e86c1', 'font_color': 'white', 'border': 1, 'align': 'center', 'valign': 'vcenter', 'text_wrap': True})
+        fmt_data     = workbook.add_format({'border': 1, 'align': 'center', 'valign': 'vcenter'})
+        fmt_data_left= workbook.add_format({'border': 1, 'align': 'left', 'valign': 'vcenter'})
+        fmt_total    = workbook.add_format({'bold': True, 'bg_color': '#d5e8d4', 'border': 1, 'align': 'center'})
+        fmt_red      = workbook.add_format({'border': 1, 'align': 'center', 'font_color': 'red', 'bold': True})
+        fmt_green    = workbook.add_format({'border': 1, 'align': 'center', 'font_color': 'green', 'bold': True})
+        fmt_orange   = workbook.add_format({'border': 1, 'align': 'center', 'font_color': '#e67e22', 'bold': True})
+        formats = {'title': fmt_title, 'header': fmt_header, 'data': fmt_data, 'data_left': fmt_data_left, 'total': fmt_total, 'red': fmt_red, 'green': fmt_green, 'orange': fmt_orange}
         callback(workbook, formats)
         workbook.close()
         output.seek(0)
         xlsx_data = base64.b64encode(output.read()).decode()
-
-        # Sauvegarder dans attachment
         attachment = self.env['ir.attachment'].create({
             'name': filename,
             'type': 'binary',
             'datas': xlsx_data,
             'mimetype': 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
         })
-        return {
-            'type': 'ir.actions.act_url',
-            'url': f'/web/content/{attachment.id}?download=true',
-            'target': 'self',
-        }
+        return {'type': 'ir.actions.act_url', 'url': f'/web/content/{attachment.id}?download=true', 'target': 'self'}
 
     # ── ACTIONS PDF ─────────────────────────────────────────
     def action_generer_rapport_carburant(self):
@@ -100,6 +82,7 @@ class WizardRapportConsommation(models.TransientModel):
             'par_vehicule': 'transport_energy.action_rapport_par_vehicule',
             'par_station':  'transport_energy.action_rapport_par_station',
             'rotation':     'transport_energy.action_rapport_rotation_chauffeurs',
+            'admin':        'transport_energy.action_rapport_vehicules_admin',
         }
         return self.env.ref(refs[self.type_rapport_carburant]).report_action(self)
 
@@ -116,25 +99,22 @@ class WizardRapportConsommation(models.TransientModel):
             'par_station':  'transport_energy.action_rapport_par_station',
             'lubrifiant':   'transport_energy.action_rapport_lubrifiant',
             'rotation':     'transport_energy.action_rapport_rotation_chauffeurs',
+            'admin':        'transport_energy.action_rapport_vehicules_admin',
         }
         return self.env.ref(refs[self.type_rapport]).report_action(self)
 
     # ── EXPORT EXCEL CARBURANT ───────────────────────────────
     def action_export_excel_carburant(self):
         self.ensure_one()
-        typ = self.type_rapport_carburant
-        if typ == 'recap':
-            return self._export_recap()
-        elif typ == 'excessif':
-            return self._export_excessif()
-        elif typ == 'par_vehicule':
-            return self._export_par_vehicule()
-        elif typ == 'par_station':
-            return self._export_par_station()
-        elif typ == 'rotation':
-            return self._export_rotation()
+        return {
+            'recap':        self._export_recap,
+            'excessif':     self._export_excessif,
+            'par_vehicule': self._export_par_vehicule,
+            'par_station':  self._export_par_station,
+            'rotation':     self._export_rotation,
+            'admin':        self._export_admin,
+        }[self.type_rapport_carburant]()
 
-    # ── EXPORT EXCEL LUBRIFIANT ──────────────────────────────
     def action_export_excel_lubrifiant(self):
         self.ensure_one()
         return self._export_lubrifiant()
@@ -160,8 +140,7 @@ class WizardRapportConsommation(models.TransientModel):
                 ws.write(row, 5, l['conso_moy'], f['data'])
             r = len(lignes) + 4
             ws.write(r, 0, 'TOTAL', f['total'])
-            ws.write(r, 3, sum(l['total_litres'] for l in lignes), f['total'])
-            ws.write(r, 4, sum(l['total_km'] for l in lignes), f['total'])
+            ws.write(r, 3, round(sum(l['total_litres'] for l in lignes), 2), f['total'])
         return self._make_xlsx_response(f'Recapitulatif_{self.date_debut}_{self.date_fin}.xlsx', build)
 
     # ── EXPORT BUS EXCESSIFS ─────────────────────────────────
@@ -187,7 +166,7 @@ class WizardRapportConsommation(models.TransientModel):
                 ws.write(row, 7, l['ecart'], f['red'])
         return self._make_xlsx_response(f'BusExcessifs_{self.date_debut}_{self.date_fin}.xlsx', build)
 
-    # ── EXPORT DISTRIBUTION PAR VEHICULE ────────────────────
+    # ── EXPORT PAR VEHICULE ──────────────────────────────────
     def _export_par_vehicule(self):
         def build(workbook, f):
             ws = workbook.add_worksheet('Distribution Vehicule')
@@ -217,7 +196,7 @@ class WizardRapportConsommation(models.TransientModel):
             ws.write(r, 6, round(sum(l['total_litres'] for l in lignes), 2), f['total'])
         return self._make_xlsx_response(f'DistributionVehicule_{self.date_debut}_{self.date_fin}.xlsx', build)
 
-    # ── EXPORT DISTRIBUTION PAR STATION ─────────────────────
+    # ── EXPORT PAR STATION ───────────────────────────────────
     def _export_par_station(self):
         def build(workbook, f):
             ws = workbook.add_worksheet('Distribution Station')
@@ -229,8 +208,7 @@ class WizardRapportConsommation(models.TransientModel):
             for col, h in enumerate(headers):
                 ws.write(3, col, h, f['header'])
             stations = self._get_donnees_par_station()
-            row = 4
-            for s in stations:
+            for row, s in enumerate(stations, 4):
                 ws.write(row, 0, s['station_name'], f['data_left'])
                 ws.write(row, 1, s['station_code'], f['data'])
                 ws.write(row, 2, s['fuel_type'], f['data'])
@@ -239,24 +217,9 @@ class WizardRapportConsommation(models.TransientModel):
                 ws.write(row, 5, s['total_litres'], f['data'])
                 ws.write(row, 6, s['stock_initial'], f['data'])
                 ws.write(row, 7, s['stock_restant'], f['data'])
-                row += 1
-                # Detail bons
-                ws2_name = s['station_name'][:25]
-                ws2 = workbook.add_worksheet(f'Detail_{ws2_name}')
-                ws2.set_column(0, 5, 18)
-                detail_headers = ['Date', 'Bon', 'Type', 'Agent', 'Nb Vehicules', 'Quantite (L)']
-                for col, h in enumerate(detail_headers):
-                    ws2.write(0, col, h, f['header'])
-                for r2, bon in enumerate(s['bons'], 1):
-                    ws2.write(r2, 0, str(bon['date']), f['data'])
-                    ws2.write(r2, 1, bon['bon_name'], f['data'])
-                    ws2.write(r2, 2, bon['type'], f['data'])
-                    ws2.write(r2, 3, bon['agent'], f['data'])
-                    ws2.write(r2, 4, bon['nb_lignes'], f['data'])
-                    ws2.write(r2, 5, bon['quantite'], f['data'])
         return self._make_xlsx_response(f'DistributionStation_{self.date_debut}_{self.date_fin}.xlsx', build)
 
-    # ── EXPORT ROTATION CHAUFFEURS ───────────────────────────
+    # ── EXPORT ROTATION ──────────────────────────────────────
     def _export_rotation(self):
         def build(workbook, f):
             ws = workbook.add_worksheet('Rotation Chauffeurs')
@@ -308,6 +271,34 @@ class WizardRapportConsommation(models.TransientModel):
             ws.write(r, 0, 'TOTAL', f['total'])
             ws.write(r, 8, round(sum(l['total_quantite'] for l in lignes), 2), f['total'])
         return self._make_xlsx_response(f'Lubrifiants_{self.date_debut}_{self.date_fin}.xlsx', build)
+
+    # ── EXPORT VEHICULES ADMIN ───────────────────────────────
+    def _export_admin(self):
+        def build(workbook, f):
+            ws = workbook.add_worksheet('Vehicules Admin')
+            ws.set_column(0, 0, 30)
+            ws.set_column(1, 8, 18)
+            ws.merge_range('A1:I1', 'Consommation Vehicules Administratifs', f['title'])
+            ws.merge_range('A2:I2', f'Du {self.date_debut} au {self.date_fin}', f['data'])
+            headers = ['Vehicule', 'Immatriculation', 'Type', 'Centre', 'Nb Sorties', 'Total Litres (L)', 'Total KM', 'Conso Reelle (L/100)', 'Conso Theorique']
+            for col, h in enumerate(headers):
+                ws.write(3, col, h, f['header'])
+            donnees = self._get_donnees_vehicules_admin()
+            for row, l in enumerate(donnees['lignes'], 4):
+                ws.write(row, 0, l['nom'], f['data_left'])
+                ws.write(row, 1, l['immatriculation'], f['data'])
+                ws.write(row, 2, l['type'], f['data'])
+                ws.write(row, 3, l['centre'], f['data'])
+                ws.write(row, 4, l['nb_sorties'], f['data'])
+                ws.write(row, 5, l['total_litres'], f['data'])
+                ws.write(row, 6, l['total_km'], f['data'])
+                ws.write(row, 7, l['conso_reelle'], f['data'])
+                ws.write(row, 8, l['conso_theorique'], f['data'])
+            r = len(donnees['lignes']) + 4
+            ws.write(r, 0, 'TOTAL', f['total'])
+            ws.write(r, 5, donnees['total_litres'], f['total'])
+            ws.write(r, 6, donnees['total_km'], f['total'])
+        return self._make_xlsx_response(f'VehiculesAdmin_{self.date_debut}_{self.date_fin}.xlsx', build)
 
     # ── DONNÉES RÉCAPITULATIF ────────────────────────────────
     def _get_donnees_recap(self):
@@ -372,7 +363,7 @@ class WizardRapportConsommation(models.TransientModel):
                 result.append({'bus_name': val['bus_name'], 'bus_type': val['bus_type'], 'nb_sorties': val['nb_sorties'], 'total_litres': round(total_l, 2), 'total_km': round(total_km, 2), 'conso_theorique': round(val['conso_theorique'], 2), 'conso_reelle': round(conso_reelle, 2), 'ecart': round(ecart, 2)})
         return sorted(result, key=lambda x: x['conso_reelle'], reverse=True)
 
-    # ── DONNÉES DISTRIBUTION PAR VÉHICULE ────────────────────
+    # ── DONNÉES PAR VÉHICULE ─────────────────────────────────
     def _get_donnees_par_vehicule(self):
         domain = [('state', '=', 'done')]
         if self.date_debut:
@@ -406,7 +397,7 @@ class WizardRapportConsommation(models.TransientModel):
             result.append({'bus_name': val['bus_name'], 'bus_type': val['bus_type'], 'code_interne': val['code_interne'], 'service_code': val['service_code'], 'nb_sorties': val['nb_sorties'], 'nb_chauffeurs': len(val['chauffeurs']), 'total_litres': round(total_l, 2), 'total_km': round(total_km, 2), 'conso_theorique': round(conso_theorique, 2), 'conso_reelle': round(conso_reelle, 2), 'ecart': round(ecart, 2)})
         return sorted(result, key=lambda x: x['total_litres'], reverse=True)
 
-    # ── DONNÉES DISTRIBUTION PAR STATION ─────────────────────
+    # ── DONNÉES PAR STATION ──────────────────────────────────
     def _get_donnees_par_station(self):
         domain = [('state', '=', 'done')]
         if self.date_debut:
@@ -497,3 +488,63 @@ class WizardRapportConsommation(models.TransientModel):
             lignes.append({'bus_name': val['bus_name'], 'bus_type': val['bus_type'], 'agence': val['agence'], 'service_code': val['service_code'], 'nb_sorties': val['nb_sorties'], 'nb_chauffeurs': nb_ch, 'total_litres': round(val['total_litres'], 2), 'liste_chauffeurs': liste})
         lignes = sorted(lignes, key=lambda x: x['nb_chauffeurs'], reverse=True)
         return {'nb_bus': len(lignes), 'nb_plus_5': len([l for l in lignes if l['nb_chauffeurs'] > 5]), 'nb_plus_10': len([l for l in lignes if l['nb_chauffeurs'] > 10]), 'total_chauffeurs': sum(l['nb_chauffeurs'] for l in lignes), 'lignes': lignes, 'bus_excessifs': [l for l in lignes if l['nb_chauffeurs'] > 5]}
+
+    # ── DONNÉES VEHICULES ADMINISTRATIFS ─────────────────────
+    def _get_donnees_vehicules_admin(self):
+        domain = [('state', '=', 'done')]
+        if self.date_debut:
+            domain.append(('date', '>=', self.date_debut))
+        if self.date_fin:
+            domain.append(('date', '<=', self.date_fin))
+        bons = self.env['transport.fuel.voucher'].search(domain)
+        data = {}
+        for bon in bons:
+            for ligne in bon.line_ids:
+                bus = ligne.vehicle_id
+                if not bus:
+                    continue
+                # Filtre : vehicules administratifs uniquement
+                if bus.activity_type != 'admin' and bus.bus_type != 'service_car':
+                    continue
+                key = bus.id
+                if key not in data:
+                    data[key] = {
+                        'nom':             bus.name,
+                        'immatriculation': bus.license_plate or '-',
+                        'type':            dict(bus._fields['bus_type'].selection).get(bus.bus_type, '-') if bus.bus_type else '-',
+                        'centre':          bus.transport_agency or '-',
+                        'conso_theorique': bus.theoretical_fuel_consumption or 0,
+                        'nb_sorties':      0,
+                        'total_litres':    0,
+                        'total_km':        0,
+                    }
+                data[key]['nb_sorties'] += 1
+                data[key]['total_litres'] += ligne.quantity
+                data[key]['total_km'] += ligne.distance_estimated or 0
+
+        lignes = []
+        total_l = 0
+        total_km = 0
+        for key, val in data.items():
+            km = val['total_km']
+            l = val['total_litres']
+            conso_reelle = round((l / km * 100), 2) if km > 0 else 0
+            total_l += l
+            total_km += km
+            lignes.append({
+                'nom':             val['nom'],
+                'immatriculation': val['immatriculation'],
+                'type':            val['type'],
+                'centre':          val['centre'],
+                'nb_sorties':      val['nb_sorties'],
+                'total_litres':    round(l, 2),
+                'total_km':        round(km, 2),
+                'conso_reelle':    conso_reelle,
+                'conso_theorique': round(val['conso_theorique'], 2),
+            })
+        return {
+            'nb_vehicules': len(lignes),
+            'total_litres': round(total_l, 2),
+            'total_km':     round(total_km, 2),
+            'lignes':       sorted(lignes, key=lambda x: x['total_litres'], reverse=True),
+        }
