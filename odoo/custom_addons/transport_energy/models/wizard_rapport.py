@@ -29,6 +29,7 @@ class WizardRapportConsommation(models.TransientModel):
         ('par_station',  'جدول توزيع السوائل حسب المغازة - Distribution par station'),
         ('rotation',     'تقرير دوران السائقين - Rotation Chauffeurs'),
         ('admin',        'سيارات ادارية - Vehicules Administratifs'),
+        ('stats',        'احصائيات حسب الوكالة - Stats par Agence'),
     ], string='Type de rapport', default='recap')
 
     # ── TYPE RAPPORT LUBRIFIANT ──────────────────────────────
@@ -44,6 +45,7 @@ class WizardRapportConsommation(models.TransientModel):
         ('lubrifiant', 'Rapport Lubrifiants'),
         ('rotation', 'Rotation Chauffeurs'),
         ('admin', 'Vehicules Administratifs'),
+        ('stats', 'Stats par Agence'),
     ], default='recap')
 
     # ── HELPER XLSX ──────────────────────────────────────────
@@ -83,6 +85,7 @@ class WizardRapportConsommation(models.TransientModel):
             'par_station':  'transport_energy.action_rapport_par_station',
             'rotation':     'transport_energy.action_rapport_rotation_chauffeurs',
             'admin':        'transport_energy.action_rapport_vehicules_admin',
+            'stats':        'transport_energy.action_rapport_stats_agence',
         }
         return self.env.ref(refs[self.type_rapport_carburant]).report_action(self)
 
@@ -100,6 +103,7 @@ class WizardRapportConsommation(models.TransientModel):
             'lubrifiant':   'transport_energy.action_rapport_lubrifiant',
             'rotation':     'transport_energy.action_rapport_rotation_chauffeurs',
             'admin':        'transport_energy.action_rapport_vehicules_admin',
+            'stats':        'transport_energy.action_rapport_stats_agence',
         }
         return self.env.ref(refs[self.type_rapport]).report_action(self)
 
@@ -113,6 +117,7 @@ class WizardRapportConsommation(models.TransientModel):
             'par_station':  self._export_par_station,
             'rotation':     self._export_rotation,
             'admin':        self._export_admin,
+            'stats':        self._export_stats_agence,
         }[self.type_rapport_carburant]()
 
     def action_export_excel_lubrifiant(self):
@@ -548,3 +553,174 @@ class WizardRapportConsommation(models.TransientModel):
             'total_km':     round(total_km, 2),
             'lignes':       sorted(lignes, key=lambda x: x['total_litres'], reverse=True),
         }
+
+    # ── DONNÉES STATS PAR AGENCE ─────────────────────────────
+    def _get_donnees_stats_agence(self):
+        domain = [('state', '=', 'done')]
+        if self.date_debut:
+            domain.append(('date', '>=', self.date_debut))
+        if self.date_fin:
+            domain.append(('date', '<=', self.date_fin))
+        bons = self.env['transport.fuel.voucher'].search(domain)
+
+        par_agence = {}
+        par_type   = {}
+        croise     = {}  # {agence: {type: litres}}
+
+        bus_type_labels = dict(self.env['fleet.vehicle']._fields['bus_type'].selection)
+
+        for bon in bons:
+            for ligne in bon.line_ids:
+                bus = ligne.vehicle_id
+                if not bus:
+                    continue
+                agence  = bus.transport_agency or 'Non defini'
+                btype   = bus_type_labels.get(bus.bus_type, bus.bus_type or 'Non defini')
+                litres  = ligne.quantity or 0
+                km      = ligne.distance_estimated or 0
+
+                # Par agence
+                if agence not in par_agence:
+                    par_agence[agence] = {'nb_vehicules': set(), 'nb_sorties': 0, 'total_litres': 0, 'total_km': 0}
+                par_agence[agence]['nb_vehicules'].add(bus.id)
+                par_agence[agence]['nb_sorties'] += 1
+                par_agence[agence]['total_litres'] += litres
+                par_agence[agence]['total_km'] += km
+
+                # Par type
+                if btype not in par_type:
+                    par_type[btype] = {'nb_vehicules': set(), 'nb_sorties': 0, 'total_litres': 0, 'total_km': 0}
+                par_type[btype]['nb_vehicules'].add(bus.id)
+                par_type[btype]['nb_sorties'] += 1
+                par_type[btype]['total_litres'] += litres
+                par_type[btype]['total_km'] += km
+
+                # Croisé
+                if agence not in croise:
+                    croise[agence] = {}
+                croise[agence][btype] = croise[agence].get(btype, 0) + litres
+
+        total_litres = sum(v['total_litres'] for v in par_agence.values())
+        total_km     = sum(v['total_km'] for v in par_agence.values())
+        total_sorties= sum(v['nb_sorties'] for v in par_agence.values())
+        total_veh    = len(set(vid for v in par_agence.values() for vid in v['nb_vehicules']))
+        conso_moy_g  = round((total_litres / total_km * 100), 2) if total_km > 0 else 0
+
+        result_agence = []
+        for ag, val in par_agence.items():
+            km   = val['total_km']
+            l    = val['total_litres']
+            pct  = round((l / total_litres * 100), 1) if total_litres > 0 else 0
+            result_agence.append({
+                'agence':       ag,
+                'nb_vehicules': len(val['nb_vehicules']),
+                'nb_sorties':   val['nb_sorties'],
+                'total_litres': round(l, 2),
+                'total_km':     round(km, 2),
+                'conso_moy':    round((l / km * 100), 2) if km > 0 else 0,
+                'pct':          pct,
+            })
+        result_agence = sorted(result_agence, key=lambda x: x['total_litres'], reverse=True)
+
+        result_type = []
+        for tp, val in par_type.items():
+            km  = val['total_km']
+            l   = val['total_litres']
+            pct = round((l / total_litres * 100), 1) if total_litres > 0 else 0
+            result_type.append({
+                'bus_type':     tp,
+                'nb_vehicules': len(val['nb_vehicules']),
+                'nb_sorties':   val['nb_sorties'],
+                'total_litres': round(l, 2),
+                'total_km':     round(km, 2),
+                'conso_moy':    round((l / km * 100), 2) if km > 0 else 0,
+                'pct':          pct,
+            })
+        result_type = sorted(result_type, key=lambda x: x['total_litres'], reverse=True)
+        types_list  = [t['bus_type'] for t in result_type]
+
+        result_croise = []
+        for ag in [r['agence'] for r in result_agence]:
+            row = {'agence': ag, 'types': {}, 'total': 0}
+            for tp in types_list:
+                val = croise.get(ag, {}).get(tp, 0)
+                row['types'][tp] = round(val, 2) if val else '-'
+                if val:
+                    row['total'] += val
+            row['total'] = round(row['total'], 2)
+            result_croise.append(row)
+
+        return {
+            'par_agence':       result_agence,
+            'par_type':         result_type,
+            'croise':           result_croise,
+            'types_list':       types_list,
+            'total_litres':     round(total_litres, 2),
+            'total_km':         round(total_km, 2),
+            'total_sorties':    total_sorties,
+            'total_vehicules':  total_veh,
+            'conso_moy_globale': conso_moy_g,
+        }
+
+    # ── EXPORT STATS AGENCE ──────────────────────────────────
+    def _export_stats_agence(self):
+        def build(workbook, f):
+            donnees = self._get_donnees_stats_agence()
+
+            # Feuille 1 : Par agence
+            ws1 = workbook.add_worksheet('Par Agence')
+            ws1.set_column(0, 0, 25)
+            ws1.set_column(1, 6, 18)
+            ws1.merge_range('A1:G1', 'Statistiques Consommation par Agence', f['title'])
+            ws1.merge_range('A2:G2', f'Du {self.date_debut} au {self.date_fin}', f['data'])
+            headers = ['Agence', 'Nb Vehicules', 'Nb Sorties', 'Total Litres (L)', 'Total KM', 'Conso Moy (L/100)', '% Total']
+            for col, h in enumerate(headers):
+                ws1.write(3, col, h, f['header'])
+            for row, ag in enumerate(donnees['par_agence'], 4):
+                ws1.write(row, 0, ag['agence'], f['data_left'])
+                ws1.write(row, 1, ag['nb_vehicules'], f['data'])
+                ws1.write(row, 2, ag['nb_sorties'], f['data'])
+                ws1.write(row, 3, ag['total_litres'], f['data'])
+                ws1.write(row, 4, ag['total_km'], f['data'])
+                ws1.write(row, 5, ag['conso_moy'], f['data'])
+                ws1.write(row, 6, f"{ag['pct']} %", f['data'])
+            r = len(donnees['par_agence']) + 4
+            for col, val in enumerate(['TOTAL', donnees['total_vehicules'], donnees['total_sorties'], donnees['total_litres'], donnees['total_km'], donnees['conso_moy_globale'], '100 %']):
+                ws1.write(r, col, val, f['total'])
+
+            # Feuille 2 : Par type de bus
+            ws2 = workbook.add_worksheet('Par Type Bus')
+            ws2.set_column(0, 0, 30)
+            ws2.set_column(1, 6, 18)
+            ws2.merge_range('A1:G1', 'Consommation par Type de Bus', f['title'])
+            ws2.merge_range('A2:G2', f'Du {self.date_debut} au {self.date_fin}', f['data'])
+            for col, h in enumerate(headers):
+                ws2.write(3, col, h.replace('Agence', 'Type Bus'), f['header'])
+            for row, tp in enumerate(donnees['par_type'], 4):
+                ws2.write(row, 0, tp['bus_type'], f['data_left'])
+                ws2.write(row, 1, tp['nb_vehicules'], f['data'])
+                ws2.write(row, 2, tp['nb_sorties'], f['data'])
+                ws2.write(row, 3, tp['total_litres'], f['data'])
+                ws2.write(row, 4, tp['total_km'], f['data'])
+                ws2.write(row, 5, tp['conso_moy'], f['data'])
+                ws2.write(row, 6, f"{tp['pct']} %", f['data'])
+
+            # Feuille 3 : Tableau croisé
+            ws3 = workbook.add_worksheet('Croise Agence x Type')
+            ws3.set_column(0, 0, 25)
+            ws3.set_column(1, len(donnees['types_list']) + 1, 18)
+            titre = 'Comparaison Agences x Types de Bus (Litres)'
+            ws3.merge_range(0, 0, 0, len(donnees['types_list']) + 1, titre, f['title'])
+            ws3.merge_range(1, 0, 1, len(donnees['types_list']) + 1, f'Du {self.date_debut} au {self.date_fin}', f['data'])
+            ws3.write(3, 0, 'Agence', f['header'])
+            for col, tp in enumerate(donnees['types_list'], 1):
+                ws3.write(3, col, tp, f['header'])
+            ws3.write(3, len(donnees['types_list']) + 1, 'TOTAL (L)', f['header'])
+            for row, cr in enumerate(donnees['croise'], 4):
+                ws3.write(row, 0, cr['agence'], f['data_left'])
+                for col, tp in enumerate(donnees['types_list'], 1):
+                    val = cr['types'].get(tp, '-')
+                    ws3.write(row, col, val, f['data'])
+                ws3.write(row, len(donnees['types_list']) + 1, cr['total'], f['total'])
+
+        return self._make_xlsx_response(f'StatsAgence_{self.date_debut}_{self.date_fin}.xlsx', build)

@@ -29,7 +29,8 @@
         'reports/rapport_rotation_chauffeurs.xml',
         'reports/rapport_vehicules_admin.xml',
         'reports/rapport_bgi.xml',
-        'reports/rapport_consommation.xml',g
+        'reports/rapport_stats_agence.xml',
+        'reports/rapport_consommation.xml',
         'views/agilis_views.xml',
 
     ],

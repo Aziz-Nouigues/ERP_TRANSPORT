@@ -1,0 +1,135 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <template id="rapport_stats_agence_template">
+        <t t-call="web.html_container">
+            <t t-foreach="docs" t-as="wizard">
+                <t t-call="web.external_layout">
+                    <div class="page" style="direction:rtl; font-family: Arial, sans-serif;">
+
+                        <!-- TITRE -->
+                        <div style="text-align:center; margin-bottom:20px;">
+                            <h2 style="color:#1a5276; border-bottom:3px solid #1a5276; padding-bottom:8px;">
+                                احصائيات استهلاك المحروقات حسب الوكالة
+                            </h2>
+                            <h4 style="color:#555;">Statistiques Consommation par Agence / Type de Bus</h4>
+                            <p>
+                                <strong>من</strong> <t t-esc="wizard.date_debut"/>
+                                <strong> الى </strong> <t t-esc="wizard.date_fin"/>
+                            </p>
+                        </div>
+
+                        <t t-set="donnees" t-value="wizard._get_donnees_stats_agence()"/>
+
+                        <!-- ═══ SECTION 1 : RÉCAP PAR AGENCE ═══ -->
+                        <h4 style="color:#1a5276; margin-top:15px;">1. ملخص حسب الوكالة - Recapitulatif par Agence</h4>
+                        <table class="table table-sm table-bordered" style="width:100%; font-size:11px; direction:rtl;">
+                            <thead style="background:#1a5276; color:white;">
+                                <tr>
+                                    <th>الوكالة</th>
+                                    <th style="text-align:center;">عدد الحافلات</th>
+                                    <th style="text-align:center;">عدد الخروجات</th>
+                                    <th style="text-align:center;">الكمية (L)</th>
+                                    <th style="text-align:center;">المسافة (km)</th>
+                                    <th style="text-align:center;">معدل الاستهلاك (L/100)</th>
+                                    <th style="text-align:center;">% من الجملة</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <t t-foreach="donnees['par_agence']" t-as="ag">
+                                    <tr>
+                                        <td style="font-weight:bold;"><t t-esc="ag['agence']"/></td>
+                                        <td style="text-align:center;"><t t-esc="ag['nb_vehicules']"/></td>
+                                        <td style="text-align:center;"><t t-esc="ag['nb_sorties']"/></td>
+                                        <td style="text-align:center; font-weight:bold;"><t t-esc="ag['total_litres']"/></td>
+                                        <td style="text-align:center;"><t t-esc="ag['total_km']"/></td>
+                                        <td style="text-align:center;"><t t-esc="ag['conso_moy']"/></td>
+                                        <td style="text-align:center;"><t t-esc="ag['pct']"/> %</td>
+                                    </tr>
+                                </t>
+                            </tbody>
+                            <tfoot style="background:#d5e8d4; font-weight:bold;">
+                                <tr>
+                                    <td>الجملة</td>
+                                    <td style="text-align:center;"><t t-esc="donnees['total_vehicules']"/></td>
+                                    <td style="text-align:center;"><t t-esc="donnees['total_sorties']"/></td>
+                                    <td style="text-align:center;"><t t-esc="donnees['total_litres']"/></td>
+                                    <td style="text-align:center;"><t t-esc="donnees['total_km']"/></td>
+                                    <td style="text-align:center;"><t t-esc="donnees['conso_moy_globale']"/></td>
+                                    <td style="text-align:center;">100 %</td>
+                                </tr>
+                            </tfoot>
+                        </table>
+
+                        <!-- ═══ SECTION 2 : PAR TYPE DE BUS ═══ -->
+                        <h4 style="color:#1a5276; margin-top:20px;">2. الاستهلاك حسب صنف الحافلة - Consommation par Type de Bus</h4>
+                        <table class="table table-sm table-bordered" style="width:100%; font-size:11px; direction:rtl;">
+                            <thead style="background:#2e86c1; color:white;">
+                                <tr>
+                                    <th>صنف الحافلة</th>
+                                    <th style="text-align:center;">عدد الحافلات</th>
+                                    <th style="text-align:center;">عدد الخروجات</th>
+                                    <th style="text-align:center;">الكمية (L)</th>
+                                    <th style="text-align:center;">المسافة (km)</th>
+                                    <th style="text-align:center;">معدل الاستهلاك (L/100)</th>
+                                    <th style="text-align:center;">% من الجملة</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <t t-foreach="donnees['par_type']" t-as="tp">
+                                    <tr>
+                                        <td style="font-weight:bold;"><t t-esc="tp['bus_type']"/></td>
+                                        <td style="text-align:center;"><t t-esc="tp['nb_vehicules']"/></td>
+                                        <td style="text-align:center;"><t t-esc="tp['nb_sorties']"/></td>
+                                        <td style="text-align:center; font-weight:bold;"><t t-esc="tp['total_litres']"/></td>
+                                        <td style="text-align:center;"><t t-esc="tp['total_km']"/></td>
+                                        <td style="text-align:center;"><t t-esc="tp['conso_moy']"/></td>
+                                        <td style="text-align:center;"><t t-esc="tp['pct']"/> %</td>
+                                    </tr>
+                                </t>
+                            </tbody>
+                        </table>
+
+                        <!-- ═══ SECTION 3 : COMPARAISON AGENCES PAR TYPE ═══ -->
+                        <h4 style="color:#1a5276; margin-top:20px;">3. مقارنة الوكالات حسب صنف الحافلة - Comparaison Agences x Types</h4>
+                        <table class="table table-sm table-bordered" style="width:100%; font-size:10px; direction:rtl;">
+                            <thead style="background:#1a5276; color:white;">
+                                <tr>
+                                    <th>الوكالة</th>
+                                    <t t-foreach="donnees['types_list']" t-as="tp">
+                                        <th style="text-align:center;"><t t-esc="tp"/></th>
+                                    </t>
+                                    <th style="text-align:center;">الجملة (L)</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <t t-foreach="donnees['croise']" t-as="row">
+                                    <tr>
+                                        <td style="font-weight:bold;"><t t-esc="row['agence']"/></td>
+                                        <t t-foreach="donnees['types_list']" t-as="tp">
+                                            <td style="text-align:center;">
+                                                <t t-esc="row['types'].get(tp, '-')"/>
+                                            </td>
+                                        </t>
+                                        <td style="text-align:center; font-weight:bold;"><t t-esc="row['total']"/></td>
+                                    </tr>
+                                </t>
+                            </tbody>
+                        </table>
+
+                    </div>
+                </t>
+            </t>
+        </t>
+    </template>
+
+    <record id="action_rapport_stats_agence" model="ir.actions.report">
+        <field name="name">Statistiques Consommation par Agence</field>
+        <field name="model">transport.wizard.rapport</field>
+        <field name="report_type">qweb-pdf</field>
+        <field name="report_name">transport_energy.rapport_stats_agence_template</field>
+        <field name="report_file">transport_energy.rapport_stats_agence_template</field>
+        <field name="binding_model_id" ref="model_transport_wizard_rapport"/>
+    </record>
+
+</odoo>
