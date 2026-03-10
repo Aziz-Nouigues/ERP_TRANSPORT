@@ -21,6 +21,9 @@ class WizardRapportConsommation(models.TransientModel):
     atelier_filtre = fields.Char(
         string='Atelier / Magasin (optionnel)'
     )
+    agence_filtre = fields.Char(
+        string='Agence / Depot (optionnel)'
+    )
     seuil_excessif = fields.Float(
         string='Seuil consommation excessive (L/100km)',
         default=35.0,
@@ -32,6 +35,7 @@ class WizardRapportConsommation(models.TransientModel):
         ('excessif',     'Bus a consommation excessive'),
         ('par_vehicule', 'جدول توزيع السوائل حسب العربة - Distribution par vehicule'),
         ('par_station',  'جدول توزيع السوائل حسب المغازة - Distribution par station'),
+        ('rotation',     'تقرير دوران السائقين - Rotation Chauffeurs'),
     ], string='Type de rapport',
        default='recap'
     )
@@ -50,6 +54,7 @@ class WizardRapportConsommation(models.TransientModel):
         ('par_vehicule', 'Distribution par vehicule'),
         ('par_station',  'Distribution par station'),
         ('lubrifiant',   'Rapport Lubrifiants'),
+        ('rotation',     'Rotation Chauffeurs'),
     ], default='recap')
 
     # ── ACTIONS ─────────────────────────────────────────────
@@ -60,6 +65,7 @@ class WizardRapportConsommation(models.TransientModel):
             'excessif':     'transport_energy.action_rapport_excessif',
             'par_vehicule': 'transport_energy.action_rapport_par_vehicule',
             'par_station':  'transport_energy.action_rapport_par_station',
+            'rotation':     'transport_energy.action_rapport_rotation_chauffeurs',
         }
         return self.env.ref(refs[self.type_rapport_carburant]).report_action(self)
 
@@ -77,6 +83,7 @@ class WizardRapportConsommation(models.TransientModel):
             'par_vehicule': 'transport_energy.action_rapport_par_vehicule',
             'par_station':  'transport_energy.action_rapport_par_station',
             'lubrifiant':   'transport_energy.action_rapport_lubrifiant',
+            'rotation':     'transport_energy.action_rapport_rotation_chauffeurs',
         }
         return self.env.ref(refs[self.type_rapport]).report_action(self)
 
@@ -346,3 +353,67 @@ class WizardRapportConsommation(models.TransientModel):
                 'kilometrage':     round(val['kilometrage'], 1),
             })
         return sorted(result, key=lambda x: x['bus_name'])
+
+    # ── DONNÉES ROTATION CHAUFFEURS ──────────────────────────
+    def _get_donnees_rotation(self):
+        domain = [('state', '=', 'done')]
+        if self.date_debut:
+            domain.append(('date', '>=', self.date_debut))
+        if self.date_fin:
+            domain.append(('date', '<=', self.date_fin))
+
+        bons = self.env['transport.fuel.voucher'].search(domain)
+        data = {}
+        for bon in bons:
+            for ligne in bon.line_ids:
+                bus = ligne.vehicle_id
+                if not bus:
+                    continue
+                agence = bus.transport_agency or '-'
+                if self.agence_filtre and self.agence_filtre.lower() not in agence.lower():
+                    continue
+                key = bus.id
+                if key not in data:
+                    data[key] = {
+                        'bus_name':     bus.name,
+                        'bus_type':     bus.bus_type or '-',
+                        'agence':       agence,
+                        'service_code': ligne.service_code or bus.service_code or '-',
+                        'nb_sorties':   0,
+                        'total_litres': 0,
+                        'chauffeurs':   {},
+                    }
+                data[key]['nb_sorties'] += 1
+                data[key]['total_litres'] += ligne.quantity
+                if ligne.driver_code:
+                    data[key]['chauffeurs'][ligne.driver_code] = (
+                        ligne.driver_name or ligne.driver_code
+                    )
+
+        lignes = []
+        for key, val in data.items():
+            nb_ch = len(val['chauffeurs'])
+            liste = ', '.join(
+                f"{code}({nom})" if nom != code else code
+                for code, nom in sorted(val['chauffeurs'].items())
+            )
+            lignes.append({
+                'bus_name':        val['bus_name'],
+                'bus_type':        val['bus_type'],
+                'agence':          val['agence'],
+                'service_code':    val['service_code'],
+                'nb_sorties':      val['nb_sorties'],
+                'nb_chauffeurs':   nb_ch,
+                'total_litres':    round(val['total_litres'], 2),
+                'liste_chauffeurs': liste,
+            })
+
+        lignes = sorted(lignes, key=lambda x: x['nb_chauffeurs'], reverse=True)
+        return {
+            'nb_bus':          len(lignes),
+            'nb_plus_5':       len([l for l in lignes if l['nb_chauffeurs'] > 5]),
+            'nb_plus_10':      len([l for l in lignes if l['nb_chauffeurs'] > 10]),
+            'total_chauffeurs': sum(l['nb_chauffeurs'] for l in lignes),
+            'lignes':          lignes,
+            'bus_excessifs':   [l for l in lignes if l['nb_chauffeurs'] > 5],
+        }

@@ -1,0 +1,120 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <!-- ═══════════════════════════════════════════════════════
+         RAPPORT ROTATION CHAUFFEURS
+    ═══════════════════════════════════════════════════════ -->
+
+    <template id="rapport_rotation_chauffeurs_template">
+        <t t-call="web.html_container">
+            <t t-foreach="docs" t-as="wizard">
+                <t t-call="web.external_layout">
+                    <div class="page" style="direction:rtl; font-family: Arial, sans-serif;">
+
+                        <!-- TITRE -->
+                        <div style="text-align:center; margin-bottom:20px;">
+                            <h2 style="color:#1a5276; border-bottom:3px solid #1a5276; padding-bottom:8px;">
+                                تقرير دوران السائقين
+                            </h2>
+                            <h4 style="color:#555;">Rapport Rotation des Chauffeurs par Bus</h4>
+                            <p>
+                                <strong>من</strong> <t t-esc="wizard.date_debut"/>
+                                <strong> الى </strong> <t t-esc="wizard.date_fin"/>
+                                <t t-if="wizard.agence_filtre">
+                                    | <strong>الوكالة:</strong> <t t-esc="wizard.agence_filtre"/>
+                                </t>
+                            </p>
+                        </div>
+
+                        <t t-set="donnees" t-value="wizard._get_donnees_rotation()"/>
+
+                        <!-- RÉSUMÉ -->
+                        <div style="background:#eaf2ff; padding:10px; border-radius:5px; margin-bottom:15px;">
+                            <strong>ملخص: </strong>
+                            عدد الحافلات: <strong><t t-esc="donnees['nb_bus']"/></strong>
+                            | حافلات بأكثر من 5 سائقين: <strong style="color:orange;"><t t-esc="donnees['nb_plus_5']"/></strong>
+                            | حافلات بأكثر من 10 سائقين: <strong style="color:red;"><t t-esc="donnees['nb_plus_10']"/></strong>
+                            | اجمالي السائقين الفريدين: <strong><t t-esc="donnees['total_chauffeurs']"/></strong>
+                        </div>
+
+                        <!-- TABLEAU PRINCIPAL -->
+                        <table class="table table-sm table-bordered" style="width:100%; font-size:11px; direction:rtl;">
+                            <thead style="background:#1a5276; color:white;">
+                                <tr>
+                                    <th style="text-align:center;">العربة</th>
+                                    <th style="text-align:center;">الصنف</th>
+                                    <th style="text-align:center;">الوكالة</th>
+                                    <th style="text-align:center;">المصلحة</th>
+                                    <th style="text-align:center;">عدد الخروجات</th>
+                                    <th style="text-align:center;">عدد السائقين المختلفين</th>
+                                    <th style="text-align:center;">الكمية المستهلكة (L)</th>
+                                    <th style="text-align:center;">قائمة السائقين</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <t t-foreach="donnees['lignes']" t-as="ligne">
+                                    <tr t-attf-style="background: {{ '#fdecea' if ligne['nb_chauffeurs'] > 10 else '#fef9e7' if ligne['nb_chauffeurs'] > 5 else 'white' }}">
+                                        <td style="font-weight:bold;"><t t-esc="ligne['bus_name']"/></td>
+                                        <td><t t-esc="ligne['bus_type']"/></td>
+                                        <td><t t-esc="ligne['agence']"/></td>
+                                        <td style="text-align:center;"><t t-esc="ligne['service_code']"/></td>
+                                        <td style="text-align:center;"><t t-esc="ligne['nb_sorties']"/></td>
+                                        <td t-attf-style="text-align:center; font-weight:bold; color: {{ 'red' if ligne['nb_chauffeurs'] > 10 else 'orange' if ligne['nb_chauffeurs'] > 5 else 'green' }}">
+                                            <t t-esc="ligne['nb_chauffeurs']"/>
+                                        </td>
+                                        <td style="text-align:center;"><t t-esc="ligne['total_litres']"/></td>
+                                        <td style="font-size:9px;"><t t-esc="ligne['liste_chauffeurs']"/></td>
+                                    </tr>
+                                </t>
+                            </tbody>
+                        </table>
+
+                        <!-- SECTION BUS AVEC ROTATION EXCESSIVE -->
+                        <t t-if="donnees['bus_excessifs']">
+                            <div style="margin-top:20px;">
+                                <h4 style="color:red;">
+                                    حافلات بدوران مفرط (اكثر من 5 سائقين)
+                                </h4>
+                                <table class="table table-sm table-bordered" style="width:100%; font-size:11px; direction:rtl;">
+                                    <thead style="background:#c0392b; color:white;">
+                                        <tr>
+                                            <th>العربة</th>
+                                            <th>الصنف</th>
+                                            <th>الوكالة</th>
+                                            <th style="text-align:center;">عدد السائقين</th>
+                                            <th>السائقون</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <t t-foreach="donnees['bus_excessifs']" t-as="bus">
+                                            <tr>
+                                                <td style="font-weight:bold;"><t t-esc="bus['bus_name']"/></td>
+                                                <td><t t-esc="bus['bus_type']"/></td>
+                                                <td><t t-esc="bus['agence']"/></td>
+                                                <td style="text-align:center; color:red; font-weight:bold;">
+                                                    <t t-esc="bus['nb_chauffeurs']"/>
+                                                </td>
+                                                <td style="font-size:9px;"><t t-esc="bus['liste_chauffeurs']"/></td>
+                                            </tr>
+                                        </t>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </t>
+
+                    </div>
+                </t>
+            </t>
+        </t>
+    </template>
+
+    <record id="action_rapport_rotation_chauffeurs" model="ir.actions.report">
+        <field name="name">Rapport Rotation Chauffeurs</field>
+        <field name="model">transport.wizard.rapport</field>
+        <field name="report_type">qweb-pdf</field>
+        <field name="report_name">transport_energy.rapport_rotation_chauffeurs_template</field>
+        <field name="report_file">transport_energy.rapport_rotation_chauffeurs_template</field>
+        <field name="binding_model_id" ref="model_transport_wizard_rapport"/>
+    </record>
+
+</odoo>

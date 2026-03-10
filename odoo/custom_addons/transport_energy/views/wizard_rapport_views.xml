@@ -12,11 +12,14 @@
                         <field name="type_rapport_carburant" widget="radio"/>
                         <field name="seuil_excessif"
                                invisible="type_rapport_carburant != 'excessif'"/>
+                        <field name="agence_filtre"
+                               invisible="type_rapport_carburant != 'rotation'"/>
                     </group>
                     <group string="Filtres">
                         <field name="date_debut"/>
                         <field name="date_fin"/>
-                        <field name="station_id"/>
+                        <field name="station_id"
+                               invisible="type_rapport_carburant == 'rotation'"/>
                     </group>
                 </group>
                 <footer>
