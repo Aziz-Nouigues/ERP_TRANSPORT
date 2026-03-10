@@ -24,9 +24,13 @@
                 </group>
                 <footer>
                     <button name="action_generer_rapport_carburant"
-                            string="Generer le Rapport"
+                            string="Generer PDF"
                             type="object"
                             class="btn-primary"/>
+                    <button name="action_export_excel_carburant"
+                            string="Exporter Excel"
+                            type="object"
+                            class="btn-success"/>
                     <button string="Annuler"
                             class="btn-secondary"
                             special="cancel"/>
@@ -53,9 +57,13 @@
                 </group>
                 <footer>
                     <button name="action_generer_rapport_lubrifiant"
-                            string="Generer le Rapport"
+                            string="Generer PDF"
                             type="object"
                             class="btn-primary"/>
+                    <button name="action_export_excel_lubrifiant"
+                            string="Exporter Excel"
+                            type="object"
+                            class="btn-success"/>
                     <button string="Annuler"
                             class="btn-secondary"
                             special="cancel"/>
@@ -89,7 +97,7 @@
         <field name="target">new</field>
     </record>
 
-    <!-- ===== MENU SOUS Carburant ===== -->
+    <!-- ===== MENUS ===== -->
     <menuitem
         id="menu_rapport_carburant"
         name="Rapports"
@@ -97,7 +105,6 @@
         action="action_rapport_carburant"
         sequence="30"/>
 
-    <!-- ===== MENU SOUS Lubrifiants ===== -->
     <menuitem
         id="menu_rapport_lubrifiant_menu"
         name="Rapports"
