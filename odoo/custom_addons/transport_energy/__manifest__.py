@@ -1,16 +1,12 @@
+# -*- coding: utf-8 -*-
 {
-    'name': 'Transport - Gestion Énergie',
-    'author': 'Aziz Nouigues',
-    'category': 'Transport',
+    'name': 'Transport - Energie',
     'version': '19.0.1.0.0',
+    'category': 'Transport',
+    'summary': 'Gestion de l\'énergie : carburant, lubrifiants, STEG, SONEDE',
+    'author': 'ERP Transport',
+    'depends': ['base', 'mail', 'fleet', 'transport_boc'],
     'license': 'LGPL-3',
-    'depends': [
-        'base',
-        'fleet',
-        'stock',
-        'mail',
-        'hr',
-    ],
     'data': [
         'security/groups.xml',
         'security/ir.model.access.csv',
@@ -26,13 +22,9 @@
         'reports/rapport_energie.xml',
         'reports/rapport_distribution.xml',
         'views/wizard_rapport_views.xml',
-        'reports/rapport_rotation_chauffeurs.xml',
-        'reports/rapport_vehicules_admin.xml',
         'reports/rapport_bgi.xml',
-        'reports/rapport_stats_agence.xml',
         'reports/rapport_consommation.xml',
         'views/agilis_views.xml',
-
     ],
     'installable': True,
     'application': True,

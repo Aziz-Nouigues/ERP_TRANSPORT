@@ -64,6 +64,12 @@
                     </group>
 
                     <field name="notes" placeholder="Notes..."/>
+
+                    <group string="Lien Bureau d'Ordre">
+                        <field name="boc_arrivee_id"/>
+                        <field name="boc_reference" readonly="1"
+                               invisible="not boc_arrivee_id"/>
+                    </group>
                 </sheet>
 
                 <chatter/>
@@ -89,6 +95,7 @@
                 <field name="unite_mesure"/>
                 <field name="montant"/>
                 <field name="ecart_pourcentage"/>
+                <field name="boc_reference" optional="show"/>
                 <field name="statut"/>
             </list>
         </field>

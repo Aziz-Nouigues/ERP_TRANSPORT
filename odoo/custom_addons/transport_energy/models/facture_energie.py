@@ -104,6 +104,20 @@ class FactureEnergie(models.Model):
 
     notes = fields.Text(string='Notes')
 
+    # ── LIEN BOC ─────────────────────────────────────────────
+    boc_arrivee_id = fields.Many2one(
+        'boc.courrier.arrivee',
+        string='Courrier BOC associé',
+        help='Courrier arrivée BOC correspondant à cette facture (reçu par courrier)',
+        domain=[('type_courrier_id.name', 'ilike', 'facture')],
+    )
+    boc_reference = fields.Char(
+        string='Réf. BOC',
+        related='boc_arrivee_id.name',
+        store=True,
+        readonly=True,
+    )
+
     # ── CALCULS ─────────────────────────────────────────────
     @api.depends('type_facture')
     def _calcul_unite(self):
