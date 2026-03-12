@@ -37,6 +37,7 @@ class BocTransmission(models.Model):
     )
     instruction = fields.Char(
         string='Instruction',
+        translate=False,
         help='ex: Pour traitement, Pour information, Pour signature...',
     )
 
@@ -56,7 +57,7 @@ class BocTransmission(models.Model):
         ('traite',     'Traité'),
     ], string='État', default='en_attente')
 
-    notes = fields.Text(string='Notes')
+    notes = fields.Text(string='Notes', translate=False)
 
     # ── INFOS CALCULÉES ──────────────────────────────────────────
     type_transmission = fields.Selection(

@@ -15,7 +15,8 @@ class BonLubrifiant(models.Model):
         required=True,
         copy=False,
         readonly=True,
-        default='Nouveau'
+        default='Nouveau',
+        translate=False,
     )
 
     statut = fields.Selection([
@@ -35,11 +36,13 @@ class BonLubrifiant(models.Model):
     atelier = fields.Char(
         string='Atelier / Magasin',
         required=True,
+        translate=True,
         help='Atelier ou magasin qui effectue l\'opération'
     )
 
     agence = fields.Char(
         string='Agence / Dépôt',
+        translate=True,
     )
 
     # ── VÉHICULE ────────────────────────────────────────────
@@ -59,11 +62,13 @@ class BonLubrifiant(models.Model):
 
     # ── CHAUFFEUR ───────────────────────────────────────────
     code_chauffeur = fields.Char(
-        string='Code chauffeur'
+        string='Code chauffeur',
+        translate=False,
     )
 
     nom_chauffeur = fields.Char(
-        string='Nom chauffeur'
+        string='Nom chauffeur',
+        translate=True,
     )
 
     # ── KILOMÉTRAGE ─────────────────────────────────────────
@@ -100,7 +105,7 @@ class BonLubrifiant(models.Model):
         digits=(10, 2)
     )
 
-    notes = fields.Text(string='Observations')
+    notes = fields.Text(string='Observations', translate=False)
 
     # ── CALCULS ─────────────────────────────────────────────
     @api.depends('ligne_ids.quantite')

@@ -11,6 +11,7 @@ class BocTypeCourrier(models.Model):
     name = fields.Char(
         string='Type de courrier',
         required=True,
+        translate=True,
     )
     code = fields.Char(
         string='Code',
@@ -33,6 +34,7 @@ class BocOrganisme(models.Model):
     name = fields.Char(
         string='Nom organisme',
         required=True,
+        translate=True,
     )
     type_organisme = fields.Selection([
         ('interne', 'Interne'),
@@ -57,7 +59,7 @@ class BocSujet(models.Model):
     _description = "Sujet Prédéfini"
     _order = 'name'
 
-    name = fields.Char(string='Sujet', required=True)
+    name = fields.Char(string='Sujet', required=True, translate=True)
     actif = fields.Boolean(string='Actif', default=True)
 
 
@@ -67,7 +69,7 @@ class BocInstruction(models.Model):
     _description = "Instruction Prédéfinie"
     _order = 'name'
 
-    name = fields.Char(string='Instruction', required=True)
+    name = fields.Char(string='Instruction', required=True, translate=True)
     # ex: "Pour traitement", "Pour information", "Pour signature", "Pour avis"
     actif = fields.Boolean(string='Actif', default=True)
 
@@ -78,5 +80,5 @@ class BocAnnotation(models.Model):
     _description = "Annotation Prédéfinie"
     _order = 'name'
 
-    name = fields.Char(string='Annotation', required=True)
+    name = fields.Char(string='Annotation', required=True, translate=True)
     actif = fields.Boolean(string='Actif', default=True)

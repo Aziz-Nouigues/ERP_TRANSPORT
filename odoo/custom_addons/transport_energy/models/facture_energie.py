@@ -31,7 +31,8 @@ class FactureEnergie(models.Model):
     # ── SITE ────────────────────────────────────────────────
     site = fields.Char(
         string='Site / Agence',
-        required=True
+        required=True,
+        translate=False,
     )
 
     adresse = fields.Char(string='Adresse du compteur')
@@ -102,7 +103,7 @@ class FactureEnergie(models.Model):
         store=True
     )
 
-    notes = fields.Text(string='Notes')
+    notes = fields.Text(string='Notes', translate=False)
 
     # ── LIEN BOC ─────────────────────────────────────────────
     boc_arrivee_id = fields.Many2one(

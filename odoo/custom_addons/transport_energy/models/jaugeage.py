@@ -9,12 +9,14 @@ class Jaugeage(models.Model):
     _inherit = ['mail.thread', 'mail.activity.mixin']
     _order = 'date desc, id desc'
 
+    # ── IDENTIFICATION ───────────────────────────────────────
     name = fields.Char(
         string='N° Jaugeage',
         required=True,
         copy=False,
         readonly=True,
-        default='Nouveau'
+        default='Nouveau',
+        translate=False,
     )
 
     statut = fields.Selection([
@@ -24,6 +26,7 @@ class Jaugeage(models.Model):
         ('annule',      'Annulé'),
     ], string='Statut', default='brouillon', tracking=True)
 
+    # ── DATE & RESPONSABLE ───────────────────────────────────
     date = fields.Datetime(
         string='Date & Heure',
         required=True,
@@ -32,9 +35,11 @@ class Jaugeage(models.Model):
 
     responsable = fields.Char(
         string='Responsable',
-        required=True
+        required=True,
+        translate=True,
     )
 
+    # ── STATION ─────────────────────────────────────────────
     station_id = fields.Many2one(
         'transport.fuel.station',
         string='Station / Cuve',
@@ -42,11 +47,12 @@ class Jaugeage(models.Model):
         tracking=True
     )
 
-    # ── STOCK THÉORIQUE FIGÉ à la création ──────────────────
+    # ── NIVEAUX ─────────────────────────────────────────────
     stock_theorique = fields.Float(
         string='Stock théorique ERP (L)',
         digits=(10, 2),
-        # Plus de compute — saisi au moment de la création
+        compute='_calcul_stock_theorique',
+        store=True
     )
 
     niveau_mesure = fields.Float(
@@ -55,6 +61,7 @@ class Jaugeage(models.Model):
         digits=(10, 2)
     )
 
+    # ── ÉCART ───────────────────────────────────────────────
     ecart = fields.Float(
         string='Écart (L)',
         digits=(10, 2),
@@ -78,29 +85,44 @@ class Jaugeage(models.Model):
        store=True
     )
 
-    justification = fields.Text(string='Justification de l\'écart')
-    ajustement_stock = fields.Boolean(string='Ajuster le stock ?', default=False)
-    notes = fields.Text(string='Notes')
+    # ── JUSTIFICATION ───────────────────────────────────────
+    justification = fields.Text(
+        string='Justification de l\'écart',
+        translate=False,
+    )
 
-    # ── ONCHANGE : remplir stock théorique automatiquement ───
-    @api.onchange('station_id')
-    def _onchange_station(self):
-        if self.station_id:
-            self.stock_theorique = self.station_id.current_stock
+    ajustement_stock = fields.Boolean(
+        string='Ajuster le stock ?',
+        default=False
+    )
 
-    # ── CALCUL ÉCART ────────────────────────────────────────
+    notes = fields.Text(string='Notes', translate=False)
+
+    # ── CALCULS ─────────────────────────────────────────────
+    @api.depends('station_id')
+    def _calcul_stock_theorique(self):
+        for jaugeage in self:
+            if jaugeage.station_id:
+                jaugeage.stock_theorique = (
+                    jaugeage.station_id.current_stock
+                )
+            else:
+                jaugeage.stock_theorique = 0
+
     @api.depends('stock_theorique', 'niveau_mesure')
     def _calcul_ecart(self):
         for jaugeage in self:
             jaugeage.ecart = (
                 jaugeage.stock_theorique - jaugeage.niveau_mesure
             )
+
             if jaugeage.stock_theorique > 0:
                 pct = abs(jaugeage.ecart) / jaugeage.stock_theorique * 100
                 jaugeage.ecart_pourcentage = round(pct, 2)
             else:
                 jaugeage.ecart_pourcentage = 0
 
+            # Niveau d'alerte selon les règles du CDC
             pct = jaugeage.ecart_pourcentage
             if pct < 1:
                 jaugeage.niveau_alerte = 'normal'
@@ -113,12 +135,6 @@ class Jaugeage(models.Model):
     @api.model_create_multi
     def create(self, vals_list):
         for vals in vals_list:
-            # Figer le stock théorique à la création
-            if not vals.get('stock_theorique') and vals.get('station_id'):
-                station = self.env['transport.fuel.station'].browse(
-                    vals['station_id']
-                )
-                vals['stock_theorique'] = station.current_stock
             if vals.get('name', 'Nouveau') == 'Nouveau':
                 vals['name'] = (
                     self.env['ir.sequence'].next_by_code(
@@ -130,6 +146,7 @@ class Jaugeage(models.Model):
     def action_confirmer(self):
         for jaugeage in self:
             if jaugeage.niveau_alerte == 'critique':
+                # Alerte automatique si écart > 3%
                 jaugeage.message_post(
                     body=f"🔴 ALERTE : Écart critique de "
                          f"{jaugeage.ecart_pourcentage:.2f}% "
@@ -146,6 +163,7 @@ class Jaugeage(models.Model):
                         "Une justification est obligatoire "
                         "pour les écarts supérieurs à 1% !"
                     )
+            # Ajuster le stock si demandé
             if jaugeage.ajustement_stock and jaugeage.station_id:
                 jaugeage.station_id.write({
                     'current_stock': jaugeage.niveau_mesure
@@ -169,6 +187,7 @@ class Jaugeage(models.Model):
     def action_brouillon(self):
         self.write({'statut': 'brouillon'})
 
+    # ── CONTRAINTES ─────────────────────────────────────────
     @api.constrains('niveau_mesure')
     def _verifier_niveau(self):
         for jaugeage in self:

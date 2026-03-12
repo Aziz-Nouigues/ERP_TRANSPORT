@@ -70,6 +70,7 @@ class BocCourrierArrivee(models.Model):
     )
     expediteur_nom = fields.Char(
         string='Nom expéditeur',
+        translate=True,
         help='Si l\'expéditeur n\'est pas dans la liste des organismes',
     )
     reference_expediteur = fields.Char(
@@ -84,6 +85,7 @@ class BocCourrierArrivee(models.Model):
     sujet = fields.Char(
         string='Objet / Sujet',
         required=True,
+        translate=False,
         tracking=True,
     )
     description = fields.Text(
@@ -148,6 +150,7 @@ class BocCourrierArrivee(models.Model):
         string='Nb diffusions',
         compute='_compute_nb_transmissions',
     )
+
 
     # ── PIÈCES JOINTES (géré par mail.thread) ────────────────────
     # Les PJ sont accessibles via le chatter standard d'Odoo

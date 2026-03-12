@@ -9,7 +9,8 @@ class TransportEnergyType(models.Model):
 
     name = fields.Char(
         string='Nom',
-        required=True
+        required=True,
+        translate=True,
     )
 
     category = fields.Selection([
@@ -24,7 +25,8 @@ class TransportEnergyType(models.Model):
 
     unite = fields.Char(
         string='Unité de mesure',
-        default='Litre'
+        default='Litre',
+        translate=True,
     )
 
     actif = fields.Boolean(

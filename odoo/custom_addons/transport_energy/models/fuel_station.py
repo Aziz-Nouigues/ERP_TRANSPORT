@@ -10,7 +10,8 @@ class TransportFuelStation(models.Model):
     # ── IDENTIFICATION ──────────────────────────────────────
     name = fields.Char(
         string='Nom de la station',
-        required=True
+        required=True,
+        translate=True,
     )
 
     code = fields.Char(
@@ -36,7 +37,7 @@ class TransportFuelStation(models.Model):
         help='Agence ou dépôt où se trouve cette station'
     )
 
-    address = fields.Char(string='Adresse')
+    address = fields.Char(string='Adresse', translate=True)
 
     # ── COMPTEUR POMPE ──────────────────────────────────────
     pump_counter_start = fields.Float(
@@ -80,7 +81,7 @@ class TransportFuelStation(models.Model):
         default=True
     )
 
-    notes = fields.Text(string='Notes')
+    notes = fields.Text(string='Notes', translate=False)
 
     # ── CALCUL ──────────────────────────────────────────────
     stock_percentage = fields.Float(

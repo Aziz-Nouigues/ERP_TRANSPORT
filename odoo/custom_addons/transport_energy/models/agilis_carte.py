@@ -13,7 +13,8 @@ class AgilisCarte(models.Model):
     name = fields.Char(
         string='Numéro de carte',
         required=True,
-        tracking=True
+        tracking=True,
+        translate=False,
     )
 
     statut = fields.Selection([
@@ -30,7 +31,8 @@ class AgilisCarte(models.Model):
     )
 
     chauffeur_principal = fields.Char(
-        string='Chauffeur principal'
+        string='Chauffeur principal',
+        translate=True,
     )
 
     # ── SOLDE ───────────────────────────────────────────────
@@ -63,7 +65,7 @@ class AgilisCarte(models.Model):
         string='Date expiration'
     )
 
-    notes = fields.Text(string='Notes')
+    notes = fields.Text(string='Notes', translate=False)
 
     # ── RELATIONS ───────────────────────────────────────────
     recharge_ids = fields.One2many(
@@ -150,10 +152,11 @@ class AgilisRecharge(models.Model):
     )
 
     reference = fields.Char(
-        string='Référence virement'
+        string='Référence virement',
+        translate=False,
     )
 
-    notes = fields.Text(string='Notes')
+    notes = fields.Text(string='Notes', translate=False)
 
     @api.constrains('montant')
     def _verifier_montant(self):
@@ -175,7 +178,8 @@ class AgilisUtilisation(models.Model):
         required=True,
         copy=False,
         readonly=True,
-        default='Nouveau'
+        default='Nouveau',
+        translate=False,
     )
 
     carte_id = fields.Many2one(
@@ -194,7 +198,8 @@ class AgilisUtilisation(models.Model):
 
     station_externe = fields.Char(
         string='Station externe',
-        required=True
+        required=True,
+        translate=True,
     )
 
     # ── VÉHICULE ────────────────────────────────────────────
@@ -206,7 +211,8 @@ class AgilisUtilisation(models.Model):
     )
 
     chauffeur = fields.Char(
-        string='Chauffeur'
+        string='Chauffeur',
+        translate=True,
     )
 
     # ── CARBURANT ───────────────────────────────────────────
@@ -270,15 +276,8 @@ class AgilisUtilisation(models.Model):
     @api.constrains('carte_id', 'montant')
     def _verifier_solde(self):
         for u in self:
-            # Solde avant cette utilisation = total_recharge - (total_utilise - montant_actuel)
-            solde_avant = (
-                    u.carte_id.total_recharge
-                    - u.carte_id.total_utilise
-                    + u.montant
-            )
-            if solde_avant < u.montant:
+            if u.carte_id.solde_actuel < 0:
                 raise ValidationError(
-                    f"Solde insuffisant sur la carte {u.carte_id.name} !\n"
-                    f"Solde disponible : {solde_avant:.3f} DT\n"
-                    f"Montant requis   : {u.montant:.3f} DT"
+                    f"Solde insuffisant sur la carte "
+                    f"{u.carte_id.name} !"
                 )

@@ -25,22 +25,26 @@ class FleetVehicleTransport(models.Model):
     # ── IDENTIFICATION INTERNE ───────────────────────────────
     internal_code = fields.Char(
         string='Code interne (العربة)',
+        translate=False,
         help='Grand numéro interne ex: 15362773'
     )
 
     service_code = fields.Char(
         string='Code service (المصلحة)',
+        translate=False,
         help='ex: 1250, 4050, 4300...'
     )
 
     # ── AGENCE ──────────────────────────────────────────────
     transport_agency = fields.Char(
         string='Agence / Dépôt (لمقازة)',
+        translate=False,
         help='ex: 2 = Dépôt Tunis'
     )
 
     agency_code = fields.Char(
         string='Code agence',
+        translate=False,
         help='Code numérique de l\'agence'
     )
 

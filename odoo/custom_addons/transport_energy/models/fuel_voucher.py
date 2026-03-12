@@ -15,7 +15,8 @@ class TransportFuelVoucher(models.Model):
         required=True,
         copy=False,
         readonly=True,
-        default='Nouveau'
+        default='Nouveau',
+        translate=False,
     )
 
     voucher_type = fields.Selection([
@@ -66,11 +67,13 @@ class TransportFuelVoucher(models.Model):
 
     # ── AGENT DISTRIBUTEUR ──────────────────────────────────
     distributor_code = fields.Char(
-        string='Code agent distributeur (العون الموزع)'
+        string='Code agent distributeur (العون الموزع)',
+        translate=False,
     )
 
     distributor_name = fields.Char(
-        string='Nom agent distributeur'
+        string='Nom agent distributeur',
+        translate=True,
     )
 
     agency_main_code = fields.Char(
@@ -111,7 +114,7 @@ class TransportFuelVoucher(models.Model):
         default=False
     )
 
-    notes = fields.Text(string='Notes / Observations')
+    notes = fields.Text(string='Notes / Observations', translate=False)
 
     # ── LIGNES ──────────────────────────────────────────────
     line_ids = fields.One2many(
@@ -230,15 +233,18 @@ class TransportFuelVoucherLine(models.Model):
 
     service_code = fields.Char(
         string='Code service (المصلحة)',
+        translate=False,
     )
 
     # ── CHAUFFEUR ───────────────────────────────────────────
     driver_code = fields.Char(
-        string='Code chauffeur (المعرف)'
+        string='Code chauffeur (المعرف)',
+        translate=False,
     )
 
     driver_name = fields.Char(
-        string='Nom chauffeur (إسم السائق)'
+        string='Nom chauffeur (إسم السائق)',
+        translate=True,
     )
 
     # ── COMPTEUR BUS ────────────────────────────────────────

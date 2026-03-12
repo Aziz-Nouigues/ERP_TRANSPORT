@@ -57,6 +57,7 @@ class BocCourrierDepart(models.Model):
     )
     destinataire_nom = fields.Char(
         string='Nom destinataire',
+        translate=True,
         help='Si le destinataire n\'est pas dans la liste des organismes',
     )
 
@@ -68,6 +69,7 @@ class BocCourrierDepart(models.Model):
     sujet = fields.Char(
         string='Objet / Sujet',
         required=True,
+        translate=False,
         tracking=True,
     )
     description = fields.Text(
