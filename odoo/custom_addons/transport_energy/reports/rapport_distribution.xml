@@ -1,56 +1,54 @@
 <?xml version="1.0" encoding="utf-8"?>
 <odoo>
 
-    <!-- ═══════════════════════════════════════════════════════
-         RAPPORT DISTRIBUTION PAR VEHICULE
-         جدول توزيع السوائل حسب العربة
-    ═══════════════════════════════════════════════════════ -->
-
+    <!-- ═══ RAPPORT DISTRIBUTION PAR VEHICULE ═══ -->
     <template id="rapport_par_vehicule_template">
         <t t-call="web.html_container">
             <t t-foreach="docs" t-as="wizard">
+
+                <!-- ═══ LANGUE AUTOMATIQUE ═══ -->
+                <t t-set="lang" t-value="wizard.env.user.lang or 'fr_FR'"/>
+                <t t-set="wizard" t-value="wizard.with_context(lang=lang)"/>
+                <t t-set="lbl" t-value="wizard._get_labels()"/>
+                <t t-set="is_rtl" t-value="lang.startswith('ar')"/>
+
                 <t t-call="web.external_layout">
-                    <div class="page" style="direction:rtl; font-family: Arial, sans-serif;">
+                    <div class="page" t-att-style="'direction:rtl;' if is_rtl else 'direction:ltr;'" style="font-family: Arial, sans-serif;">
 
                         <div style="text-align:center; margin-bottom:20px;">
                             <h2 style="color:#1a5276; border-bottom:3px solid #1a5276; padding-bottom:8px;">
-                                جدول توزيع المحروقات حسب العربة
+                                <t t-esc="lbl['titre_par_vehicule']"/>
                             </h2>
-                            <h4 style="color:#555;">Distribution de Carburant par Vehicule</h4>
                             <p>
-                                <strong>من</strong> <t t-esc="wizard.date_debut"/>
-                                <strong> الى </strong> <t t-esc="wizard.date_fin"/>
+                                <t t-esc="lbl['de']"/> <t t-esc="wizard.date_debut"/>
+                                <t t-esc="lbl['au']"/> <t t-esc="wizard.date_fin"/>
                                 <t t-if="wizard.station_id">
-                                    | <strong>المحطة:</strong> <t t-esc="wizard.station_id.name"/>
+                                    | <t t-esc="lbl['station']"/> : <t t-esc="wizard.station_id.name"/>
                                 </t>
                             </p>
                         </div>
 
                         <t t-set="lignes" t-value="wizard._get_donnees_par_vehicule()"/>
 
-                        <p style="color:red; font-size:14px;">
-                            DEBUG: <t t-esc="len(lignes)"/> vehicules trouves
-                        </p>
-
                         <div style="background:#eaf2ff; padding:10px; border-radius:5px; margin-bottom:15px;">
-                            <strong>ملخص: </strong>
-                            عدد العربات: <strong><t t-esc="len(lignes)"/></strong>
-                            | اجمالي الكمية:
+                            <strong><t t-esc="lbl['nb_vehicules']"/> : </strong>
+                            <strong><t t-esc="len(lignes)"/></strong>
+                            | <t t-esc="lbl['quantite_consommee']"/> :
                             <strong><t t-esc="sum(l['total_litres'] for l in lignes)"/> L</strong>
                         </div>
 
-                        <table class="table table-sm table-bordered" style="width:100%; font-size:11px; direction:rtl;">
+                        <table class="table table-sm table-bordered" style="width:100%; font-size:11px;">
                             <thead style="background:#1a5276; color:white;">
                                 <tr>
-                                    <th>العربة</th>
-                                    <th>الصنف</th>
-                                    <th>المصلحة</th>
-                                    <th>عدد الخروجات</th>
-                                    <th>الكمية (L)</th>
-                                    <th>المسافة (km)</th>
-                                    <th>الاستهلاك الفعلي</th>
-                                    <th>الاستهلاك النظري</th>
-                                    <th>الفارق</th>
+                                    <th><t t-esc="lbl['bus']"/></th>
+                                    <th><t t-esc="lbl['type']"/></th>
+                                    <th><t t-esc="lbl['service']"/></th>
+                                    <th style="text-align:center;"><t t-esc="lbl['nb_sorties']"/></th>
+                                    <th style="text-align:center;"><t t-esc="lbl['quantite']"/></th>
+                                    <th style="text-align:center;"><t t-esc="lbl['distance']"/></th>
+                                    <th style="text-align:center;"><t t-esc="lbl['reelle']"/></th>
+                                    <th style="text-align:center;"><t t-esc="lbl['theorique']"/></th>
+                                    <th style="text-align:center;"><t t-esc="lbl['ecart']"/></th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -59,22 +57,36 @@
                                         <td><t t-esc="ligne['bus_name']"/></td>
                                         <td><t t-esc="ligne['bus_type']"/></td>
                                         <td><t t-esc="ligne['service_code']"/></td>
-                                        <td><t t-esc="ligne['nb_sorties']"/></td>
-                                        <td><t t-esc="ligne['total_litres']"/></td>
-                                        <td><t t-esc="ligne['total_km']"/></td>
-                                        <td><t t-esc="ligne['conso_reelle']"/></td>
-                                        <td><t t-esc="ligne['conso_theorique']"/></td>
-                                        <td><t t-esc="ligne['ecart']"/></td>
+                                        <td style="text-align:center;"><t t-esc="ligne['nb_sorties']"/></td>
+                                        <td style="text-align:center;"><t t-esc="ligne['total_litres']"/></td>
+                                        <td style="text-align:center;"><t t-esc="ligne['total_km']"/></td>
+                                        <td style="text-align:center;"><t t-esc="ligne['conso_reelle']"/></td>
+                                        <td style="text-align:center;"><t t-esc="ligne['conso_theorique']"/></td>
+                                        <td style="text-align:center;"><t t-esc="ligne['ecart']"/></td>
                                     </tr>
                                 </t>
                             </tbody>
                             <tfoot style="background:#d5e8d4; font-weight:bold;">
                                 <tr>
-                                    <td colspan="4">الجملة</td>
-                                    <td><t t-esc="round(sum(l['total_litres'] for l in lignes), 2)"/></td>
-                                    <td colspan="4"></td>
+                                    <td colspan="4"><t t-esc="lbl['total']"/></td>
+                                    <td style="text-align:center;"><t t-esc="round(sum(l['total_litres'] for l in lignes), 2)"/></td>
+                                    <td colspan="4"/>
                                 </tr>
                             </tfoot>
+                        </table>
+
+                        <!-- SIGNATURE -->
+                        <table style="width:100%; margin-top:40px;">
+                            <tr>
+                                <td style="width:50%; text-align:center;">
+                                    <strong><t t-esc="lbl['responsable_energie']"/></strong>
+                                    <br/><br/><br/>___________________
+                                </td>
+                                <td style="width:50%; text-align:center;">
+                                    <strong><t t-esc="lbl['directeur_technique']"/></strong>
+                                    <br/><br/><br/>___________________
+                                </td>
+                            </tr>
                         </table>
 
                     </div>
@@ -92,57 +104,54 @@
         <field name="binding_model_id" ref="model_transport_wizard_rapport"/>
     </record>
 
-
-    <!-- ═══════════════════════════════════════════════════════
-         RAPPORT DISTRIBUTION PAR STATION
-         جدول توزيع السوائل حسب المغازة
-    ═══════════════════════════════════════════════════════ -->
-
+    <!-- ═══ RAPPORT DISTRIBUTION PAR STATION ═══ -->
     <template id="rapport_par_station_template">
         <t t-call="web.html_container">
             <t t-foreach="docs" t-as="wizard">
+
+                <!-- ═══ LANGUE AUTOMATIQUE ═══ -->
+                <t t-set="lang" t-value="wizard.env.user.lang or 'fr_FR'"/>
+                <t t-set="wizard" t-value="wizard.with_context(lang=lang)"/>
+                <t t-set="lbl" t-value="wizard._get_labels()"/>
+                <t t-set="is_rtl" t-value="lang.startswith('ar')"/>
+
                 <t t-call="web.external_layout">
-                    <div class="page" style="direction:rtl; font-family: Arial, sans-serif;">
+                    <div class="page" t-att-style="'direction:rtl;' if is_rtl else 'direction:ltr;'" style="font-family: Arial, sans-serif;">
 
                         <div style="text-align:center; margin-bottom:20px;">
                             <h2 style="color:#1a5276; border-bottom:3px solid #1a5276; padding-bottom:8px;">
-                                جدول توزيع المحروقات حسب المغازة
+                                <t t-esc="lbl['titre_par_station']"/>
                             </h2>
-                            <h4 style="color:#555;">Distribution de Carburant par Station</h4>
                             <p>
-                                <strong>من</strong> <t t-esc="wizard.date_debut"/>
-                                <strong> الى </strong> <t t-esc="wizard.date_fin"/>
+                                <t t-esc="lbl['de']"/> <t t-esc="wizard.date_debut"/>
+                                <t t-esc="lbl['au']"/> <t t-esc="wizard.date_fin"/>
                             </p>
                         </div>
 
                         <t t-set="stations" t-value="wizard._get_donnees_par_station()"/>
 
-                        <p style="color:red; font-size:14px;">
-                            DEBUG: <t t-esc="len(stations)"/> stations trouvees
-                        </p>
-
                         <t t-foreach="stations" t-as="station">
                             <div style="background:#1a5276; color:white; padding:8px; border-radius:5px; margin-top:15px;">
                                 <strong>
-                                    محطة: <t t-esc="station['station_name']"/>
-                                    | الوقود: <t t-esc="station['fuel_type']"/>
+                                    <t t-esc="lbl['station_col']"/> : <t t-esc="station['station_name']"/>
+                                    | <t t-esc="lbl['type']"/> : <t t-esc="station['fuel_type']"/>
                                 </strong>
                             </div>
                             <div style="background:#eaf2ff; padding:8px; margin-bottom:8px; font-size:12px;">
-                                عدد البوانات: <strong><t t-esc="station['nb_bons']"/></strong>
-                                | عدد العربات: <strong><t t-esc="station['nb_vehicules']"/></strong>
-                                | اجمالي الكمية: <strong><t t-esc="station['total_litres']"/> L</strong>
-                                | المخزون المتبقي: <strong><t t-esc="station['stock_restant']"/> L</strong>
+                                <t t-esc="lbl['nb_bons']"/> : <strong><t t-esc="station['nb_bons']"/></strong>
+                                | <t t-esc="lbl['nb_vehicules']"/> : <strong><t t-esc="station['nb_vehicules']"/></strong>
+                                | <t t-esc="lbl['quantite_consommee']"/> : <strong><t t-esc="station['total_litres']"/> L</strong>
+                                | <t t-esc="lbl['stock_restant']"/> : <strong><t t-esc="station['stock_restant']"/> L</strong>
                             </div>
-                            <table class="table table-sm table-bordered" style="width:100%; font-size:10px; direction:rtl; margin-bottom:15px;">
+                            <table class="table table-sm table-bordered" style="width:100%; font-size:10px; margin-bottom:15px;">
                                 <thead style="background:#2e86c1; color:white;">
                                     <tr>
-                                        <th>التاريخ</th>
-                                        <th>رقم البون</th>
-                                        <th>النوع</th>
-                                        <th>العون الموزع</th>
-                                        <th>عدد العربات</th>
-                                        <th>الكمية (L)</th>
+                                        <th><t t-esc="lbl['date']"/></th>
+                                        <th><t t-esc="lbl['bon_no']"/></th>
+                                        <th><t t-esc="lbl['type']"/></th>
+                                        <th><t t-esc="lbl['agent']"/></th>
+                                        <th style="text-align:center;"><t t-esc="lbl['nb_lignes']"/></th>
+                                        <th style="text-align:center;"><t t-esc="lbl['quantite']"/></th>
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -152,15 +161,15 @@
                                             <td><t t-esc="bon['bon_name']"/></td>
                                             <td><t t-esc="bon['type']"/></td>
                                             <td><t t-esc="bon['agent']"/></td>
-                                            <td><t t-esc="bon['nb_lignes']"/></td>
-                                            <td><t t-esc="bon['quantite']"/></td>
+                                            <td style="text-align:center;"><t t-esc="bon['nb_lignes']"/></td>
+                                            <td style="text-align:center;"><t t-esc="bon['quantite']"/></td>
                                         </tr>
                                     </t>
                                 </tbody>
                                 <tfoot style="background:#d5e8d4; font-weight:bold;">
                                     <tr>
-                                        <td colspan="5">الجملة</td>
-                                        <td><t t-esc="station['total_litres']"/> L</td>
+                                        <td colspan="5"><t t-esc="lbl['total']"/></td>
+                                        <td style="text-align:center;"><t t-esc="station['total_litres']"/> L</td>
                                     </tr>
                                 </tfoot>
                             </table>

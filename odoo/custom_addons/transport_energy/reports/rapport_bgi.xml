@@ -1,122 +1,191 @@
 <?xml version="1.0" encoding="utf-8"?>
 <odoo>
 
-    <!-- ═══ ACTION RAPPORT BGI (seulement internes) ═══ -->
+    <!-- ═══ ACTION RAPPORT BGI ═══ -->
     <record id="action_rapport_bgi" model="ir.actions.report">
-    <field name="name">Bon de Ravitaillement Interne (BGI)</field>
-    <field name="model">transport.fuel.voucher</field>
-    <field name="report_type">qweb-pdf</field>
-    <field name="report_name">transport_energy.template_bgi</field>
-    <field name="report_file">transport_energy.template_bgi</field>
-    <field name="binding_model_id" ref="model_transport_fuel_voucher"/>
-    <field name="binding_type">report</field>
-</record>
+        <field name="name">Bon de Ravitaillement Interne (BGI)</field>
+        <field name="model">transport.fuel.voucher</field>
+        <field name="report_type">qweb-pdf</field>
+        <field name="report_name">transport_energy.template_bgi</field>
+        <field name="report_file">transport_energy.template_bgi</field>
+        <field name="binding_model_id" ref="model_transport_fuel_voucher"/>
+        <field name="binding_type">report</field>
+    </record>
 
-    <!-- ═══ TEMPLATE BGI ═══ -->
     <template id="template_bgi">
         <t t-call="web.html_container">
             <t t-foreach="docs" t-as="bon">
-                <t t-call="web.external_layout">
-                    <div class="page">
 
-                        <!-- ── EN-TÊTE ── -->
+                <!-- ═══ LANGUE AUTOMATIQUE ═══ -->
+                <t t-set="lang" t-value="bon.env.user.lang or 'fr_FR'"/>
+                <t t-set="bon" t-value="bon.with_context(lang=lang)"/>
+                <t t-set="is_ar" t-value="lang.startswith('ar')"/>
+                <t t-set="is_en" t-value="lang.startswith('en')"/>
+
+                <t t-call="web.external_layout">
+                    <div class="page" t-att-dir="'rtl' if is_ar else 'ltr'">
+
+                        <!-- EN-TÊTE -->
                         <div style="text-align: center; margin-bottom: 20px;">
                             <h2 style="color: #1F4E79; font-size: 18px;">
-                                جدول إخراج المحروقات
+                                <t t-if="is_ar">جدول إخراج المحروقات</t>
+                                <t t-elif="is_en">Fuel Distribution Table</t>
+                                <t t-else="">Tableau de Distribution du Carburant</t>
                             </h2>
                             <h3 style="color: #1F4E79; font-size: 14px;">
-                                Tableau de Distribution du Carburant
+                                <t t-if="is_ar">بون التزود الداخلي (BGI)</t>
+                                <t t-elif="is_en">Internal Supply Voucher (BGI)</t>
+                                <t t-else="">Bon de Ravitaillement Interne (BGI)</t>
                             </h3>
                         </div>
 
-                        <!-- ── INFORMATIONS BON ── -->
-                        <table style="width:100%; margin-bottom:15px;
-                                      border-collapse: collapse;">
+                        <!-- INFORMATIONS BON -->
+                        <table style="width:100%; margin-bottom:15px; border-collapse: collapse;">
                             <tr>
                                 <td style="width:33%; padding:4px;">
-                                    <strong>السنة / Année :</strong>
+                                    <strong>
+                                        <t t-if="is_ar">السنة :</t>
+                                        <t t-elif="is_en">Year :</t>
+                                        <t t-else="">Année :</t>
+                                    </strong>
                                     <t t-esc="bon.date.year"/>
                                 </td>
                                 <td style="width:33%; padding:4px;">
-                                    <strong>رقم الجدول / N° Bon :</strong>
+                                    <strong>
+                                        <t t-if="is_ar">رقم الجدول :</t>
+                                        <t t-elif="is_en">Voucher No. :</t>
+                                        <t t-else="">N° Bon :</t>
+                                    </strong>
                                     <t t-esc="bon.name"/>
                                 </td>
                                 <td style="width:33%; padding:4px;">
-                                    <strong>تاريخ التوزيع / Date :</strong>
+                                    <strong>
+                                        <t t-if="is_ar">تاريخ التوزيع :</t>
+                                        <t t-elif="is_en">Distribution Date :</t>
+                                        <t t-else="">Date :</t>
+                                    </strong>
                                     <t t-esc="bon.date"/>
                                 </td>
                             </tr>
                             <tr>
                                 <td style="padding:4px;">
-                                    <strong>التدرج الرئيسي :</strong>
+                                    <strong>
+                                        <t t-if="is_ar">التدرج الرئيسي :</t>
+                                        <t t-elif="is_en">Main Grade :</t>
+                                        <t t-else="">Code Principal :</t>
+                                    </strong>
                                     <t t-esc="bon.agency_main_code or ''"/>
                                 </td>
                                 <td style="padding:4px;">
-                                    <strong>الفرعي :</strong>
+                                    <strong>
+                                        <t t-if="is_ar">الفرعي :</t>
+                                        <t t-elif="is_en">Secondary :</t>
+                                        <t t-else="">Code Secondaire :</t>
+                                    </strong>
                                     <t t-esc="bon.agency_sub_code or ''"/>
                                 </td>
                                 <td style="padding:4px;">
-                                    <strong>المادة :</strong>
+                                    <strong>
+                                        <t t-if="is_ar">المادة :</t>
+                                        <t t-elif="is_en">Material :</t>
+                                        <t t-else="">Matière :</t>
+                                    </strong>
                                     <t t-esc="bon.fuel_type_id.name or ''"/>
                                 </td>
                             </tr>
                             <tr>
                                 <td style="padding:4px;">
-                                    <strong>العون الموزع :</strong>
+                                    <strong>
+                                        <t t-if="is_ar">العون الموزع :</t>
+                                        <t t-elif="is_en">Distributor Agent :</t>
+                                        <t t-else="">Agent Distributeur :</t>
+                                    </strong>
                                     <t t-esc="bon.distributor_code or ''"/>
-                                    -
-                                    <t t-esc="bon.distributor_name or ''"/>
+                                    - <t t-esc="bon.distributor_name or ''"/>
                                 </td>
                                 <td style="padding:4px;">
-                                    <strong>بداية العمل :</strong>
+                                    <strong>
+                                        <t t-if="is_ar">بداية العمل :</t>
+                                        <t t-elif="is_en">Work Start :</t>
+                                        <t t-else="">Heure début :</t>
+                                    </strong>
                                     <t t-esc="'%02d:%02d' % (int(bon.time_start), int((bon.time_start % 1) * 60))"/>
                                 </td>
                                 <td style="padding:4px;">
-                                    <strong>نهاية العمل :</strong>
+                                    <strong>
+                                        <t t-if="is_ar">نهاية العمل :</t>
+                                        <t t-elif="is_en">Work End :</t>
+                                        <t t-else="">Heure fin :</t>
+                                    </strong>
                                     <t t-esc="'%02d:%02d' % (int(bon.time_end), int((bon.time_end % 1) * 60))"/>
                                 </td>
                             </tr>
                             <tr>
                                 <td style="padding:4px;">
-                                    <strong>بداية عداد المضخة :</strong>
+                                    <strong>
+                                        <t t-if="is_ar">بداية عداد المضخة :</t>
+                                        <t t-elif="is_en">Pump Counter Start :</t>
+                                        <t t-else="">Compteur début :</t>
+                                    </strong>
                                     <t t-esc="int(bon.pump_counter_start)"/>
                                 </td>
                                 <td style="padding:4px;">
-                                    <strong>نهاية عداد المضخة :</strong>
+                                    <strong>
+                                        <t t-if="is_ar">نهاية عداد المضخة :</t>
+                                        <t t-elif="is_en">Pump Counter End :</t>
+                                        <t t-else="">Compteur fin :</t>
+                                    </strong>
                                     <t t-esc="int(bon.pump_counter_end)"/>
                                 </td>
                                 <td style="padding:4px;">
-                                    <strong>Station :</strong>
+                                    <strong>
+                                        <t t-if="is_ar">المحطة :</t>
+                                        <t t-elif="is_en">Station :</t>
+                                        <t t-else="">Station :</t>
+                                    </strong>
                                     <t t-esc="bon.station_id.name or ''"/>
                                 </td>
                             </tr>
                         </table>
 
-                        <!-- ── LIGNES DE RAVITAILLEMENT ── -->
-                        <table style="width:100%; border-collapse:collapse;
-                                      font-size:11px;">
+                        <!-- LIGNES DE RAVITAILLEMENT -->
+                        <table style="width:100%; border-collapse:collapse; font-size:11px;">
                             <thead>
                                 <tr style="background-color:#1F4E79; color:white;">
                                     <th style="border:1px solid #ccc; padding:6px; text-align:center;">
-                                        المصلحة<br/>Service
+                                        <t t-if="is_ar">المصلحة</t>
+                                        <t t-elif="is_en">Service</t>
+                                        <t t-else="">Service</t>
                                     </th>
                                     <th style="border:1px solid #ccc; padding:6px; text-align:center;">
-                                        العربة<br/>Bus N°
+                                        <t t-if="is_ar">العربة</t>
+                                        <t t-elif="is_en">Bus N°</t>
+                                        <t t-else="">Bus N°</t>
                                     </th>
                                     <th style="border:1px solid #ccc; padding:6px; text-align:center;">
-                                        التوقيت<br/>Heure
+                                        <t t-if="is_ar">التوقيت</t>
+                                        <t t-elif="is_en">Time</t>
+                                        <t t-else="">Heure</t>
                                     </th>
                                     <th style="border:1px solid #ccc; padding:6px; text-align:center;">
-                                        عداد العربة<br/>Compteur
+                                        <t t-if="is_ar">عداد العربة</t>
+                                        <t t-elif="is_en">Odometer</t>
+                                        <t t-else="">Compteur</t>
                                     </th>
                                     <th style="border:1px solid #ccc; padding:6px; text-align:center;">
-                                        الكمية الموزعة<br/>Quantité (L)
+                                        <t t-if="is_ar">الكمية الموزعة (L)</t>
+                                        <t t-elif="is_en">Distributed Qty (L)</t>
+                                        <t t-else="">Quantité (L)</t>
                                     </th>
                                     <th style="border:1px solid #ccc; padding:6px; text-align:center;">
-                                        المعرف<br/>Code
+                                        <t t-if="is_ar">المعرف</t>
+                                        <t t-elif="is_en">Driver Code</t>
+                                        <t t-else="">Code</t>
                                     </th>
                                     <th style="border:1px solid #ccc; padding:6px; text-align:center;">
-                                        إسم السائق<br/>Chauffeur
+                                        <t t-if="is_ar">إسم السائق</t>
+                                        <t t-elif="is_en">Driver Name</t>
+                                        <t t-else="">Chauffeur</t>
                                     </th>
                                 </tr>
                             </thead>
@@ -150,7 +219,9 @@
                             <tfoot>
                                 <tr style="background-color:#D6E4F0; font-weight:bold;">
                                     <td colspan="4" style="border:1px solid #ccc; padding:6px; text-align:right;">
-                                        الجملة / Total :
+                                        <t t-if="is_ar">الجملة :</t>
+                                        <t t-elif="is_en">Total :</t>
+                                        <t t-else="">Total :</t>
                                     </td>
                                     <td style="border:1px solid #ccc; padding:6px; text-align:center; color:#C00000;">
                                         <t t-esc="bon.total_quantity"/> L
@@ -160,38 +231,70 @@
                             </tfoot>
                         </table>
 
-                        <!-- ── RÉSUMÉ BAS DE PAGE ── -->
+                        <!-- RÉSUMÉ -->
                         <table style="width:100%; margin-top:15px; border-collapse:collapse;">
                             <tr>
                                 <td style="width:33%; padding:6px;">
-                                    <strong>الكمية الموزعة :</strong>
+                                    <strong>
+                                        <t t-if="is_ar">الكمية الموزعة :</t>
+                                        <t t-elif="is_en">Distributed Qty :</t>
+                                        <t t-else="">Quantité distribuée :</t>
+                                    </strong>
                                     <t t-esc="bon.total_quantity"/> L
                                 </td>
                                 <td style="width:33%; padding:6px;">
-                                    <strong>الكمية المتبقية :</strong>
+                                    <strong>
+                                        <t t-if="is_ar">الكمية المتبقية :</t>
+                                        <t t-elif="is_en">Remaining Stock :</t>
+                                        <t t-else="">Stock restant :</t>
+                                    </strong>
                                     <t t-esc="bon.remaining_stock"/> L
                                 </td>
                                 <td style="width:33%; padding:6px;">
-                                    <strong>مصادق / Validé :</strong>
-                                    <t t-if="bon.is_validated">نعم / Oui</t>
-                                    <t t-else="">لا / Non</t>
+                                    <strong>
+                                        <t t-if="is_ar">مصادق :</t>
+                                        <t t-elif="is_en">Validated :</t>
+                                        <t t-else="">Validé :</t>
+                                    </strong>
+                                    <t t-if="bon.is_validated">
+                                        <t t-if="is_ar">نعم</t>
+                                        <t t-elif="is_en">Yes</t>
+                                        <t t-else="">Oui</t>
+                                    </t>
+                                    <t t-else="">
+                                        <t t-if="is_ar">لا</t>
+                                        <t t-elif="is_en">No</t>
+                                        <t t-else="">Non</t>
+                                    </t>
                                 </td>
                             </tr>
                         </table>
 
-                        <!-- ── SIGNATURES ── -->
+                        <!-- SIGNATURES -->
                         <table style="width:100%; margin-top:40px;">
                             <tr>
                                 <td style="width:33%; text-align:center;">
-                                    <strong>Agent Distributeur</strong>
+                                    <strong>
+                                        <t t-if="is_ar">العون الموزع</t>
+                                        <t t-elif="is_en">Distributor Agent</t>
+                                        <t t-else="">Agent Distributeur</t>
+                                    </strong>
                                     <br/><br/><br/>___________________
                                 </td>
                                 <td style="width:33%; text-align:center;">
-                                    <strong>Responsable Station</strong>
+                                    <strong>
+                                        <t t-if="is_ar">مسؤول المحطة</t>
+                                        <t t-elif="is_en">Station Manager</t>
+                                        <t t-else="">Responsable Station</t>
+                                    </strong>
                                     <br/><br/><br/>___________________
                                 </td>
                                 <td style="width:33%; text-align:center;">
-                                    <strong>Chef de Dépôt</strong>
+                                    <strong>
+                                        <t t-if="is_ar">رئيس المستودع</t>
+                                        <t t-elif="is_en">Depot Manager</t>
+                                        <t t-else="">Chef de Dépôt</t>
+                                    </strong>
                                     <br/><br/><br/>___________________
                                 </td>
                             </tr>
@@ -203,89 +306,133 @@
         </t>
     </template>
 
-    <!-- ═══ ACTION RAPPORT BGE (seulement externes) ═══ -->
-   <record id="action_rapport_bge" model="ir.actions.report">
-    <field name="name">Bon de Ravitaillement Externe (BGE)</field>
-    <field name="model">transport.fuel.voucher</field>
-    <field name="report_type">qweb-pdf</field>
-    <field name="report_name">transport_energy.template_bge</field>
-    <field name="report_file">transport_energy.template_bge</field>
-    <field name="binding_model_id" ref="model_transport_fuel_voucher"/>
-    <field name="binding_type">report</field>
-</record>
+    <!-- ═══ ACTION RAPPORT BGE ═══ -->
+    <record id="action_rapport_bge" model="ir.actions.report">
+        <field name="name">Bon de Ravitaillement Externe (BGE)</field>
+        <field name="model">transport.fuel.voucher</field>
+        <field name="report_type">qweb-pdf</field>
+        <field name="report_name">transport_energy.template_bge</field>
+        <field name="report_file">transport_energy.template_bge</field>
+        <field name="binding_model_id" ref="model_transport_fuel_voucher"/>
+        <field name="binding_type">report</field>
+    </record>
 
-    <!-- ═══ TEMPLATE BGE ═══ -->
     <template id="template_bge">
         <t t-call="web.html_container">
             <t t-foreach="docs" t-as="bon">
-                <t t-call="web.external_layout">
-                    <div class="page">
 
-                        <!-- ── EN-TÊTE ── -->
+                <!-- ═══ LANGUE AUTOMATIQUE ═══ -->
+                <t t-set="lang" t-value="bon.env.user.lang or 'fr_FR'"/>
+                <t t-set="bon" t-value="bon.with_context(lang=lang)"/>
+                <t t-set="is_ar" t-value="lang.startswith('ar')"/>
+                <t t-set="is_en" t-value="lang.startswith('en')"/>
+
+                <t t-call="web.external_layout">
+                    <div class="page" t-att-dir="'rtl' if is_ar else 'ltr'">
+
+                        <!-- EN-TÊTE -->
                         <div style="text-align:center; margin-bottom:20px;">
                             <h2 style="color:#C55A11; font-size:18px;">
-                                بطاقة التزود بالوقود الخارجي
+                                <t t-if="is_ar">بون التزود الخارجي (BGE)</t>
+                                <t t-elif="is_en">External Fuel Supply Card</t>
+                                <t t-else="">Bon de Gasoil Externe (BGE)</t>
                             </h2>
                             <h3 style="color:#C55A11; font-size:14px;">
-                                Bon de Gasoil Externe (BGE)
+                                <t t-if="is_ar">بطاقة التزود بالوقود الخارجي</t>
+                                <t t-elif="is_en">External Supply Voucher (BGE)</t>
+                                <t t-else="">Bon de Ravitaillement Externe</t>
                             </h3>
                         </div>
 
-                        <!-- ── INFORMATIONS BON ── -->
-                        <table style="width:100%; margin-bottom:15px;
-                                      border-collapse:collapse;
-                                      border:1px solid #C55A11;">
+                        <!-- INFORMATIONS BON -->
+                        <table style="width:100%; margin-bottom:15px; border-collapse:collapse; border:1px solid #C55A11;">
                             <tr style="background-color:#FCE4D6;">
                                 <td style="padding:6px; width:33%;">
-                                    <strong>N° Bon :</strong>
+                                    <strong>
+                                        <t t-if="is_ar">رقم البون :</t>
+                                        <t t-elif="is_en">Voucher No. :</t>
+                                        <t t-else="">N° Bon :</t>
+                                    </strong>
                                     <t t-esc="bon.name"/>
                                 </td>
                                 <td style="padding:6px; width:33%;">
-                                    <strong>Date :</strong>
+                                    <strong>
+                                        <t t-if="is_ar">التاريخ :</t>
+                                        <t t-elif="is_en">Date :</t>
+                                        <t t-else="">Date :</t>
+                                    </strong>
                                     <t t-esc="bon.date"/>
                                 </td>
                                 <td style="padding:6px; width:33%;">
-                                    <strong>Station :</strong>
+                                    <strong>
+                                        <t t-if="is_ar">المحطة :</t>
+                                        <t t-elif="is_en">Station :</t>
+                                        <t t-else="">Station :</t>
+                                    </strong>
                                     <t t-esc="bon.station_id.name or ''"/>
                                 </td>
                             </tr>
                             <tr>
                                 <td style="padding:6px;">
-                                    <strong>Type carburant :</strong>
+                                    <strong>
+                                        <t t-if="is_ar">نوع الوقود :</t>
+                                        <t t-elif="is_en">Fuel Type :</t>
+                                        <t t-else="">Type carburant :</t>
+                                    </strong>
                                     <t t-esc="bon.fuel_type_id.name or ''"/>
                                 </td>
                                 <td style="padding:6px;">
-                                    <strong>Heure début :</strong>
+                                    <strong>
+                                        <t t-if="is_ar">ساعة البداية :</t>
+                                        <t t-elif="is_en">Start Time :</t>
+                                        <t t-else="">Heure début :</t>
+                                    </strong>
                                     <t t-esc="'%02d:%02d' % (int(bon.time_start), int((bon.time_start % 1) * 60))"/>
                                 </td>
                                 <td style="padding:6px;">
-                                    <strong>Heure fin :</strong>
+                                    <strong>
+                                        <t t-if="is_ar">ساعة النهاية :</t>
+                                        <t t-elif="is_en">End Time :</t>
+                                        <t t-else="">Heure fin :</t>
+                                    </strong>
                                     <t t-esc="'%02d:%02d' % (int(bon.time_end), int((bon.time_end % 1) * 60))"/>
                                 </td>
                             </tr>
                         </table>
 
-                        <!-- ── LIGNES ── -->
+                        <!-- LIGNES -->
                         <table style="width:100%; border-collapse:collapse; font-size:11px;">
                             <thead>
                                 <tr style="background-color:#C55A11; color:white;">
                                     <th style="border:1px solid #ccc; padding:6px; text-align:center;">
-                                        المصلحة<br/>Service
+                                        <t t-if="is_ar">المصلحة</t>
+                                        <t t-elif="is_en">Service</t>
+                                        <t t-else="">Service</t>
                                     </th>
                                     <th style="border:1px solid #ccc; padding:6px; text-align:center;">
-                                        العربة<br/>Bus N°
+                                        <t t-if="is_ar">العربة</t>
+                                        <t t-elif="is_en">Bus N°</t>
+                                        <t t-else="">Bus N°</t>
                                     </th>
                                     <th style="border:1px solid #ccc; padding:6px; text-align:center;">
-                                        التوقيت<br/>Heure
+                                        <t t-if="is_ar">التوقيت</t>
+                                        <t t-elif="is_en">Time</t>
+                                        <t t-else="">Heure</t>
                                     </th>
                                     <th style="border:1px solid #ccc; padding:6px; text-align:center;">
-                                        عداد العربة<br/>Compteur
+                                        <t t-if="is_ar">عداد العربة</t>
+                                        <t t-elif="is_en">Odometer</t>
+                                        <t t-else="">Compteur</t>
                                     </th>
                                     <th style="border:1px solid #ccc; padding:6px; text-align:center;">
-                                        الكمية<br/>Quantité (L)
+                                        <t t-if="is_ar">الكمية (L)</t>
+                                        <t t-elif="is_en">Quantity (L)</t>
+                                        <t t-else="">Quantité (L)</t>
                                     </th>
                                     <th style="border:1px solid #ccc; padding:6px; text-align:center;">
-                                        إسم السائق<br/>Chauffeur
+                                        <t t-if="is_ar">إسم السائق</t>
+                                        <t t-elif="is_en">Driver Name</t>
+                                        <t t-else="">Chauffeur</t>
                                     </th>
                                 </tr>
                             </thead>
@@ -316,7 +463,9 @@
                             <tfoot>
                                 <tr style="background-color:#FCE4D6; font-weight:bold;">
                                     <td colspan="4" style="border:1px solid #ccc; padding:6px; text-align:right;">
-                                        الجملة / Total :
+                                        <t t-if="is_ar">الجملة :</t>
+                                        <t t-elif="is_en">Total :</t>
+                                        <t t-else="">Total :</t>
                                     </td>
                                     <td style="border:1px solid #ccc; padding:6px; text-align:center; color:#C55A11;">
                                         <t t-esc="bon.total_quantity"/> L
@@ -326,34 +475,62 @@
                             </tfoot>
                         </table>
 
-                        <!-- ── RÉSUMÉ ── -->
+                        <!-- RÉSUMÉ -->
                         <table style="width:100%; margin-top:15px; border-collapse:collapse;">
                             <tr>
                                 <td style="width:33%; padding:6px;">
-                                    <strong>الكمية الموزعة :</strong>
+                                    <strong>
+                                        <t t-if="is_ar">الكمية الموزعة :</t>
+                                        <t t-elif="is_en">Distributed Qty :</t>
+                                        <t t-else="">Quantité distribuée :</t>
+                                    </strong>
                                     <t t-esc="bon.total_quantity"/> L
                                 </td>
                                 <td style="width:33%; padding:6px;">
-                                    <strong>الكمية المتبقية :</strong>
+                                    <strong>
+                                        <t t-if="is_ar">الكمية المتبقية :</t>
+                                        <t t-elif="is_en">Remaining Stock :</t>
+                                        <t t-else="">Stock restant :</t>
+                                    </strong>
                                     <t t-esc="bon.remaining_stock"/> L
                                 </td>
                                 <td style="width:33%; padding:6px;">
-                                    <strong>مصادق / Validé :</strong>
-                                    <t t-if="bon.is_validated">نعم / Oui</t>
-                                    <t t-else="">لا / Non</t>
+                                    <strong>
+                                        <t t-if="is_ar">مصادق :</t>
+                                        <t t-elif="is_en">Validated :</t>
+                                        <t t-else="">Validé :</t>
+                                    </strong>
+                                    <t t-if="bon.is_validated">
+                                        <t t-if="is_ar">نعم</t>
+                                        <t t-elif="is_en">Yes</t>
+                                        <t t-else="">Oui</t>
+                                    </t>
+                                    <t t-else="">
+                                        <t t-if="is_ar">لا</t>
+                                        <t t-elif="is_en">No</t>
+                                        <t t-else="">Non</t>
+                                    </t>
                                 </td>
                             </tr>
                         </table>
 
-                        <!-- ── SIGNATURES ── -->
+                        <!-- SIGNATURES -->
                         <table style="width:100%; margin-top:40px;">
                             <tr>
                                 <td style="width:50%; text-align:center;">
-                                    <strong>Chauffeur / السائق</strong>
+                                    <strong>
+                                        <t t-if="is_ar">السائق</t>
+                                        <t t-elif="is_en">Driver</t>
+                                        <t t-else="">Chauffeur</t>
+                                    </strong>
                                     <br/><br/><br/>___________________
                                 </td>
                                 <td style="width:50%; text-align:center;">
-                                    <strong>Responsable / المسؤول</strong>
+                                    <strong>
+                                        <t t-if="is_ar">المسؤول</t>
+                                        <t t-elif="is_en">Responsible</t>
+                                        <t t-else="">Responsable</t>
+                                    </strong>
                                     <br/><br/><br/>___________________
                                 </td>
                             </tr>

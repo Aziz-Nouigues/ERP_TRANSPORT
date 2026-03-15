@@ -30,6 +30,8 @@ msgid ""
 "<strong>Agent Distributeur</strong>\n"
 "                                    <br/><br/><br/>___________________"
 msgstr ""
+"<strong>Distributor Agent</strong>\n"
+"                                    <br/><br/><br/>___________________"
 
 #. module: transport_energy
 #: model_terms:ir.ui.view,arch_db:transport_energy.template_bge
@@ -37,6 +39,8 @@ msgid ""
 "<strong>Chauffeur / السائق</strong>\n"
 "                                    <br/><br/><br/>___________________"
 msgstr ""
+"<strong>Driver</strong>\n"
+"                                    <br/><br/><br/>___________________"
 
 #. module: transport_energy
 #: model_terms:ir.ui.view,arch_db:transport_energy.template_bgi
@@ -44,6 +48,8 @@ msgid ""
 "<strong>Chef de Dépôt</strong>\n"
 "                                    <br/><br/><br/>___________________"
 msgstr ""
+"<strong>Depot Manager</strong>\n"
+"                                    <br/><br/><br/>___________________"
 
 #. module: transport_energy
 #: model_terms:ir.ui.view,arch_db:transport_energy.template_bge
@@ -57,6 +63,8 @@ msgid ""
 "<strong>Directeur Technique</strong>\n"
 "                                    <br/><br/><br/>___________________"
 msgstr ""
+"<strong>Technical Director</strong>\n"
+"                                    <br/><br/><br/>___________________"
 
 #. module: transport_energy
 #: model_terms:ir.ui.view,arch_db:transport_energy.template_bge
@@ -79,6 +87,8 @@ msgid ""
 "<strong>Responsable / المسؤول</strong>\n"
 "                                    <br/><br/><br/>___________________"
 msgstr ""
+"<strong>Responsible</strong>\n"
+"                                    <br/><br/><br/>___________________"
 
 #. module: transport_energy
 #: model_terms:ir.ui.view,arch_db:transport_energy.template_bgi
@@ -86,6 +96,8 @@ msgid ""
 "<strong>Responsable Station</strong>\n"
 "                                    <br/><br/><br/>___________________"
 msgstr ""
+"<strong>Station Manager</strong>\n"
+"                                    <br/><br/><br/>___________________"
 
 #. module: transport_energy
 #: model_terms:ir.ui.view,arch_db:transport_energy.template_excessif
@@ -94,6 +106,8 @@ msgid ""
 "<strong>Responsable Énergie</strong>\n"
 "                                    <br/><br/><br/>___________________"
 msgstr ""
+"<strong>Energy Manager</strong>\n"
+"                                    <br/><br/><br/>___________________"
 
 #. module: transport_energy
 #: model_terms:ir.ui.view,arch_db:transport_energy.template_bge
@@ -181,6 +195,8 @@ msgid ""
 "<strong>ملخص: </strong>\n"
 "                            عدد العربات:"
 msgstr ""
+"<strong>Summary: </strong>\n"
+"                            No. of vehicles:"
 
 #. module: transport_energy
 #: model_terms:ir.ui.view,arch_db:transport_energy.rapport_energie_template
@@ -188,6 +204,8 @@ msgid ""
 "<strong>ملخص: </strong>\n"
 "                            عدد الفواتير:"
 msgstr ""
+"<strong>Summary: </strong>\n"
+"                            No. of invoices:"
 
 #. module: transport_energy
 #: model_terms:ir.ui.view,arch_db:transport_energy.rapport_lubrifiant_template

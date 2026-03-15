@@ -17,70 +17,158 @@
     <template id="rapport_boc_arrivee">
         <t t-call="web.html_container">
             <t t-foreach="docs" t-as="o">
-                <t t-call="web.external_layout">
-                    <div class="page">
 
+                <!-- ═══ LANGUE AUTOMATIQUE ═══ -->
+                <t t-set="lang" t-value="o.env.user.lang or 'fr_FR'"/>
+                <t t-set="o" t-value="o.with_context(lang=lang)"/>
+                <t t-set="is_ar" t-value="lang.startswith('ar')"/>
+                <t t-set="is_en" t-value="lang.startswith('en')"/>
+
+                <t t-call="web.external_layout">
+                    <div class="page" t-att-dir="'rtl' if is_ar else 'ltr'">
+
+                        <!-- TITRE -->
                         <div class="text-center mb-4">
-                            <h2>بطاقة البريد الوارد — Bordereau Courrier Arrivée</h2>
+                            <h2>
+                                <t t-if="is_ar">بطاقة البريد الوارد</t>
+                                <t t-elif="is_en">Incoming Mail Form</t>
+                                <t t-else="">Bordereau Courrier Arrivée</t>
+                            </h2>
                         </div>
 
-                        <!-- Entête du courrier -->
+                        <!-- ENTÊTE DU COURRIER -->
                         <table class="table table-bordered" style="font-size:12px;">
                             <tbody>
                                 <tr>
-                                    <td class="fw-bold" style="width:30%">N° d'ordre</td>
+                                    <td class="fw-bold" style="width:30%">
+                                        <t t-if="is_ar">رقم التسجيل</t>
+                                        <t t-elif="is_en">Reference No.</t>
+                                        <t t-else="">N° d'ordre</t>
+                                    </td>
                                     <td><t t-esc="o.name"/></td>
-                                    <td class="fw-bold" style="width:30%">Année</td>
+                                    <td class="fw-bold" style="width:30%">
+                                        <t t-if="is_ar">السنة</t>
+                                        <t t-elif="is_en">Year</t>
+                                        <t t-else="">Année</t>
+                                    </td>
                                     <td><t t-esc="o.annee_exercice"/></td>
                                 </tr>
                                 <tr>
-                                    <td class="fw-bold">Date / Heure d'arrivée</td>
+                                    <td class="fw-bold">
+                                        <t t-if="is_ar">تاريخ الوصول</t>
+                                        <t t-elif="is_en">Arrival Date / Time</t>
+                                        <t t-else="">Date / Heure d'arrivée</t>
+                                    </td>
                                     <td><t t-esc="o.date_arrivee"/></td>
-                                    <td class="fw-bold">Date du courrier</td>
+                                    <td class="fw-bold">
+                                        <t t-if="is_ar">تاريخ المراسلة</t>
+                                        <t t-elif="is_en">Mail Date</t>
+                                        <t t-else="">Date du courrier</t>
+                                    </td>
                                     <td><t t-esc="o.date_courrier or '-'"/></td>
                                 </tr>
                                 <tr>
-                                    <td class="fw-bold">Type d'arrivée</td>
+                                    <td class="fw-bold">
+                                        <t t-if="is_ar">نوع الوصول</t>
+                                        <t t-elif="is_en">Arrival Type</t>
+                                        <t t-else="">Type d'arrivée</t>
+                                    </td>
                                     <td><t t-esc="dict(o.fields_get(['type_arrivee'])['type_arrivee']['selection'])[o.type_arrivee]"/></td>
-                                    <td class="fw-bold">Nature du courrier</td>
+                                    <td class="fw-bold">
+                                        <t t-if="is_ar">طبيعة المراسلة</t>
+                                        <t t-elif="is_en">Mail Nature</t>
+                                        <t t-else="">Nature du courrier</t>
+                                    </td>
                                     <td><t t-esc="o.type_courrier_id.name or '-'"/></td>
                                 </tr>
                                 <tr>
-                                    <td class="fw-bold">Expéditeur</td>
+                                    <td class="fw-bold">
+                                        <t t-if="is_ar">المرسِل</t>
+                                        <t t-elif="is_en">Sender</t>
+                                        <t t-else="">Expéditeur</t>
+                                    </td>
                                     <td><t t-esc="o.organisme_id.name or o.expediteur_nom or '-'"/></td>
-                                    <td class="fw-bold">Réf. expéditeur</td>
+                                    <td class="fw-bold">
+                                        <t t-if="is_ar">مرجع المرسِل</t>
+                                        <t t-elif="is_en">Sender Ref.</t>
+                                        <t t-else="">Réf. expéditeur</t>
+                                    </td>
                                     <td><t t-esc="o.reference_expediteur or '-'"/></td>
                                 </tr>
                                 <tr>
-                                    <td class="fw-bold">Objet / Sujet</td>
+                                    <td class="fw-bold">
+                                        <t t-if="is_ar">الموضوع</t>
+                                        <t t-elif="is_en">Subject</t>
+                                        <t t-else="">Objet / Sujet</t>
+                                    </td>
                                     <td colspan="3"><t t-esc="o.sujet"/></td>
                                 </tr>
                                 <tr t-if="o.necessite_reponse">
-                                    <td class="fw-bold">Date d'échéance</td>
+                                    <td class="fw-bold">
+                                        <t t-if="is_ar">تاريخ الاستحقاق</t>
+                                        <t t-elif="is_en">Due Date</t>
+                                        <t t-else="">Date d'échéance</t>
+                                    </td>
                                     <td><t t-esc="o.date_echeance or '-'"/></td>
-                                    <td class="fw-bold">Date de rappel</td>
+                                    <td class="fw-bold">
+                                        <t t-if="is_ar">تاريخ التذكير</t>
+                                        <t t-elif="is_en">Reminder Date</t>
+                                        <t t-else="">Date de rappel</t>
+                                    </td>
                                     <td><t t-esc="o.date_rappel or '-'"/></td>
                                 </tr>
                                 <tr t-if="o.est_facture">
-                                    <td class="fw-bold">Référence facture</td>
+                                    <td class="fw-bold">
+                                        <t t-if="is_ar">مرجع الفاتورة</t>
+                                        <t t-elif="is_en">Invoice Reference</t>
+                                        <t t-else="">Référence facture</t>
+                                    </td>
                                     <td><t t-esc="o.reference_facture or '-'"/></td>
-                                    <td class="fw-bold">Fournisseur</td>
+                                    <td class="fw-bold">
+                                        <t t-if="is_ar">المورد</t>
+                                        <t t-elif="is_en">Supplier</t>
+                                        <t t-else="">Fournisseur</t>
+                                    </td>
                                     <td><t t-esc="o.fournisseur or '-'"/></td>
                                 </tr>
                             </tbody>
                         </table>
 
-                        <!-- Tableau des diffusions -->
+                        <!-- TABLEAU DES DIFFUSIONS -->
                         <t t-if="o.transmission_ids">
-                            <h4 class="mt-3">Diffusions / Transmissions</h4>
+                            <h4 class="mt-3">
+                                <t t-if="is_ar">التحويلات</t>
+                                <t t-elif="is_en">Transmissions</t>
+                                <t t-else="">Diffusions / Transmissions</t>
+                            </h4>
                             <table class="table table-bordered table-sm" style="font-size:11px;">
                                 <thead class="table-secondary">
                                     <tr>
-                                        <th>Service / Direction</th>
-                                        <th>Instruction</th>
-                                        <th>Date transmission</th>
-                                        <th>Date échéance</th>
-                                        <th>État</th>
+                                        <th>
+                                            <t t-if="is_ar">المصلحة / الإدارة</t>
+                                            <t t-elif="is_en">Service / Department</t>
+                                            <t t-else="">Service / Direction</t>
+                                        </th>
+                                        <th>
+                                            <t t-if="is_ar">التعليمات</t>
+                                            <t t-elif="is_en">Instructions</t>
+                                            <t t-else="">Instruction</t>
+                                        </th>
+                                        <th>
+                                            <t t-if="is_ar">تاريخ التحويل</t>
+                                            <t t-elif="is_en">Transmission Date</t>
+                                            <t t-else="">Date transmission</t>
+                                        </th>
+                                        <th>
+                                            <t t-if="is_ar">تاريخ الاستحقاق</t>
+                                            <t t-elif="is_en">Due Date</t>
+                                            <t t-else="">Date échéance</t>
+                                        </th>
+                                        <th>
+                                            <t t-if="is_ar">الحالة</t>
+                                            <t t-elif="is_en">State</t>
+                                            <t t-else="">État</t>
+                                        </th>
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -97,15 +185,23 @@
                             </table>
                         </t>
 
-                        <!-- Zone signatures -->
+                        <!-- SIGNATURES -->
                         <div class="row mt-4">
                             <div class="col-6 text-center">
-                                <p>Agent BOC</p>
+                                <p>
+                                    <t t-if="is_ar">عون المكتب</t>
+                                    <t t-elif="is_en">BOC Agent</t>
+                                    <t t-else="">Agent BOC</t>
+                                </p>
                                 <br/><br/>
                                 <p>___________________________</p>
                             </div>
                             <div class="col-6 text-center">
-                                <p>Responsable BOC</p>
+                                <p>
+                                    <t t-if="is_ar">مسؤول المكتب</t>
+                                    <t t-elif="is_en">BOC Manager</t>
+                                    <t t-else="">Responsable BOC</t>
+                                </p>
                                 <br/><br/>
                                 <p>___________________________</p>
                             </div>
@@ -133,58 +229,122 @@
     <template id="rapport_boc_depart">
         <t t-call="web.html_container">
             <t t-foreach="docs" t-as="o">
-                <t t-call="web.external_layout">
-                    <div class="page">
 
+                <!-- ═══ LANGUE AUTOMATIQUE ═══ -->
+                <t t-set="lang" t-value="o.env.user.lang or 'fr_FR'"/>
+                <t t-set="o" t-value="o.with_context(lang=lang)"/>
+                <t t-set="is_ar" t-value="lang.startswith('ar')"/>
+                <t t-set="is_en" t-value="lang.startswith('en')"/>
+
+                <t t-call="web.external_layout">
+                    <div class="page" t-att-dir="'rtl' if is_ar else 'ltr'">
+
+                        <!-- TITRE -->
                         <div class="text-center mb-4">
-                            <h2>بطاقة البريد الصادر — Bordereau Courrier Départ</h2>
+                            <h2>
+                                <t t-if="is_ar">بطاقة البريد الصادر</t>
+                                <t t-elif="is_en">Outgoing Mail Form</t>
+                                <t t-else="">Bordereau Courrier Départ</t>
+                            </h2>
                         </div>
 
+                        <!-- ENTÊTE -->
                         <table class="table table-bordered" style="font-size:12px;">
                             <tbody>
                                 <tr>
-                                    <td class="fw-bold" style="width:30%">N° d'ordre</td>
+                                    <td class="fw-bold" style="width:30%">
+                                        <t t-if="is_ar">رقم التسجيل</t>
+                                        <t t-elif="is_en">Reference No.</t>
+                                        <t t-else="">N° d'ordre</t>
+                                    </td>
                                     <td><t t-esc="o.name"/></td>
-                                    <td class="fw-bold" style="width:30%">Date de départ</td>
+                                    <td class="fw-bold" style="width:30%">
+                                        <t t-if="is_ar">تاريخ الإرسال</t>
+                                        <t t-elif="is_en">Departure Date</t>
+                                        <t t-else="">Date de départ</t>
+                                    </td>
                                     <td><t t-esc="o.date_depart"/></td>
                                 </tr>
                                 <tr>
-                                    <td class="fw-bold">Type</td>
+                                    <td class="fw-bold">
+                                        <t t-if="is_ar">النوع</t>
+                                        <t t-elif="is_en">Type</t>
+                                        <t t-else="">Type</t>
+                                    </td>
                                     <td><t t-esc="dict(o.fields_get(['type_depart'])['type_depart']['selection'])[o.type_depart]"/></td>
-                                    <td class="fw-bold">Support</td>
+                                    <td class="fw-bold">
+                                        <t t-if="is_ar">الدعامة</t>
+                                        <t t-elif="is_en">Medium</t>
+                                        <t t-else="">Support</t>
+                                    </td>
                                     <td><t t-esc="dict(o.fields_get(['support'])['support']['selection'])[o.support]"/></td>
                                 </tr>
                                 <tr>
-                                    <td class="fw-bold">Destinataire</td>
+                                    <td class="fw-bold">
+                                        <t t-if="is_ar">المرسَل إليه</t>
+                                        <t t-elif="is_en">Recipient</t>
+                                        <t t-else="">Destinataire</t>
+                                    </td>
                                     <td><t t-esc="o.organisme_id.name or o.destinataire_nom or '-'"/></td>
-                                    <td class="fw-bold">Nature du courrier</td>
+                                    <td class="fw-bold">
+                                        <t t-if="is_ar">طبيعة المراسلة</t>
+                                        <t t-elif="is_en">Mail Nature</t>
+                                        <t t-else="">Nature du courrier</t>
+                                    </td>
                                     <td><t t-esc="o.type_courrier_id.name or '-'"/></td>
                                 </tr>
                                 <tr>
-                                    <td class="fw-bold">Objet / Sujet</td>
+                                    <td class="fw-bold">
+                                        <t t-if="is_ar">الموضوع</t>
+                                        <t t-elif="is_en">Subject</t>
+                                        <t t-else="">Objet / Sujet</t>
+                                    </td>
                                     <td colspan="3"><t t-esc="o.sujet"/></td>
                                 </tr>
                                 <tr t-if="o.arrivee_id">
-                                    <td class="fw-bold">En réponse à</td>
-                                    <td colspan="3"><t t-esc="o.arrivee_id.name"/> — <t t-esc="o.arrivee_id.sujet"/></td>
+                                    <td class="fw-bold">
+                                        <t t-if="is_ar">ردًا على</t>
+                                        <t t-elif="is_en">In reply to</t>
+                                        <t t-else="">En réponse à</t>
+                                    </td>
+                                    <td colspan="3">
+                                        <t t-esc="o.arrivee_id.name"/> — <t t-esc="o.arrivee_id.sujet"/>
+                                    </td>
                                 </tr>
                                 <tr>
-                                    <td class="fw-bold">Service expéditeur</td>
+                                    <td class="fw-bold">
+                                        <t t-if="is_ar">المصلحة المرسِلة</t>
+                                        <t t-elif="is_en">Sending Service</t>
+                                        <t t-else="">Service expéditeur</t>
+                                    </td>
                                     <td><t t-esc="o.service_expediteur or '-'"/></td>
-                                    <td class="fw-bold">Responsable</td>
+                                    <td class="fw-bold">
+                                        <t t-if="is_ar">المسؤول</t>
+                                        <t t-elif="is_en">Responsible</t>
+                                        <t t-else="">Responsable</t>
+                                    </td>
                                     <td><t t-esc="o.responsable_id.name or '-'"/></td>
                                 </tr>
                             </tbody>
                         </table>
 
+                        <!-- SIGNATURES -->
                         <div class="row mt-4">
                             <div class="col-6 text-center">
-                                <p>Agent BOC</p>
+                                <p>
+                                    <t t-if="is_ar">عون المكتب</t>
+                                    <t t-elif="is_en">BOC Agent</t>
+                                    <t t-else="">Agent BOC</t>
+                                </p>
                                 <br/><br/>
                                 <p>___________________________</p>
                             </div>
                             <div class="col-6 text-center">
-                                <p>Responsable BOC</p>
+                                <p>
+                                    <t t-if="is_ar">مسؤول المكتب</t>
+                                    <t t-elif="is_en">BOC Manager</t>
+                                    <t t-else="">Responsable BOC</t>
+                                </p>
                                 <br/><br/>
                                 <p>___________________________</p>
                             </div>

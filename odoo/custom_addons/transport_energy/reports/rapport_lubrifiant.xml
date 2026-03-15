@@ -1,60 +1,57 @@
 <?xml version="1.0" encoding="utf-8"?>
 <odoo>
 
-    <!-- ═══════════════════════════════════════════════════════
-         RAPPORT LUBRIFIANTS PAR VEHICULE
-         كشف استهلاك العربة للسوائل
-    ═══════════════════════════════════════════════════════ -->
-
     <template id="rapport_lubrifiant_template">
         <t t-call="web.html_container">
             <t t-foreach="docs" t-as="wizard">
-                <t t-call="web.external_layout">
-                    <div class="page" style="direction:rtl; font-family: Arial, sans-serif;">
 
-                        <!-- TITRE -->
+                <!-- ═══ LANGUE AUTOMATIQUE ═══ -->
+                <t t-set="lang" t-value="wizard.env.user.lang or 'fr_FR'"/>
+                <t t-set="wizard" t-value="wizard.with_context(lang=lang)"/>
+                <t t-set="lbl" t-value="wizard._get_labels()"/>
+                <t t-set="is_rtl" t-value="lang.startswith('ar')"/>
+
+                <t t-call="web.external_layout">
+                    <div class="page" t-att-style="'direction:rtl;' if is_rtl else 'direction:ltr;'" style="font-family: Arial, sans-serif;">
+
                         <div style="text-align:center; margin-bottom:20px;">
                             <h2 style="color:#6c3483; border-bottom:3px solid #6c3483; padding-bottom:8px;">
-                                كشف استهلاك العربة للمزيتات
+                                <t t-esc="lbl['titre_lubrifiant']"/>
                             </h2>
-                            <h4 style="color:#555;">Rapport Consommation Lubrifiants par Vehicule</h4>
                             <p>
-                                <strong>من</strong> <t t-esc="wizard.date_debut"/>
-                                <strong> الى </strong> <t t-esc="wizard.date_fin"/>
+                                <t t-esc="lbl['de']"/> <t t-esc="wizard.date_debut"/>
+                                <t t-esc="lbl['au']"/> <t t-esc="wizard.date_fin"/>
                                 <t t-if="wizard.atelier_filtre">
-                                    | <strong>الورشة:</strong> <t t-esc="wizard.atelier_filtre"/>
+                                    | <t t-esc="lbl['atelier']"/> : <t t-esc="wizard.atelier_filtre"/>
                                 </t>
                             </p>
                         </div>
 
                         <t t-set="lignes" t-value="wizard._get_donnees_lubrifiant()"/>
 
-                        <!-- RÉSUMÉ -->
                         <div style="background:#f4ecf7; padding:10px; border-radius:5px; margin-bottom:15px;">
-                            <strong>ملخص: </strong>
-                            عدد العربات: <strong><t t-esc="len(lignes)"/></strong>
-                            | اجمالي الكمية:
+                            <t t-esc="lbl['nb_vehicules']"/> : <strong><t t-esc="len(lignes)"/></strong>
+                            | <t t-esc="lbl['quantite_consommee']"/> :
                             <strong><t t-esc="round(sum(l['total_quantite'] for l in lignes), 2)"/> L</strong>
-                            | عدد الفيدانجات:
+                            | <t t-esc="lbl['nb_vidanges']"/> :
                             <strong><t t-esc="sum(l['nb_vidanges'] for l in lignes)"/></strong>
-                            | عدد الاضافات:
+                            | <t t-esc="lbl['nb_additions']"/> :
                             <strong><t t-esc="sum(l['nb_additions'] for l in lignes)"/></strong>
                         </div>
 
-                        <!-- TABLEAU PRINCIPAL -->
-                        <table class="table table-sm table-bordered" style="width:100%; font-size:11px; direction:rtl;">
+                        <table class="table table-sm table-bordered" style="width:100%; font-size:11px;">
                             <thead style="background:#6c3483; color:white;">
                                 <tr>
-                                    <th style="text-align:center;">العربة</th>
-                                    <th style="text-align:center;">الصنف</th>
-                                    <th style="text-align:center;">الورشة</th>
-                                    <th style="text-align:center;">نوع المزيت</th>
-                                    <th style="text-align:center;">عدد الفيدانجات</th>
-                                    <th style="text-align:center;">كمية الفيدانج (L)</th>
-                                    <th style="text-align:center;">عدد الاضافات</th>
-                                    <th style="text-align:center;">كمية الاضافة (L)</th>
-                                    <th style="text-align:center;">الكمية الاجمالية (L)</th>
-                                    <th style="text-align:center;">عداد الكيلومتر</th>
+                                    <th><t t-esc="lbl['bus']"/></th>
+                                    <th><t t-esc="lbl['type']"/></th>
+                                    <th><t t-esc="lbl['atelier']"/></th>
+                                    <th><t t-esc="lbl['lubrifiant']"/></th>
+                                    <th style="text-align:center;"><t t-esc="lbl['nb_vidanges']"/></th>
+                                    <th style="text-align:center;"><t t-esc="lbl['qte_vidange']"/></th>
+                                    <th style="text-align:center;"><t t-esc="lbl['nb_additions']"/></th>
+                                    <th style="text-align:center;"><t t-esc="lbl['qte_addition']"/></th>
+                                    <th style="text-align:center;"><t t-esc="lbl['quantite_consommee']"/></th>
+                                    <th style="text-align:center;"><t t-esc="lbl['kilometrage']"/></th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -75,15 +72,29 @@
                             </tbody>
                             <tfoot style="background:#d7bde2; font-weight:bold;">
                                 <tr>
-                                    <td colspan="4" style="text-align:right;">الجملة</td>
+                                    <td colspan="4"><t t-esc="lbl['total']"/></td>
                                     <td style="text-align:center;"><t t-esc="sum(l['nb_vidanges'] for l in lignes)"/></td>
                                     <td style="text-align:center;"><t t-esc="round(sum(l['qte_vidange'] for l in lignes), 2)"/></td>
                                     <td style="text-align:center;"><t t-esc="sum(l['nb_additions'] for l in lignes)"/></td>
                                     <td style="text-align:center;"><t t-esc="round(sum(l['qte_addition'] for l in lignes), 2)"/></td>
                                     <td style="text-align:center;"><t t-esc="round(sum(l['total_quantite'] for l in lignes), 2)"/></td>
-                                    <td></td>
+                                    <td/>
                                 </tr>
                             </tfoot>
+                        </table>
+
+                        <!-- SIGNATURE -->
+                        <table style="width:100%; margin-top:40px;">
+                            <tr>
+                                <td style="width:50%; text-align:center;">
+                                    <strong><t t-esc="lbl['responsable_energie']"/></strong>
+                                    <br/><br/><br/>___________________
+                                </td>
+                                <td style="width:50%; text-align:center;">
+                                    <strong><t t-esc="lbl['directeur_technique']"/></strong>
+                                    <br/><br/><br/>___________________
+                                </td>
+                            </tr>
                         </table>
 
                     </div>

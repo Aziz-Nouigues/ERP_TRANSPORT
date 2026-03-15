@@ -4,35 +4,42 @@
     <template id="rapport_stats_agence_template">
         <t t-call="web.html_container">
             <t t-foreach="docs" t-as="wizard">
-                <t t-call="web.external_layout">
-                    <div class="page" style="direction:rtl; font-family: Arial, sans-serif;">
 
-                        <!-- TITRE -->
+                <!-- ═══ LANGUE AUTOMATIQUE ═══ -->
+                <t t-set="lang" t-value="wizard.env.user.lang or 'fr_FR'"/>
+                <t t-set="wizard" t-value="wizard.with_context(lang=lang)"/>
+                <t t-set="lbl" t-value="wizard._get_labels()"/>
+                <t t-set="is_rtl" t-value="lang.startswith('ar')"/>
+
+                <t t-call="web.external_layout">
+                    <div class="page" t-att-style="'direction:rtl;' if is_rtl else 'direction:ltr;'" style="font-family: Arial, sans-serif;">
+
                         <div style="text-align:center; margin-bottom:20px;">
                             <h2 style="color:#1a5276; border-bottom:3px solid #1a5276; padding-bottom:8px;">
-                                احصائيات استهلاك المحروقات حسب الوكالة
+                                <t t-esc="lbl['titre_stats']"/>
                             </h2>
-                            <h4 style="color:#555;">Statistiques Consommation par Agence / Type de Bus</h4>
                             <p>
-                                <strong>من</strong> <t t-esc="wizard.date_debut"/>
-                                <strong> الى </strong> <t t-esc="wizard.date_fin"/>
+                                <t t-esc="lbl['de']"/> <t t-esc="wizard.date_debut"/>
+                                <t t-esc="lbl['au']"/> <t t-esc="wizard.date_fin"/>
                             </p>
                         </div>
 
                         <t t-set="donnees" t-value="wizard._get_donnees_stats_agence()"/>
 
-                        <!-- ═══ SECTION 1 : RÉCAP PAR AGENCE ═══ -->
-                        <h4 style="color:#1a5276; margin-top:15px;">1. ملخص حسب الوكالة - Recapitulatif par Agence</h4>
-                        <table class="table table-sm table-bordered" style="width:100%; font-size:11px; direction:rtl;">
+                        <!-- SECTION 1 : PAR AGENCE -->
+                        <h4 style="color:#1a5276; margin-top:15px;">
+                            1. <t t-esc="lbl['agence']"/>
+                        </h4>
+                        <table class="table table-sm table-bordered" style="width:100%; font-size:11px;">
                             <thead style="background:#1a5276; color:white;">
                                 <tr>
-                                    <th>الوكالة</th>
-                                    <th style="text-align:center;">عدد الحافلات</th>
-                                    <th style="text-align:center;">عدد الخروجات</th>
-                                    <th style="text-align:center;">الكمية (L)</th>
-                                    <th style="text-align:center;">المسافة (km)</th>
-                                    <th style="text-align:center;">معدل الاستهلاك (L/100)</th>
-                                    <th style="text-align:center;">% من الجملة</th>
+                                    <th><t t-esc="lbl['agence']"/></th>
+                                    <th style="text-align:center;"><t t-esc="lbl['nb_vehicules']"/></th>
+                                    <th style="text-align:center;"><t t-esc="lbl['nb_sorties']"/></th>
+                                    <th style="text-align:center;"><t t-esc="lbl['quantite_consommee']"/></th>
+                                    <th style="text-align:center;"><t t-esc="lbl['distance']"/></th>
+                                    <th style="text-align:center;"><t t-esc="lbl['conso_moyenne']"/></th>
+                                    <th style="text-align:center;"><t t-esc="lbl['pct']"/></th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -50,7 +57,7 @@
                             </tbody>
                             <tfoot style="background:#d5e8d4; font-weight:bold;">
                                 <tr>
-                                    <td>الجملة</td>
+                                    <td><t t-esc="lbl['total']"/></td>
                                     <td style="text-align:center;"><t t-esc="donnees['total_vehicules']"/></td>
                                     <td style="text-align:center;"><t t-esc="donnees['total_sorties']"/></td>
                                     <td style="text-align:center;"><t t-esc="donnees['total_litres']"/></td>
@@ -61,18 +68,20 @@
                             </tfoot>
                         </table>
 
-                        <!-- ═══ SECTION 2 : PAR TYPE DE BUS ═══ -->
-                        <h4 style="color:#1a5276; margin-top:20px;">2. الاستهلاك حسب صنف الحافلة - Consommation par Type de Bus</h4>
-                        <table class="table table-sm table-bordered" style="width:100%; font-size:11px; direction:rtl;">
+                        <!-- SECTION 2 : PAR TYPE DE BUS -->
+                        <h4 style="color:#1a5276; margin-top:20px;">
+                            2. <t t-esc="lbl['type_bus']"/>
+                        </h4>
+                        <table class="table table-sm table-bordered" style="width:100%; font-size:11px;">
                             <thead style="background:#2e86c1; color:white;">
                                 <tr>
-                                    <th>صنف الحافلة</th>
-                                    <th style="text-align:center;">عدد الحافلات</th>
-                                    <th style="text-align:center;">عدد الخروجات</th>
-                                    <th style="text-align:center;">الكمية (L)</th>
-                                    <th style="text-align:center;">المسافة (km)</th>
-                                    <th style="text-align:center;">معدل الاستهلاك (L/100)</th>
-                                    <th style="text-align:center;">% من الجملة</th>
+                                    <th><t t-esc="lbl['type_bus']"/></th>
+                                    <th style="text-align:center;"><t t-esc="lbl['nb_vehicules']"/></th>
+                                    <th style="text-align:center;"><t t-esc="lbl['nb_sorties']"/></th>
+                                    <th style="text-align:center;"><t t-esc="lbl['quantite_consommee']"/></th>
+                                    <th style="text-align:center;"><t t-esc="lbl['distance']"/></th>
+                                    <th style="text-align:center;"><t t-esc="lbl['conso_moyenne']"/></th>
+                                    <th style="text-align:center;"><t t-esc="lbl['pct']"/></th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -90,16 +99,18 @@
                             </tbody>
                         </table>
 
-                        <!-- ═══ SECTION 3 : COMPARAISON AGENCES PAR TYPE ═══ -->
-                        <h4 style="color:#1a5276; margin-top:20px;">3. مقارنة الوكالات حسب صنف الحافلة - Comparaison Agences x Types</h4>
-                        <table class="table table-sm table-bordered" style="width:100%; font-size:10px; direction:rtl;">
+                        <!-- SECTION 3 : COMPARAISON CROISÉE -->
+                        <h4 style="color:#1a5276; margin-top:20px;">
+                            3. <t t-esc="lbl['agence']"/> x <t t-esc="lbl['type_bus']"/>
+                        </h4>
+                        <table class="table table-sm table-bordered" style="width:100%; font-size:10px;">
                             <thead style="background:#1a5276; color:white;">
                                 <tr>
-                                    <th>الوكالة</th>
+                                    <th><t t-esc="lbl['agence']"/></th>
                                     <t t-foreach="donnees['types_list']" t-as="tp">
                                         <th style="text-align:center;"><t t-esc="tp"/></th>
                                     </t>
-                                    <th style="text-align:center;">الجملة (L)</th>
+                                    <th style="text-align:center;"><t t-esc="lbl['total']"/> (L)</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -115,6 +126,20 @@
                                     </tr>
                                 </t>
                             </tbody>
+                        </table>
+
+                        <!-- SIGNATURE -->
+                        <table style="width:100%; margin-top:40px;">
+                            <tr>
+                                <td style="width:50%; text-align:center;">
+                                    <strong><t t-esc="lbl['responsable_energie']"/></strong>
+                                    <br/><br/><br/>___________________
+                                </td>
+                                <td style="width:50%; text-align:center;">
+                                    <strong><t t-esc="lbl['directeur_technique']"/></strong>
+                                    <br/><br/><br/>___________________
+                                </td>
+                            </tr>
                         </table>
 
                     </div>

@@ -1,48 +1,49 @@
 <?xml version="1.0" encoding="utf-8"?>
 <odoo>
 
-    <!-- ═══════════════════════════════════════════════════════
-         RAPPORT CONSOMMATION VEHICULES ADMINISTRATIFS
-    ═══════════════════════════════════════════════════════ -->
-
     <template id="rapport_vehicules_admin_template">
         <t t-call="web.html_container">
             <t t-foreach="docs" t-as="wizard">
+
+                <!-- ═══ LANGUE AUTOMATIQUE ═══ -->
+                <t t-set="lang" t-value="wizard.env.user.lang or 'fr_FR'"/>
+                <t t-set="wizard" t-value="wizard.with_context(lang=lang)"/>
+                <t t-set="lbl" t-value="wizard._get_labels()"/>
+                <t t-set="is_rtl" t-value="lang.startswith('ar')"/>
+
                 <t t-call="web.external_layout">
-                    <div class="page" style="direction:rtl; font-family: Arial, sans-serif;">
+                    <div class="page" t-att-style="'direction:rtl;' if is_rtl else 'direction:ltr;'" style="font-family: Arial, sans-serif;">
 
                         <div style="text-align:center; margin-bottom:20px;">
                             <h2 style="color:#1a5276; border-bottom:3px solid #1a5276; padding-bottom:8px;">
-                                استهلاك المحروقات للسيارات الادارية
+                                <t t-esc="lbl['titre_admin']"/>
                             </h2>
-                            <h4 style="color:#555;">Consommation Carburant - Vehicules Administratifs</h4>
                             <p>
-                                <strong>من</strong> <t t-esc="wizard.date_debut"/>
-                                <strong> الى </strong> <t t-esc="wizard.date_fin"/>
+                                <t t-esc="lbl['de']"/> <t t-esc="wizard.date_debut"/>
+                                <t t-esc="lbl['au']"/> <t t-esc="wizard.date_fin"/>
                             </p>
                         </div>
 
                         <t t-set="donnees" t-value="wizard._get_donnees_vehicules_admin()"/>
 
                         <div style="background:#eaf2ff; padding:10px; border-radius:5px; margin-bottom:15px;">
-                            <strong>ملخص: </strong>
-                            عدد السيارات: <strong><t t-esc="donnees['nb_vehicules']"/></strong>
-                            | اجمالي الاستهلاك: <strong><t t-esc="donnees['total_litres']"/> L</strong>
-                            | اجمالي المسافة: <strong><t t-esc="donnees['total_km']"/> km</strong>
+                            <t t-esc="lbl['nb_vehicules']"/> : <strong><t t-esc="donnees['nb_vehicules']"/></strong>
+                            | <t t-esc="lbl['quantite_consommee']"/> : <strong><t t-esc="donnees['total_litres']"/> L</strong>
+                            | <t t-esc="lbl['distance']"/> : <strong><t t-esc="donnees['total_km']"/> km</strong>
                         </div>
 
-                        <table class="table table-sm table-bordered" style="width:100%; font-size:11px; direction:rtl;">
+                        <table class="table table-sm table-bordered" style="width:100%; font-size:11px;">
                             <thead style="background:#1a5276; color:white;">
                                 <tr>
-                                    <th>السيارة</th>
-                                    <th>رقم التسجيل</th>
-                                    <th>الصنف</th>
-                                    <th>المركز</th>
-                                    <th>عدد التزودات</th>
-                                    <th>الكمية (L)</th>
-                                    <th>المسافة (km)</th>
-                                    <th>الاستهلاك (L/100)</th>
-                                    <th>الاستهلاك النظري</th>
+                                    <th><t t-esc="lbl['bus']"/></th>
+                                    <th style="text-align:center;">N° immat.</th>
+                                    <th><t t-esc="lbl['type']"/></th>
+                                    <th><t t-esc="lbl['agence']"/></th>
+                                    <th style="text-align:center;"><t t-esc="lbl['nb_sorties']"/></th>
+                                    <th style="text-align:center;"><t t-esc="lbl['quantite_consommee']"/></th>
+                                    <th style="text-align:center;"><t t-esc="lbl['distance']"/></th>
+                                    <th style="text-align:center;"><t t-esc="lbl['reelle']"/></th>
+                                    <th style="text-align:center;"><t t-esc="lbl['theorique']"/></th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -62,12 +63,26 @@
                             </tbody>
                             <tfoot style="background:#d5e8d4; font-weight:bold;">
                                 <tr>
-                                    <td colspan="5" style="text-align:right;">الجملة</td>
+                                    <td colspan="5"><t t-esc="lbl['total']"/></td>
                                     <td style="text-align:center;"><t t-esc="donnees['total_litres']"/></td>
                                     <td style="text-align:center;"><t t-esc="donnees['total_km']"/></td>
-                                    <td colspan="2"></td>
+                                    <td colspan="2"/>
                                 </tr>
                             </tfoot>
+                        </table>
+
+                        <!-- SIGNATURE -->
+                        <table style="width:100%; margin-top:40px;">
+                            <tr>
+                                <td style="width:50%; text-align:center;">
+                                    <strong><t t-esc="lbl['responsable_energie']"/></strong>
+                                    <br/><br/><br/>___________________
+                                </td>
+                                <td style="width:50%; text-align:center;">
+                                    <strong><t t-esc="lbl['directeur_technique']"/></strong>
+                                    <br/><br/><br/>___________________
+                                </td>
+                            </tr>
                         </table>
 
                     </div>

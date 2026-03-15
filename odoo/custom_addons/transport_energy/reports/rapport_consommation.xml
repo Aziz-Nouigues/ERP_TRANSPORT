@@ -16,49 +16,54 @@
     <template id="template_recap">
         <t t-call="web.html_container">
             <t t-foreach="docs" t-as="wizard">
+
+                <!-- ═══ LANGUE AUTOMATIQUE ═══ -->
+                <t t-set="lang" t-value="wizard.env.user.lang or 'fr_FR'"/>
+                <t t-set="wizard" t-value="wizard.with_context(lang=lang)"/>
+                <t t-set="lbl" t-value="wizard._get_labels()"/>
+                <t t-set="is_rtl" t-value="lang.startswith('ar')"/>
+
                 <t t-call="web.external_layout">
-                    <div class="page">
+                    <div class="page" t-att-dir="'rtl' if is_rtl else 'ltr'">
 
                         <!-- EN-TÊTE -->
                         <div style="text-align:center; margin-bottom:20px;">
                             <h2 style="color:#1F4E79; font-size:18px;">
-                                حوصلة للكمية المستهلكة من محروقات
+                                <t t-esc="lbl['titre_recap']"/>
                             </h2>
-                            <h3 style="color:#1F4E79; font-size:14px;">
-                                Récapitulatif de Consommation de Carburant
-                            </h3>
                             <p style="color:#666; font-size:11px;">
-                                Période :
+                                <t t-esc="lbl['periode']"/> :
                                 <t t-esc="wizard.date_debut"/> →
                                 <t t-esc="wizard.date_fin"/>
                                 <t t-if="wizard.station_id">
-                                    | Station : <t t-esc="wizard.station_id.name"/>
+                                    | <t t-esc="lbl['station']"/> :
+                                    <t t-esc="wizard.station_id.name"/>
                                 </t>
                             </p>
                         </div>
 
-                        <!-- TABLEAU RÉCAPITULATIF -->
+                        <!-- TABLEAU -->
                         <t t-set="donnees" t-value="wizard._get_donnees_recap()"/>
                         <table style="width:100%; border-collapse:collapse; font-size:11px;">
                             <thead>
                                 <tr style="background-color:#1F4E79; color:white;">
                                     <th style="border:1px solid #ccc; padding:7px; text-align:center;">
-                                        نوع الحافلة<br/>Type de Bus
+                                        <t t-esc="lbl['type_bus']"/>
                                     </th>
                                     <th style="border:1px solid #ccc; padding:7px; text-align:center;">
-                                        عدد الحافلات<br/>Nb Véhicules
+                                        <t t-esc="lbl['nb_vehicules']"/>
                                     </th>
                                     <th style="border:1px solid #ccc; padding:7px; text-align:center;">
-                                        عدد التزودات<br/>Nb Bons
+                                        <t t-esc="lbl['nb_bons']"/>
                                     </th>
                                     <th style="border:1px solid #ccc; padding:7px; text-align:center;">
-                                        المسافة (km)<br/>Distance
+                                        <t t-esc="lbl['distance']"/>
                                     </th>
                                     <th style="border:1px solid #ccc; padding:7px; text-align:center;">
-                                        الكمية المستهلكة (L)<br/>Quantité
+                                        <t t-esc="lbl['quantite_consommee']"/>
                                     </th>
                                     <th style="border:1px solid #ccc; padding:7px; text-align:center;">
-                                        المعدل (L/100km)<br/>Conso Moy.
+                                        <t t-esc="lbl['conso_moyenne']"/>
                                     </th>
                                 </tr>
                             </thead>
@@ -89,7 +94,7 @@
                             <tfoot>
                                 <tr style="background-color:#D6E4F0; font-weight:bold;">
                                     <td colspan="4" style="border:1px solid #ccc; padding:7px; text-align:right;">
-                                        الجملة / Total :
+                                        <t t-esc="lbl['total']"/> :
                                     </td>
                                     <td style="border:1px solid #ccc; padding:7px; text-align:center; color:#C00000; font-size:13px;">
                                         <t t-esc="sum(l['total_litres'] for l in donnees)"/> L
@@ -103,11 +108,11 @@
                         <table style="width:100%; margin-top:50px;">
                             <tr>
                                 <td style="width:50%; text-align:center;">
-                                    <strong>Responsable Énergie</strong>
+                                    <strong><t t-esc="lbl['responsable_energie']"/></strong>
                                     <br/><br/><br/>___________________
                                 </td>
                                 <td style="width:50%; text-align:center;">
-                                    <strong>Directeur Technique</strong>
+                                    <strong><t t-esc="lbl['directeur_technique']"/></strong>
                                     <br/><br/><br/>___________________
                                 </td>
                             </tr>
@@ -134,22 +139,27 @@
     <template id="template_excessif">
         <t t-call="web.html_container">
             <t t-foreach="docs" t-as="wizard">
+
+                <!-- ═══ LANGUE AUTOMATIQUE ═══ -->
+                <t t-set="lang" t-value="wizard.env.user.lang or 'fr_FR'"/>
+                <t t-set="wizard" t-value="wizard.with_context(lang=lang)"/>
+                <t t-set="lbl" t-value="wizard._get_labels()"/>
+                <t t-set="is_rtl" t-value="lang.startswith('ar')"/>
+
                 <t t-call="web.external_layout">
-                    <div class="page">
+                    <div class="page" t-att-dir="'rtl' if is_rtl else 'ltr'">
 
                         <!-- EN-TÊTE -->
                         <div style="text-align:center; margin-bottom:20px;">
                             <h2 style="color:#C00000; font-size:18px;">
-                                الحافلات ذات الاستهلاك المفرط
+                                <t t-esc="lbl['titre_excessif']"/>
                             </h2>
-                            <h3 style="color:#C00000; font-size:14px;">
-                                Rapport des Bus à Consommation Excessive
-                            </h3>
                             <p style="color:#666; font-size:11px;">
-                                Période :
+                                <t t-esc="lbl['periode']"/> :
                                 <t t-esc="wizard.date_debut"/> →
                                 <t t-esc="wizard.date_fin"/>
-                                | Seuil : <t t-esc="wizard.seuil_excessif"/> L/100km
+                                | <t t-esc="lbl['seuil']"/> :
+                                <t t-esc="wizard.seuil_excessif"/> L/100km
                             </p>
                         </div>
 
@@ -157,9 +167,8 @@
                         <t t-set="donnees" t-value="wizard._get_donnees_excessif()"/>
 
                         <t t-if="not donnees">
-                            <div style="text-align:center; padding:30px;
-                                        color:green; font-size:14px;">
-                                ✅ Aucun bus avec consommation excessive détecté !
+                            <div style="text-align:center; padding:30px; color:green; font-size:14px;">
+                                ✅ <t t-esc="lbl['aucun_excessif']"/>
                             </div>
                         </t>
 
@@ -168,28 +177,28 @@
                                 <thead>
                                     <tr style="background-color:#C00000; color:white;">
                                         <th style="border:1px solid #ccc; padding:6px; text-align:center;">
-                                            العربة<br/>Bus
+                                            <t t-esc="lbl['bus']"/>
                                         </th>
                                         <th style="border:1px solid #ccc; padding:6px; text-align:center;">
-                                            النوع<br/>Type
+                                            <t t-esc="lbl['type']"/>
                                         </th>
                                         <th style="border:1px solid #ccc; padding:6px; text-align:center;">
-                                            عدد الخروج<br/>Nb Sorties
+                                            <t t-esc="lbl['nb_sorties']"/>
                                         </th>
                                         <th style="border:1px solid #ccc; padding:6px; text-align:center;">
-                                            المسافة (km)<br/>Distance
+                                            <t t-esc="lbl['distance']"/>
                                         </th>
                                         <th style="border:1px solid #ccc; padding:6px; text-align:center;">
-                                            الكمية (L)<br/>Quantité
+                                            <t t-esc="lbl['quantite']"/>
                                         </th>
                                         <th style="border:1px solid #ccc; padding:6px; text-align:center;">
-                                            النظري (L/100km)<br/>Théorique
+                                            <t t-esc="lbl['theorique']"/>
                                         </th>
                                         <th style="border:1px solid #ccc; padding:6px; text-align:center;">
-                                            الفعلي (L/100km)<br/>Réelle
+                                            <t t-esc="lbl['reelle']"/>
                                         </th>
                                         <th style="border:1px solid #ccc; padding:6px; text-align:center;">
-                                            الفارق<br/>Écart
+                                            <t t-esc="lbl['ecart']"/>
                                         </th>
                                     </tr>
                                 </thead>
@@ -226,7 +235,9 @@
                             </table>
 
                             <p style="margin-top:15px; font-size:11px; color:#666;">
-                                Total : <t t-esc="len(donnees)"/> bus détectés avec consommation excessive.
+                                <t t-esc="lbl['total']"/> :
+                                <t t-esc="len(donnees)"/>
+                                <t t-esc="lbl['bus_excessif_detectes']"/>
                             </p>
                         </t>
 
@@ -234,11 +245,11 @@
                         <table style="width:100%; margin-top:40px;">
                             <tr>
                                 <td style="width:50%; text-align:center;">
-                                    <strong>Responsable Énergie</strong>
+                                    <strong><t t-esc="lbl['responsable_energie']"/></strong>
                                     <br/><br/><br/>___________________
                                 </td>
                                 <td style="width:50%; text-align:center;">
-                                    <strong>Directeur Technique</strong>
+                                    <strong><t t-esc="lbl['directeur_technique']"/></strong>
                                     <br/><br/><br/>___________________
                                 </td>
                             </tr>
