@@ -104,6 +104,68 @@ class BocCourrierDepart(models.Model):
         default=lambda self: self.env.user,
     )
 
+    # ── GED (Gestion Électronique des Documents) ─────────────────
+    # Intégration avec une GED externe open source (Alfresco, Mayan EDMS, Nextcloud…)
+    # La mise en place de la GED ne fait pas partie du présent marché.
+    ged_document_ref = fields.Char(
+        string='Référence GED',
+        copy=False,
+        help='Identifiant / référence du document dans la GED externe',
+    )
+    ged_url = fields.Char(
+        string='Lien GED',
+        copy=False,
+        help='URL direct vers le document archivé dans la GED externe',
+    )
+    ged_archive_date = fields.Date(
+        string='Date archivage GED',
+        copy=False,
+        readonly=True,
+        help='Date à laquelle le document a été archivé dans la GED',
+    )
+    ged_archive_status = fields.Selection([
+        ('non_archive', 'Non archivé'),
+        ('archive',     'Archivé'),
+        ('restaure',    'Restauré'),
+    ], string='Statut GED',
+       default='non_archive',
+       copy=False,
+       tracking=True,
+    )
+
+    def action_ouvrir_ged(self):
+        """Ouvrir le document dans la GED externe"""
+        self.ensure_one()
+        if not self.ged_url:
+            from odoo.exceptions import ValidationError
+            raise ValidationError(
+                "Aucun lien GED n'est renseigné pour ce courrier.\n"
+                "Veuillez d'abord archiver le document dans la GED et renseigner le lien."
+            )
+        return {
+            'type': 'ir.actions.act_url',
+            'url': self.ged_url,
+            'target': 'new',
+        }
+
+    def action_marquer_archive_ged(self):
+        """Marquer le courrier comme archivé dans la GED"""
+        from odoo.exceptions import ValidationError
+        for rec in self:
+            if not rec.ged_document_ref:
+                raise ValidationError(
+                    "Veuillez renseigner la référence GED avant de marquer comme archivé."
+                )
+            rec.write({
+                'ged_archive_status': 'archive',
+                'ged_archive_date': fields.Date.today(),
+            })
+
+    def action_restaurer_ged(self):
+        """Marquer le document comme restauré depuis la GED"""
+        for rec in self:
+            rec.write({'ged_archive_status': 'restaure'})
+
     # ═══════════════════════════════════════════════════════════
     # ONCHANGE
     # ═══════════════════════════════════════════════════════════

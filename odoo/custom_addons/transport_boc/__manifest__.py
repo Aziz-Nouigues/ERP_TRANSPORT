@@ -1,16 +1,16 @@
 # -*- coding: utf-8 -*-
 {
-    'name': "Transport - Bureau d'Ordre",
+    'name': 'Transport - Bureau d\'Ordre',
     'version': '19.0.1.0.0',
     'category': 'Transport',
-    'summary': "Gestion du courrier arrivee et depart - Bureau d'Ordre",
+    'summary': 'Gestion du courrier arrivée et départ - Bureau d\'Ordre',
     'description': """
         Module Bureau d'Ordre (BOC) pour la gestion du courrier :
-        - Courrier Arrivee (interne et externe)
-        - Courrier Depart
+        - Courrier Arrivée (interne et externe)
+        - Courrier Départ
         - Diffusion aux services
-        - Suivi des delais et alertes
-        - Rapports et editions
+        - Suivi des délais et alertes
+        - Rapports et éditions
     """,
     'author': 'ERP Transport',
     'depends': ['base', 'mail', 'hr'],
@@ -24,6 +24,7 @@
         'views/boc_depart_views.xml',
         'views/boc_transmission_views.xml',
         'reports/rapport_boc.xml',
+
         'views/boc_menu_views.xml',
     ],
     'installable': True,

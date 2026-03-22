@@ -64,6 +64,49 @@
                     </group>
                     <field name="description" placeholder="Description / Remarques..."/>
 
+                    <!-- Onglet GED -->
+                    <notebook>
+                        <page string="GED / Archivage" name="ged">
+                            <group>
+                                <group string="Référence document">
+                                    <field name="ged_document_ref"
+                                           placeholder="ex: DOC-2025-00123"/>
+                                    <field name="ged_archive_status"/>
+                                    <field name="ged_archive_date"
+                                           invisible="ged_archive_status == 'non_archive'"/>
+                                </group>
+                                <group string="Accès GED">
+                                    <field name="ged_url"
+                                           placeholder="https://ged.exemple.com/document/..."/>
+                                    <button name="action_ouvrir_ged"
+                                            string="🔗 Ouvrir dans la GED"
+                                            type="object"
+                                            class="btn-secondary"
+                                            invisible="not ged_url"/>
+                                </group>
+                            </group>
+                            <group>
+                                <div class="alert alert-info" role="alert"
+                                     invisible="ged_archive_status != 'non_archive'">
+                                    <p>Ce courrier n'est pas encore archivé dans la GED.</p>
+                                    <button name="action_marquer_archive_ged"
+                                            string="📁 Marquer comme archivé"
+                                            type="object"
+                                            class="btn-primary"
+                                            invisible="not ged_document_ref"/>
+                                </div>
+                                <div class="alert alert-success" role="alert"
+                                     invisible="ged_archive_status != 'archive'">
+                                    <p>Document archivé dans la GED.</p>
+                                    <button name="action_restaurer_ged"
+                                            string="♻️ Marquer comme restauré"
+                                            type="object"
+                                            class="btn-secondary"/>
+                                </div>
+                            </group>
+                        </page>
+                    </notebook>
+
                 </sheet>
                 <chatter/>
             </form>
