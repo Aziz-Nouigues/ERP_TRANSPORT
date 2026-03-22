@@ -196,4 +196,294 @@
         </t>
     </template>
 
+
+    <!-- ══════════════════════════════════════════════════
+         RAPPORT 1 — COURRIERS ÉCHUS (sans suite, délai dépassé)
+    ══════════════════════════════════════════════════ -->
+    <record id="action_rapport_boc_echus" model="ir.actions.report">
+        <field name="name">État Courriers Échus</field>
+        <field name="model">boc.wizard.rapport.delais</field>
+        <field name="report_type">qweb-pdf</field>
+        <field name="report_name">transport_boc.rapport_boc_echus</field>
+        <field name="report_file">transport_boc.rapport_boc_echus</field>
+    </record>
+
+    <template id="rapport_boc_echus">
+        <t t-call="web.html_container">
+            <t t-foreach="docs" t-as="wiz">
+                <t t-call="web.external_layout">
+                    <div class="page">
+
+                        <div class="text-center mb-4">
+                            <h2>جدول البريد المتأخّر — État des Courriers Échus</h2>
+                            <p style="font-size:12px; color:#666;">
+                                Courriers sans suite dont la date d'échéance est dépassée<br/>
+                                Période : <t t-esc="wiz.date_debut"/> au <t t-esc="wiz.date_fin"/>
+                                <t t-if="wiz.type_arrivee"> | Type : <t t-esc="dict(wiz.fields_get(['type_arrivee'])['type_arrivee']['selection'])[wiz.type_arrivee]"/></t>
+                            </p>
+                        </div>
+
+                        <t t-set="courriers" t-value="wiz._get_courriers_echus()"/>
+
+                        <t t-if="not courriers">
+                            <p class="text-center text-muted mt-4">Aucun courrier échu sur cette période.</p>
+                        </t>
+
+                        <t t-if="courriers">
+                            <table class="table table-bordered table-sm" style="font-size:11px;">
+                                <thead class="table-danger">
+                                    <tr>
+                                        <th>N° Ordre</th>
+                                        <th>Date arrivée</th>
+                                        <th>Type</th>
+                                        <th>Expéditeur</th>
+                                        <th>Objet</th>
+                                        <th>Date échéance</th>
+                                        <th>Jours dépassés</th>
+                                        <th>État</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <t t-foreach="courriers" t-as="c">
+                                        <tr>
+                                            <td><t t-esc="c['name']"/></td>
+                                            <td><t t-esc="c['date_arrivee']"/></td>
+                                            <td><t t-esc="c['type_courrier']"/></td>
+                                            <td><t t-esc="c['expediteur']"/></td>
+                                            <td><t t-esc="c['sujet']"/></td>
+                                            <td style="color:red; font-weight:bold;"><t t-esc="c['date_echeance']"/></td>
+                                            <td style="color:red; font-weight:bold; text-align:center;"><t t-esc="c['jours_depasses']"/> j</td>
+                                            <td><t t-esc="c['state']"/></td>
+                                        </tr>
+                                    </t>
+                                </tbody>
+                                <tfoot class="table-secondary">
+                                    <tr>
+                                        <td colspan="6" class="fw-bold">Total courriers échus</td>
+                                        <td colspan="2" class="fw-bold text-center"><t t-esc="len(courriers)"/></td>
+                                    </tr>
+                                </tfoot>
+                            </table>
+                        </t>
+
+                        <div class="row mt-4">
+                            <div class="col-6 text-center">
+                                <p>Agent BOC</p><br/><br/>
+                                <p>___________________________</p>
+                            </div>
+                            <div class="col-6 text-center">
+                                <p>Responsable BOC</p><br/><br/>
+                                <p>___________________________</p>
+                            </div>
+                        </div>
+
+                    </div>
+                </t>
+            </t>
+        </t>
+    </template>
+
+    <!-- ══════════════════════════════════════════════════
+         RAPPORT 2 — COURRIERS TRAITÉS AVEC DÉPASSEMENT DE DÉLAI
+    ══════════════════════════════════════════════════ -->
+    <record id="action_rapport_boc_depasse" model="ir.actions.report">
+        <field name="name">État Dépassement Délai de Réponse</field>
+        <field name="model">boc.wizard.rapport.delais</field>
+        <field name="report_type">qweb-pdf</field>
+        <field name="report_name">transport_boc.rapport_boc_depasse</field>
+        <field name="report_file">transport_boc.rapport_boc_depasse</field>
+    </record>
+
+    <template id="rapport_boc_depasse">
+        <t t-call="web.html_container">
+            <t t-foreach="docs" t-as="wiz">
+                <t t-call="web.external_layout">
+                    <div class="page">
+
+                        <div class="text-center mb-4">
+                            <h2>جدول تجاوز آجال الردّ — État des Dépassements de Délai</h2>
+                            <p style="font-size:12px; color:#666;">
+                                Courriers traités après la date d'échéance<br/>
+                                Période : <t t-esc="wiz.date_debut"/> au <t t-esc="wiz.date_fin"/>
+                            </p>
+                        </div>
+
+                        <t t-set="courriers" t-value="wiz._get_courriers_depasse_delai()"/>
+
+                        <t t-if="not courriers">
+                            <p class="text-center text-muted mt-4">Aucun dépassement de délai sur cette période.</p>
+                        </t>
+
+                        <t t-if="courriers">
+                            <table class="table table-bordered table-sm" style="font-size:11px;">
+                                <thead class="table-warning">
+                                    <tr>
+                                        <th>N° Ordre</th>
+                                        <th>Date arrivée</th>
+                                        <th>Type</th>
+                                        <th>Expéditeur</th>
+                                        <th>Objet</th>
+                                        <th>Date échéance</th>
+                                        <th>Date réponse</th>
+                                        <th>Dépassement (j)</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <t t-foreach="courriers" t-as="c">
+                                        <tr>
+                                            <td><t t-esc="c['name']"/></td>
+                                            <td><t t-esc="c['date_arrivee']"/></td>
+                                            <td><t t-esc="c['type_courrier']"/></td>
+                                            <td><t t-esc="c['expediteur']"/></td>
+                                            <td><t t-esc="c['sujet']"/></td>
+                                            <td><t t-esc="c['date_echeance']"/></td>
+                                            <td><t t-esc="c['date_reponse']"/></td>
+                                            <td style="color:orange; font-weight:bold; text-align:center;"><t t-esc="c['jours_depasses']"/> j</td>
+                                        </tr>
+                                    </t>
+                                </tbody>
+                                <tfoot class="table-secondary">
+                                    <tr>
+                                        <td colspan="7" class="fw-bold">Total courriers avec dépassement</td>
+                                        <td class="fw-bold text-center"><t t-esc="len(courriers)"/></td>
+                                    </tr>
+                                </tfoot>
+                            </table>
+                        </t>
+
+                        <div class="row mt-4">
+                            <div class="col-6 text-center">
+                                <p>Agent BOC</p><br/><br/>
+                                <p>___________________________</p>
+                            </div>
+                            <div class="col-6 text-center">
+                                <p>Responsable BOC</p><br/><br/>
+                                <p>___________________________</p>
+                            </div>
+                        </div>
+
+                    </div>
+                </t>
+            </t>
+        </t>
+    </template>
+
+    <!-- ══════════════════════════════════════════════════
+         RAPPORT 3 — ÉDITION DES DÉLAIS DE TRAITEMENT
+    ══════════════════════════════════════════════════ -->
+    <record id="action_rapport_boc_delais" model="ir.actions.report">
+        <field name="name">Édition des Délais de Traitement</field>
+        <field name="model">boc.wizard.rapport.delais</field>
+        <field name="report_type">qweb-pdf</field>
+        <field name="report_name">transport_boc.rapport_boc_delais</field>
+        <field name="report_file">transport_boc.rapport_boc_delais</field>
+    </record>
+
+    <template id="rapport_boc_delais">
+        <t t-call="web.html_container">
+            <t t-foreach="docs" t-as="wiz">
+                <t t-call="web.external_layout">
+                    <div class="page">
+
+                        <div class="text-center mb-4">
+                            <h2>جدول آجال المعالجة — Édition des Délais de Traitement</h2>
+                            <p style="font-size:12px; color:#666;">
+                                Suivi des délais pour tous les courriers<br/>
+                                Période : <t t-esc="wiz.date_debut"/> au <t t-esc="wiz.date_fin"/>
+                                <t t-if="wiz.type_arrivee"> | Type : <t t-esc="dict(wiz.fields_get(['type_arrivee'])['type_arrivee']['selection'])[wiz.type_arrivee]"/></t>
+                            </p>
+                        </div>
+
+                        <t t-set="courriers" t-value="wiz._get_delais_traitement()"/>
+                        <t t-set="stats" t-value="wiz._get_stats_delais()"/>
+
+                        <!-- Statistiques globales -->
+                        <table class="table table-bordered" style="font-size:11px; margin-bottom:16px;">
+                            <thead class="table-primary">
+                                <tr>
+                                    <th colspan="4" class="text-center">Statistiques globales</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td class="fw-bold">Total courriers</td>
+                                    <td><t t-esc="stats['total']"/></td>
+                                    <td class="fw-bold">Dans les délais</td>
+                                    <td style="color:green;"><t t-esc="stats['dans_delai']"/></td>
+                                </tr>
+                                <tr>
+                                    <td class="fw-bold">Échus (non traités)</td>
+                                    <td style="color:red;"><t t-esc="stats['echus']"/></td>
+                                    <td class="fw-bold">Traités hors délai</td>
+                                    <td style="color:orange;"><t t-esc="stats['hors_delai']"/></td>
+                                </tr>
+                                <tr>
+                                    <td class="fw-bold">Délai moyen de traitement</td>
+                                    <td colspan="3"><t t-esc="stats['delai_moyen']"/> jours</td>
+                                </tr>
+                            </tbody>
+                        </table>
+
+                        <!-- Détail par courrier -->
+                        <t t-if="courriers">
+                            <table class="table table-bordered table-sm" style="font-size:10px;">
+                                <thead class="table-secondary">
+                                    <tr>
+                                        <th>N° Ordre</th>
+                                        <th>Date arrivée</th>
+                                        <th>Expéditeur</th>
+                                        <th>Objet</th>
+                                        <th>Date échéance</th>
+                                        <th>Date réponse</th>
+                                        <th>Délai (j)</th>
+                                        <th>Statut délai</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <t t-foreach="courriers" t-as="c">
+                                        <tr>
+                                            <td><t t-esc="c['name']"/></td>
+                                            <td><t t-esc="c['date_arrivee']"/></td>
+                                            <td><t t-esc="c['expediteur']"/></td>
+                                            <td><t t-esc="c['sujet']"/></td>
+                                            <td><t t-esc="c['date_echeance']"/></td>
+                                            <td><t t-esc="c['date_reponse']"/></td>
+                                            <td style="text-align:center;"><t t-esc="c['delai_jours']"/></td>
+                                            <td>
+                                                <t t-if="c['statut_delai'] == 'dans_delai'">
+                                                    <span style="color:green; font-weight:bold;">✓ Dans les délais</span>
+                                                </t>
+                                                <t t-elif="c['statut_delai'] == 'hors_delai'">
+                                                    <span style="color:orange; font-weight:bold;">⚠ Hors délai</span>
+                                                </t>
+                                                <t t-elif="c['statut_delai'] == 'echu'">
+                                                    <span style="color:red; font-weight:bold;">✗ Échu</span>
+                                                </t>
+                                                <t t-else="">
+                                                    <span style="color:gray;">— En cours</span>
+                                                </t>
+                                            </td>
+                                        </tr>
+                                    </t>
+                                </tbody>
+                            </table>
+                        </t>
+
+                        <div class="row mt-4">
+                            <div class="col-6 text-center">
+                                <p>Agent BOC</p><br/><br/>
+                                <p>___________________________</p>
+                            </div>
+                            <div class="col-6 text-center">
+                                <p>Responsable BOC</p><br/><br/>
+                                <p>___________________________</p>
+                            </div>
+                        </div>
+
+                    </div>
+                </t>
+            </t>
+        </t>
+    </template>
+
 </odoo>

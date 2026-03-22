@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <!-- ══════════════════════════════════════════════════
+         WIZARD — RAPPORT DÉLAIS DE TRAITEMENT
+    ══════════════════════════════════════════════════ -->
+    <record id="view_boc_wizard_rapport_delais_form" model="ir.ui.view">
+        <field name="name">boc.wizard.rapport.delais.form</field>
+        <field name="model">boc.wizard.rapport.delais</field>
+        <field name="arch" type="xml">
+            <form string="Rapports Délais de Traitement">
+                <group>
+                    <group string="Période">
+                        <field name="date_debut"/>
+                        <field name="date_fin"/>
+                    </group>
+                    <group string="Filtres">
+                        <field name="type_arrivee"/>
+                        <field name="type_rapport"/>
+                    </group>
+                </group>
+
+                <!-- Description dynamique selon le type choisi -->
+                <group invisible="type_rapport != 'echus'">
+                    <div class="alert alert-danger" role="alert">
+                        <strong>Courriers échus</strong> — Liste des courriers sans suite
+                        dont la date d'échéance est dépassée à la date du jour.
+                    </div>
+                </group>
+                <group invisible="type_rapport != 'depasse'">
+                    <div class="alert alert-warning" role="alert">
+                        <strong>Dépassement de délai</strong> — Liste des courriers traités
+                        mais dont la réponse a été fournie après la date d'échéance.
+                    </div>
+                </group>
+                <group invisible="type_rapport != 'delais'">
+                    <div class="alert alert-info" role="alert">
+                        <strong>Édition des délais</strong> — Tableau complet de tous les courriers
+                        avec calcul du délai de traitement et statut (dans les délais / hors délai / échu).
+                        Inclut les statistiques globales.
+                    </div>
+                </group>
+
+                <footer>
+                    <button name="action_generer_rapport"
+                            string="🖨️ Générer le rapport PDF"
+                            type="object"
+                            class="btn-primary"/>
+                    <button string="Annuler" class="btn-secondary" special="cancel"/>
+                </footer>
+            </form>
+        </field>
+    </record>
+
+    <!-- Action wizard -->
+    <record id="action_boc_wizard_rapport_delais" model="ir.actions.act_window">
+        <field name="name">Rapports Délais de Traitement</field>
+        <field name="res_model">boc.wizard.rapport.delais</field>
+        <field name="view_mode">form</field>
+        <field name="target">new</field>
+    </record>
+
+    <!-- Droits d'accès wizard -->
+    <record id="access_boc_wizard_rapport_delais" model="ir.model.access">
+        <field name="name">boc.wizard.rapport.delais.access</field>
+        <field name="model_id" ref="model_boc_wizard_rapport_delais"/>
+        <field name="group_id" ref="base.group_user"/>
+        <field name="perm_read" eval="1"/>
+        <field name="perm_write" eval="1"/>
+        <field name="perm_create" eval="1"/>
+        <field name="perm_unlink" eval="1"/>
+    </record>
+
+</odoo>

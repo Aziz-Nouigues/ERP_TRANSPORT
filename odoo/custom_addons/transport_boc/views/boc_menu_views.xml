@@ -10,7 +10,8 @@
               web_icon="transport_boc,static/description/icon.png"/>
 
     <!-- ══════════════════════════════════════════════════
-         COURRIER ARRIVÉE
+         1. COURRIER ARRIVÉE
+         CDC : إستقبال الإرساليّات الداخلية / الخارجية
     ══════════════════════════════════════════════════ -->
     <menuitem id="menu_boc_arrivee_root"
               name="📥 Courrier Arrivée"
@@ -30,7 +31,8 @@
               sequence="20"/>
 
     <!-- ══════════════════════════════════════════════════
-         COURRIER DÉPART
+         2. COURRIER DÉPART
+         CDC : إرسال البريد
     ══════════════════════════════════════════════════ -->
     <menuitem id="menu_boc_depart_root"
               name="📤 Courrier Départ"
@@ -44,7 +46,9 @@
               sequence="10"/>
 
     <!-- ══════════════════════════════════════════════════
-         TRANSMISSIONS
+         3. TRANSMISSIONS / DIFFUSION
+         CDC : Diffusion courriers aux services
+               البحث في الصادرات / الواردات
     ══════════════════════════════════════════════════ -->
     <menuitem id="menu_boc_transmission_root"
               name="🔄 Transmissions"
@@ -57,40 +61,56 @@
               action="action_boc_transmission"
               sequence="10"/>
 
-    <menuitem id="menu_boc_transmission_non_transferees"
-              name="Non transférées"
-              parent="menu_boc_transmission_root"
-              action="action_boc_transmission_non_transferees"
-              sequence="20"/>
-
-    <menuitem id="menu_boc_transmission_transferees"
-              name="Transférées"
+    <!-- Internes — CDC : جدول الواردات الداخلية -->
+    <menuitem id="menu_boc_transmission_internes_transferees"
+              name="Internes transférées"
               parent="menu_boc_transmission_root"
               action="action_boc_transmission_transferees"
+              sequence="20"/>
+
+    <menuitem id="menu_boc_transmission_internes_non_transferees"
+              name="Internes non transférées"
+              parent="menu_boc_transmission_root"
+              action="action_boc_transmission_non_transferees"
               sequence="30"/>
 
+    <!-- Externes — CDC : جدول الواردات الخارجية -->
+    <menuitem id="menu_boc_transmission_externes_realisees"
+              name="Externes réalisées"
+              parent="menu_boc_transmission_root"
+              action="action_boc_transmission_externes_transferees"
+              sequence="40"/>
+
+    <menuitem id="menu_boc_transmission_externes_non_realisees"
+              name="Externes non réalisées"
+              parent="menu_boc_transmission_root"
+              action="action_boc_transmission_externes_non_transferees"
+              sequence="50"/>
+
     <!-- ══════════════════════════════════════════════════
-         RAPPORTS
+         4. ÉDITIONS
+         CDC :
+           - Bordereau suivi courrier avec note de rappel (mi-délai)
+           - État courriers échus (sans suite)
+           - État courriers traités avec dépassement délai
+           - Édition des délais de traitement
     ══════════════════════════════════════════════════ -->
-    <menuitem id="menu_boc_rapports"
-              name="📄 Rapports"
+    <menuitem id="menu_boc_editions"
+              name="📄 Éditions"
               parent="menu_boc_root"
               sequence="40"/>
 
-    <menuitem id="menu_boc_rapport_arrivee"
-              name="Bordereau courrier arrivée"
-              parent="menu_boc_rapports"
-              action="action_boc_arrivee"
+    <menuitem id="menu_boc_rapport_delais"
+              name="📊 Suivi des délais de traitement"
+              parent="menu_boc_editions"
+              action="action_boc_wizard_rapport_delais"
               sequence="10"/>
 
-    <menuitem id="menu_boc_rapport_depart"
-              name="Bordereau courrier départ"
-              parent="menu_boc_rapports"
-              action="action_boc_depart"
-              sequence="20"/>
-
     <!-- ══════════════════════════════════════════════════
-         CONFIGURATION
+         5. CONFIGURATION
+         CDC : التّصرّف في مكتب الضّبط -> معطيات عامّة
+               Types courrier, organismes, annotations,
+               sujets, instructions, année exercice
     ══════════════════════════════════════════════════ -->
     <menuitem id="menu_boc_config"
               name="⚙️ Configuration"

@@ -84,18 +84,23 @@
         <field name="model">boc.transmission</field>
         <field name="arch" type="xml">
             <search>
+                <field name="arrivee_id" string="Courrier"/>
+                <field name="organisme_id" string="Service"/>
+                <separator/>
                 <filter name="en_attente" string="En attente"
                         domain="[('state','=','en_attente')]"/>
-                <filter name="transfere" string="Transferee"
+                <filter name="transfere" string="Transférée"
                         domain="[('state','=','transfere')]"/>
-                <filter name="traite" string="Traitee"
+                <filter name="traite" string="Traitée"
                         domain="[('state','=','traite')]"/>
+                <separator/>
                 <filter name="interne" string="Interne"
                         domain="[('type_transmission','=','interne')]"/>
                 <filter name="externe" string="Externe"
                         domain="[('type_transmission','=','externe')]"/>
                 <group>
-                    <filter name="group_state" string="Etat" context="{'group_by':'state'}"/>
+                    <filter name="group_type" string="Type" context="{'group_by':'type_transmission'}"/>
+                    <filter name="group_state" string="État" context="{'group_by':'state'}"/>
                     <filter name="group_organisme" string="Service" context="{'group_by':'organisme_id'}"/>
                 </group>
             </search>
@@ -103,8 +108,10 @@
     </record>
 
     <!-- ══════════════════════════════════════════════════
-         ACTIONS TRANSMISSIONS
+         ACTIONS — CDC : Diffusion courriers aux services
     ══════════════════════════════════════════════════ -->
+
+    <!-- Toutes les transmissions -->
     <record id="action_boc_transmission" model="ir.actions.act_window">
         <field name="name">Toutes les transmissions</field>
         <field name="res_model">boc.transmission</field>
@@ -112,18 +119,44 @@
         <field name="search_view_id" ref="view_boc_transmission_search"/>
     </record>
 
-    <record id="action_boc_transmission_non_transferees" model="ir.actions.act_window">
-        <field name="name">Transmissions non transférées</field>
+    <!-- CDC : جدول الواردات الداخلية المحولة — Internes transférées -->
+    <record id="action_boc_transmission_transferees" model="ir.actions.act_window">
+        <field name="name">Transmissions internes transférées</field>
         <field name="res_model">boc.transmission</field>
         <field name="view_mode">list,form</field>
-        <field name="domain">[('state','=','en_attente')]</field>
+        <field name="search_view_id" ref="view_boc_transmission_search"/>
+        <field name="domain">[('type_transmission','=','interne'),('state','in',['transfere','accuse','traite'])]</field>
+        <field name="context">{'search_default_interne': 1, 'search_default_transfere': 1}</field>
     </record>
 
-    <record id="action_boc_transmission_transferees" model="ir.actions.act_window">
-        <field name="name">Transmissions transférées</field>
+    <!-- CDC : جدول الواردات الداخلية غير المحولة — Internes non transférées -->
+    <record id="action_boc_transmission_non_transferees" model="ir.actions.act_window">
+        <field name="name">Transmissions internes non transférées</field>
         <field name="res_model">boc.transmission</field>
         <field name="view_mode">list,form</field>
-        <field name="domain">[('state','in',['transfere','accuse','traite'])]</field>
+        <field name="search_view_id" ref="view_boc_transmission_search"/>
+        <field name="domain">[('type_transmission','=','interne'),('state','=','en_attente')]</field>
+        <field name="context">{'search_default_interne': 1, 'search_default_en_attente': 1}</field>
+    </record>
+
+    <!-- CDC : جدول الواردات الخارجية المحولة — Externes réalisées -->
+    <record id="action_boc_transmission_externes_transferees" model="ir.actions.act_window">
+        <field name="name">Transmissions externes réalisées</field>
+        <field name="res_model">boc.transmission</field>
+        <field name="view_mode">list,form</field>
+        <field name="search_view_id" ref="view_boc_transmission_search"/>
+        <field name="domain">[('type_transmission','=','externe'),('state','in',['transfere','accuse','traite'])]</field>
+        <field name="context">{'search_default_externe': 1, 'search_default_transfere': 1}</field>
+    </record>
+
+    <!-- CDC : جدول الواردات الخارجية غير المحولة — Externes non réalisées -->
+    <record id="action_boc_transmission_externes_non_transferees" model="ir.actions.act_window">
+        <field name="name">Transmissions externes non réalisées</field>
+        <field name="res_model">boc.transmission</field>
+        <field name="view_mode">list,form</field>
+        <field name="search_view_id" ref="view_boc_transmission_search"/>
+        <field name="domain">[('type_transmission','=','externe'),('state','=','en_attente')]</field>
+        <field name="context">{'search_default_externe': 1, 'search_default_en_attente': 1}</field>
     </record>
 
 </odoo>

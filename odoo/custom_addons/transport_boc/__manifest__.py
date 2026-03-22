@@ -24,6 +24,7 @@
         'views/boc_depart_views.xml',
         'views/boc_transmission_views.xml',
         'reports/rapport_boc.xml',
+        'reports/boc_wizard_rapport_delais_views.xml',
 
         'views/boc_menu_views.xml',
     ],

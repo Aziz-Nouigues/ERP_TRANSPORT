@@ -48,7 +48,7 @@ class BocTransmission(models.Model):
         required=True,
     )
     date_echeance = fields.Date(
-        string='Date d\'échéance',
+        string="Date d'échéance",
     )
     state = fields.Selection([
         ('en_attente', 'En attente'),
@@ -59,8 +59,14 @@ class BocTransmission(models.Model):
 
     notes = fields.Text(string='Notes', translate=False)
 
-    # ── INFOS CALCULÉES ──────────────────────────────────────────
+    # ── TYPE TRANSMISSION ────────────────────────────────────────
+    # Déclaration explicite du selection nécessaire pour que les
+    # filtres interne/externe fonctionnent correctement dans les vues
     type_transmission = fields.Selection(
+        selection=[
+            ('externe', 'Externe'),
+            ('interne', 'Interne'),
+        ],
         related='arrivee_id.type_arrivee',
         string='Type',
         store=True,
