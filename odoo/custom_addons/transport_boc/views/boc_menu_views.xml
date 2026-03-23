@@ -14,7 +14,7 @@
          CDC : إستقبال الإرساليّات الداخلية / الخارجية
     ══════════════════════════════════════════════════ -->
     <menuitem id="menu_boc_arrivee_root"
-              name="📥 Courrier Arrivée"
+              name="Courrier Arrivée"
               parent="menu_boc_root"
               sequence="10"/>
 
@@ -25,7 +25,7 @@
               sequence="10"/>
 
     <menuitem id="menu_boc_arrivee_sans_suite"
-              name="⚠️ Sans suite / En retard"
+              name="Sans suite / En retard"
               parent="menu_boc_arrivee_root"
               action="action_boc_arrivee_sans_suite"
               sequence="20"/>
@@ -35,7 +35,7 @@
          CDC : إرسال البريد
     ══════════════════════════════════════════════════ -->
     <menuitem id="menu_boc_depart_root"
-              name="📤 Courrier Départ"
+              name="Courrier Départ"
               parent="menu_boc_root"
               sequence="20"/>
 
@@ -51,7 +51,7 @@
                البحث في الصادرات / الواردات
     ══════════════════════════════════════════════════ -->
     <menuitem id="menu_boc_transmission_root"
-              name="🔄 Transmissions"
+              name="Transmissions"
               parent="menu_boc_root"
               sequence="30"/>
 
@@ -96,12 +96,12 @@
            - Édition des délais de traitement
     ══════════════════════════════════════════════════ -->
     <menuitem id="menu_boc_editions"
-              name="📄 Éditions"
+              name="Editions"
               parent="menu_boc_root"
               sequence="40"/>
 
     <menuitem id="menu_boc_rapport_delais"
-              name="📊 Suivi des délais de traitement"
+              name="Suivi des délais de traitement"
               parent="menu_boc_editions"
               action="action_boc_wizard_rapport_delais"
               sequence="10"/>
@@ -113,7 +113,7 @@
                sujets, instructions, année exercice
     ══════════════════════════════════════════════════ -->
     <menuitem id="menu_boc_config"
-              name="⚙️ Configuration"
+              name="Configuration"
               parent="menu_boc_root"
               sequence="99"/>
 

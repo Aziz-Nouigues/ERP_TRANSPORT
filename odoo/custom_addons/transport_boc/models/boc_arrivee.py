@@ -308,7 +308,7 @@ class BocCourrierArrivee(models.Model):
             ], limit=1)
             if doublon:
                 raise ValidationError(
-                    "⚠️ Doublon détecté !\n"
+                    "DOUBLON DETECTE !\n"
                     "Une facture avec la référence '%s' du fournisseur '%s' "
                     "existe déjà (N° %s).\n"
                     "Risque de double facturation !"

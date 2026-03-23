@@ -12,16 +12,16 @@
 
                 <!-- Barre de statut -->
                 <header>
-                    <button name="action_enregistrer" string="✅ Enregistrer"
+                    <button name="action_enregistrer" string="Enregistrer"
                             type="object" class="btn-primary"
                             invisible="state != 'brouillon'"/>
-                    <button name="action_diffuser" string="📤 Diffuser"
+                    <button name="action_diffuser" string="Diffuser"
                             type="object" class="btn-primary"
                             invisible="state != 'enregistre'"/>
                     <button name="action_traiter" string="✔️ Marquer Traité"
                             type="object" class="btn-success"
                             invisible="state not in ('enregistre','diffuse')"/>
-                    <button name="action_classer" string="🗂️ Classer"
+                    <button name="action_classer" string="Classer"
                             type="object"
                             invisible="state != 'traite'"/>
                     <button name="action_reset" string="Remettre en brouillon"
@@ -35,7 +35,7 @@
                     <!-- Alerte retard -->
                     <div class="alert alert-danger" role="alert"
                          invisible="not en_retard">
-                        ⚠️ Ce courrier est <strong>en retard</strong> !
+                        Ce courrier est <strong>en retard</strong> !
                         Échéance dépassée de <field name="jours_restants" nolabel="1"/> jour(s).
                     </div>
 
@@ -61,13 +61,13 @@
                     </group>
 
                     <group>
-                        <group string="Expéditeur">
+                        <group string="Sender">
                             <field name="organisme_id"/>
                             <field name="expediteur_nom"
                                    invisible="organisme_id != False"/>
                             <field name="reference_expediteur"/>
                         </group>
-                        <group string="Suivi">
+                        <group string="Follow-up">
                             <field name="necessite_reponse"/>
                             <field name="reponse_fournie"
                                    invisible="not necessite_reponse"/>
@@ -78,7 +78,7 @@
                         </group>
                     </group>
 
-                    <group string="Contenu">
+                    <group string="Content">
                         <field name="sujet_id"/>
                         <field name="sujet" placeholder="Objet du courrier..."/>
                         <field name="annotation_id"/>
@@ -86,7 +86,7 @@
                     <field name="description" placeholder="Description / Remarques..."/>
 
                     <!-- Section Facture -->
-                    <group string="Informations Facture" invisible="not est_facture">
+                    <group string="Invoice Information" invisible="not est_facture">
                         <group>
                             <field name="reference_facture"/>
                             <field name="fournisseur"/>
@@ -114,20 +114,20 @@
                         </page>
 
                         <!-- Onglet GED -->
-                        <page string="GED / Archivage" name="ged">
+                        <page string="DMS / Archive" name="ged">
                             <group>
-                                <group string="Référence document">
+                                <group string="Document Reference">
                                     <field name="ged_document_ref"
                                            placeholder="ex: DOC-2025-00123"/>
                                     <field name="ged_archive_status"/>
                                     <field name="ged_archive_date"
                                            invisible="ged_archive_status == 'non_archive'"/>
                                 </group>
-                                <group string="Accès GED">
+                                <group string="DMS Access">
                                     <field name="ged_url"
                                            placeholder="https://ged.exemple.com/document/..."/>
                                     <button name="action_ouvrir_ged"
-                                            string="🔗 Ouvrir dans la GED"
+                                            string="Ouvrir dans la GED"
                                             type="object"
                                             class="btn-secondary"
                                             invisible="not ged_url"/>
@@ -138,7 +138,7 @@
                                      invisible="ged_archive_status != 'non_archive'">
                                     <p>Ce courrier n'est pas encore archivé dans la GED.</p>
                                     <button name="action_marquer_archive_ged"
-                                            string="📁 Marquer comme archivé"
+                                            string="Marquer comme archivé"
                                             type="object"
                                             class="btn-primary"
                                             invisible="not ged_document_ref"/>
@@ -147,7 +147,7 @@
                                      invisible="ged_archive_status != 'archive'">
                                     <p>Document archivé dans la GED.</p>
                                     <button name="action_restaurer_ged"
-                                            string="♻️ Marquer comme restauré"
+                                            string="Marquer comme restauré"
                                             type="object"
                                             class="btn-secondary"/>
                                 </div>
@@ -201,35 +201,35 @@
         <field name="model">boc.courrier.arrivee</field>
         <field name="arch" type="xml">
             <search>
-                <filter name="en_retard" string="En retard"
+                <filter name="en_retard" string="Overdue"
                         domain="[('en_retard','=',True)]"/>
-                <filter name="necessite_reponse" string="Necessite reponse"
+                <filter name="necessite_reponse" string="Needs Reply"
                         domain="[('necessite_reponse','=',True),('reponse_fournie','=',False)]"/>
                 <separator/>
-                <filter name="externe" string="Externe"
+                <filter name="externe" string="External"
                         domain="[('type_arrivee','=','externe')]"/>
-                <filter name="interne" string="Interne"
+                <filter name="interne" string="Internal"
                         domain="[('type_arrivee','=','interne')]"/>
                 <separator/>
-                <filter name="brouillon" string="Brouillon"
+                <filter name="brouillon" string="Draft"
                         domain="[('state','=','brouillon')]"/>
-                <filter name="enregistre" string="Enregistre"
+                <filter name="enregistre" string="Registered"
                         domain="[('state','=','enregistre')]"/>
-                <filter name="diffuse" string="Diffuse"
+                <filter name="diffuse" string="Distributed"
                         domain="[('state','=','diffuse')]"/>
-                <filter name="traite" string="Traite"
+                <filter name="traite" string="Processed"
                         domain="[('state','=','traite')]"/>
                 <separator/>
-                <filter name="ged_non_archive" string="Non archivé GED"
+                <filter name="ged_non_archive" string="Not Archived DMS"
                         domain="[('ged_archive_status','=','non_archive')]"/>
-                <filter name="ged_archive" string="Archivé GED"
+                <filter name="ged_archive" string="Archived DMS"
                         domain="[('ged_archive_status','=','archive')]"/>
                 <group>
                     <filter name="group_type" string="Type" context="{'group_by':'type_courrier_id'}"/>
-                    <filter name="group_state" string="Etat" context="{'group_by':'state'}"/>
-                    <filter name="group_organisme" string="Expediteur" context="{'group_by':'organisme_id'}"/>
-                    <filter name="group_mois" string="Mois" context="{'group_by':'date_arrivee:month'}"/>
-                    <filter name="group_ged" string="Statut GED" context="{'group_by':'ged_archive_status'}"/>
+                    <filter name="group_state" string="Status" context="{'group_by':'state'}"/>
+                    <filter name="group_organisme" string="Sender" context="{'group_by':'organisme_id'}"/>
+                    <filter name="group_mois" string="Month" context="{'group_by':'date_arrivee:month'}"/>
+                    <filter name="group_ged" string="DMS Status" context="{'group_by':'ged_archive_status'}"/>
                 </group>
             </search>
         </field>

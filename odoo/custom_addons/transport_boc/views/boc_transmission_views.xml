@@ -49,11 +49,11 @@
                 </header>
                 <sheet>
                     <group>
-                        <group string="Courrier">
+                        <group string="Mail">
                             <field name="arrivee_id"/>
                             <field name="type_transmission" readonly="1"/>
                         </group>
-                        <group string="Destinataire">
+                        <group string="Recipient">
                             <field name="organisme_id"
                                    domain="[('type_organisme','=','interne')]"/>
                             <field name="destinataire_nom"/>
@@ -84,24 +84,24 @@
         <field name="model">boc.transmission</field>
         <field name="arch" type="xml">
             <search>
-                <field name="arrivee_id" string="Courrier"/>
-                <field name="organisme_id" string="Service"/>
+                <field name="arrivee_id" string="Mail"/>
+                <field name="organisme_id" string="Department"/>
                 <separator/>
-                <filter name="en_attente" string="En attente"
+                <filter name="en_attente" string="Pending"
                         domain="[('state','=','en_attente')]"/>
-                <filter name="transfere" string="Transférée"
+                <filter name="transfere" string="Transferred"
                         domain="[('state','=','transfere')]"/>
-                <filter name="traite" string="Traitée"
+                <filter name="traite" string="Processed"
                         domain="[('state','=','traite')]"/>
                 <separator/>
-                <filter name="interne" string="Interne"
+                <filter name="interne" string="Internal"
                         domain="[('type_transmission','=','interne')]"/>
-                <filter name="externe" string="Externe"
+                <filter name="externe" string="External"
                         domain="[('type_transmission','=','externe')]"/>
                 <group>
                     <filter name="group_type" string="Type" context="{'group_by':'type_transmission'}"/>
-                    <filter name="group_state" string="État" context="{'group_by':'state'}"/>
-                    <filter name="group_organisme" string="Service" context="{'group_by':'organisme_id'}"/>
+                    <filter name="group_state" string="Status" context="{'group_by':'state'}"/>
+                    <filter name="group_organisme" string="Department" context="{'group_by':'organisme_id'}"/>
                 </group>
             </search>
         </field>

@@ -268,7 +268,7 @@ msgstr "Destinataire"
 
 #. module: transport_boc
 #: model_terms:ir.ui.view,arch_db:transport_boc.view_boc_arrivee_search
-msgid "Diffuse"
+msgid "Diffusé"
 msgstr "Diffusé"
 
 #. module: transport_boc
@@ -312,7 +312,7 @@ msgstr "En réponse à"
 
 #. module: transport_boc
 #: model_terms:ir.ui.view,arch_db:transport_boc.view_boc_arrivee_search
-msgid "Enregistre"
+msgid "Enregistré"
 msgstr "Enregistré"
 
 #. module: transport_boc
@@ -330,12 +330,12 @@ msgstr "Envoyé"
 #: model_terms:ir.ui.view,arch_db:transport_boc.view_boc_arrivee_search
 #: model_terms:ir.ui.view,arch_db:transport_boc.view_boc_depart_search
 #: model_terms:ir.ui.view,arch_db:transport_boc.view_boc_transmission_search
-msgid "Etat"
+msgid "État"
 msgstr "État"
 
 #. module: transport_boc
 #: model_terms:ir.ui.view,arch_db:transport_boc.view_boc_arrivee_search
-msgid "Expediteur"
+msgid "Expéditeur"
 msgstr "Expéditeur"
 
 #. module: transport_boc
@@ -442,7 +442,7 @@ msgstr "Nb diffusions"
 
 #. module: transport_boc
 #: model_terms:ir.ui.view,arch_db:transport_boc.view_boc_arrivee_search
-msgid "Necessite reponse"
+msgid "Nécessite réponse"
 msgstr "Nécessite réponse"
 
 #. module: transport_boc
@@ -462,7 +462,7 @@ msgstr "Nom organisme"
 
 #. module: transport_boc
 #: model_terms:ir.ui.view,arch_db:transport_boc.view_boc_depart_search
-msgid "Non envoye"
+msgid "Non envoyé"
 msgstr "Non envoyé"
 
 #. module: transport_boc
@@ -640,7 +640,7 @@ msgstr "Toutes les transmissions"
 
 #. module: transport_boc
 #: model_terms:ir.ui.view,arch_db:transport_boc.view_boc_arrivee_search
-msgid "Traite"
+msgid "Traité"
 msgstr "Traité"
 
 #. module: transport_boc
@@ -764,64 +764,492 @@ msgstr "بطاقة البريد الوارد — Bordereau Courrier Arrivée"
 
 #. module: transport_boc
 #: model:ir.ui.menu,name:transport_boc.menu_boc_config
-msgid "⚙️ Configuration"
-msgstr "⚙️ Configuration"
+msgid "Configuration"
+msgstr "Configuration"
 
 #. module: transport_boc
 #: model_terms:ir.ui.view,arch_db:transport_boc.view_boc_arrivee_form
 msgid ""
-"⚠️ Ce courrier est <strong>en retard</strong> !\n"
+"Ce courrier est <strong>en retard</strong> !\n"
 "                        Échéance dépassée de"
 msgstr ""
 
 #. module: transport_boc
 #: model:ir.ui.menu,name:transport_boc.menu_boc_arrivee_sans_suite
-msgid "⚠️ Sans suite / En retard"
-msgstr "⚠️ Sans suite / En retard"
+msgid "Sans suite / En retard"
+msgstr "Sans suite / En retard"
 
 #. module: transport_boc
 #: model_terms:ir.ui.view,arch_db:transport_boc.view_boc_arrivee_form
 #: model_terms:ir.ui.view,arch_db:transport_boc.view_boc_depart_form
-msgid "✅ Enregistrer"
-msgstr "✅ Enregistrer"
+msgid "Enregistrer"
+msgstr "Enregistrer"
 
 #. module: transport_boc
 #: model_terms:ir.ui.view,arch_db:transport_boc.view_boc_arrivee_form
-msgid "✔️ Marquer Traité"
-msgstr "✔️ Marquer Traité"
+msgid "Marquer Traité"
+msgstr "Marquer Traité"
 
 #. module: transport_boc
 #: model:ir.ui.menu,name:transport_boc.menu_boc_rapports
-msgid "📄 Rapports"
-msgstr "📄 Rapports"
+msgid "Editions"
+msgstr "Editions"
 
 #. module: transport_boc
 #: model:ir.ui.menu,name:transport_boc.menu_boc_depart_root
-msgid "📤 Courrier Départ"
-msgstr "📤 Courrier Départ"
+msgid "Courrier Départ"
+msgstr "Courrier Départ"
 
 #. module: transport_boc
 #: model_terms:ir.ui.view,arch_db:transport_boc.view_boc_arrivee_form
-msgid "📤 Diffuser"
-msgstr "📤 Diffuser"
+msgid "Diffuser"
+msgstr "Diffuser"
 
 #. module: transport_boc
 #: model:ir.ui.menu,name:transport_boc.menu_boc_arrivee_root
-msgid "📥 Courrier Arrivée"
-msgstr "📥 Courrier Arrivée"
+msgid "Courrier Arrivée"
+msgstr "Courrier Arrivée"
 
 #. module: transport_boc
 #: model_terms:ir.ui.view,arch_db:transport_boc.view_boc_depart_form
-msgid "📨 Marquer Envoyé"
-msgstr "📨 Marquer Envoyé"
+msgid "Marquer Envoyé"
+msgstr "Marquer Envoyé"
 
 #. module: transport_boc
 #: model:ir.ui.menu,name:transport_boc.menu_boc_transmission_root
-msgid "🔄 Transmissions"
-msgstr "🔄 Transmissions"
+msgid "Transmissions"
+msgstr "Transmissions"
 
 #. module: transport_boc
 #: model_terms:ir.ui.view,arch_db:transport_boc.view_boc_arrivee_form
 #: model_terms:ir.ui.view,arch_db:transport_boc.view_boc_depart_form
-msgid "🗂️ Classer"
-msgstr "🗂️ Classer"
+msgid "Classer"
+msgstr "Classer"
+
+#. module: transport_boc
+#: model:ir.ui.menu,name:transport_boc.menu_boc_editions
+msgid "Editions"
+msgstr "Editions"
+
+#. module: transport_boc
+#: model:ir.ui.menu,name:transport_boc.menu_boc_rapport_delais
+#: model:ir.actions.act_window,name:transport_boc.action_boc_wizard_rapport_delais
+msgid "Suivi des délais de traitement"
+msgstr "Suivi des délais de traitement"
+
+#. module: transport_boc
+#: model:ir.ui.menu,name:transport_boc.menu_boc_transmission_internes_transferees
+#: model:ir.actions.act_window,name:transport_boc.action_boc_transmission_transferees
+msgid "Transmissions internes transférées"
+msgstr "Transmissions internes transférées"
+
+#. module: transport_boc
+#: model:ir.ui.menu,name:transport_boc.menu_boc_transmission_internes_non_transferees
+#: model:ir.actions.act_window,name:transport_boc.action_boc_transmission_non_transferees
+msgid "Transmissions internes non transférées"
+msgstr "Transmissions internes non transférées"
+
+#. module: transport_boc
+#: model:ir.ui.menu,name:transport_boc.menu_boc_transmission_externes_realisees
+#: model:ir.actions.act_window,name:transport_boc.action_boc_transmission_externes_transferees
+msgid "Transmissions externes réalisées"
+msgstr "Transmissions externes réalisées"
+
+#. module: transport_boc
+#: model:ir.ui.menu,name:transport_boc.menu_boc_transmission_externes_non_realisees
+#: model:ir.actions.act_window,name:transport_boc.action_boc_transmission_externes_non_transferees
+msgid "Transmissions externes non réalisées"
+msgstr "Transmissions externes non réalisées"
+
+#. module: transport_boc
+#: model:ir.model,name:transport_boc.model_boc_wizard_rapport_delais
+msgid "Rapport Délais de Traitement BOC"
+msgstr "Rapport Délais de Traitement BOC"
+
+#. module: transport_boc
+#: model:ir.model.fields,field_description:transport_boc.field_boc_courrier_arrivee__ged_document_ref
+#: model:ir.model.fields,field_description:transport_boc.field_boc_courrier_depart__ged_document_ref
+msgid "Référence GED"
+msgstr "Référence GED"
+
+#. module: transport_boc
+#: model:ir.model.fields,field_description:transport_boc.field_boc_courrier_arrivee__ged_url
+#: model:ir.model.fields,field_description:transport_boc.field_boc_courrier_depart__ged_url
+msgid "Lien GED"
+msgstr "Lien GED"
+
+#. module: transport_boc
+#: model:ir.model.fields,field_description:transport_boc.field_boc_courrier_arrivee__ged_archive_date
+#: model:ir.model.fields,field_description:transport_boc.field_boc_courrier_depart__ged_archive_date
+msgid "Date archivage GED"
+msgstr "Date archivage GED"
+
+#. module: transport_boc
+#: model:ir.model.fields,field_description:transport_boc.field_boc_courrier_arrivee__ged_archive_status
+#: model:ir.model.fields,field_description:transport_boc.field_boc_courrier_depart__ged_archive_status
+msgid "Statut GED"
+msgstr "Statut GED"
+
+#. module: transport_boc
+#: model:ir.model.fields.selection,name:transport_boc.selection__ged_archive_status__non_archive
+msgid "Non archivé"
+msgstr "Non archivé"
+
+#. module: transport_boc
+#: model:ir.model.fields.selection,name:transport_boc.selection__ged_archive_status__archive
+msgid "Archivé"
+msgstr "Archivé"
+
+#. module: transport_boc
+#: model:ir.model.fields.selection,name:transport_boc.selection__ged_archive_status__restaure
+msgid "Restauré"
+msgstr "Restauré"
+
+#. module: transport_boc
+#: model_terms:ir.ui.view,arch_db:transport_boc.view_boc_arrivee_form
+#: model_terms:ir.ui.view,arch_db:transport_boc.view_boc_depart_form
+msgid "GED / Archivage"
+msgstr "GED / Archivage"
+
+#. module: transport_boc
+#: model_terms:ir.ui.view,arch_db:transport_boc.view_boc_arrivee_form
+#: model_terms:ir.ui.view,arch_db:transport_boc.view_boc_depart_form
+msgid "Ouvrir dans la GED"
+msgstr "Ouvrir dans la GED"
+
+#. module: transport_boc
+#: model_terms:ir.ui.view,arch_db:transport_boc.view_boc_arrivee_form
+#: model_terms:ir.ui.view,arch_db:transport_boc.view_boc_depart_form
+msgid "Marquer comme archivé"
+msgstr "Marquer comme archivé"
+
+#. module: transport_boc
+#: model_terms:ir.ui.view,arch_db:transport_boc.view_boc_arrivee_form
+#: model_terms:ir.ui.view,arch_db:transport_boc.view_boc_depart_form
+msgid "Marquer comme restauré"
+msgstr "Marquer comme restauré"
+
+#. module: transport_boc
+#: model:ir.actions.report,name:transport_boc.action_rapport_boc_echus
+msgid "État Courriers Echus"
+msgstr "État Courriers Echus"
+
+#. module: transport_boc
+#: model:ir.actions.report,name:transport_boc.action_rapport_boc_depasse
+msgid "État Dépassement Délai de Réponse"
+msgstr "État Dépassement Délai de Réponse"
+
+#. module: transport_boc
+#: model:ir.actions.report,name:transport_boc.action_rapport_boc_delais
+msgid "Edition des Délais de Traitement"
+msgstr "Edition des Délais de Traitement"
+
+#. module: transport_boc
+msgid "Internes transférées"
+msgstr "Internes transférées"
+
+#. module: transport_boc
+msgid "Internes non transférées"
+msgstr "Internes non transférées"
+
+#. module: transport_boc
+msgid "Externes réalisées"
+msgstr "Externes réalisées"
+
+#. module: transport_boc
+msgid "Externes non réalisées"
+msgstr "Externes non réalisées"
+
+#. module: transport_boc
+msgid "Rapports Délais de Traitement"
+msgstr "Rapports Délais de Traitement"
+
+#. module: transport_boc
+msgid "Période"
+msgstr "Période"
+
+#. module: transport_boc
+msgid "Filtres"
+msgstr "Filtres"
+
+#. module: transport_boc
+msgid "Type de rapport"
+msgstr "Type de rapport"
+
+#. module: transport_boc
+msgid "Générer le rapport PDF"
+msgstr "Générer le rapport PDF"
+
+#. module: transport_boc
+msgid "Annuler"
+msgstr "Annuler"
+
+#. module: transport_boc
+msgid "Courriers échus (sans suite)"
+msgstr "Courriers échus (sans suite)"
+
+#. module: transport_boc
+msgid "Courriers traités hors délai"
+msgstr "Courriers traités hors délai"
+
+#. module: transport_boc
+msgid "Date début"
+msgstr "Date début"
+
+#. module: transport_boc
+msgid "Date fin"
+msgstr "Date fin"
+
+#. module: transport_boc
+msgid "Type arrivée"
+msgstr "Type arrivée"
+
+#. module: transport_boc
+msgid "Courriers sans suite dont la date d'échéance est dépassée"
+msgstr "Courriers sans suite dont la date d'échéance est dépassée"
+
+#. module: transport_boc
+msgid "Courriers traités après la date d'échéance"
+msgstr "Courriers traités après la date d'échéance"
+
+#. module: transport_boc
+msgid "Suivi des délais pour tous les courriers"
+msgstr "Suivi des délais pour tous les courriers"
+
+#. module: transport_boc
+msgid "Statistiques globales"
+msgstr "Statistiques globales"
+
+#. module: transport_boc
+msgid "Dans les délais"
+msgstr "Dans les délais"
+
+#. module: transport_boc
+msgid "Echus (non traités)"
+msgstr "Echus (non traités)"
+
+#. module: transport_boc
+msgid "Traités hors délai"
+msgstr "Traités hors délai"
+
+#. module: transport_boc
+msgid "Délai moyen de traitement"
+msgstr "Délai moyen de traitement"
+
+#. module: transport_boc
+msgid "Hors délai"
+msgstr "Hors délai"
+
+#. module: transport_boc
+msgid "Echu"
+msgstr "Echu"
+
+#. module: transport_boc
+msgid "En cours"
+msgstr "En cours"
+
+#. module: transport_boc
+msgid "Jours dépassés"
+msgstr "Jours dépassés"
+
+#. module: transport_boc
+msgid "Dépassement (j)"
+msgstr "Dépassement (j)"
+
+#. module: transport_boc
+msgid "Délai (j)"
+msgstr "Délai (j)"
+
+#. module: transport_boc
+msgid "Statut délai"
+msgstr "Statut délai"
+
+#. module: transport_boc
+msgid "Total courriers échus"
+msgstr "Total courriers échus"
+
+#. module: transport_boc
+msgid "Total courriers avec dépassement"
+msgstr "Total courriers avec dépassement"
+
+#. module: transport_boc
+msgid "jours"
+msgstr "jours"
+
+#. module: transport_boc
+msgid "Ce document n'est pas encore archivé dans la GED."
+msgstr "Ce document n'est pas encore archivé dans la GED."
+
+#. module: transport_boc
+msgid "Document archivé dans la GED."
+msgstr "Document archivé dans la GED."
+
+#. module: transport_boc
+msgid "Accès GED"
+msgstr "Accès GED"
+
+#. module: transport_boc
+msgid "Archivé GED"
+msgstr "Archivé GED"
+
+#. module: transport_boc
+msgid "Non archivé GED"
+msgstr "Non archivé GED"
+
+#. module: transport_boc
+msgid "Brouillon"
+msgstr "Brouillon"
+
+#. module: transport_boc
+msgid "Dates"
+msgstr "Dates"
+
+#. module: transport_boc
+msgid "Externe"
+msgstr "Externe"
+
+#. module: transport_boc
+msgid "Identification"
+msgstr "Identification"
+
+#. module: transport_boc
+msgid "Mois"
+msgstr "Mois"
+
+#. module: transport_boc
+msgid "Référence document"
+msgstr "Référence document"
+
+#. module: transport_boc
+msgid "Service"
+msgstr "Service"
+
+#. module: transport_boc
+msgid "Traitée"
+msgstr "Traitée"
+
+#. module: transport_boc
+msgid "Transférée"
+msgstr "Transférée"
+
+#. module: transport_boc
+msgid "Type"
+msgstr "Type"
+
+
+#. module: transport_boc
+msgid "Overdue"
+msgstr "En retard"
+
+#. module: transport_boc
+msgid "Needs Reply"
+msgstr "Nécessite réponse"
+
+#. module: transport_boc
+msgid "External"
+msgstr "Externe"
+
+#. module: transport_boc
+msgid "Internal"
+msgstr "Interne"
+
+#. module: transport_boc
+msgid "Draft"
+msgstr "Brouillon"
+
+#. module: transport_boc
+msgid "Registered"
+msgstr "Enregistré"
+
+#. module: transport_boc
+msgid "Distributed"
+msgstr "Diffusé"
+
+#. module: transport_boc
+msgid "Not Archived DMS"
+msgstr "Non archivé GED"
+
+#. module: transport_boc
+msgid "Archived DMS"
+msgstr "Archivé GED"
+
+#. module: transport_boc
+msgid "DMS Status"
+msgstr "Statut GED"
+
+#. module: transport_boc
+msgid "Sender"
+msgstr "Expéditeur"
+
+#. module: transport_boc
+msgid "Month"
+msgstr "Mois"
+
+#. module: transport_boc
+msgid "Pending"
+msgstr "En attente"
+
+#. module: transport_boc
+msgid "Transferred"
+msgstr "Transférée"
+
+#. module: transport_boc
+msgid "Not Sent"
+msgstr "Non envoyé"
+
+#. module: transport_boc
+msgid "Status"
+msgstr "État"
+
+#. module: transport_boc
+msgid "Department"
+msgstr "Service/Direction"
+
+#. module: transport_boc
+msgid "Content"
+msgstr "Contenu"
+
+#. module: transport_boc
+msgid "Follow-up"
+msgstr "Suivi"
+
+#. module: transport_boc
+msgid "Recipient"
+msgstr "Destinataire"
+
+#. module: transport_boc
+msgid "Link to Incoming"
+msgstr "Lien avec arrivée"
+
+#. module: transport_boc
+msgid "Mail"
+msgstr "Courrier"
+
+#. module: transport_boc
+msgid "Invoice Information"
+msgstr "Informations Facture"
+
+#. module: transport_boc
+msgid "Document Reference"
+msgstr "Référence document"
+
+#. module: transport_boc
+msgid "DMS Access"
+msgstr "Accès GED"
+
+#. module: transport_boc
+msgid "DMS / Archive"
+msgstr "GED / Archivage"
+
+#. module: transport_boc
+msgid "Period"
+msgstr "Période"
+
+#. module: transport_boc
+msgid "Filters"
+msgstr "Filtres"
+
+#. module: transport_boc
+msgid "Processed"
+msgstr "Traité(e)"
+

@@ -10,11 +10,11 @@
         <field name="arch" type="xml">
             <form string="Rapports Délais de Traitement">
                 <group>
-                    <group string="Période">
+                    <group string="Period">
                         <field name="date_debut"/>
                         <field name="date_fin"/>
                     </group>
-                    <group string="Filtres">
+                    <group string="Filters">
                         <field name="type_arrivee"/>
                         <field name="type_rapport"/>
                     </group>
@@ -43,7 +43,7 @@
 
                 <footer>
                     <button name="action_generer_rapport"
-                            string="🖨️ Générer le rapport PDF"
+                            string="Générer le rapport PDF"
                             type="object"
                             class="btn-primary"/>
                     <button string="Annuler" class="btn-secondary" special="cancel"/>

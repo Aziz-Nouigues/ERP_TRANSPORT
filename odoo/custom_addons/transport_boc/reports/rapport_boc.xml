@@ -451,13 +451,13 @@
                                             <td style="text-align:center;"><t t-esc="c['delai_jours']"/></td>
                                             <td>
                                                 <t t-if="c['statut_delai'] == 'dans_delai'">
-                                                    <span style="color:green; font-weight:bold;">✓ Dans les délais</span>
+                                                    <span style="color:green; font-weight:bold;">Dans les délais</span>
                                                 </t>
                                                 <t t-elif="c['statut_delai'] == 'hors_delai'">
-                                                    <span style="color:orange; font-weight:bold;">⚠ Hors délai</span>
+                                                    <span style="color:orange; font-weight:bold;">Hors délai</span>
                                                 </t>
                                                 <t t-elif="c['statut_delai'] == 'echu'">
-                                                    <span style="color:red; font-weight:bold;">✗ Échu</span>
+                                                    <span style="color:red; font-weight:bold;">Echu</span>
                                                 </t>
                                                 <t t-else="">
                                                     <span style="color:gray;">— En cours</span>

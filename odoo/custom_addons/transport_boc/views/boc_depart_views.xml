@@ -10,13 +10,13 @@
         <field name="arch" type="xml">
             <form string="Courrier Départ">
                 <header>
-                    <button name="action_enregistrer" string="✅ Enregistrer"
+                    <button name="action_enregistrer" string="Enregistrer"
                             type="object" class="btn-primary"
                             invisible="state != 'brouillon'"/>
                     <button name="action_envoyer" string="📨 Marquer Envoyé"
                             type="object" class="btn-success"
                             invisible="state != 'enregistre'"/>
-                    <button name="action_classer" string="🗂️ Classer"
+                    <button name="action_classer" string="Classer"
                             type="object"
                             invisible="state != 'envoye'"/>
                     <button name="action_reset" string="Remettre en brouillon"
@@ -48,17 +48,17 @@
                     </group>
 
                     <group>
-                        <group string="Destinataire">
+                        <group string="Recipient">
                             <field name="organisme_id"/>
                             <field name="destinataire_nom"
                                    invisible="organisme_id != False"/>
                         </group>
-                        <group string="Lien avec arrivée">
+                        <group string="Link to Incoming">
                             <field name="arrivee_id"/>
                         </group>
                     </group>
 
-                    <group string="Contenu">
+                    <group string="Content">
                         <field name="sujet_id"/>
                         <field name="sujet" placeholder="Objet du courrier..."/>
                     </group>
@@ -66,20 +66,20 @@
 
                     <!-- Onglet GED -->
                     <notebook>
-                        <page string="GED / Archivage" name="ged">
+                        <page string="DMS / Archive" name="ged">
                             <group>
-                                <group string="Référence document">
+                                <group string="Document Reference">
                                     <field name="ged_document_ref"
                                            placeholder="ex: DOC-2025-00123"/>
                                     <field name="ged_archive_status"/>
                                     <field name="ged_archive_date"
                                            invisible="ged_archive_status == 'non_archive'"/>
                                 </group>
-                                <group string="Accès GED">
+                                <group string="DMS Access">
                                     <field name="ged_url"
                                            placeholder="https://ged.exemple.com/document/..."/>
                                     <button name="action_ouvrir_ged"
-                                            string="🔗 Ouvrir dans la GED"
+                                            string="Ouvrir dans la GED"
                                             type="object"
                                             class="btn-secondary"
                                             invisible="not ged_url"/>
@@ -90,7 +90,7 @@
                                      invisible="ged_archive_status != 'non_archive'">
                                     <p>Ce courrier n'est pas encore archivé dans la GED.</p>
                                     <button name="action_marquer_archive_ged"
-                                            string="📁 Marquer comme archivé"
+                                            string="Marquer comme archivé"
                                             type="object"
                                             class="btn-primary"
                                             invisible="not ged_document_ref"/>
@@ -99,7 +99,7 @@
                                      invisible="ged_archive_status != 'archive'">
                                     <p>Document archivé dans la GED.</p>
                                     <button name="action_restaurer_ged"
-                                            string="♻️ Marquer comme restauré"
+                                            string="Marquer comme restauré"
                                             type="object"
                                             class="btn-secondary"/>
                                 </div>
@@ -145,16 +145,16 @@
         <field name="model">boc.courrier.depart</field>
         <field name="arch" type="xml">
             <search>
-                <filter name="externe" string="Externe"
+                <filter name="externe" string="External"
                         domain="[('type_depart','=','externe')]"/>
-                <filter name="interne" string="Interne"
+                <filter name="interne" string="Internal"
                         domain="[('type_depart','=','interne')]"/>
                 <filter name="non_envoye" string="Non envoye"
                         domain="[('state','in',['brouillon','enregistre'])]"/>
                 <group>
                     <filter name="group_type" string="Type" context="{'group_by':'type_courrier_id'}"/>
-                    <filter name="group_state" string="Etat" context="{'group_by':'state'}"/>
-                    <filter name="group_mois" string="Mois" context="{'group_by':'date_depart:month'}"/>
+                    <filter name="group_state" string="Status" context="{'group_by':'state'}"/>
+                    <filter name="group_mois" string="Month" context="{'group_by':'date_depart:month'}"/>
                 </group>
             </search>
         </field>
