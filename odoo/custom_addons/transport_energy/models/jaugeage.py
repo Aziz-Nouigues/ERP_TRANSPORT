@@ -77,9 +77,9 @@ class Jaugeage(models.Model):
     )
 
     niveau_alerte = fields.Selection([
-        ('normal',      '✅ Normal (< 1%)'),
-        ('attention',   '⚠️ Attention (1-3%)'),
-        ('critique',    '🔴 Critique (> 3%)'),
+        ('normal',      'Normal (< 1%)'),
+        ('attention',   'Attention (1-3%)'),
+        ('critique',    'Critique (> 3%)'),
     ], string='Niveau alerte',
        compute='_calcul_ecart',
        store=True

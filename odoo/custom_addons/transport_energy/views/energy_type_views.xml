@@ -10,7 +10,6 @@
                 <field name="name"/>
                 <field name="category"/>
                 <field name="unite"/>
-                <field name="actif"/>
             </list>
         </field>
     </record>
@@ -26,10 +25,9 @@
                         <field name="name"/>
                         <field name="category"/>
                         <field name="unite"/>
-                        <field name="actif"/>
                     </group>
                     <group>
-                        <field name="notes" placeholder="Notes..."/>
+                        <field name="notes"/>
                     </group>
                 </sheet>
             </form>
@@ -43,14 +41,12 @@
         <field name="view_mode">list,form</field>
     </record>
 
-    <!-- ===== MENU RACINE (utilisé par TOUS les autres fichiers de vues) ===== -->
     <menuitem
         id="menu_transport_energy_root"
         name="Énergie Transport"
         web_icon="transport_energy,static/description/icon.png"
         sequence="50"/>
 
-    <!-- ===== CONFIGURATION ===== -->
     <menuitem
         id="menu_energy_config"
         name="Configuration"

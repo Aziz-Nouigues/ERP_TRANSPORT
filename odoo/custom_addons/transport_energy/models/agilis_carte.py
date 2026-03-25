@@ -18,9 +18,9 @@ class AgilisCarte(models.Model):
     )
 
     statut = fields.Selection([
-        ('active', '✅ Active'),
-        ('bloquee', '🔴 Bloquée'),
-        ('expiree', '⚫ Expirée'),
+        ('active', 'Active'),
+        ('bloquee', 'Bloquée'),
+        ('expiree', 'Expirée'),
     ], string='Statut', default='active', tracking=True)
 
     # ── VÉHICULE ────────────────────────────────────────────

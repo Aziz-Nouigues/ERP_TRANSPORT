@@ -50,8 +50,10 @@
                                     <field name="type_operation"/>
                                     <field name="type_lubrifiant_id"
                                            options="{'no_create': True, 'no_create_edit': True}"/>
+                                    <!-- CORRIGÉ : suppression de optional="show" combiné avec invisible= -->
+                                    <!-- En Odoo 17/19 Owl, les deux attributs sur le même champ dans -->
+                                    <!-- une liste editable provoquent le crash "this.child.mount is not a function" -->
                                     <field name="quantite_videe"
-                                           optional="show"
                                            invisible="type_operation != 'vidange'"/>
                                     <field name="quantite"/>
                                 </list>
@@ -97,7 +99,6 @@
         <field name="model">transport.bon.lubrifiant</field>
         <field name="arch" type="xml">
             <search>
-
                 <filter name="f_valide" string="Valides"
                         domain="[('statut','=','valide')]"/>
                 <filter name="f_brouillon" string="Brouillons"

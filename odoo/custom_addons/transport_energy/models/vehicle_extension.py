@@ -65,9 +65,9 @@ class FleetVehicleTransport(models.Model):
 
     # ── COMPTEUR KILOMÉTRIQUE ────────────────────────────────
     odometer_status = fields.Selection([
-        ('ok',       '✅ Fonctionnel'),
-        ('replaced', '🔄 Remplacé / Réparé'),
-        ('broken',   '❌ En panne'),
+        ('ok',       'Fonctionnel'),
+        ('replaced', 'Remplacé / Réparé'),
+        ('broken',   'En panne'),
     ], string='État du compteur',
        default='ok',
        required=True

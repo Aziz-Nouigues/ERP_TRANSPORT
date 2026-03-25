@@ -39,6 +39,13 @@
                         Échéance dépassée de <field name="jours_restants" nolabel="1"/> jour(s).
                     </div>
 
+                    <!-- Alerte rappel : on approche de l'échéance -->
+                    <div class="alert alert-warning" role="alert"
+                         invisible="en_retard or not necessite_reponse or not date_rappel or reponse_fournie">
+                        <strong>Rappel :</strong> Ce courrier nécessite une réponse.
+                        Date d'échéance : <field name="date_echeance" nolabel="1" readonly="1"/>.
+                    </div>
+
                     <!-- Entête -->
                     <div class="oe_title">
                         <h1>
@@ -56,18 +63,25 @@
                             <field name="date_arrivee"/>
                             <field name="date_courrier"/>
                             <field name="date_echeance"/>
-                            <field name="date_rappel" readonly="1"/>
+                            <field name="date_rappel" readonly="1"
+                                   invisible="not date_echeance"/>
                         </group>
                     </group>
 
-                    <group>
-                        <group string="Sender">
-                            <field name="organisme_id"/>
+                    <!-- ── EXPÉDITEUR EXTERNE ── -->
+                    <group string="Expéditeur" invisible="type_arrivee != 'externe'">
+                        <group>
+                            <field name="organisme_id"
+                                   string="Organisme expéditeur"
+                                   domain="[('type_organisme','=','externe')]"
+                                   options="{'no_quick_create': False}"/>
                             <field name="expediteur_nom"
-                                   invisible="organisme_id != False"/>
+                                   string="Nom expéditeur (libre)"
+                                   invisible="organisme_id != False"
+                                   placeholder="Si non référencé dans la liste..."/>
                             <field name="reference_expediteur"/>
                         </group>
-                        <group string="Follow-up">
+                        <group>
                             <field name="necessite_reponse"/>
                             <field name="reponse_fournie"
                                    invisible="not necessite_reponse"/>
@@ -78,15 +92,44 @@
                         </group>
                     </group>
 
-                    <group string="Content">
+                    <!-- ── EXPÉDITEUR INTERNE ── -->
+                    <group string="Expéditeur interne" invisible="type_arrivee != 'interne'">
+                        <group>
+                            <field name="organisme_id"
+                                   string="Direction / Service expéditeur"
+                                   domain="[('type_organisme','=','interne')]"
+                                   options="{'no_quick_create': False}"/>
+                            <field name="expediteur_nom"
+                                   string="Nom (si non référencé)"
+                                   invisible="organisme_id != False"
+                                   placeholder="Nom de l'expéditeur interne..."/>
+                            <!-- Référence expéditeur masquée pour interne (moins pertinente) -->
+                            <field name="reference_expediteur"
+                                   string="Référence interne"
+                                   placeholder="Réf. interne si applicable"/>
+                        </group>
+                        <group>
+                            <field name="necessite_reponse"/>
+                            <field name="reponse_fournie"
+                                   invisible="not necessite_reponse"/>
+                            <field name="date_reponse"
+                                   invisible="not reponse_fournie"/>
+                            <field name="depart_reponse_id"
+                                   invisible="not reponse_fournie"/>
+                        </group>
+                    </group>
+
+                    <!-- ── CONTENU ── -->
+                    <group string="Contenu">
                         <field name="sujet_id"/>
                         <field name="sujet" placeholder="Objet du courrier..."/>
                         <field name="annotation_id"/>
                     </group>
                     <field name="description" placeholder="Description / Remarques..."/>
 
-                    <!-- Section Facture -->
-                    <group string="Invoice Information" invisible="not est_facture">
+                    <!-- ── SECTION FACTURE : uniquement pour courrier EXTERNE ── -->
+                    <group string="Informations Facture"
+                           invisible="type_arrivee != 'externe' or not est_facture">
                         <group>
                             <field name="reference_facture"/>
                             <field name="fournisseur"/>
@@ -96,9 +139,16 @@
                         </group>
                     </group>
 
-                    <!-- Diffusions -->
+                    <!-- Message informatif pour courrier interne : pas de facture -->
+                    <div class="alert alert-info" role="alert"
+                         invisible="type_arrivee != 'interne' or not est_facture">
+                        <strong>Information :</strong> Les factures sont associées aux courriers externes uniquement.
+                        Veuillez changer le type de courrier si nécessaire.
+                    </div>
+
+                    <!-- ── ONGLETS ── -->
                     <notebook>
-                        <page string="Diffusions">
+                        <page string="Diffusions" name="diffusions">
                             <field name="transmission_ids">
                                 <list editable="bottom">
                                     <field name="organisme_id"
@@ -114,16 +164,16 @@
                         </page>
 
                         <!-- Onglet GED -->
-                        <page string="DMS / Archive" name="ged">
+                        <page string="GED / Archivage" name="ged">
                             <group>
-                                <group string="Document Reference">
+                                <group string="Référence document">
                                     <field name="ged_document_ref"
                                            placeholder="ex: DOC-2025-00123"/>
                                     <field name="ged_archive_status"/>
                                     <field name="ged_archive_date"
                                            invisible="ged_archive_status == 'non_archive'"/>
                                 </group>
-                                <group string="DMS Access">
+                                <group string="Accès GED">
                                     <field name="ged_url"
                                            placeholder="https://ged.exemple.com/document/..."/>
                                     <button name="action_ouvrir_ged"
@@ -201,35 +251,45 @@
         <field name="model">boc.courrier.arrivee</field>
         <field name="arch" type="xml">
             <search>
-                <filter name="en_retard" string="Overdue"
+                <!-- Champs de recherche texte -->
+                <field name="name" string="N° d'ordre"/>
+                <field name="sujet" string="Sujet / Objet"/>
+                <field name="expediteur_nom" string="Nom expéditeur"/>
+                <field name="organisme_id" string="Organisme"/>
+                <field name="reference_expediteur" string="Référence expéditeur"/>
+                <field name="fournisseur" string="Fournisseur"/>
+                <field name="reference_facture" string="Référence facture"/>
+                <separator/>
+                <filter name="en_retard" string="En retard"
                         domain="[('en_retard','=',True)]"/>
-                <filter name="necessite_reponse" string="Needs Reply"
+                <filter name="necessite_reponse" string="Nécessite réponse"
                         domain="[('necessite_reponse','=',True),('reponse_fournie','=',False)]"/>
                 <separator/>
-                <filter name="externe" string="External"
+                <filter name="externe" string="Externe"
                         domain="[('type_arrivee','=','externe')]"/>
-                <filter name="interne" string="Internal"
+                <filter name="interne" string="Interne"
                         domain="[('type_arrivee','=','interne')]"/>
                 <separator/>
-                <filter name="brouillon" string="Draft"
+                <filter name="brouillon" string="Brouillon"
                         domain="[('state','=','brouillon')]"/>
-                <filter name="enregistre" string="Registered"
+                <filter name="enregistre" string="Enregistré"
                         domain="[('state','=','enregistre')]"/>
-                <filter name="diffuse" string="Distributed"
+                <filter name="diffuse" string="Diffusé"
                         domain="[('state','=','diffuse')]"/>
-                <filter name="traite" string="Processed"
+                <filter name="traite" string="Traité"
                         domain="[('state','=','traite')]"/>
                 <separator/>
-                <filter name="ged_non_archive" string="Not Archived DMS"
+                <filter name="ged_non_archive" string="Non archivé GED"
                         domain="[('ged_archive_status','=','non_archive')]"/>
-                <filter name="ged_archive" string="Archived DMS"
+                <filter name="ged_archive" string="Archivé GED"
                         domain="[('ged_archive_status','=','archive')]"/>
                 <group>
-                    <filter name="group_type" string="Type" context="{'group_by':'type_courrier_id'}"/>
-                    <filter name="group_state" string="Status" context="{'group_by':'state'}"/>
-                    <filter name="group_organisme" string="Sender" context="{'group_by':'organisme_id'}"/>
-                    <filter name="group_mois" string="Month" context="{'group_by':'date_arrivee:month'}"/>
-                    <filter name="group_ged" string="DMS Status" context="{'group_by':'ged_archive_status'}"/>
+                    <filter name="group_type" string="Nature courrier" context="{'group_by':'type_courrier_id'}"/>
+                    <filter name="group_type_arrivee" string="Type (interne/externe)" context="{'group_by':'type_arrivee'}"/>
+                    <filter name="group_state" string="État" context="{'group_by':'state'}"/>
+                    <filter name="group_organisme" string="Expéditeur" context="{'group_by':'organisme_id'}"/>
+                    <filter name="group_mois" string="Mois" context="{'group_by':'date_arrivee:month'}"/>
+                    <filter name="group_ged" string="Statut GED" context="{'group_by':'ged_archive_status'}"/>
                 </group>
             </search>
         </field>

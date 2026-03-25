@@ -182,7 +182,7 @@ class BonLubrifiantLigne(models.Model):
 
     # ── TYPE OPÉRATION ───────────────────────────────────────
     type_operation = fields.Selection([
-        ('vidange',  '🔄 Vidange (رemplacement complet)'),
+        ('vidange',  'Vidange (remplacement complet)'),
         ('addition', '➕ Addition (appoint)'),
     ], string='Type opération',
        required=True,

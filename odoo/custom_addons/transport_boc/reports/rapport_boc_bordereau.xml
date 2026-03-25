@@ -1,0 +1,564 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <!-- ══════════════════════════════════════════════════
+         RAPPORT 1 — BORDEREAU TRANSMISSIONS INTERNES TRANSFÉRÉES
+         CDC : Courriers internes transférés aux services
+    ══════════════════════════════════════════════════ -->
+    <record id="action_bordereau_interne_transfere" model="ir.actions.report">
+        <field name="name">Bordereau — Internes transférés</field>
+        <field name="model">boc.wizard.bordereau</field>
+        <field name="report_type">qweb-pdf</field>
+        <field name="report_name">transport_boc.bordereau_interne_transfere</field>
+        <field name="report_file">transport_boc.bordereau_interne_transfere</field>
+    </record>
+
+    <template id="bordereau_interne_transfere">
+        <t t-call="web.html_container">
+            <t t-foreach="docs" t-as="wiz">
+                <t t-call="web.external_layout">
+                    <div class="page">
+
+                        <div class="text-center mb-4">
+                            <h2>قائمة الإرساليّات الداخلية المُحوَّلة</h2>
+                            <h3>Bordereau des Courriers Internes Transférés</h3>
+                            <p style="font-size:12px; color:#555;">
+                                Période : <t t-esc="wiz.date_debut"/> au <t t-esc="wiz.date_fin"/>
+                            </p>
+                        </div>
+
+                        <t t-set="lignes" t-value="wiz._get_transmissions_internes_transferees()"/>
+
+                        <t t-if="not lignes">
+                            <p class="text-center text-muted mt-4">
+                                Aucun courrier interne transféré sur cette période.
+                            </p>
+                        </t>
+
+                        <t t-if="lignes">
+                            <table class="table table-bordered table-sm" style="font-size:10px;">
+                                <thead style="background:#d1ecf1;">
+                                    <tr>
+                                        <th style="width:8%">N° Arrivée</th>
+                                        <th style="width:10%">Date arrivée</th>
+                                        <th style="width:12%">Expéditeur</th>
+                                        <th style="width:18%">Objet</th>
+                                        <th style="width:10%">Type courrier</th>
+                                        <th style="width:14%">Service destinataire</th>
+                                        <th style="width:10%">Responsable</th>
+                                        <th style="width:12%">Instruction</th>
+                                        <th style="width:9%">Date trans.</th>
+                                        <th style="width:7%">État</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <t t-foreach="lignes" t-as="l">
+                                        <tr>
+                                            <td><t t-esc="l['arrivee_num']"/></td>
+                                            <td><t t-esc="l['arrivee_date']"/></td>
+                                            <td><t t-esc="l['expediteur']"/></td>
+                                            <td><t t-esc="l['arrivee_sujet']"/></td>
+                                            <td><t t-esc="l['type_courrier']"/></td>
+                                            <td><t t-esc="l['destinataire']"/></td>
+                                            <td><t t-esc="l['responsable']"/></td>
+                                            <td><t t-esc="l['instruction']"/></td>
+                                            <td><t t-esc="l['date_transmission']"/></td>
+                                            <td><t t-esc="l['state']"/></td>
+                                        </tr>
+                                    </t>
+                                </tbody>
+                                <tfoot style="background:#f8f9fa;">
+                                    <tr>
+                                        <td colspan="9" class="fw-bold">Total</td>
+                                        <td class="fw-bold text-center">
+                                            <t t-esc="len(lignes)"/>
+                                        </td>
+                                    </tr>
+                                </tfoot>
+                            </table>
+                        </t>
+
+                        <div class="row mt-5">
+                            <div class="col-4 text-center">
+                                <p>Agent BOC</p><br/><br/>
+                                <p>___________________________</p>
+                            </div>
+                            <div class="col-4 text-center">
+                                <p>Responsable BOC</p><br/><br/>
+                                <p>___________________________</p>
+                            </div>
+                            <div class="col-4 text-center">
+                                <p>Directeur</p><br/><br/>
+                                <p>___________________________</p>
+                            </div>
+                        </div>
+
+                    </div>
+                </t>
+            </t>
+        </t>
+    </template>
+
+
+    <!-- ══════════════════════════════════════════════════
+         RAPPORT 2 — BORDEREAU TRANSMISSIONS INTERNES NON TRANSFÉRÉES
+         CDC : Courriers internes non transférés
+    ══════════════════════════════════════════════════ -->
+    <record id="action_bordereau_interne_non_transfere" model="ir.actions.report">
+        <field name="name">Bordereau — Internes non transférés</field>
+        <field name="model">boc.wizard.bordereau</field>
+        <field name="report_type">qweb-pdf</field>
+        <field name="report_name">transport_boc.bordereau_interne_non_transfere</field>
+        <field name="report_file">transport_boc.bordereau_interne_non_transfere</field>
+    </record>
+
+    <template id="bordereau_interne_non_transfere">
+        <t t-call="web.html_container">
+            <t t-foreach="docs" t-as="wiz">
+                <t t-call="web.external_layout">
+                    <div class="page">
+
+                        <div class="text-center mb-4">
+                            <h2>قائمة الإرساليّات الداخلية غير المُحوَّلة</h2>
+                            <h3>Bordereau des Courriers Internes Non Transférés</h3>
+                            <p style="font-size:12px; color:#555;">
+                                Période : <t t-esc="wiz.date_debut"/> au <t t-esc="wiz.date_fin"/>
+                            </p>
+                        </div>
+
+                        <t t-set="lignes" t-value="wiz._get_transmissions_internes_non_transferees()"/>
+
+                        <t t-if="not lignes">
+                            <p class="text-center text-muted mt-4">
+                                Aucun courrier interne en attente de transfert sur cette période.
+                            </p>
+                        </t>
+
+                        <t t-if="lignes">
+                            <div class="alert alert-warning" style="font-size:11px; margin-bottom:12px;">
+                                Ces courriers sont enregistrés mais n'ont pas encore été transférés aux services concernés.
+                            </div>
+                            <table class="table table-bordered table-sm" style="font-size:10px;">
+                                <thead style="background:#fff3cd;">
+                                    <tr>
+                                        <th style="width:9%">N° Arrivée</th>
+                                        <th style="width:11%">Date arrivée</th>
+                                        <th style="width:13%">Expéditeur</th>
+                                        <th style="width:19%">Objet</th>
+                                        <th style="width:11%">Type courrier</th>
+                                        <th style="width:14%">Service destinataire</th>
+                                        <th style="width:11%">Responsable</th>
+                                        <th style="width:12%">Instruction</th>
+                                        <th style="width:10%">Date trans. prévue</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <t t-foreach="lignes" t-as="l">
+                                        <tr>
+                                            <td><t t-esc="l['arrivee_num']"/></td>
+                                            <td><t t-esc="l['arrivee_date']"/></td>
+                                            <td><t t-esc="l['expediteur']"/></td>
+                                            <td><t t-esc="l['arrivee_sujet']"/></td>
+                                            <td><t t-esc="l['type_courrier']"/></td>
+                                            <td><t t-esc="l['destinataire']"/></td>
+                                            <td><t t-esc="l['responsable']"/></td>
+                                            <td><t t-esc="l['instruction']"/></td>
+                                            <td><t t-esc="l['date_echeance']"/></td>
+                                        </tr>
+                                    </t>
+                                </tbody>
+                                <tfoot style="background:#f8f9fa;">
+                                    <tr>
+                                        <td colspan="8" class="fw-bold">Total en attente</td>
+                                        <td class="fw-bold text-center">
+                                            <t t-esc="len(lignes)"/>
+                                        </td>
+                                    </tr>
+                                </tfoot>
+                            </table>
+                        </t>
+
+                        <div class="row mt-5">
+                            <div class="col-4 text-center">
+                                <p>Agent BOC</p><br/><br/>
+                                <p>___________________________</p>
+                            </div>
+                            <div class="col-4 text-center">
+                                <p>Responsable BOC</p><br/><br/>
+                                <p>___________________________</p>
+                            </div>
+                            <div class="col-4 text-center">
+                                <p>Directeur</p><br/><br/>
+                                <p>___________________________</p>
+                            </div>
+                        </div>
+
+                    </div>
+                </t>
+            </t>
+        </t>
+    </template>
+
+
+    <!-- ══════════════════════════════════════════════════
+         RAPPORT 3 — BORDEREAU TRANSMISSIONS EXTERNES TRANSFÉRÉES
+         CDC : Courriers externes transférés
+    ══════════════════════════════════════════════════ -->
+    <record id="action_bordereau_externe_transfere" model="ir.actions.report">
+        <field name="name">Bordereau — Externes transférés</field>
+        <field name="model">boc.wizard.bordereau</field>
+        <field name="report_type">qweb-pdf</field>
+        <field name="report_name">transport_boc.bordereau_externe_transfere</field>
+        <field name="report_file">transport_boc.bordereau_externe_transfere</field>
+    </record>
+
+    <template id="bordereau_externe_transfere">
+        <t t-call="web.html_container">
+            <t t-foreach="docs" t-as="wiz">
+                <t t-call="web.external_layout">
+                    <div class="page">
+
+                        <div class="text-center mb-4">
+                            <h2>قائمة الإرساليّات الخارجية المُحوَّلة</h2>
+                            <h3>Bordereau des Courriers Externes Transférés</h3>
+                            <p style="font-size:12px; color:#555;">
+                                Période : <t t-esc="wiz.date_debut"/> au <t t-esc="wiz.date_fin"/>
+                            </p>
+                        </div>
+
+                        <t t-set="lignes" t-value="wiz._get_transmissions_externes_transferees()"/>
+
+                        <t t-if="not lignes">
+                            <p class="text-center text-muted mt-4">
+                                Aucun courrier externe transféré sur cette période.
+                            </p>
+                        </t>
+
+                        <t t-if="lignes">
+                            <table class="table table-bordered table-sm" style="font-size:10px;">
+                                <thead style="background:#d4edda;">
+                                    <tr>
+                                        <th style="width:8%">N° Arrivée</th>
+                                        <th style="width:10%">Date arrivée</th>
+                                        <th style="width:13%">Organisme expéditeur</th>
+                                        <th style="width:18%">Objet</th>
+                                        <th style="width:10%">Type courrier</th>
+                                        <th style="width:14%">Service destinataire</th>
+                                        <th style="width:10%">Responsable</th>
+                                        <th style="width:11%">Instruction</th>
+                                        <th style="width:9%">Date trans.</th>
+                                        <th style="width:7%">État</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <t t-foreach="lignes" t-as="l">
+                                        <tr>
+                                            <td><t t-esc="l['arrivee_num']"/></td>
+                                            <td><t t-esc="l['arrivee_date']"/></td>
+                                            <td><t t-esc="l['expediteur']"/></td>
+                                            <td><t t-esc="l['arrivee_sujet']"/></td>
+                                            <td><t t-esc="l['type_courrier']"/></td>
+                                            <td><t t-esc="l['destinataire']"/></td>
+                                            <td><t t-esc="l['responsable']"/></td>
+                                            <td><t t-esc="l['instruction']"/></td>
+                                            <td><t t-esc="l['date_transmission']"/></td>
+                                            <td><t t-esc="l['state']"/></td>
+                                        </tr>
+                                    </t>
+                                </tbody>
+                                <tfoot style="background:#f8f9fa;">
+                                    <tr>
+                                        <td colspan="9" class="fw-bold">Total</td>
+                                        <td class="fw-bold text-center">
+                                            <t t-esc="len(lignes)"/>
+                                        </td>
+                                    </tr>
+                                </tfoot>
+                            </table>
+                        </t>
+
+                        <div class="row mt-5">
+                            <div class="col-4 text-center">
+                                <p>Agent BOC</p><br/><br/>
+                                <p>___________________________</p>
+                            </div>
+                            <div class="col-4 text-center">
+                                <p>Responsable BOC</p><br/><br/>
+                                <p>___________________________</p>
+                            </div>
+                            <div class="col-4 text-center">
+                                <p>Directeur</p><br/><br/>
+                                <p>___________________________</p>
+                            </div>
+                        </div>
+
+                    </div>
+                </t>
+            </t>
+        </t>
+    </template>
+
+
+    <!-- ══════════════════════════════════════════════════
+         RAPPORT 4 — BORDEREAU TRANSMISSIONS EXTERNES NON TRANSFÉRÉES
+         CDC : Courriers externes non transférés
+    ══════════════════════════════════════════════════ -->
+    <record id="action_bordereau_externe_non_transfere" model="ir.actions.report">
+        <field name="name">Bordereau — Externes non transférés</field>
+        <field name="model">boc.wizard.bordereau</field>
+        <field name="report_type">qweb-pdf</field>
+        <field name="report_name">transport_boc.bordereau_externe_non_transfere</field>
+        <field name="report_file">transport_boc.bordereau_externe_non_transfere</field>
+    </record>
+
+    <template id="bordereau_externe_non_transfere">
+        <t t-call="web.html_container">
+            <t t-foreach="docs" t-as="wiz">
+                <t t-call="web.external_layout">
+                    <div class="page">
+
+                        <div class="text-center mb-4">
+                            <h2>قائمة الإرساليّات الخارجية غير المُحوَّلة</h2>
+                            <h3>Bordereau des Courriers Externes Non Transférés</h3>
+                            <p style="font-size:12px; color:#555;">
+                                Période : <t t-esc="wiz.date_debut"/> au <t t-esc="wiz.date_fin"/>
+                            </p>
+                        </div>
+
+                        <t t-set="lignes" t-value="wiz._get_transmissions_externes_non_transferees()"/>
+
+                        <t t-if="not lignes">
+                            <p class="text-center text-muted mt-4">
+                                Aucun courrier externe en attente de transfert sur cette période.
+                            </p>
+                        </t>
+
+                        <t t-if="lignes">
+                            <div class="alert alert-warning" style="font-size:11px; margin-bottom:12px;">
+                                Ces courriers externes sont enregistrés mais n'ont pas encore été transférés aux services.
+                            </div>
+                            <table class="table table-bordered table-sm" style="font-size:10px;">
+                                <thead style="background:#fff3cd;">
+                                    <tr>
+                                        <th style="width:9%">N° Arrivée</th>
+                                        <th style="width:11%">Date arrivée</th>
+                                        <th style="width:14%">Organisme expéditeur</th>
+                                        <th style="width:19%">Objet</th>
+                                        <th style="width:11%">Type courrier</th>
+                                        <th style="width:14%">Service destinataire</th>
+                                        <th style="width:11%">Responsable</th>
+                                        <th style="width:11%">Instruction</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <t t-foreach="lignes" t-as="l">
+                                        <tr>
+                                            <td><t t-esc="l['arrivee_num']"/></td>
+                                            <td><t t-esc="l['arrivee_date']"/></td>
+                                            <td><t t-esc="l['expediteur']"/></td>
+                                            <td><t t-esc="l['arrivee_sujet']"/></td>
+                                            <td><t t-esc="l['type_courrier']"/></td>
+                                            <td><t t-esc="l['destinataire']"/></td>
+                                            <td><t t-esc="l['responsable']"/></td>
+                                            <td><t t-esc="l['instruction']"/></td>
+                                        </tr>
+                                    </t>
+                                </tbody>
+                                <tfoot style="background:#f8f9fa;">
+                                    <tr>
+                                        <td colspan="7" class="fw-bold">Total en attente</td>
+                                        <td class="fw-bold text-center">
+                                            <t t-esc="len(lignes)"/>
+                                        </td>
+                                    </tr>
+                                </tfoot>
+                            </table>
+                        </t>
+
+                        <div class="row mt-5">
+                            <div class="col-4 text-center">
+                                <p>Agent BOC</p><br/><br/>
+                                <p>___________________________</p>
+                            </div>
+                            <div class="col-4 text-center">
+                                <p>Responsable BOC</p><br/><br/>
+                                <p>___________________________</p>
+                            </div>
+                            <div class="col-4 text-center">
+                                <p>Directeur</p><br/><br/>
+                                <p>___________________________</p>
+                            </div>
+                        </div>
+
+                    </div>
+                </t>
+            </t>
+        </t>
+    </template>
+
+
+    <!-- ══════════════════════════════════════════════════
+         RAPPORT 5 — COURRIERS NÉCESSITANT UNE ACTION (RAPPEL MI-DÉLAI)
+         CDC : Bordereau suivi courrier avec note de rappel (mi-délai)
+    ══════════════════════════════════════════════════ -->
+    <record id="action_bordereau_rappel_echeance" model="ir.actions.report">
+        <field name="name">Bordereau — Rappels échéance (mi-délai)</field>
+        <field name="model">boc.wizard.bordereau</field>
+        <field name="report_type">qweb-pdf</field>
+        <field name="report_name">transport_boc.bordereau_rappel_echeance</field>
+        <field name="report_file">transport_boc.bordereau_rappel_echeance</field>
+    </record>
+
+    <template id="bordereau_rappel_echeance">
+        <t t-call="web.html_container">
+            <t t-foreach="docs" t-as="wiz">
+                <t t-call="web.external_layout">
+                    <div class="page">
+
+                        <div class="text-center mb-4">
+                            <h2>قائمة الإرساليّات المطلوب التصرّف فيها</h2>
+                            <h3>Bordereau des Courriers Nécessitant une Action</h3>
+                            <p style="font-size:12px; color:#555;">
+                                Courriers en attente de réponse — Note de rappel à mi-délai<br/>
+                                Période d'arrivée : <t t-esc="wiz.date_debut"/> au <t t-esc="wiz.date_fin"/>
+                            </p>
+                        </div>
+
+                        <t t-set="courriers" t-value="wiz._get_courriers_rappel_echeance()"/>
+
+                        <t t-if="not courriers">
+                            <p class="text-center text-muted mt-4">
+                                Aucun courrier en attente d'action sur cette période.
+                            </p>
+                        </t>
+
+                        <t t-if="courriers">
+                            <!-- Compteurs par niveau d'alerte -->
+                            <t t-set="nb_retard"  t-value="len([c for c in courriers if c['alerte'] == 'danger'])"/>
+                            <t t-set="nb_urgent"  t-value="len([c for c in courriers if c['alerte'] == 'warning'])"/>
+                            <t t-set="nb_normal"  t-value="len([c for c in courriers if c['alerte'] == 'info'])"/>
+
+                            <table class="table table-bordered" style="font-size:11px; margin-bottom:14px; width:60%;">
+                                <thead style="background:#e2e3e5;">
+                                    <tr>
+                                        <th colspan="2" class="text-center">Récapitulatif des alertes</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td style="color:red; font-weight:bold;">En retard (échéance dépassée)</td>
+                                        <td class="text-center" style="color:red; font-weight:bold;">
+                                            <t t-esc="nb_retard"/>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td style="color:#856404; font-weight:bold;">Urgent (≤ 3 jours restants)</td>
+                                        <td class="text-center" style="color:#856404; font-weight:bold;">
+                                            <t t-esc="nb_urgent"/>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>En cours</td>
+                                        <td class="text-center"><t t-esc="nb_normal"/></td>
+                                    </tr>
+                                    <tr style="background:#f8f9fa;">
+                                        <td class="fw-bold">Total courriers en attente</td>
+                                        <td class="text-center fw-bold"><t t-esc="len(courriers)"/></td>
+                                    </tr>
+                                </tbody>
+                            </table>
+
+                            <table class="table table-bordered table-sm" style="font-size:10px;">
+                                <thead style="background:#cce5ff;">
+                                    <tr>
+                                        <th style="width:9%">N° Arrivée</th>
+                                        <th style="width:10%">Date arrivée</th>
+                                        <th style="width:13%">Expéditeur</th>
+                                        <th style="width:19%">Objet</th>
+                                        <th style="width:10%">Type</th>
+                                        <th style="width:10%">Date échéance</th>
+                                        <th style="width:10%">Date rappel</th>
+                                        <th style="width:10%">Jours restants</th>
+                                        <th style="width:9%">État courrier</th>
+                                        <th style="width:10%">Alerte</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <t t-foreach="courriers" t-as="c">
+                                        <tr>
+                                            <td><t t-esc="c['name']"/></td>
+                                            <td><t t-esc="c['date_arrivee']"/></td>
+                                            <td><t t-esc="c['expediteur']"/></td>
+                                            <td><t t-esc="c['sujet']"/></td>
+                                            <td><t t-esc="c['type_courrier']"/></td>
+                                            <td>
+                                                <t t-if="c['alerte'] == 'danger'">
+                                                    <span style="color:red; font-weight:bold;">
+                                                        <t t-esc="c['date_echeance']"/>
+                                                    </span>
+                                                </t>
+                                                <t t-else="">
+                                                    <t t-esc="c['date_echeance']"/>
+                                                </t>
+                                            </td>
+                                            <td><t t-esc="c['date_rappel']"/></td>
+                                            <td style="text-align:center;">
+                                                <t t-if="c['jours_restants'] &lt; 0">
+                                                    <span style="color:red; font-weight:bold;">
+                                                        <t t-esc="c['jours_restants']"/> j
+                                                    </span>
+                                                </t>
+                                                <t t-elif="c['jours_restants'] &lt;= 3">
+                                                    <span style="color:#856404; font-weight:bold;">
+                                                        <t t-esc="c['jours_restants']"/> j
+                                                    </span>
+                                                </t>
+                                                <t t-else="">
+                                                    <t t-esc="c['jours_restants']"/> j
+                                                </t>
+                                            </td>
+                                            <td><t t-esc="c['state']"/></td>
+                                            <td>
+                                                <t t-if="c['alerte'] == 'danger'">
+                                                    <span style="color:red; font-weight:bold;">En retard</span>
+                                                </t>
+                                                <t t-elif="c['alerte'] == 'warning'">
+                                                    <span style="color:#856404; font-weight:bold;">Urgent</span>
+                                                </t>
+                                                <t t-else="">
+                                                    <span style="color:#004085;">En cours</span>
+                                                </t>
+                                            </td>
+                                        </tr>
+                                    </t>
+                                </tbody>
+                            </table>
+
+                            <p style="font-size:10px; color:#666; margin-top:8px; font-style:italic;">
+                                * Date de rappel = mi-délai entre la date d'arrivée et la date d'échéance.
+                                Les courriers marqués "En retard" ont dépassé leur date d'échéance sans réponse.
+                            </p>
+                        </t>
+
+                        <div class="row mt-5">
+                            <div class="col-4 text-center">
+                                <p>Agent BOC</p><br/><br/>
+                                <p>___________________________</p>
+                            </div>
+                            <div class="col-4 text-center">
+                                <p>Responsable BOC</p><br/><br/>
+                                <p>___________________________</p>
+                            </div>
+                            <div class="col-4 text-center">
+                                <p>Directeur</p><br/><br/>
+                                <p>___________________________</p>
+                            </div>
+                        </div>
+
+                    </div>
+                </t>
+            </t>
+        </t>
+    </template>
+
+</odoo>

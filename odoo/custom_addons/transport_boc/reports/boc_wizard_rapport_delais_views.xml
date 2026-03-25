@@ -60,6 +60,87 @@
         <field name="target">new</field>
     </record>
 
+    <!-- ══════════════════════════════════════════════════
+         WIZARD — BORDEREAUX DE TRANSMISSION
+    ══════════════════════════════════════════════════ -->
+    <record id="view_boc_wizard_bordereau_form" model="ir.ui.view">
+        <field name="name">boc.wizard.bordereau.form</field>
+        <field name="model">boc.wizard.bordereau</field>
+        <field name="arch" type="xml">
+            <form string="Bordereaux de Transmission">
+                <group>
+                    <group string="Période">
+                        <field name="date_debut"/>
+                        <field name="date_fin"/>
+                    </group>
+                    <group string="Type de bordereau">
+                        <field name="type_bordereau"/>
+                    </group>
+                </group>
+
+                <group invisible="type_bordereau != 'interne_transfere'">
+                    <div class="alert alert-info" role="alert">
+                        <strong>Courriers internes transférés</strong> — Liste des courriers
+                        internes dont la diffusion aux services a été effectuée (état : Transféré,
+                        Accusé de réception ou Traité).
+                    </div>
+                </group>
+                <group invisible="type_bordereau != 'interne_non_transfere'">
+                    <div class="alert alert-warning" role="alert">
+                        <strong>Courriers internes non transférés</strong> — Courriers internes
+                        enregistrés mais dont la transmission aux services est encore en attente.
+                    </div>
+                </group>
+                <group invisible="type_bordereau != 'externe_transfere'">
+                    <div class="alert alert-info" role="alert">
+                        <strong>Courriers externes transférés</strong> — Liste des courriers
+                        externes dont la diffusion aux services concernés a été réalisée.
+                    </div>
+                </group>
+                <group invisible="type_bordereau != 'externe_non_transfere'">
+                    <div class="alert alert-warning" role="alert">
+                        <strong>Courriers externes non transférés</strong> — Courriers externes
+                        enregistrés mais dont la transmission aux services est encore en attente.
+                    </div>
+                </group>
+                <group invisible="type_bordereau != 'rappel_echeance'">
+                    <div class="alert alert-danger" role="alert">
+                        <strong>Rappels échéance (mi-délai)</strong> — Courriers nécessitant
+                        une réponse, non encore traités, avec calcul du délai restant.
+                        Inclut un récapitulatif des alertes (en retard / urgent / en cours).
+                    </div>
+                </group>
+
+                <footer>
+                    <button name="action_generer_bordereau"
+                            string="Générer le bordereau PDF"
+                            type="object"
+                            class="btn-primary"/>
+                    <button string="Annuler" class="btn-secondary" special="cancel"/>
+                </footer>
+            </form>
+        </field>
+    </record>
+
+    <!-- Action wizard bordereaux -->
+    <record id="action_boc_wizard_bordereau" model="ir.actions.act_window">
+        <field name="name">Bordereaux de Transmission</field>
+        <field name="res_model">boc.wizard.bordereau</field>
+        <field name="view_mode">form</field>
+        <field name="target">new</field>
+    </record>
+
+    <!-- Droits d'accès wizard bordereaux -->
+    <record id="access_boc_wizard_bordereau" model="ir.model.access">
+        <field name="name">boc.wizard.bordereau.access</field>
+        <field name="model_id" ref="model_boc_wizard_bordereau"/>
+        <field name="group_id" ref="base.group_user"/>
+        <field name="perm_read" eval="1"/>
+        <field name="perm_write" eval="1"/>
+        <field name="perm_create" eval="1"/>
+        <field name="perm_unlink" eval="1"/>
+    </record>
+
     <!-- Droits d'accès wizard -->
     <record id="access_boc_wizard_rapport_delais" model="ir.model.access">
         <field name="name">boc.wizard.rapport.delais.access</field>

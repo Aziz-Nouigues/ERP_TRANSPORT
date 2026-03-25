@@ -91,9 +91,9 @@ class TransportFuelStation(models.Model):
     )
 
     stock_status = fields.Selection([
-        ('ok',      '✅ Normal'),
-        ('low',     '⚠️ Bas'),
-        ('critical','🔴 Critique'),
+        ('ok',      'Normal'),
+        ('low',     'Bas'),
+        ('critical','Critique'),
     ], string='État stock',
        compute='_compute_stock_percentage',
        store=True

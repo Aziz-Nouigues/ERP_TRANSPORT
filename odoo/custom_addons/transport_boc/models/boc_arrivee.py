@@ -151,14 +151,7 @@ class BocCourrierArrivee(models.Model):
         compute='_compute_nb_transmissions',
     )
 
-
-    # ── PIÈCES JOINTES (géré par mail.thread) ────────────────────
-    # Les PJ sont accessibles via le chatter standard d'Odoo
-
     # ── GED (Gestion Électronique des Documents) ─────────────────
-    # Intégration avec une GED externe open source (Alfresco, Mayan EDMS, Nextcloud…)
-    # La mise en place de la GED ne fait pas partie du présent marché.
-    # Ces champs permettent le lien entre le courrier et le document archivé dans la GED.
     ged_document_ref = fields.Char(
         string='Référence GED',
         copy=False,
@@ -184,37 +177,6 @@ class BocCourrierArrivee(models.Model):
        copy=False,
        tracking=True,
     )
-
-    def action_ouvrir_ged(self):
-        """Ouvrir le document dans la GED externe"""
-        self.ensure_one()
-        if not self.ged_url:
-            raise ValidationError(
-                "Aucun lien GED n'est renseigné pour ce courrier.\n"
-                "Veuillez d'abord archiver le document dans la GED et renseigner le lien."
-            )
-        return {
-            'type': 'ir.actions.act_url',
-            'url': self.ged_url,
-            'target': 'new',
-        }
-
-    def action_marquer_archive_ged(self):
-        """Marquer le courrier comme archivé dans la GED"""
-        for rec in self:
-            if not rec.ged_document_ref:
-                raise ValidationError(
-                    "Veuillez renseigner la référence GED avant de marquer comme archivé."
-                )
-            rec.write({
-                'ged_archive_status': 'archive',
-                'ged_archive_date': fields.Date.today(),
-            })
-
-    def action_restaurer_ged(self):
-        """Marquer le document comme restauré depuis la GED"""
-        for rec in self:
-            rec.write({'ged_archive_status': 'restaure'})
 
     # ── ALERTES ──────────────────────────────────────────────────
     en_retard = fields.Boolean(
@@ -271,13 +233,45 @@ class BocCourrierArrivee(models.Model):
             rec.nb_transmissions = len(rec.transmission_ids)
 
     # ═══════════════════════════════════════════════════════════
-    # ONCHANGE
+    # ONCHANGE — DYNAMIQUE SELON LE TYPE
     # ═══════════════════════════════════════════════════════════
+
+    @api.onchange('type_arrivee')
+    def _onchange_type_arrivee(self):
+        """
+        Quand le type change (externe ↔ interne) :
+          1. Vider l'organisme pour forcer un nouveau choix cohérent
+          2. Retourner un domaine dynamique sur organisme_id
+          3. Vider les champs facture si on passe en interne
+        """
+        # 1. Vider l'organisme et le nom libre pour cohérence
+        self.organisme_id = False
+        self.expediteur_nom = False
+
+        # 2. Si on passe en interne, les factures n'ont pas de sens
+        if self.type_arrivee == 'interne':
+            self.reference_facture = False
+            self.montant_facture = 0.0
+            self.fournisseur = False
+
+        # 3. Retourner le domaine dynamique selon le type
+        if self.type_arrivee == 'externe':
+            domain = {'organisme_id': [('type_organisme', '=', 'externe')]}
+        else:
+            domain = {'organisme_id': [('type_organisme', '=', 'interne')]}
+
+        return {'domain': domain}
 
     @api.onchange('sujet_id')
     def _onchange_sujet_id(self):
         if self.sujet_id:
             self.sujet = self.sujet_id.name
+
+    @api.onchange('organisme_id')
+    def _onchange_organisme_id(self):
+        """Vider le nom libre si un organisme est sélectionné"""
+        if self.organisme_id:
+            self.expediteur_nom = False
 
     # ═══════════════════════════════════════════════════════════
     # CONTRAINTES
@@ -294,6 +288,32 @@ class BocCourrierArrivee(models.Model):
                         "postérieure à la date d'arrivée (%s)."
                         % (rec.date_courrier, rec.date_arrivee.date())
                     )
+
+    @api.constrains('organisme_id', 'type_arrivee')
+    def _check_organisme_type_coherence(self):
+        """
+        Vérifier la cohérence entre le type d'arrivée et le type d'organisme.
+        Un courrier externe doit avoir un organisme externe (ou aucun organisme).
+        Un courrier interne doit avoir un organisme interne (ou aucun organisme).
+        """
+        for rec in self:
+            if not rec.organisme_id:
+                continue
+            org_type = rec.organisme_id.type_organisme
+            if rec.type_arrivee == 'externe' and org_type == 'interne':
+                raise ValidationError(
+                    "Incohérence : un courrier EXTERNE ne peut pas avoir "
+                    "un organisme expéditeur de type INTERNE.\n"
+                    "Organisme sélectionné : %s (type : interne)"
+                    % rec.organisme_id.name
+                )
+            if rec.type_arrivee == 'interne' and org_type == 'externe':
+                raise ValidationError(
+                    "Incohérence : un courrier INTERNE ne peut pas avoir "
+                    "un organisme expéditeur de type EXTERNE.\n"
+                    "Organisme sélectionné : %s (type : externe)"
+                    % rec.organisme_id.name
+                )
 
     @api.constrains('reference_facture', 'fournisseur', 'montant_facture')
     def _check_doublon_facture(self):
@@ -314,6 +334,41 @@ class BocCourrierArrivee(models.Model):
                     "Risque de double facturation !"
                     % (rec.reference_facture, rec.fournisseur, doublon.name)
                 )
+
+    # ═══════════════════════════════════════════════════════════
+    # ACTIONS GED
+    # ═══════════════════════════════════════════════════════════
+
+    def action_ouvrir_ged(self):
+        """Ouvrir le document dans la GED externe"""
+        self.ensure_one()
+        if not self.ged_url:
+            raise ValidationError(
+                "Aucun lien GED n'est renseigné pour ce courrier.\n"
+                "Veuillez d'abord archiver le document dans la GED et renseigner le lien."
+            )
+        return {
+            'type': 'ir.actions.act_url',
+            'url': self.ged_url,
+            'target': 'new',
+        }
+
+    def action_marquer_archive_ged(self):
+        """Marquer le courrier comme archivé dans la GED"""
+        for rec in self:
+            if not rec.ged_document_ref:
+                raise ValidationError(
+                    "Veuillez renseigner la référence GED avant de marquer comme archivé."
+                )
+            rec.write({
+                'ged_archive_status': 'archive',
+                'ged_archive_date': fields.Date.today(),
+            })
+
+    def action_restaurer_ged(self):
+        """Marquer le document comme restauré depuis la GED"""
+        for rec in self:
+            rec.write({'ged_archive_status': 'restaure'})
 
     # ═══════════════════════════════════════════════════════════
     # ACTIONS WORKFLOW

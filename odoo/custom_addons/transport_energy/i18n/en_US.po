@@ -2230,17 +2230,17 @@ msgstr "Lubricant Type"
 
 #. module: transport_energy
 #: model_terms:ir.ui.view,arch_db:transport_energy.view_jaugeage_search
-msgid "⚠️ Attention"
+msgid "Attention"
 msgstr "⚠️ Warning"
 
 #. module: transport_energy
 #: model:ir.model.fields.selection,name:transport_energy.selection__transport_jaugeage__niveau_alerte__attention
-msgid "⚠️ Attention (1-3%)"
+msgid "Attention (1-3%)"
 msgstr "⚠️ Warning (1-3%)"
 
 #. module: transport_energy
 #: model:ir.model.fields.selection,name:transport_energy.selection__transport_fuel_station__stock_status__low
-msgid "⚠️ Bas"
+msgid "Bas"
 msgstr "⚠️ Low"
 
 #. module: transport_energy
@@ -2270,7 +2270,7 @@ msgstr "⚡ STEG (Electricity)"
 
 #. module: transport_energy
 #: model:ir.model.fields.selection,name:transport_energy.selection__transport_agilis_carte__statut__expiree
-msgid "⚫ Expirée"
+msgid "Expirée"
 msgstr "⚫ Expired"
 
 #. module: transport_energy
@@ -2285,18 +2285,18 @@ msgstr "⛽ Usages"
 
 #. module: transport_energy
 #: model:ir.model.fields.selection,name:transport_energy.selection__transport_agilis_carte__statut__active
-msgid "✅ Active"
-msgstr "✅ Active"
+msgid "Active"
+msgstr "Active"
 
 #. module: transport_energy
 #: model_terms:ir.ui.view,arch_db:transport_energy.view_agilis_carte_form
-msgid "✅ Activer"
+msgid "Activer"
 msgstr "✅ Activate"
 
 #. module: transport_energy
 #: model_terms:ir.ui.view,arch_db:transport_energy.view_agilis_carte_search
-msgid "✅ Actives"
-msgstr "✅ Active"
+msgid "Actives"
+msgstr "Active"
 
 #. module: transport_energy
 #: model_terms:ir.ui.view,arch_db:transport_energy.template_excessif
@@ -2305,23 +2305,23 @@ msgstr "✅ No bus with excessive consumption detected!"
 
 #. module: transport_energy
 #: model:ir.model.fields.selection,name:transport_energy.selection__fleet_vehicle__odometer_status__ok
-msgid "✅ Fonctionnel"
+msgid "Fonctionnel"
 msgstr "✅ Functional"
 
 #. module: transport_energy
 #: model:ir.model.fields.selection,name:transport_energy.selection__transport_fuel_station__stock_status__ok
 #: model_terms:ir.ui.view,arch_db:transport_energy.view_jaugeage_search
-msgid "✅ Normal"
-msgstr "✅ Normal"
+msgid "Normal"
+msgstr "Normal"
 
 #. module: transport_energy
 #: model:ir.model.fields.selection,name:transport_energy.selection__transport_jaugeage__niveau_alerte__normal
-msgid "✅ Normal (< 1%)"
-msgstr "✅ Normal (< 1%)"
+msgid "Normal (< 1%)"
+msgstr "Normal (< 1%)"
 
 #. module: transport_energy
 #: model:ir.model.fields.selection,name:transport_energy.selection__fleet_vehicle__odometer_status__broken
-msgid "❌ En panne"
+msgid "En panne"
 msgstr "❌ Broken"
 
 #. module: transport_energy
@@ -2366,12 +2366,12 @@ msgstr "📊 Comparison with N-1"
 
 #. module: transport_energy
 #: model:ir.model.fields.selection,name:transport_energy.selection__fleet_vehicle__odometer_status__replaced
-msgid "🔄 Remplacé / Réparé"
+msgid "Remplacé / Réparé"
 msgstr "🔄 Replaced / Repaired"
 
 #. module: transport_energy
 #: model:ir.model.fields.selection,name:transport_energy.selection__transport_bon_lubrifiant_ligne__type_operation__vidange
-msgid "🔄 Vidange (رemplacement complet)"
+msgid "Vidange (remplacement complet)"
 msgstr "🔄 Oil Change (complete replacement)"
 
 #. module: transport_energy
@@ -2381,23 +2381,23 @@ msgstr "🔴 Block"
 
 #. module: transport_energy
 #: model:ir.model.fields.selection,name:transport_energy.selection__transport_agilis_carte__statut__bloquee
-msgid "🔴 Bloquée"
+msgid "Bloquée"
 msgstr "🔴 Blocked"
 
 #. module: transport_energy
 #: model_terms:ir.ui.view,arch_db:transport_energy.view_agilis_carte_search
-msgid "🔴 Bloquées"
+msgid "Bloquées"
 msgstr "🔴 Blocked"
 
 #. module: transport_energy
 #: model:ir.model.fields.selection,name:transport_energy.selection__transport_fuel_station__stock_status__critical
 #: model_terms:ir.ui.view,arch_db:transport_energy.view_jaugeage_search
-msgid "🔴 Critique"
+msgid "Critique"
 msgstr "🔴 Critical"
 
 #. module: transport_energy
 #: model:ir.model.fields.selection,name:transport_energy.selection__transport_jaugeage__niveau_alerte__critique
-msgid "🔴 Critique (> 3%)"
+msgid "Critique (> 3%)"
 msgstr "🔴 Critical (> 3%)"
 
 #. module: transport_energy

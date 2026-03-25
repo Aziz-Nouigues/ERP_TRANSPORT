@@ -66,7 +66,9 @@
                                placeholder="Expliquer l'écart..."/>
                     </group>
 
-                    <field name="notes" placeholder="Notes..."/>
+                    <group string="Notes">
+                        <field name="notes" placeholder="Notes..." nolabel="1" colspan="2" widget="text"/>
+                    </group>
                 </sheet>
 
                 <chatter/>

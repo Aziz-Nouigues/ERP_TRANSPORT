@@ -63,7 +63,9 @@
                         </group>
                     </group>
 
-                    <field name="notes" placeholder="Notes..."/>
+                    <group string="Notes">
+                        <field name="notes" placeholder="Notes..." nolabel="1" colspan="2" widget="text"/>
+                    </group>
 
                     <group string="Lien Bureau d'Ordre">
                         <field name="boc_arrivee_id"/>

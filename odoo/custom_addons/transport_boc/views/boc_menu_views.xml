@@ -61,32 +61,6 @@
               action="action_boc_transmission"
               sequence="10"/>
 
-    <!-- Internes — CDC : جدول الواردات الداخلية -->
-    <menuitem id="menu_boc_transmission_internes_transferees"
-              name="Internes transférées"
-              parent="menu_boc_transmission_root"
-              action="action_boc_transmission_transferees"
-              sequence="20"/>
-
-    <menuitem id="menu_boc_transmission_internes_non_transferees"
-              name="Internes non transférées"
-              parent="menu_boc_transmission_root"
-              action="action_boc_transmission_non_transferees"
-              sequence="30"/>
-
-    <!-- Externes — CDC : جدول الواردات الخارجية -->
-    <menuitem id="menu_boc_transmission_externes_realisees"
-              name="Externes réalisées"
-              parent="menu_boc_transmission_root"
-              action="action_boc_transmission_externes_transferees"
-              sequence="40"/>
-
-    <menuitem id="menu_boc_transmission_externes_non_realisees"
-              name="Externes non réalisées"
-              parent="menu_boc_transmission_root"
-              action="action_boc_transmission_externes_non_transferees"
-              sequence="50"/>
-
     <!-- ══════════════════════════════════════════════════
          4. ÉDITIONS
          CDC :
@@ -100,11 +74,17 @@
               parent="menu_boc_root"
               sequence="40"/>
 
+    <menuitem id="menu_boc_rapport_bordereaux"
+              name="Bordereaux de transmission"
+              parent="menu_boc_editions"
+              action="action_boc_wizard_bordereau"
+              sequence="10"/>
+
     <menuitem id="menu_boc_rapport_delais"
               name="Suivi des délais de traitement"
               parent="menu_boc_editions"
               action="action_boc_wizard_rapport_delais"
-              sequence="10"/>
+              sequence="20"/>
 
     <!-- ══════════════════════════════════════════════════
          5. CONFIGURATION
