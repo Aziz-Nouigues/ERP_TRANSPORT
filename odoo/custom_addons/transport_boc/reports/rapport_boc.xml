@@ -12,6 +12,7 @@
         <field name="report_file">transport_boc.rapport_boc_arrivee</field>
         <field name="binding_model_id" ref="model_boc_courrier_arrivee"/>
         <field name="binding_type">report</field>
+
     </record>
 
     <template id="rapport_boc_arrivee">
@@ -128,6 +129,7 @@
         <field name="report_file">transport_boc.rapport_boc_depart</field>
         <field name="binding_model_id" ref="model_boc_courrier_depart"/>
         <field name="binding_type">report</field>
+
     </record>
 
     <template id="rapport_boc_depart">
@@ -206,6 +208,7 @@
         <field name="report_type">qweb-pdf</field>
         <field name="report_name">transport_boc.rapport_boc_echus</field>
         <field name="report_file">transport_boc.rapport_boc_echus</field>
+
     </record>
 
     <template id="rapport_boc_echus">
@@ -292,6 +295,7 @@
         <field name="report_type">qweb-pdf</field>
         <field name="report_name">transport_boc.rapport_boc_depasse</field>
         <field name="report_file">transport_boc.rapport_boc_depasse</field>
+
     </record>
 
     <template id="rapport_boc_depasse">
@@ -377,6 +381,7 @@
         <field name="report_type">qweb-pdf</field>
         <field name="report_name">transport_boc.rapport_boc_delais</field>
         <field name="report_file">transport_boc.rapport_boc_delais</field>
+
     </record>
 
     <template id="rapport_boc_delais">

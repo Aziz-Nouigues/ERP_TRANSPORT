@@ -24,6 +24,36 @@ class BocTypeCourrier(models.Model):
         string='Notes',
     )
 
+    # ── PÉRIODICITÉ ──────────────────────────────────────────────
+    periodicite = fields.Selection([
+        ('mensuel',     'Mensuel'),
+        ('semestriel',  'Semestriel'),
+        ('annuel',      'Annuel'),
+    ], string='Périodicité',
+       help='Si renseigné, ce type de courrier est périodique et génère des rappels automatiques.',
+    )
+    est_periodique = fields.Boolean(
+        string='Courrier périodique',
+        compute='_compute_est_periodique',
+        store=True,
+    )
+    # Délai de rappel avant échéance (en jours) pour les courriers périodiques
+    delai_rappel_periodique = fields.Integer(
+        string='Rappel avant échéance (jours)',
+        default=7,
+        help='Nombre de jours avant l\'échéance pour envoyer le rappel périodique.',
+    )
+    # Description des documents attendus pour ce type périodique
+    documents_attendus = fields.Text(
+        string='Documents attendus',
+        help='Liste des documents/états financiers attendus pour ce courrier périodique.',
+    )
+
+    @api.depends('periodicite')
+    def _compute_est_periodique(self):
+        for rec in self:
+            rec.est_periodique = bool(rec.periodicite)
+
 
 class BocOrganisme(models.Model):
     """Organismes internes et externes (expéditeurs / destinataires)"""

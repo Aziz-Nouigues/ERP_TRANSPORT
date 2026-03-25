@@ -1,0 +1,106 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data noupdate="1">
+
+        <!-- ════════════════════════════════════════════════════
+             CRON — Rappels automatiques courriers périodiques
+             Fréquence : quotidienne
+        ════════════════════════════════════════════════════ -->
+        <record id="cron_boc_rappels_periodiques" model="ir.cron">
+            <field name="name">BOC — Rappels courriers périodiques</field>
+            <field name="model_id" ref="model_boc_courrier_periodique"/>
+            <field name="state">code</field>
+            <field name="code">model._cron_envoyer_rappels_periodiques()</field>
+            <field name="interval_number">1</field>
+            <field name="interval_type">days</field>
+            <field name="active" eval="True"/>
+            <field name="user_id" ref="base.user_root"/>
+        </record>
+
+        <!-- ════════════════════════════════════════════════════
+             TYPES DE COURRIER PÉRIODIQUES PRÉDÉFINIS
+        ════════════════════════════════════════════════════ -->
+
+        <record id="type_courrier_liquidite_mensuel" model="boc.type.courrier">
+            <field name="name">Situation de liquidité mensuelle</field>
+            <field name="code">LIQ-M</field>
+            <field name="periodicite">mensuel</field>
+            <field name="delai_rappel_periodique">7</field>
+            <field name="documents_attendus">Situation de liquidité — à transmettre avant le 15 du mois suivant.</field>
+            <field name="actif" eval="True"/>
+        </record>
+
+        <record id="type_courrier_fiche7_mensuel" model="boc.type.courrier">
+            <field name="name">Fiche 7 — Effectifs et masse salariale</field>
+            <field name="code">F7-M</field>
+            <field name="periodicite">mensuel</field>
+            <field name="delai_rappel_periodique">7</field>
+            <field name="documents_attendus">Fiche 7 : nombre d'effectifs, masse salariale et départs.</field>
+            <field name="actif" eval="True"/>
+        </record>
+
+        <record id="type_courrier_endettement_semestriel" model="boc.type.courrier">
+            <field name="name">Fiches d'endettement et créances (n°12 et 13)</field>
+            <field name="code">END-S</field>
+            <field name="periodicite">semestriel</field>
+            <field name="delai_rappel_periodique">15</field>
+            <field name="documents_attendus">Fiches semestrielles d'endettement et créances.</field>
+            <field name="actif" eval="True"/>
+        </record>
+
+        <record id="type_courrier_nomination_semestriel" model="boc.type.courrier">
+            <field name="name">Nomination aux postes fonctionnels</field>
+            <field name="code">NOM-S</field>
+            <field name="periodicite">semestriel</field>
+            <field name="delai_rappel_periodique">15</field>
+            <field name="documents_attendus">État semestriel des nominations.</field>
+            <field name="actif" eval="True"/>
+        </record>
+
+        <record id="type_courrier_fiche18_annuel" model="boc.type.courrier">
+            <field name="name">Fiche 18 — Rapport annuel</field>
+            <field name="code">F18-A</field>
+            <field name="periodicite">annuel</field>
+            <field name="delai_rappel_periodique">30</field>
+            <field name="documents_attendus">Rapport annuel.</field>
+            <field name="actif" eval="True"/>
+        </record>
+
+        <record id="type_courrier_contrat_prog_annuel" model="boc.type.courrier">
+            <field name="name">Contrat programme</field>
+            <field name="code">CP-A</field>
+            <field name="periodicite">annuel</field>
+            <field name="delai_rappel_periodique">30</field>
+            <field name="documents_attendus">Contrat programme annuel.</field>
+            <field name="actif" eval="True"/>
+        </record>
+
+        <record id="type_courrier_budget_annuel" model="boc.type.courrier">
+            <field name="name">Budget prévisionnel</field>
+            <field name="code">BUD-A</field>
+            <field name="periodicite">annuel</field>
+            <field name="delai_rappel_periodique">30</field>
+            <field name="documents_attendus">Budget prévisionnel annuel.</field>
+            <field name="actif" eval="True"/>
+        </record>
+
+        <record id="type_courrier_bilan_annuel" model="boc.type.courrier">
+            <field name="name">Bilan et notes aux états financiers</field>
+            <field name="code">BIL-A</field>
+            <field name="periodicite">annuel</field>
+            <field name="delai_rappel_periodique">30</field>
+            <field name="documents_attendus">Bilan annuel et états financiers.</field>
+            <field name="actif" eval="True"/>
+        </record>
+
+        <record id="type_courrier_rapport_activite_annuel" model="boc.type.courrier">
+            <field name="name">Rapport d'activité annuel</field>
+            <field name="code">RAP-A</field>
+            <field name="periodicite">annuel</field>
+            <field name="delai_rappel_periodique">30</field>
+            <field name="documents_attendus">Rapport d'activité annuel.</field>
+            <field name="actif" eval="True"/>
+        </record>
+
+    </data>
+</odoo>

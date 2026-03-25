@@ -4,127 +4,128 @@
     <!-- ══════════════════════════════════════════════════
          MENU RACINE
     ══════════════════════════════════════════════════ -->
+    <!-- Visible par tous les utilisateurs BOC -->
     <menuitem id="menu_boc_root"
               name="Bureau d'Ordre"
               sequence="20"
+              groups="transport_boc.group_agent_boc"
               web_icon="transport_boc,static/description/icon.png"/>
 
     <!-- ══════════════════════════════════════════════════
-         1. COURRIER ARRIVÉE
-         CDC : إستقبال الإرساليّات الداخلية / الخارجية
+         1. COURRIER ARRIVÉE — Agent BOC et plus
     ══════════════════════════════════════════════════ -->
     <menuitem id="menu_boc_arrivee_root"
               name="Courrier Arrivée"
               parent="menu_boc_root"
+              groups="transport_boc.group_agent_boc"
               sequence="10"/>
 
     <menuitem id="menu_boc_arrivee"
               name="Tous les courriers"
               parent="menu_boc_arrivee_root"
               action="action_boc_arrivee"
+              groups="transport_boc.group_agent_boc"
               sequence="10"/>
 
-    <menuitem id="menu_boc_arrivee_sans_suite"
-              name="Sans suite / En retard"
-              parent="menu_boc_arrivee_root"
-              action="action_boc_arrivee_sans_suite"
-              sequence="20"/>
+
 
     <!-- ══════════════════════════════════════════════════
-         2. COURRIER DÉPART
-         CDC : إرسال البريد
+         2. COURRIER DÉPART — Agent BOC et plus
     ══════════════════════════════════════════════════ -->
     <menuitem id="menu_boc_depart_root"
               name="Courrier Départ"
               parent="menu_boc_root"
+              groups="transport_boc.group_agent_boc"
               sequence="20"/>
 
     <menuitem id="menu_boc_depart"
               name="Tous les courriers"
               parent="menu_boc_depart_root"
               action="action_boc_depart"
+              groups="transport_boc.group_agent_boc"
               sequence="10"/>
 
     <!-- ══════════════════════════════════════════════════
-         3. TRANSMISSIONS / DIFFUSION
-         CDC : Diffusion courriers aux services
-               البحث في الصادرات / الواردات
+         3. TRANSMISSIONS — Agent BOC et plus
     ══════════════════════════════════════════════════ -->
     <menuitem id="menu_boc_transmission_root"
               name="Transmissions"
               parent="menu_boc_root"
+              groups="transport_boc.group_agent_boc"
               sequence="30"/>
 
     <menuitem id="menu_boc_transmission_all"
               name="Toutes les transmissions"
               parent="menu_boc_transmission_root"
               action="action_boc_transmission"
+              groups="transport_boc.group_agent_boc"
               sequence="10"/>
 
     <!-- ══════════════════════════════════════════════════
-         4. ÉDITIONS
-         CDC :
-           - Bordereau suivi courrier avec note de rappel (mi-délai)
-           - État courriers échus (sans suite)
-           - État courriers traités avec dépassement délai
-           - Édition des délais de traitement
+         4. ÉDITIONS — Responsable BOC et plus uniquement
     ══════════════════════════════════════════════════ -->
     <menuitem id="menu_boc_editions"
               name="Editions"
               parent="menu_boc_root"
+              groups="transport_boc.group_responsable_boc"
               sequence="40"/>
 
     <menuitem id="menu_boc_rapport_bordereaux"
               name="Bordereaux de transmission"
               parent="menu_boc_editions"
               action="action_boc_wizard_bordereau"
+              groups="transport_boc.group_responsable_boc"
               sequence="10"/>
 
     <menuitem id="menu_boc_rapport_delais"
               name="Suivi des délais de traitement"
               parent="menu_boc_editions"
               action="action_boc_wizard_rapport_delais"
+              groups="transport_boc.group_responsable_boc"
               sequence="20"/>
 
     <!-- ══════════════════════════════════════════════════
-         5. CONFIGURATION
-         CDC : التّصرّف في مكتب الضّبط -> معطيات عامّة
-               Types courrier, organismes, annotations,
-               sujets, instructions, année exercice
+         5. CONFIGURATION — Responsable BOC et plus uniquement
     ══════════════════════════════════════════════════ -->
     <menuitem id="menu_boc_config"
               name="Configuration"
               parent="menu_boc_root"
+              groups="transport_boc.group_responsable_boc"
               sequence="99"/>
 
     <menuitem id="menu_boc_type_courrier"
               name="Types de courrier"
               parent="menu_boc_config"
               action="action_boc_type_courrier"
+              groups="transport_boc.group_responsable_boc"
               sequence="10"/>
 
     <menuitem id="menu_boc_organisme"
               name="Organismes"
               parent="menu_boc_config"
               action="action_boc_organisme"
+              groups="transport_boc.group_responsable_boc"
               sequence="20"/>
 
     <menuitem id="menu_boc_sujet"
               name="Sujets prédéfinis"
               parent="menu_boc_config"
               action="action_boc_sujet"
+              groups="transport_boc.group_responsable_boc"
               sequence="30"/>
 
     <menuitem id="menu_boc_instruction"
               name="Instructions prédéfinies"
               parent="menu_boc_config"
               action="action_boc_instruction"
+              groups="transport_boc.group_responsable_boc"
               sequence="40"/>
 
     <menuitem id="menu_boc_annotation"
               name="Annotations"
               parent="menu_boc_config"
               action="action_boc_annotation"
+              groups="transport_boc.group_responsable_boc"
               sequence="50"/>
 
 </odoo>

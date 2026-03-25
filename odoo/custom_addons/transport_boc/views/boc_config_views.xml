@@ -11,6 +11,8 @@
             <list string="Types de courrier">
                 <field name="code"/>
                 <field name="name"/>
+                <field name="periodicite"/>
+                <field name="est_periodique" optional="show"/>
                 <field name="actif"/>
             </list>
         </field>
@@ -23,9 +25,20 @@
             <form string="Type de Courrier">
                 <sheet>
                     <group>
-                        <field name="code"/>
-                        <field name="name"/>
-                        <field name="actif"/>
+                        <group string="Identification">
+                            <field name="code"/>
+                            <field name="name"/>
+                            <field name="actif"/>
+                        </group>
+                        <group string="Périodicité">
+                            <field name="periodicite"/>
+                            <field name="est_periodique" readonly="1" invisible="not periodicite"/>
+                            <field name="delai_rappel_periodique" invisible="not periodicite"/>
+                        </group>
+                    </group>
+                    <group string="Documents attendus" invisible="not periodicite">
+                        <field name="documents_attendus" nolabel="1"
+                               placeholder="Ex: Situation de liquidité, Fiche 7 (effectifs/masse salariale)..."/>
                     </group>
                     <field name="notes" placeholder="Notes..."/>
                 </sheet>
@@ -152,6 +165,185 @@
         <field name="name">Annotations prédéfinies</field>
         <field name="res_model">boc.annotation</field>
         <field name="view_mode">list,form</field>
+    </record>
+
+    <!-- ══════════════════════════════════════════════════
+         COURRIERS PÉRIODIQUES — LISTE
+    ══════════════════════════════════════════════════ -->
+    <record id="view_boc_periodique_list" model="ir.ui.view">
+        <field name="name">boc.courrier.periodique.list</field>
+        <field name="model">boc.courrier.periodique</field>
+        <field name="arch" type="xml">
+            <list string="Courriers Périodiques"
+                  decoration-danger="en_retard == True"
+                  decoration-warning="en_attente_rappel == True and en_retard == False">
+                <field name="name"/>
+                <field name="type_courrier_id"/>
+                <field name="periodicite"/>
+                <field name="organisme_id"/>
+                <field name="responsable_id"/>
+                <field name="prochaine_echeance"/>
+                <field name="date_rappel"/>
+                <field name="nb_courriers"/>
+                <field name="state" widget="badge"
+                       decoration-success="state == 'actif'"
+                       decoration-warning="state == 'suspendu'"
+                       decoration-muted="state == 'clos'"/>
+                <field name="en_retard" invisible="1"/>
+                <field name="en_attente_rappel" invisible="1"/>
+            </list>
+        </field>
+    </record>
+
+    <!-- ══════════════════════════════════════════════════
+         COURRIERS PÉRIODIQUES — FORMULAIRE
+    ══════════════════════════════════════════════════ -->
+    <record id="view_boc_periodique_form" model="ir.ui.view">
+        <field name="name">boc.courrier.periodique.form</field>
+        <field name="model">boc.courrier.periodique</field>
+        <field name="arch" type="xml">
+            <form string="Courrier Périodique">
+
+                <header>
+                    <button name="action_generer_courrier" string="Générer un courrier"
+                            type="object" class="btn-primary"
+                            groups="transport_boc.group_agent_boc"
+                            invisible="state != 'actif'"/>
+                    <button name="action_suspendre" string="Suspendre"
+                            type="object"
+                            groups="transport_boc.group_responsable_boc"
+                            invisible="state != 'actif'"/>
+                    <button name="action_reactiver" string="Réactiver"
+                            type="object" class="btn-secondary"
+                            groups="transport_boc.group_responsable_boc"
+                            invisible="state != 'suspendu'"/>
+                    <button name="action_clore" string="Clore"
+                            type="object"
+                            groups="transport_boc.group_responsable_boc"
+                            invisible="state == 'clos'"/>
+                    <field name="state" widget="statusbar"
+                           statusbar_visible="actif,suspendu,clos"/>
+                </header>
+
+                <sheet>
+                    <!-- Alerte retard -->
+                    <div class="alert alert-danger" role="alert"
+                         invisible="not en_retard">
+                        Ce courrier périodique est <strong>en retard</strong> !
+                        Échéance dépassée : <field name="prochaine_echeance" nolabel="1" readonly="1"/>.
+                    </div>
+                    <!-- Alerte rappel -->
+                    <div class="alert alert-warning" role="alert"
+                         invisible="en_retard or not en_attente_rappel">
+                        <strong>Rappel :</strong> L'échéance de ce courrier périodique approche.
+                        Prochaine échéance : <field name="prochaine_echeance" nolabel="1" readonly="1"/>.
+                    </div>
+
+                    <div class="oe_title">
+                        <h1><field name="name" placeholder="Désignation du courrier périodique..."/></h1>
+                    </div>
+
+                    <group>
+                        <group string="Identification">
+                            <field name="type_courrier_id"
+                                   domain="[('est_periodique','=',True)]"/>
+                            <field name="periodicite" readonly="1"/>
+                            <field name="organisme_id"/>
+                            <field name="responsable_id"/>
+                        </group>
+                        <group string="Calendrier">
+                            <field name="date_debut"/>
+                            <field name="derniere_echeance" readonly="1"/>
+                            <field name="prochaine_echeance" readonly="1"/>
+                            <field name="date_rappel" readonly="1"/>
+                        </group>
+                    </group>
+
+                    <group string="Documents attendus / Notes">
+                        <field name="notes" nolabel="1"
+                               placeholder="Décrire les documents/états attendus pour ce courrier périodique..."/>
+                    </group>
+
+                    <notebook>
+                        <page string="Courriers générés" name="courriers">
+                            <button name="action_voir_courriers"
+                                    string="Voir tous les courriers"
+                                    type="object"
+                                    class="btn-secondary mb-2"
+                                    invisible="nb_courriers == 0"/>
+                            <field name="arrivee_ids" readonly="1">
+                                <list>
+                                    <field name="name"/>
+                                    <field name="date_arrivee"/>
+                                    <field name="sujet"/>
+                                    <field name="date_echeance"/>
+                                    <field name="state" widget="badge"/>
+                                </list>
+                            </field>
+                        </page>
+                    </notebook>
+                </sheet>
+
+                <chatter/>
+            </form>
+        </field>
+    </record>
+
+    <!-- ══════════════════════════════════════════════════
+         COURRIERS PÉRIODIQUES — RECHERCHE
+    ══════════════════════════════════════════════════ -->
+    <record id="view_boc_periodique_search" model="ir.ui.view">
+        <field name="name">boc.courrier.periodique.search</field>
+        <field name="model">boc.courrier.periodique</field>
+        <field name="arch" type="xml">
+            <search>
+                <field name="name" string="Désignation"/>
+                <field name="type_courrier_id" string="Type de courrier"/>
+                <field name="organisme_id" string="Organisme"/>
+                <field name="responsable_id" string="Responsable"/>
+                <separator/>
+                <filter name="en_retard" string="En retard"
+                        domain="[('en_retard','=',True)]"/>
+                <filter name="rappel_aujourd_hui" string="Rappel aujourd'hui"
+                        domain="[('en_attente_rappel','=',True)]"/>
+                <separator/>
+                <filter name="mensuel" string="Mensuel"
+                        domain="[('periodicite','=','mensuel')]"/>
+                <filter name="semestriel" string="Semestriel"
+                        domain="[('periodicite','=','semestriel')]"/>
+                <filter name="annuel" string="Annuel"
+                        domain="[('periodicite','=','annuel')]"/>
+                <separator/>
+                <filter name="actif" string="Actif"
+                        domain="[('state','=','actif')]"/>
+                <group>
+                    <filter name="group_periodicite" string="Périodicité"
+                            context="{'group_by':'periodicite'}"/>
+                    <filter name="group_type" string="Type de courrier"
+                            context="{'group_by':'type_courrier_id'}"/>
+                    <filter name="group_state" string="État"
+                            context="{'group_by':'state'}"/>
+                </group>
+            </search>
+        </field>
+    </record>
+
+    <!-- ══════════════════════════════════════════════════
+         ACTION COURRIERS PÉRIODIQUES
+    ══════════════════════════════════════════════════ -->
+    <record id="action_boc_courrier_periodique" model="ir.actions.act_window">
+        <field name="name">Courriers Périodiques</field>
+        <field name="res_model">boc.courrier.periodique</field>
+        <field name="view_mode">list,form</field>
+        <field name="search_view_id" ref="view_boc_periodique_search"/>
+        <field name="context">{'search_default_actif': 1}</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                Aucun courrier périodique configuré.
+            </p>
+            <p>Créez un modèle de rappel pour les courriers récurrents
+               (mensuel, semestriel, annuel) conformément au décret n°2197 du 7/10/2002.</p>
+        </field>
     </record>
 
 </odoo>

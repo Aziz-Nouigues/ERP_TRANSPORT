@@ -12,15 +12,19 @@
                 <header>
                     <button name="action_enregistrer" string="Enregistrer"
                             type="object" class="btn-primary"
+                            groups="transport_boc.group_agent_boc"
                             invisible="state != 'brouillon'"/>
                     <button name="action_envoyer" string="📨 Marquer Envoyé"
                             type="object" class="btn-success"
+                            groups="transport_boc.group_responsable_boc"
                             invisible="state != 'enregistre'"/>
                     <button name="action_classer" string="Classer"
                             type="object"
+                            groups="transport_boc.group_responsable_boc"
                             invisible="state != 'envoye'"/>
                     <button name="action_reset" string="Remettre en brouillon"
                             type="object"
+                            groups="transport_boc.group_responsable_boc"
                             invisible="state == 'brouillon'"/>
                     <field name="state" widget="statusbar"
                            statusbar_visible="brouillon,enregistre,envoye,classe"/>

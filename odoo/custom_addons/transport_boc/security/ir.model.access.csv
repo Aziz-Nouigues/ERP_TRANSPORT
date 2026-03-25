@@ -23,3 +23,6 @@ access_boc_depart_dir,boc.courrier.depart.dir,model_boc_courrier_depart,transpor
 access_boc_transmission_agent,boc.transmission.agent,model_boc_transmission,transport_boc.group_agent_boc,1,1,1,0
 access_boc_transmission_resp,boc.transmission.resp,model_boc_transmission,transport_boc.group_responsable_boc,1,1,1,1
 access_boc_transmission_dir,boc.transmission.dir,model_boc_transmission,transport_boc.group_directeur_boc,1,1,1,1
+access_boc_periodique_agent,boc.courrier.periodique.agent,model_boc_courrier_periodique,transport_boc.group_agent_boc,1,1,1,0
+access_boc_periodique_resp,boc.courrier.periodique.resp,model_boc_courrier_periodique,transport_boc.group_responsable_boc,1,1,1,1
+access_boc_periodique_dir,boc.courrier.periodique.dir,model_boc_courrier_periodique,transport_boc.group_directeur_boc,1,1,1,1

@@ -19,6 +19,7 @@
         'security/groups.xml',
         'security/ir.model.access.csv',
         'data/sequences.xml',
+        'data/boc_periodique_data.xml',
         'views/boc_config_views.xml',
         'views/boc_arrivee_views.xml',
         'views/boc_depart_views.xml',

@@ -151,6 +151,25 @@ class BocCourrierArrivee(models.Model):
         compute='_compute_nb_transmissions',
     )
 
+    # ── COURRIER PÉRIODIQUE ───────────────────────────────────────
+    periodique_id = fields.Many2one(
+        'boc.courrier.periodique',
+        string='Modèle périodique',
+        copy=False,
+        ondelete='set null',
+        help='Si ce courrier a été généré depuis un modèle périodique.',
+    )
+    est_periodique = fields.Boolean(
+        string='Issu d\'un modèle périodique',
+        compute='_compute_est_periodique_arrivee',
+        store=True,
+    )
+
+    @api.depends('periodique_id')
+    def _compute_est_periodique_arrivee(self):
+        for rec in self:
+            rec.est_periodique = bool(rec.periodique_id)
+
     # ── GED (Gestion Électronique des Documents) ─────────────────
     ged_document_ref = fields.Char(
         string='Référence GED',
@@ -394,6 +413,9 @@ class BocCourrierArrivee(models.Model):
             rec.state = 'traite'
             rec.reponse_fournie = True
             rec.date_reponse = fields.Date.today()
+            # Si issu d'un modèle périodique, mettre à jour la dernière échéance
+            if rec.periodique_id and rec.date_echeance:
+                rec.periodique_id.derniere_echeance = rec.date_echeance
 
     def action_classer(self):
         """Archiver / Classer le courrier"""
