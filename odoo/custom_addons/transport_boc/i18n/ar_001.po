@@ -1,4 +1,4 @@
-# Traduction du module transport_boc — العربية
+# Translation of Odoo Server.
 # This file contains the translation of the following modules:
 # 	* transport_boc
 #
@@ -6,42 +6,249 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Odoo Server 19.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-03-11 10:54+0000\n"
-"PO-Revision-Date: 2026-03-11 10:54+0000\n"
+"POT-Creation-Date: 2026-03-25 22:04+0000\n"
+"PO-Revision-Date: 2026-03-25 22:04+0000\n"
 "Last-Translator: \n"
 "Language-Team: \n"
-"Language: ar_001\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
-"Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"Content-Transfer-Encoding: \n"
+"Plural-Forms: \n"
+
+#. module: transport_boc
+#: model_terms:ir.ui.view,arch_db:transport_boc.bordereau_rappel_echeance
+msgid ""
+"* Date de rappel = mi-délai entre la date d'arrivée et la date d'échéance.\n"
+"                                Les courriers marqués \"En retard\" ont dépassé leur date d'échéance sans réponse."
+msgstr ""
+
+#. module: transport_boc
+#: model_terms:ir.ui.view,arch_db:transport_boc.bordereau_rappel_echeance
+msgid "<span style=\"color:#004085;\">En cours</span>"
+msgstr "<span style=\"color:#004085;\">قيد التنفيذ</span>"
+
+#. module: transport_boc
+#: model_terms:ir.ui.view,arch_db:transport_boc.bordereau_rappel_echeance
+msgid "<span style=\"color:#856404; font-weight:bold;\">Urgent</span>"
+msgstr "<span style=\"color:#856404; font-weight:bold;\">عاجل</span>"
+
+#. module: transport_boc
+#: model_terms:ir.ui.view,arch_db:transport_boc.rapport_boc_delais
+msgid "<span style=\"color:gray;\">— En cours</span>"
+msgstr "<span style=\"color:gray;\">— قيد التنفيذ</span>"
+
+#. module: transport_boc
+#: model_terms:ir.ui.view,arch_db:transport_boc.rapport_boc_delais
+msgid "<span style=\"color:green; font-weight:bold;\">Dans les délais</span>"
+msgstr "<span style=\"color:green; font-weight:bold;\">في الأجل</span>"
+
+#. module: transport_boc
+#: model_terms:ir.ui.view,arch_db:transport_boc.rapport_boc_delais
+msgid "<span style=\"color:orange; font-weight:bold;\">Hors délai</span>"
+msgstr "<span style=\"color:orange; font-weight:bold;\">خارج الأجل</span>"
+
+#. module: transport_boc
+#: model_terms:ir.ui.view,arch_db:transport_boc.rapport_boc_delais
+msgid "<span style=\"color:red; font-weight:bold;\">Echu</span>"
+msgstr "<span style=\"color:red; font-weight:bold;\">منتهي الأجل</span>"
+
+#. module: transport_boc
+#: model_terms:ir.ui.view,arch_db:transport_boc.bordereau_rappel_echeance
+msgid "<span style=\"color:red; font-weight:bold;\">En retard</span>"
+msgstr "<span style=\"color:red; font-weight:bold;\">متأخر</span>"
+
+#. module: transport_boc
+#: model_terms:ir.ui.view,arch_db:transport_boc.view_boc_wizard_bordereau_form
+msgid ""
+"<strong>Courriers externes non transférés</strong> — Courriers externes\n"
+"                        enregistrés mais dont la transmission aux services est encore en attente."
+msgstr "مراسلات خارجية غير محوّلة</strong> — مراسلات خارجية\n"
+"                        مسجَّلة لم يتم تحويلها بعد إلى المصالح."
+
+#. module: transport_boc
+#: model_terms:ir.ui.view,arch_db:transport_boc.view_boc_wizard_bordereau_form
+msgid ""
+"<strong>Courriers externes transférés</strong> — Liste des courriers\n"
+"                        externes dont la diffusion aux services concernés a été réalisée."
+msgstr "مراسلات خارجية محوّلة</strong> — قائمة المراسلات\n"
+"                        الخارجية التي تم توزيعها على المصالح المعنية."
+
+#. module: transport_boc
+#: model_terms:ir.ui.view,arch_db:transport_boc.view_boc_wizard_bordereau_form
+msgid ""
+"<strong>Courriers internes non transférés</strong> — Courriers internes\n"
+"                        enregistrés mais dont la transmission aux services est encore en attente."
+msgstr "مراسلات داخلية غير محوّلة</strong> — مراسلات داخلية\n"
+"                        مسجَّلة لم يتم تحويلها بعد إلى المصالح."
+
+#. module: transport_boc
+#: model_terms:ir.ui.view,arch_db:transport_boc.view_boc_wizard_bordereau_form
+msgid ""
+"<strong>Courriers internes transférés</strong> — Liste des courriers\n"
+"                        internes dont la diffusion aux services a été effectuée (état : Transféré,\n"
+"                        Accusé de réception ou Traité)."
+msgstr "مراسلات داخلية محوّلة</strong> — قائمة المراسلات\n"
+"                        الداخلية التي تم توزيعها (الحالة: محوَّل، وصل استلام أو معالَج)."
+
+#. module: transport_boc
+#: model_terms:ir.ui.view,arch_db:transport_boc.view_boc_wizard_rapport_delais_form
+msgid ""
+"<strong>Courriers échus</strong> — Liste des courriers sans suite\n"
+"                        dont la date d'échéance est dépassée à la date du jour."
+msgstr "مراسلات منتهية الأجل</strong> — قائمة المراسلات بدون متابعة\n"
+"                        التي تجاوز أجلها تاريخ اليوم."
+
+#. module: transport_boc
+#: model_terms:ir.ui.view,arch_db:transport_boc.view_boc_wizard_rapport_delais_form
+msgid ""
+"<strong>Dépassement de délai</strong> — Liste des courriers traités\n"
+"                        mais dont la réponse a été fournie après la date d'échéance."
+msgstr "تجاوز الأجل</strong> — قائمة المراسلات المعالَجة\n"
+"                        لكن الرد أُرسل بعد تاريخ الاستحقاق."
+
+#. module: transport_boc
+#: model_terms:ir.ui.view,arch_db:transport_boc.view_boc_arrivee_form
+msgid ""
+"<strong>Information :</strong> Les factures sont associées aux courriers externes uniquement.\n"
+"                        Veuillez changer le type de courrier si nécessaire."
+msgstr "معلومة :</strong> الفواتير مرتبطة بالمراسلات الخارجية فقط.\n"
+"                        يُرجى تغيير نوع المراسلة إذا لزم الأمر."
+
+#. module: transport_boc
+#: model_terms:ir.ui.view,arch_db:transport_boc.view_boc_arrivee_form
+msgid ""
+"<strong>Rappel :</strong> Ce courrier nécessite une réponse.\n"
+"                        Date d'échéance :"
+msgstr "تذكير :</strong> هذه المراسلة تستلزم رداً.\n"
+"                        تاريخ الاستحقاق :"
+
+#. module: transport_boc
+#: model_terms:ir.ui.view,arch_db:transport_boc.view_boc_periodique_form
+msgid ""
+"<strong>Rappel :</strong> L'échéance de ce courrier périodique approche.\n"
+"                        Prochaine échéance :"
+msgstr "تذكير :</strong> يقترب أجل هذه المراسلة الدورية.\n"
+"                        الأجل القادم :"
+
+#. module: transport_boc
+#: model_terms:ir.ui.view,arch_db:transport_boc.view_boc_wizard_bordereau_form
+msgid ""
+"<strong>Rappels échéance (mi-délai)</strong> — Courriers nécessitant\n"
+"                        une réponse, non encore traités, avec calcul du délai restant.\n"
+"                        Inclut un récapitulatif des alertes (en retard / urgent / en cours)."
+msgstr "تذكيرات الأجل (منتصف المهلة)</strong> — مراسلات تستلزم\n"
+"                        رداً، لم تعالَج بعد، مع حساب الأجل المتبقي.\n"
+"                        يتضمن ملخص التنبيهات (متأخر / عاجل / جارٍ)."
+
+#. module: transport_boc
+#: model_terms:ir.ui.view,arch_db:transport_boc.view_boc_wizard_rapport_delais_form
+msgid ""
+"<strong>Édition des délais</strong> — Tableau complet de tous les courriers\n"
+"                        avec calcul du délai de traitement et statut (dans les délais / hors délai / échu).\n"
+"                        Inclut les statistiques globales."
+msgstr "طباعة الآجال</strong> — جدول شامل لجميع المراسلات\n"
+"                        مع حساب أجل المعالجة والحالة (في الأجل / خارج الأجل / منتهي).\n"
+"                        يتضمن الإحصائيات العامة."
+
+#. module: transport_boc
+#: model_terms:ir.ui.view,arch_db:transport_boc.view_boc_arrivee_form
+msgid "Accès GED"
+msgstr "الوصول إلى نظام إدارة الوثائق"
 
 #. module: transport_boc
 #: model_terms:ir.ui.view,arch_db:transport_boc.view_boc_transmission_form
-msgid "Accuser réception"
+msgid "Acknowledge receipt"
 msgstr "إشعار الاستلام"
 
 #. module: transport_boc
 #: model:ir.model.fields.selection,name:transport_boc.selection__boc_transmission__state__accuse
-msgid "Accusé de réception"
+msgid "Acknowledgement of receipt"
 msgstr "وصل الاستلام"
 
 #. module: transport_boc
-#: model:res.groups,comment:transport_boc.group_directeur_boc
-msgid "Accès total au module Bureau d'Ordre."
-msgstr "وصول كامل لوحدة مكتب البريد."
+#: model:ir.model.fields,field_description:transport_boc.field_boc_annotation__actif
+#: model:ir.model.fields,field_description:transport_boc.field_boc_instruction__actif
+#: model:ir.model.fields,field_description:transport_boc.field_boc_organisme__actif
+#: model:ir.model.fields,field_description:transport_boc.field_boc_sujet__actif
+#: model:ir.model.fields,field_description:transport_boc.field_boc_type_courrier__actif
+#: model:ir.model.fields.selection,name:transport_boc.selection__boc_courrier_periodique__state__actif
+#: model_terms:ir.ui.view,arch_db:transport_boc.view_boc_periodique_search
+msgid "Actif"
+msgstr "نشط"
+
+#. module: transport_boc
+#: model:ir.model.fields,field_description:transport_boc.field_boc_courrier_arrivee__message_needaction
+#: model:ir.model.fields,field_description:transport_boc.field_boc_courrier_depart__message_needaction
+#: model:ir.model.fields,field_description:transport_boc.field_boc_courrier_periodique__message_needaction
+msgid "Action Needed"
+msgstr "إجراء مطلوب"
+
+#. module: transport_boc
+#: model:ir.model.fields,field_description:transport_boc.field_boc_courrier_arrivee__activity_ids
+#: model:ir.model.fields,field_description:transport_boc.field_boc_courrier_depart__activity_ids
+#: model:ir.model.fields,field_description:transport_boc.field_boc_courrier_periodique__activity_ids
+msgid "Activities"
+msgstr "الأنشطة"
+
+#. module: transport_boc
+#: model:ir.model.fields,field_description:transport_boc.field_boc_courrier_arrivee__activity_exception_decoration
+#: model:ir.model.fields,field_description:transport_boc.field_boc_courrier_depart__activity_exception_decoration
+#: model:ir.model.fields,field_description:transport_boc.field_boc_courrier_periodique__activity_exception_decoration
+msgid "Activity Exception Decoration"
+msgstr "تزيين استثناء النشاط"
+
+#. module: transport_boc
+#: model:ir.model.fields,field_description:transport_boc.field_boc_courrier_arrivee__activity_state
+#: model:ir.model.fields,field_description:transport_boc.field_boc_courrier_depart__activity_state
+#: model:ir.model.fields,field_description:transport_boc.field_boc_courrier_periodique__activity_state
+msgid "Activity State"
+msgstr "حالة النشاط"
+
+#. module: transport_boc
+#: model:ir.model.fields,field_description:transport_boc.field_boc_courrier_arrivee__activity_type_icon
+#: model:ir.model.fields,field_description:transport_boc.field_boc_courrier_depart__activity_type_icon
+#: model:ir.model.fields,field_description:transport_boc.field_boc_courrier_periodique__activity_type_icon
+msgid "Activity Type Icon"
+msgstr "أيقونة نوع النشاط"
 
 #. module: transport_boc
 #: model_terms:ir.ui.view,arch_db:transport_boc.view_boc_organisme_form
-msgid "Adresse..."
+msgid "Address..."
 msgstr "العنوان..."
 
 #. module: transport_boc
-#: model:res.groups,name:transport_boc.group_agent_boc
-#: model_terms:ir.ui.view,arch_db:transport_boc.rapport_boc_arrivee
-#: model_terms:ir.ui.view,arch_db:transport_boc.rapport_boc_depart
+#: model:ir.model.fields,field_description:transport_boc.field_boc_organisme__adresse
+msgid "Adresse"
+msgstr "العنوان"
+
+#. module: transport_boc
+#: model_terms:ir.ui.view,arch_db:transport_boc.bordereau_externe_non_transfere
+#: model_terms:ir.ui.view,arch_db:transport_boc.bordereau_externe_transfere
+#: model_terms:ir.ui.view,arch_db:transport_boc.bordereau_interne_non_transfere
+#: model_terms:ir.ui.view,arch_db:transport_boc.bordereau_interne_transfere
+#: model_terms:ir.ui.view,arch_db:transport_boc.bordereau_rappel_echeance
+#: model_terms:ir.ui.view,arch_db:transport_boc.rapport_boc_delais
+#: model_terms:ir.ui.view,arch_db:transport_boc.rapport_boc_depasse
+#: model_terms:ir.ui.view,arch_db:transport_boc.rapport_boc_echus
 msgid "Agent BOC"
 msgstr "عون مكتب البريد"
+
+#. module: transport_boc
+#: model_terms:ir.ui.view,arch_db:transport_boc.bordereau_rappel_echeance
+msgid "Alerte"
+msgstr "تنبيه"
+
+#. module: transport_boc
+#: model:ir.ui.menu,name:transport_boc.menu_boc_arrivee
+#: model:ir.ui.menu,name:transport_boc.menu_boc_depart
+msgid "All mails"
+msgstr "جميع المراسلات"
+
+#. module: transport_boc
+#: model:ir.actions.act_window,name:transport_boc.action_boc_transmission
+#: model:ir.ui.menu,name:transport_boc.menu_boc_transmission_all
+msgid "All transmissions"
+msgstr "جميع الإحالات"
 
 #. module: transport_boc
 #: model:ir.model.fields,field_description:transport_boc.field_boc_annotation__name
@@ -50,317 +257,1020 @@ msgid "Annotation"
 msgstr "تعليق"
 
 #. module: transport_boc
-#: model:ir.model,name:transport_boc.model_boc_annotation
-msgid "Annotation Prédéfinie"
-msgstr "تعليق محدد مسبقاً"
-
-#. module: transport_boc
 #: model:ir.ui.menu,name:transport_boc.menu_boc_annotation
 msgid "Annotations"
 msgstr "التعليقات"
 
 #. module: transport_boc
-#: model:ir.actions.act_window,name:transport_boc.action_boc_annotation
-#: model_terms:ir.ui.view,arch_db:transport_boc.view_boc_annotation_list
-msgid "Annotations prédéfinies"
-msgstr "التعليقات المحددة مسبقاً"
+#: model:ir.model.fields.selection,name:transport_boc.selection__boc_type_courrier__periodicite__annuel
+#: model_terms:ir.ui.view,arch_db:transport_boc.view_boc_periodique_search
+msgid "Annuel"
+msgstr "سنوي"
 
 #. module: transport_boc
-#: model_terms:ir.ui.view,arch_db:transport_boc.rapport_boc_arrivee
-msgid "Année"
-msgstr "السنة"
+#: model_terms:ir.ui.view,arch_db:transport_boc.view_boc_wizard_bordereau_form
+#: model_terms:ir.ui.view,arch_db:transport_boc.view_boc_wizard_rapport_delais_form
+msgid "Annuler"
+msgstr "إلغاء"
 
 #. module: transport_boc
-#: model:ir.model.fields,field_description:transport_boc.field_boc_courrier_arrivee__annee_exercice
-msgid "Année d'exercice"
-msgstr "سنة الممارسة"
+#: model:ir.model.fields.selection,name:transport_boc.selection__boc_courrier_arrivee__ged_archive_status__archive
+#: model:ir.model.fields.selection,name:transport_boc.selection__boc_courrier_depart__ged_archive_status__archive
+msgid "Archivé"
+msgstr "مؤرشف"
 
 #. module: transport_boc
-#: model_terms:ir.actions.act_window,help:transport_boc.action_boc_arrivee
-msgid "Aucun courrier arrivée pour le moment."
-msgstr "لا يوجد بريد وارد في الوقت الحالي."
-
-#. module: transport_boc
-#: model_terms:ir.actions.act_window,help:transport_boc.action_boc_depart
-msgid "Aucun courrier départ pour le moment."
-msgstr "لا يوجد بريد صادر في الوقت الحالي."
-
-#. module: transport_boc
-#: model:ir.actions.report,name:transport_boc.action_rapport_boc_arrivee
-msgid "Bordereau Courrier Arrivée"
-msgstr "بطاقة البريد الوارد"
-
-#. module: transport_boc
-#: model:ir.actions.report,name:transport_boc.action_rapport_boc_depart
-msgid "Bordereau Courrier Départ"
-msgstr "بطاقة البريد الصادر"
-
-#. module: transport_boc
-#: model:ir.ui.menu,name:transport_boc.menu_boc_rapport_arrivee
-msgid "Bordereau courrier arrivée"
-msgstr "بطاقة البريد الوارد"
-
-#. module: transport_boc
-#: model:ir.ui.menu,name:transport_boc.menu_boc_rapport_depart
-msgid "Bordereau courrier départ"
-msgstr "بطاقة البريد الصادر"
-
-#. module: transport_boc
-#: model:ir.ui.menu,name:transport_boc.menu_boc_root
-#: model:res.groups.privilege,name:transport_boc.privilege_transport_boc
-msgid "Bureau d'Ordre"
-msgstr "مكتب البريد"
-
-#. module: transport_boc
-#: model:ir.model.fields,field_description:transport_boc.field_boc_courrier_arrivee__est_facture
-msgid "C'est une facture"
-msgstr "هذه فاتورة"
-
-#. module: transport_boc
-#: model:ir.model.fields.selection,name:transport_boc.selection__boc_courrier_depart__support__carte_geo
-msgid "Carte géographique"
-msgstr "خريطة جغرافية"
-
-#. module: transport_boc
-#: model:ir.model.fields.selection,name:transport_boc.selection__boc_courrier_arrivee__state__classe
-#: model:ir.model.fields.selection,name:transport_boc.selection__boc_courrier_depart__state__classe
-msgid "Classé"
-msgstr "مُصنَّف"
-
-#. module: transport_boc
-#: model_terms:ir.actions.act_window,help:transport_boc.action_boc_arrivee
-#: model_terms:ir.actions.act_window,help:transport_boc.action_boc_depart
-msgid "Cliquez sur <strong>Nouveau</strong> pour enregistrer un courrier."
-msgstr "انقر على <strong>جديد</strong> لتسجيل مراسلة."
-
-#. module: transport_boc
-#: model_terms:ir.ui.view,arch_db:transport_boc.view_boc_arrivee_form
-#: model_terms:ir.ui.view,arch_db:transport_boc.view_boc_depart_form
-msgid "Contenu"
-msgstr "المحتوى"
-
-#. module: transport_boc
-#: model_terms:ir.ui.view,arch_db:transport_boc.view_boc_transmission_form
-msgid "Courrier"
-msgstr "مراسلة"
-
-#. module: transport_boc
-#: model:ir.actions.act_window,name:transport_boc.action_boc_arrivee
-#: model:ir.model,name:transport_boc.model_boc_courrier_arrivee
-#: model_terms:ir.ui.view,arch_db:transport_boc.view_boc_arrivee_form
-msgid "Courrier Arrivée"
-msgstr "بريد وارد"
-
-#. module: transport_boc
-#: model:ir.actions.act_window,name:transport_boc.action_boc_depart
-#: model:ir.model,name:transport_boc.model_boc_courrier_depart
-#: model_terms:ir.ui.view,arch_db:transport_boc.view_boc_depart_form
-msgid "Courrier Départ"
-msgstr "بريد صادر"
-
-#. module: transport_boc
-#: model:ir.model.fields,field_description:transport_boc.field_boc_transmission__arrivee_id
-msgid "Courrier arrivée"
-msgstr "بريد وارد"
-
-#. module: transport_boc
-#: model:ir.model.fields,help:transport_boc.field_boc_courrier_depart__arrivee_id
-msgid "Courrier arrivée auquel ce départ répond"
-msgstr "البريد الوارد الذي يرد عليه هذا البريد الصادر"
-
-#. module: transport_boc
-#: model:ir.model.fields,field_description:transport_boc.field_boc_courrier_arrivee__depart_reponse_id
-msgid "Courrier départ (réponse)"
-msgstr "بريد صادر (رد)"
-
-#. module: transport_boc
-#: model_terms:ir.ui.view,arch_db:transport_boc.view_boc_arrivee_list
-msgid "Courriers Arrivée"
-msgstr "البريد الوارد"
-
-#. module: transport_boc
-#: model_terms:ir.ui.view,arch_db:transport_boc.view_boc_depart_list
-msgid "Courriers Départ"
-msgstr "البريد الصادر"
-
-#. module: transport_boc
-#: model:ir.actions.act_window,name:transport_boc.action_boc_arrivee_sans_suite
-msgid "Courriers sans suite"
-msgstr "مراسلات بدون متابعة"
+#: model_terms:ir.ui.view,arch_db:transport_boc.view_boc_arrivee_search
+msgid "Archivé GED"
+msgstr "مؤرشَف في نظام إدارة الوثائق"
 
 #. module: transport_boc
 #: model:ir.model.fields,field_description:transport_boc.field_boc_courrier_arrivee__date_arrivee
 #: model_terms:ir.ui.view,arch_db:transport_boc.rapport_boc_arrivee
-msgid "Date / Heure d'arrivée"
+msgid "Arrival Date / Time"
 msgstr "تاريخ / ساعة الوصول"
 
 #. module: transport_boc
-#: model:ir.model.fields,field_description:transport_boc.field_boc_courrier_arrivee__date_echeance
-#: model:ir.model.fields,field_description:transport_boc.field_boc_transmission__date_echeance
+#: model:ir.model.fields,field_description:transport_boc.field_boc_courrier_arrivee__type_arrivee
 #: model_terms:ir.ui.view,arch_db:transport_boc.rapport_boc_arrivee
-msgid "Date d'échéance"
-msgstr "تاريخ الاستحقاق"
+msgid "Arrival type"
+msgstr "نوع الوصول"
 
 #. module: transport_boc
-#: model:ir.model.fields,field_description:transport_boc.field_boc_courrier_depart__date_depart
+#: model:ir.model.fields,field_description:transport_boc.field_boc_courrier_arrivee__message_attachment_count
+#: model:ir.model.fields,field_description:transport_boc.field_boc_courrier_depart__message_attachment_count
+#: model:ir.model.fields,field_description:transport_boc.field_boc_courrier_periodique__message_attachment_count
+msgid "Attachment Count"
+msgstr "عدد المرفقات"
+
+#. module: transport_boc
+#: model_terms:ir.ui.view,arch_db:transport_boc.bordereau_rappel_echeance
+msgid "Aucun courrier en attente d'action sur cette période."
+msgstr "لا توجد مراسلات معلقة في هذه الفترة."
+
+#. module: transport_boc
+#: model_terms:ir.ui.view,arch_db:transport_boc.bordereau_externe_non_transfere
+msgid "Aucun courrier externe en attente de transfert sur cette période."
+msgstr "لا توجد مراسلات خارجية معلقة التحويل في هذه الفترة."
+
+#. module: transport_boc
+#: model_terms:ir.ui.view,arch_db:transport_boc.bordereau_externe_transfere
+msgid "Aucun courrier externe transféré sur cette période."
+msgstr "لا توجد مراسلات خارجية محوّلة في هذه الفترة."
+
+#. module: transport_boc
+#: model_terms:ir.ui.view,arch_db:transport_boc.bordereau_interne_non_transfere
+msgid "Aucun courrier interne en attente de transfert sur cette période."
+msgstr "لا توجد مراسلات داخلية معلقة التحويل في هذه الفترة."
+
+#. module: transport_boc
+#: model_terms:ir.ui.view,arch_db:transport_boc.bordereau_interne_transfere
+msgid "Aucun courrier interne transféré sur cette période."
+msgstr "لا توجد مراسلات داخلية محوّلة في هذه الفترة."
+
+#. module: transport_boc
+#: model_terms:ir.actions.act_window,help:transport_boc.action_boc_courrier_periodique
+msgid "Aucun courrier périodique configuré."
+msgstr "لا توجد مراسلات دورية مُهيَّأة."
+
+#. module: transport_boc
+#: model_terms:ir.ui.view,arch_db:transport_boc.rapport_boc_echus
+msgid "Aucun courrier échu sur cette période."
+msgstr "لا توجد مراسلات متأخرة في هذه الفترة."
+
+#. module: transport_boc
+#: model_terms:ir.ui.view,arch_db:transport_boc.rapport_boc_depasse
+msgid "Aucun dépassement de délai sur cette période."
+msgstr "لا يوجد تجاوز للآجال في هذه الفترة."
+
+#. module: transport_boc
+#: model:ir.model.fields,help:transport_boc.field_boc_courrier_arrivee__date_rappel
+msgid "Automatic reminder at mid-deadline"
+msgstr "تذكير تلقائي في منتصف الأجل"
+
+#. module: transport_boc
+#: model:ir.model.fields.selection,name:transport_boc.selection__boc_courrier_depart__support__autre
+msgid "Autre"
+msgstr "أخرى"
+
+#. module: transport_boc
+#: model:res.groups,name:transport_boc.group_agent_boc
+#: model_terms:ir.ui.view,arch_db:transport_boc.rapport_boc_arrivee
 #: model_terms:ir.ui.view,arch_db:transport_boc.rapport_boc_depart
-msgid "Date de départ"
-msgstr "تاريخ الإرسال"
+msgid "BOC Agent"
+msgstr "عون مكتب البريد"
 
 #. module: transport_boc
-#: model:ir.model.fields,field_description:transport_boc.field_boc_courrier_arrivee__date_rappel
+#: model:res.groups,name:transport_boc.group_directeur_boc
+msgid "BOC Director"
+msgstr "مدير مكتب البريد"
+
+#. module: transport_boc
+#: model:res.groups,name:transport_boc.group_responsable_boc
 #: model_terms:ir.ui.view,arch_db:transport_boc.rapport_boc_arrivee
+#: model_terms:ir.ui.view,arch_db:transport_boc.rapport_boc_depart
+msgid "BOC Manager"
+msgstr "مسؤول مكتب البريد"
+
+#. module: transport_boc
+#: model:ir.model,name:transport_boc.model_boc_wizard_rapport_delais
+msgid "BOC Processing Delay Report"
+msgstr "تقرير آجال المعالجة - مكتب الضبط"
+
+#. module: transport_boc
+#: model:ir.actions.server,name:transport_boc.cron_boc_rappels_periodiques_ir_actions_server
+msgid "BOC — Rappels courriers périodiques"
+msgstr "مكتب البريد — تذكيرات المراسلات الدورية"
+
+#. module: transport_boc
+#: model:boc.type.courrier,name:transport_boc.type_courrier_bilan_annuel
+msgid "Bilan et notes aux états financiers"
+msgstr "الميزانية وملاحق القوائم المالية"
+
+#. module: transport_boc
+#: model_terms:ir.ui.view,arch_db:transport_boc.bordereau_externe_non_transfere
+msgid "Bordereau des Courriers Externes Non Transférés"
+msgstr "قائمة المراسلات الخارجية غير المحوّلة"
+
+#. module: transport_boc
+#: model_terms:ir.ui.view,arch_db:transport_boc.bordereau_externe_transfere
+msgid "Bordereau des Courriers Externes Transférés"
+msgstr "قائمة المراسلات الخارجية المحوّلة"
+
+#. module: transport_boc
+#: model_terms:ir.ui.view,arch_db:transport_boc.bordereau_interne_non_transfere
+msgid "Bordereau des Courriers Internes Non Transférés"
+msgstr "قائمة المراسلات الداخلية غير المحوّلة"
+
+#. module: transport_boc
+#: model_terms:ir.ui.view,arch_db:transport_boc.bordereau_interne_transfere
+msgid "Bordereau des Courriers Internes Transférés"
+msgstr "قائمة المراسلات الداخلية المحوّلة"
+
+#. module: transport_boc
+#: model_terms:ir.ui.view,arch_db:transport_boc.bordereau_rappel_echeance
+msgid "Bordereau des Courriers Nécessitant une Action"
+msgstr "قائمة المراسلات التي تستوجب إجراءً"
+
+#. module: transport_boc
+#: model:ir.actions.report,name:transport_boc.action_bordereau_externe_non_transfere
+msgid "Bordereau — Externes non transférés"
+msgstr "بطاقة — خارجية غير محوّلة"
+
+#. module: transport_boc
+#: model:ir.actions.report,name:transport_boc.action_bordereau_externe_transfere
+msgid "Bordereau — Externes transférés"
+msgstr "بطاقة — خارجية محوّلة"
+
+#. module: transport_boc
+#: model:ir.actions.report,name:transport_boc.action_bordereau_interne_non_transfere
+msgid "Bordereau — Internes non transférés"
+msgstr "بطاقة — داخلية غير محوّلة"
+
+#. module: transport_boc
+#: model:ir.actions.report,name:transport_boc.action_bordereau_interne_transfere
+msgid "Bordereau — Internes transférés"
+msgstr "بطاقة — داخلية محوّلة"
+
+#. module: transport_boc
+#: model:ir.actions.report,name:transport_boc.action_bordereau_rappel_echeance
+msgid "Bordereau — Rappels échéance (mi-délai)"
+msgstr "بطاقة — تذكيرات الأجل (منتصف المهلة)"
+
+#. module: transport_boc
+#: model:ir.actions.act_window,name:transport_boc.action_boc_wizard_bordereau
+#: model_terms:ir.ui.view,arch_db:transport_boc.view_boc_wizard_bordereau_form
+msgid "Bordereaux de Transmission"
+msgstr "بطاقات التحويل"
+
+#. module: transport_boc
+#: model:ir.model,name:transport_boc.model_boc_wizard_bordereau
+msgid "Bordereaux de Transmission BOC"
+msgstr "بطاقات إحالة مكتب البريد"
+
+#. module: transport_boc
+#: model:ir.ui.menu,name:transport_boc.menu_boc_rapport_bordereaux
+msgid "Bordereaux de transmission"
+msgstr "بطاقات الإحالة"
+
+#. module: transport_boc
+#: model:ir.model.fields.selection,name:transport_boc.selection__boc_courrier_arrivee__state__brouillon
+#: model:ir.model.fields.selection,name:transport_boc.selection__boc_courrier_depart__state__brouillon
+#: model_terms:ir.ui.view,arch_db:transport_boc.view_boc_arrivee_search
+msgid "Brouillon"
+msgstr "مسودة"
+
+#. module: transport_boc
+#: model:boc.type.courrier,name:transport_boc.type_courrier_budget_annuel
+msgid "Budget prévisionnel"
+msgstr "الميزانية التقديرية"
+
+#. module: transport_boc
+#: model:ir.model.fields.selection,name:transport_boc.selection__boc_courrier_depart__support__cd
+msgid "CD"
+msgstr "قرص مدمج"
+
+#. module: transport_boc
+#: model_terms:ir.ui.view,arch_db:transport_boc.view_boc_periodique_form
+msgid "Calendrier"
+msgstr "التقويم"
+
+#. module: transport_boc
+#: model:res.groups,comment:transport_boc.group_agent_boc
+msgid "Can create and manage incoming and outgoing mail."
+msgstr "يمكنه إنشاء وإدارة البريد الوارد والصادر."
+
+#. module: transport_boc
+#: model:res.groups,comment:transport_boc.group_responsable_boc
+msgid "Can validate, distribute and access reports."
+msgstr "يمكنه التحقق والتوزيع والوصول إلى التقارير."
+
+#. module: transport_boc
+#: model_terms:ir.ui.view,arch_db:transport_boc.view_boc_arrivee_form
+#: model_terms:ir.ui.view,arch_db:transport_boc.view_boc_depart_form
+msgid "Ce courrier n'est pas encore archivé dans la GED."
+msgstr "هذه المراسلة لم تُؤرشف بعد في نظام إدارة الوثائق."
+
+#. module: transport_boc
+#: model_terms:ir.ui.view,arch_db:transport_boc.view_boc_periodique_form
+msgid ""
+"Ce courrier périodique est <strong>en retard</strong> !\n"
+"                        Échéance dépassée :"
+msgstr "هذه المراسلة الدورية <strong>متأخرة</strong>!\n"
+"                        تجاوز الأجل :"
+
+#. module: transport_boc
+#: model_terms:ir.ui.view,arch_db:transport_boc.bordereau_externe_non_transfere
+msgid ""
+"Ces courriers externes sont enregistrés mais n'ont pas encore été transférés"
+" aux services."
+msgstr "هذه المراسلات الخارجية مسجَّلة لكنها لم تحوَّل بعد إلى المصالح."
+
+#. module: transport_boc
+#: model_terms:ir.ui.view,arch_db:transport_boc.bordereau_interne_non_transfere
+msgid ""
+"Ces courriers sont enregistrés mais n'ont pas encore été transférés aux "
+"services concernés."
+msgstr "هذه المراسلات مسجَّلة لكنها لم تحوَّل بعد إلى المصالح المعنية."
+
+#. module: transport_boc
+#: model_terms:ir.actions.act_window,help:transport_boc.action_boc_arrivee
+#: model_terms:ir.actions.act_window,help:transport_boc.action_boc_depart
+msgid "Click <strong>New</strong> to register a mail."
+msgstr "انقر على <strong>جديد</strong> لتسجيل مراسلة."
+
+#. module: transport_boc
+#: model_terms:ir.ui.view,arch_db:transport_boc.view_boc_periodique_form
+msgid "Clore"
+msgstr "إغلاق"
+
+#. module: transport_boc
+#: model:ir.model.fields.selection,name:transport_boc.selection__boc_courrier_periodique__state__clos
+msgid "Clos"
+msgstr "مغلق"
+
+#. module: transport_boc
+#: model:ir.model.fields,field_description:transport_boc.field_boc_organisme__code
+#: model:ir.model.fields,field_description:transport_boc.field_boc_type_courrier__code
+msgid "Code"
+msgstr "الرمز"
+
+#. module: transport_boc
+#: model:ir.ui.menu,name:transport_boc.menu_boc_config
+msgid "Configuration"
+msgstr "الإعداد"
+
+#. module: transport_boc
+#: model_terms:ir.ui.view,arch_db:transport_boc.view_boc_organisme_form
+msgid "Contact"
+msgstr "جهة الاتصال"
+
+#. module: transport_boc
+#: model_terms:ir.ui.view,arch_db:transport_boc.view_boc_arrivee_form
+#: model_terms:ir.ui.view,arch_db:transport_boc.view_boc_depart_form
+msgid "Content"
+msgstr "المحتوى"
+
+#. module: transport_boc
+#: model:boc.type.courrier,name:transport_boc.type_courrier_contrat_prog_annuel
+msgid "Contrat programme"
+msgstr "عقد البرنامج"
+
+#. module: transport_boc
+#: model:ir.ui.menu,name:transport_boc.menu_boc_arrivee_root
+msgid "Courrier Arrivée"
+msgstr "بريد وارد"
+
+#. module: transport_boc
+#: model:ir.ui.menu,name:transport_boc.menu_boc_depart_root
+msgid "Courrier Départ"
+msgstr "بريد صادر"
+
+#. module: transport_boc
+#: model_terms:ir.ui.view,arch_db:transport_boc.view_boc_periodique_form
+msgid "Courrier Périodique"
+msgstr "المراسلة الدورية"
+
+#. module: transport_boc
+#: model:ir.model,name:transport_boc.model_boc_courrier_periodique
+msgid "Courrier Périodique — Modèle de rappel"
+msgstr "المراسلة الدورية — نموذج التذكير"
+
+#. module: transport_boc
+#: model:ir.model.fields,field_description:transport_boc.field_boc_type_courrier__est_periodique
+msgid "Courrier périodique"
+msgstr "المراسلة الدورية"
+
+#. module: transport_boc
+#: model:ir.actions.act_window,name:transport_boc.action_boc_courrier_periodique
+#: model_terms:ir.ui.view,arch_db:transport_boc.view_boc_periodique_list
+msgid "Courriers Périodiques"
+msgstr "المراسلات الدورية"
+
+#. module: transport_boc
+#: model_terms:ir.ui.view,arch_db:transport_boc.bordereau_rappel_echeance
+msgid ""
+"Courriers en attente de réponse — Note de rappel à mi-délai<br/>\n"
+"                                Période d'arrivée :"
+msgstr "مراسلات في انتظار الرد — تذكير منتصف المهلة<br/>\n"
+"                                فترة الوصول :"
+
+#. module: transport_boc
+#: model:ir.model.fields.selection,name:transport_boc.selection__boc_wizard_bordereau__type_bordereau__externe_non_transfere
+msgid "Courriers externes non transférés"
+msgstr "مراسلات خارجية غير محوّلة"
+
+#. module: transport_boc
+#: model:ir.model.fields.selection,name:transport_boc.selection__boc_wizard_bordereau__type_bordereau__externe_transfere
+msgid "Courriers externes transférés"
+msgstr "مراسلات خارجية محوّلة"
+
+#. module: transport_boc
+#: model:ir.model.fields,field_description:transport_boc.field_boc_courrier_periodique__arrivee_ids
+#: model_terms:ir.ui.view,arch_db:transport_boc.view_boc_periodique_form
+msgid "Courriers générés"
+msgstr "المراسلات المولَّدة"
+
+#. module: transport_boc
+#: model:ir.model.fields.selection,name:transport_boc.selection__boc_wizard_bordereau__type_bordereau__interne_non_transfere
+msgid "Courriers internes non transférés"
+msgstr "مراسلات داخلية غير محوّلة"
+
+#. module: transport_boc
+#: model:ir.model.fields.selection,name:transport_boc.selection__boc_wizard_bordereau__type_bordereau__interne_transfere
+msgid "Courriers internes transférés"
+msgstr "مراسلات داخلية محوّلة"
+
+#. module: transport_boc
+#: model:ir.model.fields.selection,name:transport_boc.selection__boc_wizard_bordereau__type_bordereau__rappel_echeance
+msgid "Courriers nécessitant une action (rappel mi-délai)"
+msgstr "مراسلات تستوجب إجراءً (تذكير منتصف المهلة)"
+
+#. module: transport_boc
+#: model_terms:ir.ui.view,arch_db:transport_boc.rapport_boc_echus
+msgid ""
+"Courriers sans suite dont la date d'échéance est dépassée<br/>\n"
+"                                Période :"
+msgstr "مراسلات بدون متابعة تجاوزت أجلها<br/>\n"
+"                                الفترة :"
+
+#. module: transport_boc
+#: model_terms:ir.ui.view,arch_db:transport_boc.rapport_boc_depasse
+msgid ""
+"Courriers traités après la date d'échéance<br/>\n"
+"                                Période :"
+msgstr "مراسلات عولجت بعد تاريخ الاستحقاق<br/>\n"
+"                                الفترة :"
+
+#. module: transport_boc
+#: model:ir.model.fields.selection,name:transport_boc.selection__boc_wizard_rapport_delais__type_rapport__depasse
+msgid "Courriers traités hors délai"
+msgstr "البريد المعالَج خارج الأجل"
+
+#. module: transport_boc
+#: model:ir.model.fields.selection,name:transport_boc.selection__boc_wizard_rapport_delais__type_rapport__echus
+msgid "Courriers échus (sans suite)"
+msgstr "البريد المتأخر (بدون متابعة)"
+
+#. module: transport_boc
+#: model:ir.model.fields,field_description:transport_boc.field_boc_annotation__create_uid
+#: model:ir.model.fields,field_description:transport_boc.field_boc_courrier_arrivee__create_uid
+#: model:ir.model.fields,field_description:transport_boc.field_boc_courrier_depart__create_uid
+#: model:ir.model.fields,field_description:transport_boc.field_boc_courrier_periodique__create_uid
+#: model:ir.model.fields,field_description:transport_boc.field_boc_instruction__create_uid
+#: model:ir.model.fields,field_description:transport_boc.field_boc_organisme__create_uid
+#: model:ir.model.fields,field_description:transport_boc.field_boc_sujet__create_uid
+#: model:ir.model.fields,field_description:transport_boc.field_boc_transmission__create_uid
+#: model:ir.model.fields,field_description:transport_boc.field_boc_type_courrier__create_uid
+#: model:ir.model.fields,field_description:transport_boc.field_boc_wizard_bordereau__create_uid
+#: model:ir.model.fields,field_description:transport_boc.field_boc_wizard_rapport_delais__create_uid
+msgid "Created by"
+msgstr "أُنشئ بواسطة"
+
+#. module: transport_boc
+#: model:ir.model.fields,field_description:transport_boc.field_boc_annotation__create_date
+#: model:ir.model.fields,field_description:transport_boc.field_boc_courrier_arrivee__create_date
+#: model:ir.model.fields,field_description:transport_boc.field_boc_courrier_depart__create_date
+#: model:ir.model.fields,field_description:transport_boc.field_boc_courrier_periodique__create_date
+#: model:ir.model.fields,field_description:transport_boc.field_boc_instruction__create_date
+#: model:ir.model.fields,field_description:transport_boc.field_boc_organisme__create_date
+#: model:ir.model.fields,field_description:transport_boc.field_boc_sujet__create_date
+#: model:ir.model.fields,field_description:transport_boc.field_boc_transmission__create_date
+#: model:ir.model.fields,field_description:transport_boc.field_boc_type_courrier__create_date
+#: model:ir.model.fields,field_description:transport_boc.field_boc_wizard_bordereau__create_date
+#: model:ir.model.fields,field_description:transport_boc.field_boc_wizard_rapport_delais__create_date
+msgid "Created on"
+msgstr "تاريخ الإنشاء"
+
+#. module: transport_boc
+#: model_terms:ir.actions.act_window,help:transport_boc.action_boc_courrier_periodique
+msgid ""
+"Créez un modèle de rappel pour les courriers récurrents\n"
+"               (mensuel, semestriel, annuel) conformément au décret n°2197 du 7/10/2002."
+msgstr "أنشئ نموذج تذكير للمراسلات المتكررة\n"
+"               (شهرية، نصف سنوية، سنوية) وفق المرسوم رقم 2197 بتاريخ 07/10/2002."
+
+#. module: transport_boc
+#: model_terms:ir.ui.view,arch_db:transport_boc.view_boc_arrivee_form
+#: model_terms:ir.ui.view,arch_db:transport_boc.view_boc_depart_form
+msgid "DMS / Archive"
+msgstr "نظام إدارة الوثائق / الأرشفة"
+
+#. module: transport_boc
+#: model_terms:ir.ui.view,arch_db:transport_boc.view_boc_depart_form
+msgid "DMS Access"
+msgstr "الوصول إلى نظام إدارة الوثائق"
+
+#. module: transport_boc
+#: model:ir.model.fields,field_description:transport_boc.field_boc_courrier_arrivee__ged_archive_date
+#: model:ir.model.fields,field_description:transport_boc.field_boc_courrier_depart__ged_archive_date
+msgid "DMS Archive Date"
+msgstr "تاريخ الأرشفة الإلكترونية"
+
+#. module: transport_boc
+#: model:ir.model.fields,field_description:transport_boc.field_boc_courrier_arrivee__ged_url
+#: model:ir.model.fields,field_description:transport_boc.field_boc_courrier_depart__ged_url
+msgid "DMS Link"
+msgstr "رابط نظام إدارة الوثائق"
+
+#. module: transport_boc
+#: model:ir.model.fields,field_description:transport_boc.field_boc_courrier_arrivee__ged_document_ref
+#: model:ir.model.fields,field_description:transport_boc.field_boc_courrier_depart__ged_document_ref
+msgid "DMS Reference"
+msgstr "مرجع نظام إدارة الوثائق"
+
+#. module: transport_boc
+#: model:ir.model.fields,field_description:transport_boc.field_boc_courrier_arrivee__ged_archive_status
+#: model:ir.model.fields,field_description:transport_boc.field_boc_courrier_depart__ged_archive_status
+msgid "DMS Status"
+msgstr "حالة الأرشفة"
+
+#. module: transport_boc
+#: model_terms:ir.ui.view,arch_db:transport_boc.rapport_boc_delais
+msgid "Dans les délais"
+msgstr "في الأجل"
+
+#. module: transport_boc
+#: model_terms:ir.ui.view,arch_db:transport_boc.bordereau_externe_non_transfere
+#: model_terms:ir.ui.view,arch_db:transport_boc.bordereau_externe_transfere
+#: model_terms:ir.ui.view,arch_db:transport_boc.bordereau_interne_non_transfere
+#: model_terms:ir.ui.view,arch_db:transport_boc.bordereau_interne_transfere
+#: model_terms:ir.ui.view,arch_db:transport_boc.bordereau_rappel_echeance
+#: model_terms:ir.ui.view,arch_db:transport_boc.rapport_boc_delais
+#: model_terms:ir.ui.view,arch_db:transport_boc.rapport_boc_depasse
+#: model_terms:ir.ui.view,arch_db:transport_boc.rapport_boc_echus
+msgid "Date arrivée"
+msgstr "تاريخ الوصول"
+
+#. module: transport_boc
+#: model:ir.model.fields,field_description:transport_boc.field_boc_courrier_periodique__date_debut
+msgid "Date de début de suivi"
+msgstr "تاريخ بداية المتابعة"
+
+#. module: transport_boc
+#: model:ir.model.fields,field_description:transport_boc.field_boc_courrier_periodique__date_rappel
 msgid "Date de rappel"
 msgstr "تاريخ التذكير"
 
 #. module: transport_boc
-#: model:ir.model.fields,field_description:transport_boc.field_boc_courrier_arrivee__date_reponse
-msgid "Date de réponse"
+#: model:ir.model.fields,field_description:transport_boc.field_boc_wizard_bordereau__date_debut
+#: model:ir.model.fields,field_description:transport_boc.field_boc_wizard_rapport_delais__date_debut
+msgid "Date début"
+msgstr "تاريخ البداية"
+
+#. module: transport_boc
+#: model:ir.model.fields,field_description:transport_boc.field_boc_wizard_bordereau__date_fin
+#: model:ir.model.fields,field_description:transport_boc.field_boc_wizard_rapport_delais__date_fin
+msgid "Date fin"
+msgstr "تاريخ النهاية"
+
+#. module: transport_boc
+#: model_terms:ir.ui.view,arch_db:transport_boc.bordereau_rappel_echeance
+msgid "Date rappel"
+msgstr "تاريخ التذكير"
+
+#. module: transport_boc
+#: model_terms:ir.ui.view,arch_db:transport_boc.rapport_boc_delais
+#: model_terms:ir.ui.view,arch_db:transport_boc.rapport_boc_depasse
+msgid "Date réponse"
 msgstr "تاريخ الرد"
 
 #. module: transport_boc
-#: model:ir.model.fields,field_description:transport_boc.field_boc_transmission__date_transmission
-msgid "Date de transmission"
-msgstr "تاريخ الإحالة"
+#: model_terms:ir.ui.view,arch_db:transport_boc.bordereau_externe_transfere
+#: model_terms:ir.ui.view,arch_db:transport_boc.bordereau_interne_transfere
+msgid "Date trans."
+msgstr "تاريخ التحويل"
 
 #. module: transport_boc
-#: model:ir.model.fields,field_description:transport_boc.field_boc_courrier_arrivee__date_courrier
-#: model_terms:ir.ui.view,arch_db:transport_boc.rapport_boc_arrivee
-msgid "Date du courrier"
-msgstr "تاريخ المراسلة"
+#: model_terms:ir.ui.view,arch_db:transport_boc.bordereau_interne_non_transfere
+msgid "Date trans. prévue"
+msgstr "تاريخ التحويل المتوقع"
 
 #. module: transport_boc
-#: model:ir.model.fields,help:transport_boc.field_boc_courrier_arrivee__date_echeance
-msgid "Date limite de traitement/réponse"
-msgstr "الأجل الأقصى للمعالجة/الرد"
+#: model:ir.model.fields,help:transport_boc.field_boc_courrier_arrivee__ged_archive_date
+#: model:ir.model.fields,help:transport_boc.field_boc_courrier_depart__ged_archive_date
+msgid "Date à laquelle le document a été archivé dans la GED"
+msgstr "تاريخ أرشفة الوثيقة في نظام إدارة الوثائق"
 
 #. module: transport_boc
-#: model_terms:ir.ui.view,arch_db:transport_boc.rapport_boc_arrivee
-msgid "Date transmission"
-msgstr "تاريخ الإحالة"
-
-#. module: transport_boc
-#: model_terms:ir.ui.view,arch_db:transport_boc.rapport_boc_arrivee
+#: model_terms:ir.ui.view,arch_db:transport_boc.bordereau_rappel_echeance
+#: model_terms:ir.ui.view,arch_db:transport_boc.rapport_boc_delais
+#: model_terms:ir.ui.view,arch_db:transport_boc.rapport_boc_depasse
+#: model_terms:ir.ui.view,arch_db:transport_boc.rapport_boc_echus
 msgid "Date échéance"
 msgstr "تاريخ الاستحقاق"
 
 #. module: transport_boc
+#: model_terms:ir.ui.view,arch_db:transport_boc.view_boc_arrivee_form
+#: model_terms:ir.ui.view,arch_db:transport_boc.view_boc_depart_form
+#: model_terms:ir.ui.view,arch_db:transport_boc.view_boc_transmission_form
+msgid "Dates"
+msgstr "التواريخ"
+
+#. module: transport_boc
+#: model_terms:ir.ui.view,arch_db:transport_boc.view_boc_transmission_search
+msgid "Department"
+msgstr "المصلحة"
+
+#. module: transport_boc
+#: model_terms:ir.ui.view,arch_db:transport_boc.rapport_boc_arrivee
+msgid "Department / Division"
+msgstr "المصلحة / الإدارة"
+
+#. module: transport_boc
+#: model:ir.model.fields,field_description:transport_boc.field_boc_courrier_depart__date_depart
+#: model_terms:ir.ui.view,arch_db:transport_boc.rapport_boc_depart
+msgid "Departure Date"
+msgstr "تاريخ الإرسال"
+
+#. module: transport_boc
+#: model:ir.model.fields,field_description:transport_boc.field_boc_courrier_depart__type_depart
+msgid "Departure type"
+msgstr "نوع الإرسال"
+
+#. module: transport_boc
+#: model:ir.model.fields,field_description:transport_boc.field_boc_courrier_periodique__derniere_echeance
+msgid "Dernière échéance traitée"
+msgstr "آخر أجل تمت معالجته"
+
+#. module: transport_boc
 #: model:ir.model.fields,field_description:transport_boc.field_boc_courrier_arrivee__description
 #: model:ir.model.fields,field_description:transport_boc.field_boc_courrier_depart__description
-msgid "Description / Remarques"
+msgid "Description / Remarks"
 msgstr "الوصف / الملاحظات"
 
 #. module: transport_boc
 #: model_terms:ir.ui.view,arch_db:transport_boc.view_boc_arrivee_form
 #: model_terms:ir.ui.view,arch_db:transport_boc.view_boc_depart_form
-msgid "Description / Remarques..."
+msgid "Description / Remarks..."
 msgstr "الوصف / الملاحظات..."
 
 #. module: transport_boc
-#: model:ir.model.fields,field_description:transport_boc.field_boc_courrier_depart__organisme_id
-#: model:ir.model.fields,field_description:transport_boc.field_boc_transmission__destinataire_nom
-#: model_terms:ir.ui.view,arch_db:transport_boc.rapport_boc_depart
-#: model_terms:ir.ui.view,arch_db:transport_boc.view_boc_depart_form
-#: model_terms:ir.ui.view,arch_db:transport_boc.view_boc_transmission_form
-msgid "Destinataire"
-msgstr "المرسَل إليه"
+#: model:ir.model.fields.selection,name:transport_boc.selection__boc_courrier_arrivee__state__diffuse
+msgid "Diffusé"
+msgstr "موزَّع"
+
+#. module: transport_boc
+#: model_terms:ir.ui.view,arch_db:transport_boc.bordereau_externe_non_transfere
+#: model_terms:ir.ui.view,arch_db:transport_boc.bordereau_externe_transfere
+#: model_terms:ir.ui.view,arch_db:transport_boc.bordereau_interne_non_transfere
+#: model_terms:ir.ui.view,arch_db:transport_boc.bordereau_interne_transfere
+#: model_terms:ir.ui.view,arch_db:transport_boc.bordereau_rappel_echeance
+msgid "Directeur"
+msgstr "المدير"
+
+#. module: transport_boc
+#: model:ir.model.fields,field_description:transport_boc.field_boc_organisme__direction
+msgid "Direction"
+msgstr "الإدارة"
+
+#. module: transport_boc
+#: model_terms:ir.ui.view,arch_db:transport_boc.view_boc_arrivee_form
+msgid "Direction / Service expéditeur"
+msgstr "الإدارة / المصلحة المُرسِلة"
+
+#. module: transport_boc
+#: model:ir.model.fields,field_description:transport_boc.field_boc_annotation__display_name
+#: model:ir.model.fields,field_description:transport_boc.field_boc_courrier_arrivee__display_name
+#: model:ir.model.fields,field_description:transport_boc.field_boc_courrier_depart__display_name
+#: model:ir.model.fields,field_description:transport_boc.field_boc_courrier_periodique__display_name
+#: model:ir.model.fields,field_description:transport_boc.field_boc_instruction__display_name
+#: model:ir.model.fields,field_description:transport_boc.field_boc_organisme__display_name
+#: model:ir.model.fields,field_description:transport_boc.field_boc_sujet__display_name
+#: model:ir.model.fields,field_description:transport_boc.field_boc_transmission__display_name
+#: model:ir.model.fields,field_description:transport_boc.field_boc_type_courrier__display_name
+#: model:ir.model.fields,field_description:transport_boc.field_boc_wizard_bordereau__display_name
+#: model:ir.model.fields,field_description:transport_boc.field_boc_wizard_rapport_delais__display_name
+msgid "Display Name"
+msgstr "اسم العرض"
+
+#. module: transport_boc
+#: model_terms:ir.ui.view,arch_db:transport_boc.view_boc_arrivee_form
+msgid "Distribute"
+msgstr "توزيع"
 
 #. module: transport_boc
 #: model_terms:ir.ui.view,arch_db:transport_boc.view_boc_arrivee_search
-msgid "Diffusé"
+msgid "Distributed"
 msgstr "موزَّع"
 
 #. module: transport_boc
 #: model:ir.model.fields,field_description:transport_boc.field_boc_courrier_arrivee__transmission_ids
 #: model_terms:ir.ui.view,arch_db:transport_boc.view_boc_arrivee_form
-msgid "Diffusions"
+#: model_terms:ir.ui.view,arch_db:transport_boc.view_boc_transmission_list
+msgid "Distributions"
 msgstr "التوزيعات"
 
 #. module: transport_boc
 #: model_terms:ir.ui.view,arch_db:transport_boc.rapport_boc_arrivee
-msgid "Diffusions / Transmissions"
+msgid "Distributions / Transmissions"
 msgstr "التوزيعات / الإحالات"
 
 #. module: transport_boc
-#: model:res.groups,name:transport_boc.group_directeur_boc
-msgid "Directeur BOC"
-msgstr "مدير مكتب البريد"
+#: model_terms:ir.ui.view,arch_db:transport_boc.view_boc_depart_form
+msgid "Document Reference"
+msgstr "مرجع الوثيقة"
 
 #. module: transport_boc
-#: model:ir.model.fields.selection,name:transport_boc.selection__boc_transmission__state__en_attente
-#: model_terms:ir.ui.view,arch_db:transport_boc.view_boc_transmission_search
-msgid "En attente"
-msgstr "قيد الانتظار"
+#: model_terms:ir.ui.view,arch_db:transport_boc.view_boc_arrivee_form
+#: model_terms:ir.ui.view,arch_db:transport_boc.view_boc_depart_form
+msgid "Document archivé dans la GED."
+msgstr "تمت أرشفة الوثيقة في نظام إدارة الوثائق."
 
 #. module: transport_boc
-#: model:ir.model.fields,field_description:transport_boc.field_boc_courrier_arrivee__en_retard
-#: model_terms:ir.ui.view,arch_db:transport_boc.view_boc_arrivee_search
+#: model:ir.model.fields,field_description:transport_boc.field_boc_type_courrier__documents_attendus
+#: model_terms:ir.ui.view,arch_db:transport_boc.view_boc_type_courrier_form
+msgid "Documents attendus"
+msgstr "الوثائق المطلوبة"
+
+#. module: transport_boc
+#: model_terms:ir.ui.view,arch_db:transport_boc.view_boc_periodique_form
+msgid "Documents attendus / Notes"
+msgstr "الوثائق المطلوبة / ملاحظات"
+
+#. module: transport_boc
+#: model:ir.model.fields,field_description:transport_boc.field_boc_courrier_arrivee__date_echeance
+#: model:ir.model.fields,field_description:transport_boc.field_boc_transmission__date_echeance
+#: model_terms:ir.ui.view,arch_db:transport_boc.rapport_boc_arrivee
+msgid "Due Date"
+msgstr "تاريخ الاستحقاق"
+
+#. module: transport_boc
+#: model_terms:ir.ui.view,arch_db:transport_boc.rapport_boc_arrivee
+msgid "Due date"
+msgstr "تاريخ الاستحقاق"
+
+#. module: transport_boc
+#: model_terms:ir.ui.view,arch_db:transport_boc.view_boc_periodique_form
+msgid "Décrire les documents/états attendus pour ce courrier périodique..."
+msgstr "وصف الوثائق/البيانات المطلوبة لهذه المراسلة الدورية..."
+
+#. module: transport_boc
+#: model_terms:ir.ui.view,arch_db:transport_boc.rapport_boc_delais
+msgid "Délai (j)"
+msgstr "الأجل (أيام)"
+
+#. module: transport_boc
+#: model_terms:ir.ui.view,arch_db:transport_boc.rapport_boc_delais
+msgid "Délai moyen de traitement"
+msgstr "متوسط أجل المعالجة"
+
+#. module: transport_boc
+#: model_terms:ir.ui.view,arch_db:transport_boc.rapport_boc_depasse
+msgid "Dépassement (j)"
+msgstr "التجاوز (أيام)"
+
+#. module: transport_boc
+#: model:ir.model.fields,field_description:transport_boc.field_boc_courrier_periodique__name
+#: model_terms:ir.ui.view,arch_db:transport_boc.view_boc_periodique_search
+msgid "Désignation"
+msgstr "التسمية"
+
+#. module: transport_boc
+#: model_terms:ir.ui.view,arch_db:transport_boc.view_boc_periodique_form
+msgid "Désignation du courrier périodique..."
+msgstr "تسمية المراسلة الدورية..."
+
+#. module: transport_boc
+#: model:ir.ui.menu,name:transport_boc.menu_boc_editions
+msgid "Editions"
+msgstr "الإصدارات"
+
+#. module: transport_boc
+#: model:ir.model.fields.selection,name:transport_boc.selection__boc_courrier_depart__support__electronique
+msgid "Electronic letter"
+msgstr "رسالة إلكترونية"
+
+#. module: transport_boc
+#: model:ir.model.fields,field_description:transport_boc.field_boc_organisme__email
+msgid "Email"
+msgstr "البريد الإلكتروني"
+
+#. module: transport_boc
+#: model_terms:ir.ui.view,arch_db:transport_boc.bordereau_rappel_echeance
+msgid "En cours"
+msgstr "قيد التنفيذ"
+
+#. module: transport_boc
+#: model:ir.model.fields,field_description:transport_boc.field_boc_courrier_periodique__en_retard
+#: model_terms:ir.ui.view,arch_db:transport_boc.view_boc_periodique_search
 msgid "En retard"
 msgstr "متأخر"
 
 #. module: transport_boc
-#: model:ir.model.fields,field_description:transport_boc.field_boc_courrier_depart__arrivee_id
-#: model_terms:ir.ui.view,arch_db:transport_boc.rapport_boc_depart
-msgid "En réponse à"
-msgstr "رداً على"
+#: model_terms:ir.ui.view,arch_db:transport_boc.bordereau_rappel_echeance
+msgid "En retard (échéance dépassée)"
+msgstr "متأخر (تجاوز الأجل)"
 
 #. module: transport_boc
-#: model_terms:ir.ui.view,arch_db:transport_boc.view_boc_arrivee_search
+#: model:ir.model.fields.selection,name:transport_boc.selection__boc_courrier_arrivee__state__enregistre
+#: model:ir.model.fields.selection,name:transport_boc.selection__boc_courrier_depart__state__enregistre
 msgid "Enregistré"
 msgstr "مسجَّل"
 
 #. module: transport_boc
-#: model:ir.model.fields.selection,name:transport_boc.selection__boc_courrier_depart__state__envoye
-msgid "Envoyé"
-msgstr "مُرسَل"
+#: model_terms:ir.ui.view,arch_db:transport_boc.view_boc_type_courrier_form
+msgid "Ex: Situation de liquidité, Fiche 7 (effectifs/masse salariale)..."
+msgstr "مثال: وضعية السيولة، البطاقة 7 (الموظفون/كتلة الأجور)..."
 
 #. module: transport_boc
-#: model_terms:ir.ui.view,arch_db:transport_boc.view_boc_arrivee_search
-#: model_terms:ir.ui.view,arch_db:transport_boc.view_boc_depart_search
-#: model_terms:ir.ui.view,arch_db:transport_boc.view_boc_transmission_search
-msgid "État"
-msgstr "الحالة"
-
-#. module: transport_boc
-#: model_terms:ir.ui.view,arch_db:transport_boc.view_boc_arrivee_search
+#: model:ir.model.fields,field_description:transport_boc.field_boc_courrier_arrivee__organisme_id
+#: model_terms:ir.ui.view,arch_db:transport_boc.bordereau_interne_non_transfere
+#: model_terms:ir.ui.view,arch_db:transport_boc.bordereau_interne_transfere
+#: model_terms:ir.ui.view,arch_db:transport_boc.bordereau_rappel_echeance
+#: model_terms:ir.ui.view,arch_db:transport_boc.rapport_boc_arrivee
+#: model_terms:ir.ui.view,arch_db:transport_boc.rapport_boc_delais
+#: model_terms:ir.ui.view,arch_db:transport_boc.rapport_boc_depasse
+#: model_terms:ir.ui.view,arch_db:transport_boc.rapport_boc_echus
+#: model_terms:ir.ui.view,arch_db:transport_boc.view_boc_arrivee_form
 msgid "Expéditeur"
 msgstr "المُرسِل"
 
 #. module: transport_boc
-#: model:ir.model.fields,field_description:transport_boc.field_boc_courrier_arrivee__fournisseur
-#: model_terms:ir.ui.view,arch_db:transport_boc.rapport_boc_arrivee
+#: model_terms:ir.ui.view,arch_db:transport_boc.view_boc_arrivee_form
+msgid "Expéditeur interne"
+msgstr "المُرسِل الداخلي"
+
+#. module: transport_boc
+#: model_terms:ir.ui.view,arch_db:transport_boc.view_boc_depart_search
+#: model_terms:ir.ui.view,arch_db:transport_boc.view_boc_transmission_search
+msgid "External"
+msgstr "خارجي"
+
+#. module: transport_boc
+#: model:ir.actions.act_window,name:transport_boc.action_boc_transmission_externes_transferees
+msgid "External Completed Transmissions"
+msgstr "الإحالات الخارجية المنجَزة"
+
+#. module: transport_boc
+#: model:ir.actions.act_window,name:transport_boc.action_boc_transmission_externes_non_transferees
+msgid "External Non-Completed Transmissions"
+msgstr "الإحالات الخارجية غير المنجَزة"
+
+#. module: transport_boc
+#: model:ir.model.fields.selection,name:transport_boc.selection__boc_courrier_arrivee__type_arrivee__externe
+#: model:ir.model.fields.selection,name:transport_boc.selection__boc_courrier_depart__type_depart__externe
+#: model:ir.model.fields.selection,name:transport_boc.selection__boc_organisme__type_organisme__externe
+#: model:ir.model.fields.selection,name:transport_boc.selection__boc_wizard_rapport_delais__type_arrivee__externe
+#: model_terms:ir.ui.view,arch_db:transport_boc.view_boc_arrivee_search
+msgid "Externe"
+msgstr "خارجي"
+
+#. module: transport_boc
+#: model:boc.type.courrier,name:transport_boc.type_courrier_fiche18_annuel
+msgid "Fiche 18 — Rapport annuel"
+msgstr "البطاقة 18 — التقرير السنوي"
+
+#. module: transport_boc
+#: model:boc.type.courrier,name:transport_boc.type_courrier_fiche7_mensuel
+msgid "Fiche 7 — Effectifs et masse salariale"
+msgstr "البطاقة 7 — الموظفون وكتلة الأجور"
+
+#. module: transport_boc
+#: model:boc.type.courrier,name:transport_boc.type_courrier_endettement_semestriel
+msgid "Fiches d'endettement et créances (n°12 et 13)"
+msgstr "بطاقات المديونية والمستحقات (رقم 12 و13)"
+
+#. module: transport_boc
+#: model_terms:ir.ui.view,arch_db:transport_boc.view_boc_arrivee_form
+#: model_terms:ir.ui.view,arch_db:transport_boc.view_boc_depart_form
+msgid "File"
+msgstr "تصنيف"
+
+#. module: transport_boc
+#: model:ir.model.fields.selection,name:transport_boc.selection__boc_courrier_arrivee__state__classe
+#: model:ir.model.fields.selection,name:transport_boc.selection__boc_courrier_depart__state__classe
+msgid "Filed"
+msgstr "مُصنَّف"
+
+#. module: transport_boc
+#: model_terms:ir.ui.view,arch_db:transport_boc.view_boc_wizard_rapport_delais_form
+msgid "Filters"
+msgstr "المرشّحات"
+
+#. module: transport_boc
+#: model:ir.model.fields,field_description:transport_boc.field_boc_courrier_arrivee__annee_exercice
+msgid "Fiscal Year"
+msgstr "سنة الممارسة"
+
+#. module: transport_boc
+#: model:ir.model.fields,field_description:transport_boc.field_boc_courrier_arrivee__message_follower_ids
+#: model:ir.model.fields,field_description:transport_boc.field_boc_courrier_depart__message_follower_ids
+#: model:ir.model.fields,field_description:transport_boc.field_boc_courrier_periodique__message_follower_ids
+msgid "Followers"
+msgstr "المتابعون"
+
+#. module: transport_boc
+#: model:ir.model.fields,field_description:transport_boc.field_boc_courrier_arrivee__message_partner_ids
+#: model:ir.model.fields,field_description:transport_boc.field_boc_courrier_depart__message_partner_ids
+#: model:ir.model.fields,field_description:transport_boc.field_boc_courrier_periodique__message_partner_ids
+msgid "Followers (Partners)"
+msgstr "المتابعون (الشركاء)"
+
+#. module: transport_boc
+#: model:ir.model.fields,help:transport_boc.field_boc_courrier_arrivee__activity_type_icon
+#: model:ir.model.fields,help:transport_boc.field_boc_courrier_depart__activity_type_icon
+#: model:ir.model.fields,help:transport_boc.field_boc_courrier_periodique__activity_type_icon
+msgid "Font awesome icon e.g. fa-tasks"
+msgstr "أيقونة Font Awesome مثال: fa-tasks"
+
+#. module: transport_boc
+#: model_terms:ir.ui.view,arch_db:transport_boc.view_boc_arrivee_search
 msgid "Fournisseur"
 msgstr "المورد"
 
 #. module: transport_boc
+#: model:res.groups,comment:transport_boc.group_directeur_boc
+msgid "Full access to the Mail Office module."
+msgstr "وصول كامل لوحدة مكتب البريد."
+
+#. module: transport_boc
+#: model:ir.model.fields.selection,name:transport_boc.selection__boc_courrier_depart__support__carte_geo
+msgid "Geographic map"
+msgstr "خريطة جغرافية"
+
+#. module: transport_boc
+#: model_terms:ir.ui.view,arch_db:transport_boc.view_boc_wizard_bordereau_form
+msgid "Générer le bordereau PDF"
+msgstr "إنشاء بطاقة PDF"
+
+#. module: transport_boc
+#: model_terms:ir.ui.view,arch_db:transport_boc.view_boc_wizard_rapport_delais_form
+msgid "Générer le rapport PDF"
+msgstr "توليد التقرير PDF"
+
+#. module: transport_boc
+#: model_terms:ir.ui.view,arch_db:transport_boc.view_boc_periodique_form
+msgid "Générer un courrier"
+msgstr "إنشاء مراسلة"
+
+#. module: transport_boc
+#: model:ir.model.fields,field_description:transport_boc.field_boc_courrier_arrivee__has_message
+#: model:ir.model.fields,field_description:transport_boc.field_boc_courrier_depart__has_message
+#: model:ir.model.fields,field_description:transport_boc.field_boc_courrier_periodique__has_message
+msgid "Has Message"
+msgstr "يحتوي رسائل"
+
+#. module: transport_boc
+#: model:ir.model.fields,field_description:transport_boc.field_boc_annotation__id
+#: model:ir.model.fields,field_description:transport_boc.field_boc_courrier_arrivee__id
+#: model:ir.model.fields,field_description:transport_boc.field_boc_courrier_depart__id
+#: model:ir.model.fields,field_description:transport_boc.field_boc_courrier_periodique__id
+#: model:ir.model.fields,field_description:transport_boc.field_boc_instruction__id
+#: model:ir.model.fields,field_description:transport_boc.field_boc_organisme__id
+#: model:ir.model.fields,field_description:transport_boc.field_boc_sujet__id
+#: model:ir.model.fields,field_description:transport_boc.field_boc_transmission__id
+#: model:ir.model.fields,field_description:transport_boc.field_boc_type_courrier__id
+#: model:ir.model.fields,field_description:transport_boc.field_boc_wizard_bordereau__id
+#: model:ir.model.fields,field_description:transport_boc.field_boc_wizard_rapport_delais__id
+msgid "ID"
+msgstr "المُعرف"
+
+#. module: transport_boc
+#: model:ir.model.fields,field_description:transport_boc.field_boc_courrier_arrivee__activity_exception_icon
+#: model:ir.model.fields,field_description:transport_boc.field_boc_courrier_depart__activity_exception_icon
+#: model:ir.model.fields,field_description:transport_boc.field_boc_courrier_periodique__activity_exception_icon
+msgid "Icon"
+msgstr "أيقونة"
+
+#. module: transport_boc
+#: model:ir.model.fields,help:transport_boc.field_boc_courrier_arrivee__activity_exception_icon
+#: model:ir.model.fields,help:transport_boc.field_boc_courrier_depart__activity_exception_icon
+#: model:ir.model.fields,help:transport_boc.field_boc_courrier_periodique__activity_exception_icon
+msgid "Icon to indicate an exception activity."
+msgstr "أيقونة للإشارة إلى نشاط استثنائي."
+
+#. module: transport_boc
+#: model:ir.model.fields,help:transport_boc.field_boc_courrier_arrivee__ged_document_ref
+#: model:ir.model.fields,help:transport_boc.field_boc_courrier_depart__ged_document_ref
+msgid "Identifiant / référence du document dans la GED externe"
+msgstr "معرّف / مرجع الوثيقة في نظام إدارة الوثائق الخارجي"
+
+#. module: transport_boc
 #: model_terms:ir.ui.view,arch_db:transport_boc.view_boc_arrivee_form
-msgid "Informations Facture"
-msgstr "معلومات الفاتورة"
+#: model_terms:ir.ui.view,arch_db:transport_boc.view_boc_depart_form
+#: model_terms:ir.ui.view,arch_db:transport_boc.view_boc_organisme_form
+#: model_terms:ir.ui.view,arch_db:transport_boc.view_boc_periodique_form
+#: model_terms:ir.ui.view,arch_db:transport_boc.view_boc_type_courrier_form
+msgid "Identification"
+msgstr "التعريف"
+
+#. module: transport_boc
+#: model:ir.model.fields,help:transport_boc.field_boc_courrier_arrivee__message_needaction
+#: model:ir.model.fields,help:transport_boc.field_boc_courrier_depart__message_needaction
+#: model:ir.model.fields,help:transport_boc.field_boc_courrier_periodique__message_needaction
+msgid "If checked, new messages require your attention."
+msgstr "إذا كان محدداً، تستلزم الرسائل الجديدة انتباهك."
+
+#. module: transport_boc
+#: model:ir.model.fields,help:transport_boc.field_boc_courrier_arrivee__message_has_error
+#: model:ir.model.fields,help:transport_boc.field_boc_courrier_arrivee__message_has_sms_error
+#: model:ir.model.fields,help:transport_boc.field_boc_courrier_depart__message_has_error
+#: model:ir.model.fields,help:transport_boc.field_boc_courrier_depart__message_has_sms_error
+#: model:ir.model.fields,help:transport_boc.field_boc_courrier_periodique__message_has_error
+#: model:ir.model.fields,help:transport_boc.field_boc_courrier_periodique__message_has_sms_error
+msgid "If checked, some messages have a delivery error."
+msgstr "إذا كان محدداً، بعض الرسائل تحتوي على خطأ في التسليم."
+
+#. module: transport_boc
+#: model:ir.model.fields,help:transport_boc.field_boc_courrier_depart__destinataire_nom
+msgid "If the recipient is not in the organisations list"
+msgstr "إذا لم يكن المستلم في قائمة الهياكل"
+
+#. module: transport_boc
+#: model:ir.model.fields,help:transport_boc.field_boc_courrier_arrivee__expediteur_nom
+msgid "If the sender is not in the organisations list"
+msgstr "إذا لم يكن المُرسِل في قائمة الهياكل"
+
+#. module: transport_boc
+#: model:ir.model.fields,field_description:transport_boc.field_boc_courrier_depart__arrivee_id
+#: model_terms:ir.ui.view,arch_db:transport_boc.rapport_boc_depart
+msgid "In reply to"
+msgstr "رداً على"
+
+#. module: transport_boc
+#: model:ir.actions.act_window,name:transport_boc.action_boc_arrivee
+#: model:ir.model,name:transport_boc.model_boc_courrier_arrivee
+#: model_terms:ir.ui.view,arch_db:transport_boc.view_boc_arrivee_form
+msgid "Incoming Mail"
+msgstr "بريد وارد"
+
+#. module: transport_boc
+#: model:ir.actions.report,name:transport_boc.action_rapport_boc_arrivee
+msgid "Incoming Mail Slip"
+msgstr "بطاقة البريد الوارد"
+
+#. module: transport_boc
+#: model_terms:ir.ui.view,arch_db:transport_boc.rapport_boc_arrivee
+msgid "Incoming Mail Slip — Bordereau Courrier Arrivée"
+msgstr "بطاقة البريد الوارد — Bordereau Courrier Arrivée"
+
+#. module: transport_boc
+#: model_terms:ir.ui.view,arch_db:transport_boc.view_boc_arrivee_list
+msgid "Incoming Mails"
+msgstr "البريد الوارد"
+
+#. module: transport_boc
+#: model:ir.model.fields,field_description:transport_boc.field_boc_transmission__arrivee_id
+msgid "Incoming mail"
+msgstr "بريد وارد"
+
+#. module: transport_boc
+#: model:ir.model.fields,help:transport_boc.field_boc_courrier_depart__arrivee_id
+msgid "Incoming mail to which this outgoing mail replies"
+msgstr "البريد الوارد الذي يرد عليه هذا البريد الصادر"
 
 #. module: transport_boc
 #: model:ir.model.fields,field_description:transport_boc.field_boc_instruction__name
 #: model:ir.model.fields,field_description:transport_boc.field_boc_transmission__instruction
+#: model_terms:ir.ui.view,arch_db:transport_boc.bordereau_externe_non_transfere
+#: model_terms:ir.ui.view,arch_db:transport_boc.bordereau_externe_transfere
+#: model_terms:ir.ui.view,arch_db:transport_boc.bordereau_interne_non_transfere
+#: model_terms:ir.ui.view,arch_db:transport_boc.bordereau_interne_transfere
 #: model_terms:ir.ui.view,arch_db:transport_boc.rapport_boc_arrivee
 #: model_terms:ir.ui.view,arch_db:transport_boc.view_boc_transmission_form
 msgid "Instruction"
 msgstr "التعليمة"
-
-#. module: transport_boc
-#: model:ir.model,name:transport_boc.model_boc_instruction
-msgid "Instruction Prédéfinie"
-msgstr "تعليمة محددة مسبقاً"
-
-#. module: transport_boc
-#: model:ir.model.fields,field_description:transport_boc.field_boc_transmission__instruction_id
-msgid "Instruction prédéfinie"
-msgstr "تعليمة محددة مسبقاً"
-
-#. module: transport_boc
-#: model:ir.actions.act_window,name:transport_boc.action_boc_instruction
-#: model:ir.ui.menu,name:transport_boc.menu_boc_instruction
-#: model_terms:ir.ui.view,arch_db:transport_boc.view_boc_instruction_list
-msgid "Instructions prédéfinies"
-msgstr "التعليمات المحددة مسبقاً"
 
 #. module: transport_boc
 #: model:ir.model.fields.selection,name:transport_boc.selection__boc_courrier_arrivee__type_arrivee__interne
@@ -370,827 +1280,1261 @@ msgstr "التعليمات المحددة مسبقاً"
 #: model_terms:ir.ui.view,arch_db:transport_boc.view_boc_depart_search
 #: model_terms:ir.ui.view,arch_db:transport_boc.view_boc_organisme_form
 #: model_terms:ir.ui.view,arch_db:transport_boc.view_boc_transmission_search
+msgid "Internal"
+msgstr "داخلي"
+
+#. module: transport_boc
+#: model:ir.actions.act_window,name:transport_boc.action_boc_transmission_non_transferees
+msgid "Internal Non-Transferred Transmissions"
+msgstr "الإحالات الداخلية غير المحوَّلة"
+
+#. module: transport_boc
+#: model:ir.actions.act_window,name:transport_boc.action_boc_transmission_transferees
+msgid "Internal Transferred Transmissions"
+msgstr "الإحالات الداخلية المحوَّلة"
+
+#. module: transport_boc
+#: model:ir.model.fields,field_description:transport_boc.field_boc_courrier_depart__reference_interne
+msgid "Internal reference"
+msgstr "المرجع الداخلي"
+
+#. module: transport_boc
+#: model:ir.model.fields.selection,name:transport_boc.selection__boc_wizard_rapport_delais__type_arrivee__interne
 msgid "Interne"
 msgstr "داخلي"
 
 #. module: transport_boc
-#: model:ir.model.fields,field_description:transport_boc.field_boc_courrier_arrivee__jours_restants
+#: model:ir.model.fields,field_description:transport_boc.field_boc_courrier_arrivee__montant_facture
+msgid "Invoice Amount (TND)"
+msgstr "مبلغ الفاتورة (د.ت)"
+
+#. module: transport_boc
+#: model_terms:ir.ui.view,arch_db:transport_boc.view_boc_arrivee_form
+msgid "Invoice Information"
+msgstr "معلومات الفاتورة"
+
+#. module: transport_boc
+#: model:ir.model.fields,field_description:transport_boc.field_boc_courrier_arrivee__reference_facture
+#: model_terms:ir.ui.view,arch_db:transport_boc.rapport_boc_arrivee
+msgid "Invoice reference"
+msgstr "مرجع الفاتورة"
+
+#. module: transport_boc
+#: model:ir.model.fields,field_description:transport_boc.field_boc_courrier_arrivee__message_is_follower
+#: model:ir.model.fields,field_description:transport_boc.field_boc_courrier_depart__message_is_follower
+#: model:ir.model.fields,field_description:transport_boc.field_boc_courrier_periodique__message_is_follower
+msgid "Is Follower"
+msgstr "متابع"
+
+#. module: transport_boc
+#: model:ir.model.fields,field_description:transport_boc.field_boc_courrier_arrivee__est_periodique
+msgid "Issu d'un modèle périodique"
+msgstr "مستخرج من نموذج دوري"
+
+#. module: transport_boc
+#: model_terms:ir.ui.view,arch_db:transport_boc.rapport_boc_echus
+msgid "Jours dépassés"
+msgstr "أيام التجاوز"
+
+#. module: transport_boc
+#: model_terms:ir.ui.view,arch_db:transport_boc.bordereau_rappel_echeance
 msgid "Jours restants"
 msgstr "الأيام المتبقية"
 
 #. module: transport_boc
-#: model:ir.model.fields.selection,name:transport_boc.selection__boc_courrier_depart__support__lettre_fermee
-msgid "Lettre fermée"
-msgstr "رسالة مغلقة"
+#: model:ir.model.fields,help:transport_boc.field_boc_wizard_rapport_delais__type_arrivee
+msgid "Laisser vide pour tous"
+msgstr "اترك فارغاً للكل"
 
 #. module: transport_boc
-#: model:ir.model.fields.selection,name:transport_boc.selection__boc_courrier_depart__support__papier
-msgid "Lettre papier"
-msgstr "رسالة ورقية"
+#: model:ir.model.fields,field_description:transport_boc.field_boc_annotation__write_uid
+#: model:ir.model.fields,field_description:transport_boc.field_boc_courrier_arrivee__write_uid
+#: model:ir.model.fields,field_description:transport_boc.field_boc_courrier_depart__write_uid
+#: model:ir.model.fields,field_description:transport_boc.field_boc_courrier_periodique__write_uid
+#: model:ir.model.fields,field_description:transport_boc.field_boc_instruction__write_uid
+#: model:ir.model.fields,field_description:transport_boc.field_boc_organisme__write_uid
+#: model:ir.model.fields,field_description:transport_boc.field_boc_sujet__write_uid
+#: model:ir.model.fields,field_description:transport_boc.field_boc_transmission__write_uid
+#: model:ir.model.fields,field_description:transport_boc.field_boc_type_courrier__write_uid
+#: model:ir.model.fields,field_description:transport_boc.field_boc_wizard_bordereau__write_uid
+#: model:ir.model.fields,field_description:transport_boc.field_boc_wizard_rapport_delais__write_uid
+msgid "Last Updated by"
+msgstr "آخر تحديث بواسطة"
 
 #. module: transport_boc
-#: model:ir.model.fields.selection,name:transport_boc.selection__boc_courrier_depart__support__electronique
-msgid "Lettre électronique"
-msgstr "رسالة إلكترونية"
+#: model:ir.model.fields,field_description:transport_boc.field_boc_annotation__write_date
+#: model:ir.model.fields,field_description:transport_boc.field_boc_courrier_arrivee__write_date
+#: model:ir.model.fields,field_description:transport_boc.field_boc_courrier_depart__write_date
+#: model:ir.model.fields,field_description:transport_boc.field_boc_courrier_periodique__write_date
+#: model:ir.model.fields,field_description:transport_boc.field_boc_instruction__write_date
+#: model:ir.model.fields,field_description:transport_boc.field_boc_organisme__write_date
+#: model:ir.model.fields,field_description:transport_boc.field_boc_sujet__write_date
+#: model:ir.model.fields,field_description:transport_boc.field_boc_transmission__write_date
+#: model:ir.model.fields,field_description:transport_boc.field_boc_type_courrier__write_date
+#: model:ir.model.fields,field_description:transport_boc.field_boc_wizard_bordereau__write_date
+#: model:ir.model.fields,field_description:transport_boc.field_boc_wizard_rapport_delais__write_date
+msgid "Last Updated on"
+msgstr "تاريخ آخر تحديث"
 
 #. module: transport_boc
 #: model_terms:ir.ui.view,arch_db:transport_boc.view_boc_depart_form
-msgid "Lien avec arrivée"
+msgid "Link to Incoming"
 msgstr "الربط بالوارد"
 
 #. module: transport_boc
+#: model:ir.model.fields,help:transport_boc.field_boc_type_courrier__documents_attendus
+msgid ""
+"Liste des documents/états financiers attendus pour ce courrier périodique."
+msgstr "قائمة الوثائق/البيانات المالية المطلوبة لهذه المراسلة الدورية."
+
+#. module: transport_boc
 #: model_terms:ir.ui.view,arch_db:transport_boc.view_boc_transmission_form
-msgid "Marquer Traité"
+#: model_terms:ir.ui.view,arch_db:transport_boc.view_boc_transmission_search
+msgid "Mail"
+msgstr "مراسلة"
+
+#. module: transport_boc
+#: model:ir.model.fields,field_description:transport_boc.field_boc_courrier_arrivee__date_courrier
+#: model_terms:ir.ui.view,arch_db:transport_boc.rapport_boc_arrivee
+msgid "Mail Date"
+msgstr "تاريخ المراسلة"
+
+#. module: transport_boc
+#: model:ir.ui.menu,name:transport_boc.menu_boc_root
+#: model:res.groups.privilege,name:transport_boc.privilege_transport_boc
+msgid "Mail Office"
+msgstr "مكتب البريد"
+
+#. module: transport_boc
+#: model:ir.model,name:transport_boc.model_boc_type_courrier
+#: model_terms:ir.ui.view,arch_db:transport_boc.view_boc_type_courrier_form
+msgid "Mail Type"
+msgstr "نوع المراسلة"
+
+#. module: transport_boc
+#: model_terms:ir.ui.view,arch_db:transport_boc.view_boc_arrivee_form
+#: model_terms:ir.ui.view,arch_db:transport_boc.view_boc_depart_form
+msgid "Mail subject..."
+msgstr "موضوع المراسلة..."
+
+#. module: transport_boc
+#: model:ir.model.fields,field_description:transport_boc.field_boc_type_courrier__name
+msgid "Mail type"
+msgstr "نوع المراسلة"
+
+#. module: transport_boc
+#: model:ir.actions.act_window,name:transport_boc.action_boc_type_courrier
+#: model:ir.ui.menu,name:transport_boc.menu_boc_type_courrier
+#: model_terms:ir.ui.view,arch_db:transport_boc.view_boc_type_courrier_list
+msgid "Mail types"
+msgstr "أنواع المراسلات"
+
+#. module: transport_boc
+#: model:ir.actions.act_window,name:transport_boc.action_boc_arrivee_sans_suite
+msgid "Mails without follow-up"
+msgstr "مراسلات بدون متابعة"
+
+#. module: transport_boc
+#: model_terms:ir.ui.view,arch_db:transport_boc.view_boc_arrivee_form
+#: model_terms:ir.ui.view,arch_db:transport_boc.view_boc_depart_form
+msgid "Mark as Archived"
+msgstr "تحديد كمؤرشف"
+
+#. module: transport_boc
+#: model_terms:ir.ui.view,arch_db:transport_boc.view_boc_transmission_form
+msgid "Mark as Processed"
 msgstr "تحديد كمعالَج"
 
 #. module: transport_boc
-#: model:ir.model.fields,field_description:transport_boc.field_boc_courrier_arrivee__montant_facture
-msgid "Montant facture (DT)"
-msgstr "مبلغ الفاتورة (د.ت)"
+#: model_terms:ir.ui.view,arch_db:transport_boc.view_boc_arrivee_form
+#: model_terms:ir.ui.view,arch_db:transport_boc.view_boc_depart_form
+msgid "Mark as Restored"
+msgstr "تحديد كمستعاد"
+
+#. module: transport_boc
+#: model_terms:ir.ui.view,arch_db:transport_boc.rapport_boc_depart
+msgid "Medium"
+msgstr "الوسيلة"
+
+#. module: transport_boc
+#: model:ir.model.fields,field_description:transport_boc.field_boc_courrier_depart__support
+msgid "Medium / Format"
+msgstr "الوسيلة / الصيغة"
+
+#. module: transport_boc
+#: model:ir.model.fields.selection,name:transport_boc.selection__boc_type_courrier__periodicite__mensuel
+#: model_terms:ir.ui.view,arch_db:transport_boc.view_boc_periodique_search
+msgid "Mensuel"
+msgstr "شهري"
+
+#. module: transport_boc
+#: model:ir.model.fields,field_description:transport_boc.field_boc_courrier_arrivee__message_has_error
+#: model:ir.model.fields,field_description:transport_boc.field_boc_courrier_depart__message_has_error
+#: model:ir.model.fields,field_description:transport_boc.field_boc_courrier_periodique__message_has_error
+msgid "Message Delivery error"
+msgstr "خطأ في تسليم الرسالة"
+
+#. module: transport_boc
+#: model:ir.model.fields,field_description:transport_boc.field_boc_courrier_arrivee__message_ids
+#: model:ir.model.fields,field_description:transport_boc.field_boc_courrier_depart__message_ids
+#: model:ir.model.fields,field_description:transport_boc.field_boc_courrier_periodique__message_ids
+msgid "Messages"
+msgstr "الرسائل"
+
+#. module: transport_boc
+#: model:ir.model.fields,field_description:transport_boc.field_boc_courrier_arrivee__periodique_id
+msgid "Modèle périodique"
+msgstr "النموذج الدوري"
+
+#. module: transport_boc
+#: model_terms:ir.ui.view,arch_db:transport_boc.view_boc_arrivee_search
+msgid "Mois"
+msgstr "الشهر"
+
+#. module: transport_boc
+#: model_terms:ir.ui.view,arch_db:transport_boc.view_boc_depart_search
+msgid "Month"
+msgstr "الشهر"
+
+#. module: transport_boc
+#: model:ir.model.fields,field_description:transport_boc.field_boc_courrier_arrivee__my_activity_date_deadline
+#: model:ir.model.fields,field_description:transport_boc.field_boc_courrier_depart__my_activity_date_deadline
+#: model:ir.model.fields,field_description:transport_boc.field_boc_courrier_periodique__my_activity_date_deadline
+msgid "My Activity Deadline"
+msgstr "أجل نشاطي"
+
+#. module: transport_boc
+#: model_terms:ir.ui.view,arch_db:transport_boc.view_boc_arrivee_search
+msgid "Nature courrier"
+msgstr "طبيعة المراسلة"
 
 #. module: transport_boc
 #: model:ir.model.fields,field_description:transport_boc.field_boc_courrier_arrivee__type_courrier_id
 #: model:ir.model.fields,field_description:transport_boc.field_boc_courrier_depart__type_courrier_id
 #: model_terms:ir.ui.view,arch_db:transport_boc.rapport_boc_arrivee
 #: model_terms:ir.ui.view,arch_db:transport_boc.rapport_boc_depart
-msgid "Nature du courrier"
+msgid "Nature of mail"
 msgstr "طبيعة المراسلة"
 
 #. module: transport_boc
-#: model:ir.model.fields,field_description:transport_boc.field_boc_courrier_arrivee__nb_transmissions
-msgid "Nb diffusions"
-msgstr "عدد التوزيعات"
+#: model:ir.model.fields,field_description:transport_boc.field_boc_courrier_periodique__nb_courriers
+msgid "Nb courriers générés"
+msgstr "عدد المراسلات المولَّدة"
 
 #. module: transport_boc
 #: model_terms:ir.ui.view,arch_db:transport_boc.view_boc_arrivee_search
-msgid "Nécessite réponse"
+msgid "Needs Reply"
 msgstr "يستلزم ردًا"
 
 #. module: transport_boc
-#: model:ir.model.fields,field_description:transport_boc.field_boc_courrier_depart__destinataire_nom
-msgid "Nom destinataire"
-msgstr "اسم المستلم"
+#: model:ir.model.fields,field_description:transport_boc.field_boc_courrier_arrivee__activity_date_deadline
+#: model:ir.model.fields,field_description:transport_boc.field_boc_courrier_depart__activity_date_deadline
+#: model:ir.model.fields,field_description:transport_boc.field_boc_courrier_periodique__activity_date_deadline
+msgid "Next Activity Deadline"
+msgstr "أجل النشاط القادم"
 
 #. module: transport_boc
-#: model:ir.model.fields,field_description:transport_boc.field_boc_courrier_arrivee__expediteur_nom
+#: model:ir.model.fields,field_description:transport_boc.field_boc_courrier_arrivee__activity_summary
+#: model:ir.model.fields,field_description:transport_boc.field_boc_courrier_depart__activity_summary
+#: model:ir.model.fields,field_description:transport_boc.field_boc_courrier_periodique__activity_summary
+msgid "Next Activity Summary"
+msgstr "ملخص النشاط القادم"
+
+#. module: transport_boc
+#: model:ir.model.fields,field_description:transport_boc.field_boc_courrier_arrivee__activity_type_id
+#: model:ir.model.fields,field_description:transport_boc.field_boc_courrier_depart__activity_type_id
+#: model:ir.model.fields,field_description:transport_boc.field_boc_courrier_periodique__activity_type_id
+msgid "Next Activity Type"
+msgstr "نوع النشاط القادم"
+
+#. module: transport_boc
+#: model_terms:ir.actions.act_window,help:transport_boc.action_boc_arrivee
+msgid "No incoming mail at the moment."
+msgstr "لا يوجد بريد وارد في الوقت الحالي."
+
+#. module: transport_boc
+#: model_terms:ir.actions.act_window,help:transport_boc.action_boc_depart
+msgid "No outgoing mail at the moment."
+msgstr "لا يوجد بريد صادر في الوقت الحالي."
+
+#. module: transport_boc
+#: model:ir.model.fields,field_description:transport_boc.field_boc_courrier_arrivee__nb_transmissions
+msgid "No. of distributions"
+msgstr "عدد التوزيعات"
+
+#. module: transport_boc
+#: model_terms:ir.ui.view,arch_db:transport_boc.view_boc_arrivee_form
+msgid "Nom (si non référencé)"
+msgstr "الاسم (إذا لم يكن مُدرجاً)"
+
+#. module: transport_boc
+#: model_terms:ir.ui.view,arch_db:transport_boc.view_boc_arrivee_form
+msgid "Nom de l'expéditeur interne..."
+msgstr "اسم المُرسِل الداخلي..."
+
+#. module: transport_boc
+#: model_terms:ir.ui.view,arch_db:transport_boc.view_boc_arrivee_search
 msgid "Nom expéditeur"
 msgstr "اسم المُرسِل"
 
 #. module: transport_boc
-#: model:ir.model.fields,field_description:transport_boc.field_boc_organisme__name
-msgid "Nom organisme"
-msgstr "اسم الهيكل"
+#: model_terms:ir.ui.view,arch_db:transport_boc.view_boc_arrivee_form
+msgid "Nom expéditeur (libre)"
+msgstr "اسم المُرسِل (حر)"
+
+#. module: transport_boc
+#: model:ir.model.fields,help:transport_boc.field_boc_type_courrier__delai_rappel_periodique
+msgid "Nombre de jours avant l'échéance pour envoyer le rappel périodique."
+msgstr "عدد الأيام قبل الأجل لإرسال التذكير الدوري."
+
+#. module: transport_boc
+#: model:boc.type.courrier,name:transport_boc.type_courrier_nomination_semestriel
+msgid "Nomination aux postes fonctionnels"
+msgstr "التعيين في المناصب الوظيفية"
+
+#. module: transport_boc
+#: model:ir.model.fields.selection,name:transport_boc.selection__boc_courrier_arrivee__ged_archive_status__non_archive
+#: model:ir.model.fields.selection,name:transport_boc.selection__boc_courrier_depart__ged_archive_status__non_archive
+msgid "Non archivé"
+msgstr "غير مؤرشف"
+
+#. module: transport_boc
+#: model_terms:ir.ui.view,arch_db:transport_boc.view_boc_arrivee_search
+msgid "Non archivé GED"
+msgstr "غير مؤرشَف في نظام إدارة الوثائق"
 
 #. module: transport_boc
 #: model_terms:ir.ui.view,arch_db:transport_boc.view_boc_depart_search
-msgid "Non envoyé"
+msgid "Non envoye"
 msgstr "غير مُرسَل"
 
 #. module: transport_boc
-#: model:ir.ui.menu,name:transport_boc.menu_boc_transmission_non_transferees
-msgid "Non transférées"
-msgstr "غير محالة"
+#: model:ir.model.fields,field_description:transport_boc.field_boc_transmission__notes
+#: model:ir.model.fields,field_description:transport_boc.field_boc_type_courrier__notes
+msgid "Notes"
+msgstr "ملاحظات"
 
 #. module: transport_boc
-#: model:ir.model.fields,field_description:transport_boc.field_boc_courrier_arrivee__name
-#: model:ir.model.fields,field_description:transport_boc.field_boc_courrier_depart__name
-msgid "Numéro d'ordre"
+#: model:ir.model.fields,field_description:transport_boc.field_boc_courrier_periodique__notes
+msgid "Notes / Documents attendus"
+msgstr "ملاحظات / وثائق مطلوبة"
+
+#. module: transport_boc
+#: model_terms:ir.ui.view,arch_db:transport_boc.view_boc_transmission_form
+#: model_terms:ir.ui.view,arch_db:transport_boc.view_boc_type_courrier_form
+msgid "Notes..."
+msgstr "ملاحظات..."
+
+#. module: transport_boc
+#: model:ir.model.fields,field_description:transport_boc.field_boc_courrier_arrivee__message_needaction_counter
+#: model:ir.model.fields,field_description:transport_boc.field_boc_courrier_depart__message_needaction_counter
+#: model:ir.model.fields,field_description:transport_boc.field_boc_courrier_periodique__message_needaction_counter
+msgid "Number of Actions"
+msgstr "عدد الإجراءات"
+
+#. module: transport_boc
+#: model:ir.model.fields,field_description:transport_boc.field_boc_courrier_arrivee__message_has_error_counter
+#: model:ir.model.fields,field_description:transport_boc.field_boc_courrier_depart__message_has_error_counter
+#: model:ir.model.fields,field_description:transport_boc.field_boc_courrier_periodique__message_has_error_counter
+msgid "Number of errors"
+msgstr "عدد الأخطاء"
+
+#. module: transport_boc
+#: model:ir.model.fields,help:transport_boc.field_boc_courrier_arrivee__message_needaction_counter
+#: model:ir.model.fields,help:transport_boc.field_boc_courrier_depart__message_needaction_counter
+#: model:ir.model.fields,help:transport_boc.field_boc_courrier_periodique__message_needaction_counter
+msgid "Number of messages requiring action"
+msgstr "عدد الرسائل التي تستلزم إجراءً"
+
+#. module: transport_boc
+#: model:ir.model.fields,help:transport_boc.field_boc_courrier_arrivee__message_has_error_counter
+#: model:ir.model.fields,help:transport_boc.field_boc_courrier_depart__message_has_error_counter
+#: model:ir.model.fields,help:transport_boc.field_boc_courrier_periodique__message_has_error_counter
+msgid "Number of messages with delivery error"
+msgstr "عدد الرسائل ذات خطأ في التسليم"
+
+#. module: transport_boc
+#: model_terms:ir.ui.view,arch_db:transport_boc.bordereau_externe_non_transfere
+#: model_terms:ir.ui.view,arch_db:transport_boc.bordereau_externe_transfere
+#: model_terms:ir.ui.view,arch_db:transport_boc.bordereau_interne_non_transfere
+#: model_terms:ir.ui.view,arch_db:transport_boc.bordereau_interne_transfere
+#: model_terms:ir.ui.view,arch_db:transport_boc.bordereau_rappel_echeance
+msgid "N° Arrivée"
+msgstr "رقم الوارد"
+
+#. module: transport_boc
+#: model_terms:ir.ui.view,arch_db:transport_boc.rapport_boc_delais
+#: model_terms:ir.ui.view,arch_db:transport_boc.rapport_boc_depasse
+#: model_terms:ir.ui.view,arch_db:transport_boc.rapport_boc_echus
+msgid "N° Ordre"
 msgstr "رقم الترتيب"
 
 #. module: transport_boc
-#: model_terms:ir.ui.view,arch_db:transport_boc.rapport_boc_arrivee
-#: model_terms:ir.ui.view,arch_db:transport_boc.rapport_boc_depart
+#: model_terms:ir.ui.view,arch_db:transport_boc.view_boc_arrivee_search
 msgid "N° d'ordre"
 msgstr "رقم الترتيب"
 
 #. module: transport_boc
-#: model:ir.model.fields,field_description:transport_boc.field_boc_courrier_arrivee__necessite_reponse
-msgid "Nécessite une réponse"
-msgstr "يستلزم ردًا"
-
-#. module: transport_boc
-#: model:ir.model.fields,field_description:transport_boc.field_boc_courrier_arrivee__sujet
-#: model:ir.model.fields,field_description:transport_boc.field_boc_courrier_depart__sujet
-#: model_terms:ir.ui.view,arch_db:transport_boc.rapport_boc_arrivee
-#: model_terms:ir.ui.view,arch_db:transport_boc.rapport_boc_depart
-msgid "Objet / Sujet"
+#: model_terms:ir.ui.view,arch_db:transport_boc.bordereau_externe_non_transfere
+#: model_terms:ir.ui.view,arch_db:transport_boc.bordereau_externe_transfere
+#: model_terms:ir.ui.view,arch_db:transport_boc.bordereau_interne_non_transfere
+#: model_terms:ir.ui.view,arch_db:transport_boc.bordereau_interne_transfere
+#: model_terms:ir.ui.view,arch_db:transport_boc.bordereau_rappel_echeance
+#: model_terms:ir.ui.view,arch_db:transport_boc.rapport_boc_delais
+#: model_terms:ir.ui.view,arch_db:transport_boc.rapport_boc_depasse
+#: model_terms:ir.ui.view,arch_db:transport_boc.rapport_boc_echus
+msgid "Objet"
 msgstr "الموضوع"
 
 #. module: transport_boc
 #: model_terms:ir.ui.view,arch_db:transport_boc.view_boc_arrivee_form
 #: model_terms:ir.ui.view,arch_db:transport_boc.view_boc_depart_form
-msgid "Objet du courrier..."
-msgstr "موضوع المراسلة..."
+msgid "Open in DMS"
+msgstr "فتح في نظام إدارة الوثائق"
+
+#. module: transport_boc
+#: model_terms:ir.ui.view,arch_db:transport_boc.rapport_boc_arrivee
+#: model_terms:ir.ui.view,arch_db:transport_boc.rapport_boc_depart
+msgid "Order No."
+msgstr "رقم الترتيب"
+
+#. module: transport_boc
+#: model:ir.model.fields,field_description:transport_boc.field_boc_courrier_arrivee__name
+#: model:ir.model.fields,field_description:transport_boc.field_boc_courrier_depart__name
+msgid "Order number"
+msgstr "رقم الترتيب"
 
 #. module: transport_boc
 #: model:ir.model,name:transport_boc.model_boc_organisme
 #: model_terms:ir.ui.view,arch_db:transport_boc.view_boc_organisme_form
-msgid "Organisme"
+msgid "Organisation"
 msgstr "الهيكل"
+
+#. module: transport_boc
+#: model:ir.model.fields,field_description:transport_boc.field_boc_organisme__name
+msgid "Organisation name"
+msgstr "اسم الهيكل"
 
 #. module: transport_boc
 #: model:ir.actions.act_window,name:transport_boc.action_boc_organisme
 #: model:ir.ui.menu,name:transport_boc.menu_boc_organisme
 #: model_terms:ir.ui.view,arch_db:transport_boc.view_boc_organisme_list
-msgid "Organismes"
+msgid "Organisations"
 msgstr "الهياكل"
 
 #. module: transport_boc
-#: model:res.groups,comment:transport_boc.group_agent_boc
-msgid "Peut créer et gérer les courriers arrivée et départ."
-msgstr "يمكنه إنشاء وإدارة البريد الوارد والصادر."
+#: model_terms:ir.ui.view,arch_db:transport_boc.view_boc_arrivee_search
+#: model_terms:ir.ui.view,arch_db:transport_boc.view_boc_periodique_search
+msgid "Organisme"
+msgstr "الهيكل"
 
 #. module: transport_boc
-#: model:res.groups,comment:transport_boc.group_responsable_boc
-msgid "Peut valider, diffuser et accéder aux rapports."
-msgstr "يمكنه التحقق والتوزيع والوصول إلى التقارير."
+#: model:ir.model.fields,field_description:transport_boc.field_boc_courrier_periodique__organisme_id
+msgid "Organisme destinataire"
+msgstr "الجهة المستفيدة"
 
 #. module: transport_boc
-#: model:ir.model.fields,help:transport_boc.field_boc_courrier_arrivee__date_rappel
-msgid "Rappel automatique à mi-délai"
-msgstr "تذكير تلقائي في منتصف الأجل"
-
-#. module: transport_boc
-#: model:res.groups,name:transport_boc.group_responsable_boc
-#: model_terms:ir.ui.view,arch_db:transport_boc.rapport_boc_arrivee
-#: model_terms:ir.ui.view,arch_db:transport_boc.rapport_boc_depart
-msgid "Responsable BOC"
-msgstr "مسؤول مكتب البريد"
-
-#. module: transport_boc
-#: model_terms:ir.ui.view,arch_db:transport_boc.rapport_boc_arrivee
-msgid "Réf. expéditeur"
-msgstr "مرجع المُرسِل"
-
-#. module: transport_boc
-#: model:ir.model.fields,field_description:transport_boc.field_boc_courrier_arrivee__reference_expediteur
-msgid "Référence expéditeur"
-msgstr "مرجع المُرسِل"
-
-#. module: transport_boc
-#: model:ir.model.fields,field_description:transport_boc.field_boc_courrier_arrivee__reference_facture
-#: model_terms:ir.ui.view,arch_db:transport_boc.rapport_boc_arrivee
-msgid "Référence facture"
-msgstr "مرجع الفاتورة"
-
-#. module: transport_boc
-#: model:ir.model.fields,field_description:transport_boc.field_boc_courrier_depart__reference_interne
-msgid "Référence interne"
-msgstr "المرجع الداخلي"
-
-#. module: transport_boc
-#: model:ir.model.fields,field_description:transport_boc.field_boc_courrier_arrivee__reponse_fournie
-msgid "Réponse fournie"
-msgstr "الرد المقدَّم"
-
-#. module: transport_boc
-#: model_terms:ir.ui.view,arch_db:transport_boc.rapport_boc_arrivee
-msgid "Service / Direction"
-msgstr "المصلحة / الإدارة"
-
-#. module: transport_boc
-#: model:ir.model.fields,field_description:transport_boc.field_boc_transmission__organisme_id
-msgid "Service / Direction destinataire"
-msgstr "مصلحة / إدارة المستلم"
-
-#. module: transport_boc
-#: model:ir.model.fields,field_description:transport_boc.field_boc_courrier_depart__service_expediteur
-#: model_terms:ir.ui.view,arch_db:transport_boc.rapport_boc_depart
-msgid "Service expéditeur"
-msgstr "مصلحة المُرسِل"
-
-#. module: transport_boc
-#: model:ir.model.fields,help:transport_boc.field_boc_courrier_arrivee__expediteur_nom
-msgid "Si l'expéditeur n'est pas dans la liste des organismes"
-msgstr "إذا لم يكن المُرسِل في قائمة الهياكل"
-
-#. module: transport_boc
-#: model:ir.model.fields,help:transport_boc.field_boc_courrier_depart__destinataire_nom
-msgid "Si le destinataire n'est pas dans la liste des organismes"
-msgstr "إذا لم يكن المستلم في قائمة الهياكل"
-
-#. module: transport_boc
+#: model_terms:ir.ui.view,arch_db:transport_boc.bordereau_externe_non_transfere
+#: model_terms:ir.ui.view,arch_db:transport_boc.bordereau_externe_transfere
 #: model_terms:ir.ui.view,arch_db:transport_boc.view_boc_arrivee_form
-msgid "Suivi"
-msgstr "المتابعة"
+msgid "Organisme expéditeur"
+msgstr "الجهة المُرسِلة"
 
 #. module: transport_boc
-#: model:ir.model.fields,field_description:transport_boc.field_boc_sujet__name
-msgid "Sujet"
-msgstr "الموضوع"
+#: model:ir.actions.act_window,name:transport_boc.action_boc_depart
+#: model:ir.model,name:transport_boc.model_boc_courrier_depart
+#: model_terms:ir.ui.view,arch_db:transport_boc.view_boc_depart_form
+msgid "Outgoing Mail"
+msgstr "بريد صادر"
+
+#. module: transport_boc
+#: model:ir.actions.report,name:transport_boc.action_rapport_boc_depart
+msgid "Outgoing Mail Slip"
+msgstr "بطاقة البريد الصادر"
+
+#. module: transport_boc
+#: model_terms:ir.ui.view,arch_db:transport_boc.rapport_boc_depart
+msgid "Outgoing Mail Slip — Bordereau Courrier Départ"
+msgstr "بطاقة البريد الصادر — Bordereau Courrier Départ"
+
+#. module: transport_boc
+#: model_terms:ir.ui.view,arch_db:transport_boc.view_boc_depart_list
+msgid "Outgoing Mails"
+msgstr "البريد الصادر"
+
+#. module: transport_boc
+#: model:ir.model.fields,field_description:transport_boc.field_boc_courrier_arrivee__depart_reponse_id
+msgid "Outgoing mail (reply)"
+msgstr "بريد صادر (رد)"
+
+#. module: transport_boc
+#: model:ir.model.fields,field_description:transport_boc.field_boc_courrier_arrivee__en_retard
+#: model_terms:ir.ui.view,arch_db:transport_boc.view_boc_arrivee_search
+msgid "Overdue"
+msgstr "متأخر"
+
+#. module: transport_boc
+#: model:ir.actions.report,name:transport_boc.action_rapport_boc_echus
+msgid "Overdue Mail Report"
+msgstr "تقرير المراسلات المتأخرة"
+
+#. module: transport_boc
+#: model:ir.model.fields.selection,name:transport_boc.selection__boc_courrier_depart__support__papier
+msgid "Paper letter"
+msgstr "رسالة ورقية"
+
+#. module: transport_boc
+#: model:ir.model.fields.selection,name:transport_boc.selection__boc_transmission__state__en_attente
+#: model_terms:ir.ui.view,arch_db:transport_boc.view_boc_transmission_search
+msgid "Pending"
+msgstr "قيد الانتظار"
+
+#. module: transport_boc
+#: model_terms:ir.ui.view,arch_db:transport_boc.view_boc_wizard_rapport_delais_form
+msgid "Period"
+msgstr "الفترة"
+
+#. module: transport_boc
+#: model:ir.model.fields,field_description:transport_boc.field_boc_organisme__telephone
+msgid "Phone"
+msgstr "الهاتف"
+
+#. module: transport_boc
+#: model:ir.model,name:transport_boc.model_boc_annotation
+msgid "Predefined Annotation"
+msgstr "تعليق محدد مسبقاً"
+
+#. module: transport_boc
+#: model:ir.actions.act_window,name:transport_boc.action_boc_annotation
+#: model_terms:ir.ui.view,arch_db:transport_boc.view_boc_annotation_list
+msgid "Predefined Annotations"
+msgstr "التعليقات المحددة مسبقاً"
+
+#. module: transport_boc
+#: model:ir.model,name:transport_boc.model_boc_instruction
+msgid "Predefined Instruction"
+msgstr "تعليمة محددة مسبقاً"
 
 #. module: transport_boc
 #: model:ir.model,name:transport_boc.model_boc_sujet
-msgid "Sujet Prédéfini"
+msgid "Predefined Subject"
 msgstr "موضوع محدد مسبقاً"
+
+#. module: transport_boc
+#: model:ir.model.fields,field_description:transport_boc.field_boc_transmission__instruction_id
+msgid "Predefined instruction"
+msgstr "تعليمة محددة مسبقاً"
+
+#. module: transport_boc
+#: model:ir.actions.act_window,name:transport_boc.action_boc_instruction
+#: model:ir.ui.menu,name:transport_boc.menu_boc_instruction
+#: model_terms:ir.ui.view,arch_db:transport_boc.view_boc_instruction_list
+msgid "Predefined instructions"
+msgstr "التعليمات المحددة مسبقاً"
 
 #. module: transport_boc
 #: model:ir.model.fields,field_description:transport_boc.field_boc_courrier_arrivee__sujet_id
 #: model:ir.model.fields,field_description:transport_boc.field_boc_courrier_depart__sujet_id
-msgid "Sujet prédéfini"
+msgid "Predefined subject"
 msgstr "موضوع محدد مسبقاً"
 
 #. module: transport_boc
 #: model:ir.actions.act_window,name:transport_boc.action_boc_sujet
 #: model:ir.ui.menu,name:transport_boc.menu_boc_sujet
 #: model_terms:ir.ui.view,arch_db:transport_boc.view_boc_sujet_list
-msgid "Sujets prédéfinis"
+msgid "Predefined subjects"
 msgstr "المواضيع المحددة مسبقاً"
 
 #. module: transport_boc
-#: model_terms:ir.ui.view,arch_db:transport_boc.rapport_boc_depart
-msgid "Support"
-msgstr "الوسيلة"
-
-#. module: transport_boc
-#: model:ir.model.fields,field_description:transport_boc.field_boc_courrier_depart__support
-msgid "Support / Format"
-msgstr "الوسيلة / الصيغة"
-
-#. module: transport_boc
-#: model:ir.ui.menu,name:transport_boc.menu_boc_arrivee
-#: model:ir.ui.menu,name:transport_boc.menu_boc_depart
-msgid "Tous les courriers"
-msgstr "جميع المراسلات"
-
-#. module: transport_boc
-#: model:ir.actions.act_window,name:transport_boc.action_boc_transmission
-#: model:ir.ui.menu,name:transport_boc.menu_boc_transmission_all
-msgid "Toutes les transmissions"
-msgstr "جميع الإحالات"
-
-#. module: transport_boc
 #: model_terms:ir.ui.view,arch_db:transport_boc.view_boc_arrivee_search
-msgid "Traité"
+#: model_terms:ir.ui.view,arch_db:transport_boc.view_boc_transmission_search
+msgid "Processed"
 msgstr "معالَج"
 
 #. module: transport_boc
-#: model_terms:ir.ui.view,arch_db:transport_boc.view_boc_transmission_search
-msgid "Traitee"
-msgstr "معالَجة"
-
-#. module: transport_boc
-#: model_terms:ir.ui.view,arch_db:transport_boc.view_boc_transmission_search
-msgid "Transferee"
-msgstr "محالة"
-
-#. module: transport_boc
-#: model_terms:ir.ui.view,arch_db:transport_boc.view_boc_transmission_form
-msgid "Transférer"
-msgstr "إحالة"
-
-#. module: transport_boc
-#: model:ir.model.fields.selection,name:transport_boc.selection__boc_transmission__state__transfere
-msgid "Transféré"
-msgstr "مُحال"
-
-#. module: transport_boc
-#: model:ir.ui.menu,name:transport_boc.menu_boc_transmission_transferees
-msgid "Transférées"
-msgstr "محالة"
-
-#. module: transport_boc
-#: model:ir.model,name:transport_boc.model_boc_transmission
-msgid "Transmission / Diffusion"
-msgstr "الإحالة / التوزيع"
-
-#. module: transport_boc
-#: model_terms:ir.ui.view,arch_db:transport_boc.view_boc_transmission_list
-msgid "Transmissions"
-msgstr "الإحالات"
-
-#. module: transport_boc
-#: model:ir.actions.act_window,name:transport_boc.action_boc_transmission_non_transferees
-msgid "Transmissions non transférées"
-msgstr "إحالات غير منقولة"
-
-#. module: transport_boc
-#: model:ir.actions.act_window,name:transport_boc.action_boc_transmission_transferees
-msgid "Transmissions transférées"
-msgstr "إحالات منقولة"
-
-#. module: transport_boc
-#: model:ir.model.fields,field_description:transport_boc.field_boc_courrier_arrivee__type_arrivee
-#: model_terms:ir.ui.view,arch_db:transport_boc.rapport_boc_arrivee
-msgid "Type d'arrivée"
-msgstr "نوع الوصول"
-
-#. module: transport_boc
-#: model:ir.model,name:transport_boc.model_boc_type_courrier
-#: model_terms:ir.ui.view,arch_db:transport_boc.view_boc_type_courrier_form
-msgid "Type de Courrier"
-msgstr "نوع المراسلة"
-
-#. module: transport_boc
-#: model:ir.model.fields,field_description:transport_boc.field_boc_type_courrier__name
-msgid "Type de courrier"
-msgstr "نوع المراسلة"
-
-#. module: transport_boc
-#: model:ir.model.fields,field_description:transport_boc.field_boc_courrier_depart__type_depart
-msgid "Type de départ"
-msgstr "نوع الإرسال"
-
-#. module: transport_boc
-#: model:ir.actions.act_window,name:transport_boc.action_boc_type_courrier
-#: model:ir.ui.menu,name:transport_boc.menu_boc_type_courrier
-#: model_terms:ir.ui.view,arch_db:transport_boc.view_boc_type_courrier_list
-msgid "Types de courrier"
-msgstr "أنواع المراسلات"
-
-#. module: transport_boc
-#: model:ir.model.fields,field_description:transport_boc.field_boc_organisme__telephone
-msgid "Téléphone"
-msgstr "الهاتف"
-
-#. module: transport_boc
-#: model_terms:ir.ui.view,arch_db:transport_boc.rapport_boc_arrivee
-#: model_terms:ir.ui.view,arch_db:transport_boc.rapport_boc_depart
-msgid "___________________________"
-msgstr "___________________________"
-
-#. module: transport_boc
-#: model:ir.model.fields,help:transport_boc.field_boc_transmission__instruction
-msgid "ex: Pour traitement, Pour information, Pour signature..."
-msgstr "مثال: للمعالجة، للإعلام، للتوقيع..."
-
-#. module: transport_boc
-#: model_terms:ir.ui.view,arch_db:transport_boc.view_boc_arrivee_form
-msgid "jour(s)."
-msgstr "يوم (أيام)."
-
-#. module: transport_boc
-#: model_terms:ir.ui.view,arch_db:transport_boc.rapport_boc_depart
-msgid "بطاقة البريد الصادر — Bordereau Courrier Départ"
-msgstr "بطاقة البريد الصادر — Bordereau Courrier Départ"
-
-#. module: transport_boc
-#: model_terms:ir.ui.view,arch_db:transport_boc.rapport_boc_arrivee
-msgid "بطاقة البريد الوارد — Bordereau Courrier Arrivée"
-msgstr "بطاقة البريد الوارد — Bordereau Courrier Arrivée"
-
-#. module: transport_boc
-#: model:ir.ui.menu,name:transport_boc.menu_boc_config
-msgid "Configuration"
-msgstr "الإعداد"
-
-#. module: transport_boc
-#: model_terms:ir.ui.view,arch_db:transport_boc.view_boc_arrivee_form
-msgid ""
-"Ce courrier est <strong>en retard</strong> !\n"
-"                        Échéance dépassée de"
-msgstr ""
-
-#. module: transport_boc
-#: model:ir.ui.menu,name:transport_boc.menu_boc_arrivee_sans_suite
-msgid "Sans suite / En retard"
-msgstr "بدون متابعة / متأخر"
-
-#. module: transport_boc
-#: model_terms:ir.ui.view,arch_db:transport_boc.view_boc_arrivee_form
-#: model_terms:ir.ui.view,arch_db:transport_boc.view_boc_depart_form
-msgid "Enregistrer"
-msgstr "حفظ"
-
-#. module: transport_boc
-#: model:ir.ui.menu,name:transport_boc.menu_boc_rapports
-msgid "Editions"
-msgstr "الإصدارات"
-
-#. module: transport_boc
-#: model_terms:ir.ui.view,arch_db:transport_boc.view_boc_arrivee_form
-msgid "Diffuser"
-msgstr "توزيع"
-
-#. module: transport_boc
-#: model_terms:ir.ui.view,arch_db:transport_boc.view_boc_depart_form
-msgid "Marquer Envoyé"
-msgstr "تحديد كمُرسَل"
-
-#. module: transport_boc
-#: model_terms:ir.ui.view,arch_db:transport_boc.view_boc_arrivee_form
-#: model_terms:ir.ui.view,arch_db:transport_boc.view_boc_depart_form
-msgid "Classer"
-msgstr "تصنيف"
-
-#. module: transport_boc
-#: model:ir.ui.menu,name:transport_boc.menu_boc_rapport_delais
 #: model:ir.actions.act_window,name:transport_boc.action_boc_wizard_rapport_delais
-msgid "Suivi des délais de traitement"
+#: model:ir.ui.menu,name:transport_boc.menu_boc_rapport_delais
+msgid "Processing Delay Tracking"
 msgstr "متابعة آجال المعالجة"
 
 #. module: transport_boc
-#: model:ir.ui.menu,name:transport_boc.menu_boc_transmission_internes_transferees
-#: model:ir.actions.act_window,name:transport_boc.action_boc_transmission_transferees
-msgid "Transmissions internes transférées"
-msgstr "الإحالات الداخلية المحوَّلة"
-
-#. module: transport_boc
-#: model:ir.ui.menu,name:transport_boc.menu_boc_transmission_internes_non_transferees
-#: model:ir.actions.act_window,name:transport_boc.action_boc_transmission_non_transferees
-msgid "Transmissions internes non transférées"
-msgstr "الإحالات الداخلية غير المحوَّلة"
-
-#. module: transport_boc
-#: model:ir.ui.menu,name:transport_boc.menu_boc_transmission_externes_realisees
-#: model:ir.actions.act_window,name:transport_boc.action_boc_transmission_externes_transferees
-msgid "Transmissions externes réalisées"
-msgstr "الإحالات الخارجية المنجَزة"
-
-#. module: transport_boc
-#: model:ir.ui.menu,name:transport_boc.menu_boc_transmission_externes_non_realisees
-#: model:ir.actions.act_window,name:transport_boc.action_boc_transmission_externes_non_transferees
-msgid "Transmissions externes non réalisées"
-msgstr "الإحالات الخارجية غير المنجَزة"
-
-#. module: transport_boc
-#: model:ir.model,name:transport_boc.model_boc_wizard_rapport_delais
-msgid "Rapport Délais de Traitement BOC"
-msgstr "تقرير آجال المعالجة - مكتب الضبط"
-
-#. module: transport_boc
-#: model:ir.model.fields,field_description:transport_boc.field_boc_courrier_arrivee__ged_document_ref
-#: model:ir.model.fields,field_description:transport_boc.field_boc_courrier_depart__ged_document_ref
-msgid "Référence GED"
-msgstr "Référence GED"
-
-#. module: transport_boc
-#: model:ir.model.fields,field_description:transport_boc.field_boc_courrier_arrivee__ged_url
-#: model:ir.model.fields,field_description:transport_boc.field_boc_courrier_depart__ged_url
-msgid "Lien GED"
-msgstr "Lien GED"
-
-#. module: transport_boc
-#: model:ir.model.fields,field_description:transport_boc.field_boc_courrier_arrivee__ged_archive_date
-#: model:ir.model.fields,field_description:transport_boc.field_boc_courrier_depart__ged_archive_date
-msgid "Date archivage GED"
-msgstr "Date archivage GED"
-
-#. module: transport_boc
-#: model:ir.model.fields,field_description:transport_boc.field_boc_courrier_arrivee__ged_archive_status
-#: model:ir.model.fields,field_description:transport_boc.field_boc_courrier_depart__ged_archive_status
-msgid "Statut GED"
-msgstr "حالة الأرشفة"
-
-#. module: transport_boc
-#: model:ir.model.fields.selection,name:transport_boc.selection__ged_archive_status__non_archive
-msgid "Non archivé"
-msgstr "Non archivé"
-
-#. module: transport_boc
-#: model:ir.model.fields.selection,name:transport_boc.selection__ged_archive_status__archive
-msgid "Archivé"
-msgstr "Archivé"
-
-#. module: transport_boc
-#: model:ir.model.fields.selection,name:transport_boc.selection__ged_archive_status__restaure
-msgid "Restauré"
-msgstr "Restauré"
-
-#. module: transport_boc
-#: model_terms:ir.ui.view,arch_db:transport_boc.view_boc_arrivee_form
-#: model_terms:ir.ui.view,arch_db:transport_boc.view_boc_depart_form
-msgid "GED / Archivage"
-msgstr "GED / Archivage"
-
-#. module: transport_boc
-#: model_terms:ir.ui.view,arch_db:transport_boc.view_boc_arrivee_form
-#: model_terms:ir.ui.view,arch_db:transport_boc.view_boc_depart_form
-msgid "Ouvrir dans la GED"
-msgstr "Ouvrir dans la GED"
-
-#. module: transport_boc
-#: model_terms:ir.ui.view,arch_db:transport_boc.view_boc_arrivee_form
-#: model_terms:ir.ui.view,arch_db:transport_boc.view_boc_depart_form
-msgid "Marquer comme archivé"
-msgstr "Marquer comme archivé"
-
-#. module: transport_boc
-#: model_terms:ir.ui.view,arch_db:transport_boc.view_boc_arrivee_form
-#: model_terms:ir.ui.view,arch_db:transport_boc.view_boc_depart_form
-msgid "Marquer comme restauré"
-msgstr "Marquer comme restauré"
-
-#. module: transport_boc
-#: model:ir.actions.report,name:transport_boc.action_rapport_boc_echus
-msgid "État Courriers Echus"
-msgstr "État Courriers Echus"
-
-#. module: transport_boc
-#: model:ir.actions.report,name:transport_boc.action_rapport_boc_depasse
-msgid "État Dépassement Délai de Réponse"
-msgstr "État Dépassement Délai de Réponse"
-
-#. module: transport_boc
 #: model:ir.actions.report,name:transport_boc.action_rapport_boc_delais
-msgid "Edition des Délais de Traitement"
-msgstr "Edition des Délais de Traitement"
+msgid "Processing Delays Report"
+msgstr "طباعة آجال المعالجة"
 
 #. module: transport_boc
-msgid "Internes transférées"
-msgstr "داخلي - محوَّل"
+#: model:ir.model.fields,help:transport_boc.field_boc_courrier_arrivee__date_echeance
+msgid "Processing/Reply deadline"
+msgstr "الأجل الأقصى للمعالجة/الرد"
 
 #. module: transport_boc
-msgid "Internes non transférées"
-msgstr "داخلي - غير محوَّل"
+#: model:ir.model.fields,field_description:transport_boc.field_boc_courrier_periodique__prochaine_echeance
+msgid "Prochaine échéance"
+msgstr "الأجل القادم"
 
 #. module: transport_boc
-msgid "Externes réalisées"
-msgstr "خارجي - منجَز"
-
-#. module: transport_boc
-msgid "Externes non réalisées"
-msgstr "خارجي - غير منجَز"
-
-#. module: transport_boc
-msgid "Rapports Délais de Traitement"
-msgstr "تقارير آجال المعالجة"
-
-#. module: transport_boc
+#: model_terms:ir.ui.view,arch_db:transport_boc.view_boc_wizard_bordereau_form
 msgid "Période"
 msgstr "الفترة"
 
 #. module: transport_boc
-msgid "Filtres"
-msgstr "المرشّحات"
+#: model_terms:ir.ui.view,arch_db:transport_boc.bordereau_externe_non_transfere
+#: model_terms:ir.ui.view,arch_db:transport_boc.bordereau_externe_transfere
+#: model_terms:ir.ui.view,arch_db:transport_boc.bordereau_interne_non_transfere
+#: model_terms:ir.ui.view,arch_db:transport_boc.bordereau_interne_transfere
+msgid "Période :"
+msgstr "الفترة :"
 
 #. module: transport_boc
-msgid "Type de rapport"
-msgstr "نوع التقرير"
+#: model:ir.model.fields,field_description:transport_boc.field_boc_courrier_periodique__periodicite
+#: model:ir.model.fields,field_description:transport_boc.field_boc_type_courrier__periodicite
+#: model_terms:ir.ui.view,arch_db:transport_boc.view_boc_periodique_search
+#: model_terms:ir.ui.view,arch_db:transport_boc.view_boc_type_courrier_form
+msgid "Périodicité"
+msgstr "الدورية"
 
 #. module: transport_boc
-msgid "Générer le rapport PDF"
-msgstr "توليد التقرير PDF"
+#: model_terms:ir.ui.view,arch_db:transport_boc.view_boc_periodique_search
+msgid "Rappel aujourd'hui"
+msgstr "تذكير اليوم"
 
 #. module: transport_boc
-msgid "Annuler"
-msgstr "إلغاء"
+#: model:ir.model.fields,field_description:transport_boc.field_boc_type_courrier__delai_rappel_periodique
+msgid "Rappel avant échéance (jours)"
+msgstr "التذكير قبل الأجل (أيام)"
 
 #. module: transport_boc
-msgid "Courriers échus (sans suite)"
-msgstr "البريد المتأخر (بدون متابعة)"
+#: model:ir.model.fields,field_description:transport_boc.field_boc_courrier_periodique__en_attente_rappel
+msgid "Rappel en attente"
+msgstr "تذكير معلق"
 
 #. module: transport_boc
-msgid "Courriers traités hors délai"
-msgstr "البريد المعالَج خارج الأجل"
+#: model:boc.type.courrier,name:transport_boc.type_courrier_rapport_activite_annuel
+msgid "Rapport d'activité annuel"
+msgstr "تقرير النشاط السنوي"
 
 #. module: transport_boc
-msgid "Date début"
-msgstr "تاريخ البداية"
+#: model_terms:ir.ui.view,arch_db:transport_boc.view_boc_wizard_rapport_delais_form
+msgid "Rapports Délais de Traitement"
+msgstr "تقارير آجال المعالجة"
 
 #. module: transport_boc
-msgid "Date fin"
-msgstr "تاريخ النهاية"
-
-#. module: transport_boc
-msgid "Type arrivée"
-msgstr "نوع الوارد"
-
-#. module: transport_boc
-msgid "Courriers sans suite dont la date d'échéance est dépassée"
-msgstr "البريد المتأخر بدون متابعة"
-
-#. module: transport_boc
-msgid "Courriers traités après la date d'échéance"
-msgstr "البريد المعالَج بعد انتهاء الأجل"
-
-#. module: transport_boc
-msgid "Suivi des délais pour tous les courriers"
-msgstr "متابعة الآجال لجميع البريد"
-
-#. module: transport_boc
-msgid "Statistiques globales"
-msgstr "إحصائيات عامة"
-
-#. module: transport_boc
-msgid "Dans les délais"
-msgstr "في الأجل"
-
-#. module: transport_boc
-msgid "Echus (non traités)"
-msgstr "متأخر (غير معالَج)"
-
-#. module: transport_boc
-msgid "Traités hors délai"
-msgstr "معالَج خارج الأجل"
-
-#. module: transport_boc
-msgid "Délai moyen de traitement"
-msgstr "متوسط أجل المعالجة"
-
-#. module: transport_boc
-msgid "Hors délai"
-msgstr "خارج الأجل"
-
-#. module: transport_boc
-msgid "Echu"
-msgstr "منتهي الأجل"
-
-#. module: transport_boc
-msgid "En cours"
-msgstr "قيد التنفيذ"
-
-#. module: transport_boc
-msgid "Jours dépassés"
-msgstr "أيام التجاوز"
-
-#. module: transport_boc
-msgid "Dépassement (j)"
-msgstr "التجاوز (أيام)"
-
-#. module: transport_boc
-msgid "Délai (j)"
-msgstr "الأجل (أيام)"
-
-#. module: transport_boc
-msgid "Statut délai"
-msgstr "حالة الأجل"
-
-#. module: transport_boc
-msgid "Total courriers échus"
-msgstr "مجموع البريد المتأخر"
-
-#. module: transport_boc
-msgid "Total courriers avec dépassement"
-msgstr "مجموع البريد المتجاوز"
-
-#. module: transport_boc
-msgid "jours"
-msgstr "أيام"
-
-#. module: transport_boc
-msgid "Ce document n'est pas encore archivé dans la GED."
-msgstr "هذه الوثيقة لم يتم أرشفتها بعد في نظام إدارة الوثائق."
-
-#. module: transport_boc
-msgid "Document archivé dans la GED."
-msgstr "تمت أرشفة الوثيقة في نظام إدارة الوثائق."
-
-#. module: transport_boc
-msgid "Accès GED"
-msgstr "الوصول إلى نظام إدارة الوثائق"
-
-#. module: transport_boc
-msgid "Archivé GED"
-msgstr "مؤرشَف في نظام إدارة الوثائق"
-
-#. module: transport_boc
-msgid "Non archivé GED"
-msgstr "غير مؤرشَف في نظام إدارة الوثائق"
-
-#. module: transport_boc
-msgid "Brouillon"
-msgstr "مسودة"
-
-#. module: transport_boc
-msgid "Dates"
-msgstr "التواريخ"
-
-#. module: transport_boc
-msgid "Externe"
-msgstr "خارجي"
-
-#. module: transport_boc
-msgid "Identification"
-msgstr "التعريف"
-
-#. module: transport_boc
-msgid "Mois"
-msgstr "الشهر"
-
-#. module: transport_boc
-msgid "Référence document"
-msgstr "مرجع الوثيقة"
-
-#. module: transport_boc
-msgid "Service"
-msgstr "المصلحة"
-
-#. module: transport_boc
-msgid "Traitée"
-msgstr "معالَجة"
-
-#. module: transport_boc
-msgid "Transférée"
-msgstr "محوَّلة"
-
-#. module: transport_boc
-msgid "Type"
-msgstr "النوع"
-
-#. module: transport_boc
-msgid "Overdue"
-msgstr "متأخر"
-
-#. module: transport_boc
-msgid "Needs Reply"
-msgstr "يستلزم ردًا"
-
-#. module: transport_boc
-msgid "External"
-msgstr "خارجي"
-
-#. module: transport_boc
-msgid "Internal"
-msgstr "داخلي"
-
-#. module: transport_boc
-msgid "Draft"
-msgstr "مسودة"
-
-#. module: transport_boc
-msgid "Registered"
-msgstr "مسجَّل"
-
-#. module: transport_boc
-msgid "Distributed"
-msgstr "موزَّع"
-
-#. module: transport_boc
-msgid "Not Archived DMS"
-msgstr "غير مؤرشَف في نظام إدارة الوثائق"
-
-#. module: transport_boc
-msgid "Archived DMS"
-msgstr "مؤرشَف في نظام إدارة الوثائق"
-
-#. module: transport_boc
-msgid "DMS Status"
-msgstr "حالة الأرشفة"
-
-#. module: transport_boc
-msgid "Sender"
-msgstr "المُرسِل"
-
-#. module: transport_boc
-msgid "Month"
-msgstr "الشهر"
-
-#. module: transport_boc
-msgid "Pending"
-msgstr "قيد الانتظار"
-
-#. module: transport_boc
-msgid "Transferred"
-msgstr "محوَّلة"
-
-#. module: transport_boc
-msgid "Not Sent"
-msgstr "غير مُرسَل"
-
-#. module: transport_boc
-msgid "Status"
-msgstr "الحالة"
-
-#. module: transport_boc
-msgid "Department"
-msgstr "المصلحة"
-
-#. module: transport_boc
-msgid "Content"
-msgstr "المحتوى"
-
-#. module: transport_boc
-msgid "Follow-up"
-msgstr "المتابعة"
-
-#. module: transport_boc
+#: model:ir.model.fields,field_description:transport_boc.field_boc_courrier_depart__organisme_id
+#: model:ir.model.fields,field_description:transport_boc.field_boc_transmission__destinataire_nom
+#: model_terms:ir.ui.view,arch_db:transport_boc.rapport_boc_depart
+#: model_terms:ir.ui.view,arch_db:transport_boc.view_boc_depart_form
+#: model_terms:ir.ui.view,arch_db:transport_boc.view_boc_transmission_form
 msgid "Recipient"
 msgstr "المرسَل إليه"
 
 #. module: transport_boc
-msgid "Link to Incoming"
-msgstr "الربط بالوارد"
+#: model:ir.model.fields,field_description:transport_boc.field_boc_transmission__organisme_id
+msgid "Recipient Department / Division"
+msgstr "مصلحة / إدارة المستلم"
 
 #. module: transport_boc
-msgid "Mail"
-msgstr "البريد"
+#: model:ir.model.fields,field_description:transport_boc.field_boc_courrier_depart__destinataire_nom
+msgid "Recipient name"
+msgstr "اسم المستلم"
 
 #. module: transport_boc
-msgid "Invoice Information"
-msgstr "معلومات الفاتورة"
+#: model_terms:ir.ui.view,arch_db:transport_boc.view_boc_arrivee_search
+msgid "Registered"
+msgstr "مسجَّل"
 
 #. module: transport_boc
-msgid "Document Reference"
+#: model:ir.model.fields,field_description:transport_boc.field_boc_courrier_arrivee__jours_restants
+msgid "Remaining days"
+msgstr "الأيام المتبقية"
+
+#. module: transport_boc
+#: model_terms:ir.ui.view,arch_db:transport_boc.view_boc_arrivee_form
+#: model_terms:ir.ui.view,arch_db:transport_boc.view_boc_depart_form
+msgid "Remettre en brouillon"
+msgstr "إعادة إلى المسودة"
+
+#. module: transport_boc
+#: model:ir.model.fields,field_description:transport_boc.field_boc_courrier_arrivee__date_rappel
+#: model_terms:ir.ui.view,arch_db:transport_boc.rapport_boc_arrivee
+msgid "Reminder Date"
+msgstr "تاريخ التذكير"
+
+#. module: transport_boc
+#: model:ir.model.fields,field_description:transport_boc.field_boc_courrier_arrivee__date_reponse
+msgid "Reply Date"
+msgstr "تاريخ الرد"
+
+#. module: transport_boc
+#: model:ir.model.fields,field_description:transport_boc.field_boc_courrier_arrivee__reponse_fournie
+msgid "Reply provided"
+msgstr "الرد المقدَّم"
+
+#. module: transport_boc
+#: model:ir.model.fields,field_description:transport_boc.field_boc_courrier_arrivee__necessite_reponse
+msgid "Requires a reply"
+msgstr "يستلزم ردًا"
+
+#. module: transport_boc
+#: model:ir.model.fields,field_description:transport_boc.field_boc_courrier_depart__responsable_id
+#: model:ir.model.fields,field_description:transport_boc.field_boc_courrier_periodique__responsable_id
+#: model:ir.model.fields,field_description:transport_boc.field_boc_transmission__responsable_id
+#: model_terms:ir.ui.view,arch_db:transport_boc.bordereau_externe_non_transfere
+#: model_terms:ir.ui.view,arch_db:transport_boc.bordereau_externe_transfere
+#: model_terms:ir.ui.view,arch_db:transport_boc.bordereau_interne_non_transfere
+#: model_terms:ir.ui.view,arch_db:transport_boc.bordereau_interne_transfere
+#: model_terms:ir.ui.view,arch_db:transport_boc.rapport_boc_depart
+#: model_terms:ir.ui.view,arch_db:transport_boc.view_boc_periodique_search
+msgid "Responsable"
+msgstr "المسؤول"
+
+#. module: transport_boc
+#: model_terms:ir.ui.view,arch_db:transport_boc.bordereau_externe_non_transfere
+#: model_terms:ir.ui.view,arch_db:transport_boc.bordereau_externe_transfere
+#: model_terms:ir.ui.view,arch_db:transport_boc.bordereau_interne_non_transfere
+#: model_terms:ir.ui.view,arch_db:transport_boc.bordereau_interne_transfere
+#: model_terms:ir.ui.view,arch_db:transport_boc.bordereau_rappel_echeance
+#: model_terms:ir.ui.view,arch_db:transport_boc.rapport_boc_delais
+#: model_terms:ir.ui.view,arch_db:transport_boc.rapport_boc_depasse
+#: model_terms:ir.ui.view,arch_db:transport_boc.rapport_boc_echus
+msgid "Responsable BOC"
+msgstr "مسؤول مكتب البريد"
+
+#. module: transport_boc
+#: model:ir.actions.report,name:transport_boc.action_rapport_boc_depasse
+msgid "Response Delay Report"
+msgstr "تقرير تجاوز آجال الرد"
+
+#. module: transport_boc
+#: model:ir.model.fields,field_description:transport_boc.field_boc_courrier_arrivee__activity_user_id
+#: model:ir.model.fields,field_description:transport_boc.field_boc_courrier_depart__activity_user_id
+#: model:ir.model.fields,field_description:transport_boc.field_boc_courrier_periodique__activity_user_id
+msgid "Responsible User"
+msgstr "المستخدم المسؤول"
+
+#. module: transport_boc
+#: model:ir.model.fields.selection,name:transport_boc.selection__boc_courrier_arrivee__ged_archive_status__restaure
+#: model:ir.model.fields.selection,name:transport_boc.selection__boc_courrier_depart__ged_archive_status__restaure
+msgid "Restauré"
+msgstr "مستعاد"
+
+#. module: transport_boc
+#: model_terms:ir.ui.view,arch_db:transport_boc.view_boc_periodique_form
+msgid "Réactiver"
+msgstr "إعادة التفعيل"
+
+#. module: transport_boc
+#: model_terms:ir.ui.view,arch_db:transport_boc.bordereau_rappel_echeance
+msgid "Récapitulatif des alertes"
+msgstr "ملخص التنبيهات"
+
+#. module: transport_boc
+#: model_terms:ir.ui.view,arch_db:transport_boc.view_boc_arrivee_form
+msgid "Réf. interne si applicable"
+msgstr "المرجع الداخلي إن وجد"
+
+#. module: transport_boc
+#: model_terms:ir.ui.view,arch_db:transport_boc.view_boc_arrivee_form
+msgid "Référence document"
 msgstr "مرجع الوثيقة"
 
 #. module: transport_boc
-msgid "DMS Access"
-msgstr "الوصول إلى نظام إدارة الوثائق"
+#: model_terms:ir.ui.view,arch_db:transport_boc.view_boc_arrivee_search
+msgid "Référence expéditeur"
+msgstr "مرجع المُرسِل"
 
 #. module: transport_boc
-msgid "DMS / Archive"
-msgstr "إدارة الوثائق / الأرشفة"
+#: model_terms:ir.ui.view,arch_db:transport_boc.view_boc_arrivee_search
+msgid "Référence facture"
+msgstr "مرجع الفاتورة"
 
 #. module: transport_boc
-msgid "Period"
-msgstr "الفترة"
+#: model_terms:ir.ui.view,arch_db:transport_boc.view_boc_arrivee_form
+msgid "Référence interne"
+msgstr "المرجع الداخلي"
 
 #. module: transport_boc
-msgid "Filters"
-msgstr "المرشّحات"
+#: model:ir.model.fields,field_description:transport_boc.field_boc_courrier_arrivee__message_has_sms_error
+#: model:ir.model.fields,field_description:transport_boc.field_boc_courrier_depart__message_has_sms_error
+#: model:ir.model.fields,field_description:transport_boc.field_boc_courrier_periodique__message_has_sms_error
+msgid "SMS Delivery error"
+msgstr "خطأ في تسليم الرسالة النصية"
 
 #. module: transport_boc
-msgid "Processed"
+#: model_terms:ir.ui.view,arch_db:transport_boc.view_boc_arrivee_form
+#: model_terms:ir.ui.view,arch_db:transport_boc.view_boc_depart_form
+msgid "Save"
+msgstr "حفظ"
+
+#. module: transport_boc
+#: model:ir.model.fields.selection,name:transport_boc.selection__boc_courrier_depart__support__lettre_fermee
+msgid "Sealed letter"
+msgstr "رسالة مغلقة"
+
+#. module: transport_boc
+#: model:ir.model.fields,field_description:transport_boc.field_boc_organisme__section
+msgid "Section"
+msgstr "القسم"
+
+#. module: transport_boc
+#: model:ir.model.fields.selection,name:transport_boc.selection__boc_type_courrier__periodicite__semestriel
+#: model_terms:ir.ui.view,arch_db:transport_boc.view_boc_periodique_search
+msgid "Semestriel"
+msgstr "نصف سنوي"
+
+#. module: transport_boc
+#: model_terms:ir.ui.view,arch_db:transport_boc.view_boc_arrivee_search
+msgid "Sender"
+msgstr "المُرسِل"
+
+#. module: transport_boc
+#: model:ir.model.fields,field_description:transport_boc.field_boc_courrier_depart__service_expediteur
+#: model_terms:ir.ui.view,arch_db:transport_boc.rapport_boc_depart
+msgid "Sender department"
+msgstr "مصلحة المُرسِل"
+
+#. module: transport_boc
+#: model:ir.model.fields,field_description:transport_boc.field_boc_courrier_arrivee__expediteur_nom
+msgid "Sender name"
+msgstr "اسم المُرسِل"
+
+#. module: transport_boc
+#: model_terms:ir.ui.view,arch_db:transport_boc.rapport_boc_arrivee
+msgid "Sender ref."
+msgstr "مرجع المُرسِل"
+
+#. module: transport_boc
+#: model:ir.model.fields,field_description:transport_boc.field_boc_courrier_arrivee__reference_expediteur
+msgid "Sender reference"
+msgstr "مرجع المُرسِل"
+
+#. module: transport_boc
+#: model:ir.model.fields.selection,name:transport_boc.selection__boc_courrier_depart__state__envoye
+msgid "Sent"
+msgstr "مُرسَل"
+
+#. module: transport_boc
+#: model:ir.model.fields,field_description:transport_boc.field_boc_organisme__service
+msgid "Service"
+msgstr "المصلحة"
+
+#. module: transport_boc
+#: model_terms:ir.ui.view,arch_db:transport_boc.bordereau_externe_non_transfere
+#: model_terms:ir.ui.view,arch_db:transport_boc.bordereau_externe_transfere
+#: model_terms:ir.ui.view,arch_db:transport_boc.bordereau_interne_non_transfere
+#: model_terms:ir.ui.view,arch_db:transport_boc.bordereau_interne_transfere
+msgid "Service destinataire"
+msgstr "المصلحة المستفيدة"
+
+#. module: transport_boc
+#: model:ir.model.fields,help:transport_boc.field_boc_courrier_arrivee__periodique_id
+msgid "Si ce courrier a été généré depuis un modèle périodique."
+msgstr "إذا تم إنشاء هذه المراسلة من نموذج دوري."
+
+#. module: transport_boc
+#: model_terms:ir.ui.view,arch_db:transport_boc.view_boc_arrivee_form
+msgid "Si non référencé dans la liste..."
+msgstr "إذا لم يكن مُدرجاً في القائمة..."
+
+#. module: transport_boc
+#: model:ir.model.fields,help:transport_boc.field_boc_courrier_periodique__periodicite
+#: model:ir.model.fields,help:transport_boc.field_boc_type_courrier__periodicite
+msgid ""
+"Si renseigné, ce type de courrier est périodique et génère des rappels "
+"automatiques."
+msgstr "إذا تم تعبئته، فهذا النوع دوري ويُولِّد تذكيرات تلقائية."
+
+#. module: transport_boc
+#: model:boc.type.courrier,name:transport_boc.type_courrier_liquidite_mensuel
+msgid "Situation de liquidité mensuelle"
+msgstr "وضعية السيولة الشهرية"
+
+#. module: transport_boc
+#: model_terms:ir.ui.view,arch_db:transport_boc.rapport_boc_delais
+msgid "Statistiques globales"
+msgstr "إحصائيات عامة"
+
+#. module: transport_boc
+#: model_terms:ir.ui.view,arch_db:transport_boc.view_boc_arrivee_search
+#: model_terms:ir.ui.view,arch_db:transport_boc.view_boc_depart_search
+#: model_terms:ir.ui.view,arch_db:transport_boc.view_boc_transmission_search
+msgid "Status"
+msgstr "الحالة"
+
+#. module: transport_boc
+#: model:ir.model.fields,help:transport_boc.field_boc_courrier_arrivee__activity_state
+#: model:ir.model.fields,help:transport_boc.field_boc_courrier_depart__activity_state
+#: model:ir.model.fields,help:transport_boc.field_boc_courrier_periodique__activity_state
+msgid ""
+"Status based on activities\n"
+"Overdue: Due date is already passed\n"
+"Today: Activity date is today\n"
+"Planned: Future activities."
+msgstr "الحالة بناءً على الأنشطة\nOverdue: الأجل تجاوز\nToday: نشاط اليوم\nPlanned: أنشطة مستقبلية."
+
+#. module: transport_boc
+#: model_terms:ir.ui.view,arch_db:transport_boc.view_boc_arrivee_search
+msgid "Statut GED"
+msgstr "حالة الأرشفة"
+
+#. module: transport_boc
+#: model_terms:ir.ui.view,arch_db:transport_boc.rapport_boc_delais
+msgid "Statut délai"
+msgstr "حالة الأجل"
+
+#. module: transport_boc
+#: model:ir.model.fields,field_description:transport_boc.field_boc_courrier_arrivee__sujet
+#: model:ir.model.fields,field_description:transport_boc.field_boc_courrier_depart__sujet
+#: model:ir.model.fields,field_description:transport_boc.field_boc_sujet__name
+#: model_terms:ir.ui.view,arch_db:transport_boc.rapport_boc_arrivee
+#: model_terms:ir.ui.view,arch_db:transport_boc.rapport_boc_depart
+msgid "Subject"
+msgstr "الموضوع"
+
+#. module: transport_boc
+#: model_terms:ir.ui.view,arch_db:transport_boc.rapport_boc_delais
+msgid ""
+"Suivi des délais pour tous les courriers<br/>\n"
+"                                Période :"
+msgstr "متابعة آجال جميع المراسلات<br/>\n"
+"                                الفترة :"
+
+#. module: transport_boc
+#: model_terms:ir.ui.view,arch_db:transport_boc.view_boc_arrivee_search
+msgid "Sujet / Objet"
+msgstr "الموضوع / المحتوى"
+
+#. module: transport_boc
+#: model:ir.model.fields,field_description:transport_boc.field_boc_courrier_arrivee__fournisseur
+#: model_terms:ir.ui.view,arch_db:transport_boc.rapport_boc_arrivee
+msgid "Supplier"
+msgstr "المورد"
+
+#. module: transport_boc
+#: model_terms:ir.ui.view,arch_db:transport_boc.view_boc_periodique_form
+msgid "Suspendre"
+msgstr "تعليق"
+
+#. module: transport_boc
+#: model:ir.model.fields.selection,name:transport_boc.selection__boc_courrier_periodique__state__suspendu
+msgid "Suspendu"
+msgstr "معلق"
+
+#. module: transport_boc
+#: model:ir.model.fields,field_description:transport_boc.field_boc_courrier_arrivee__est_facture
+msgid "This is an invoice"
+msgstr "هذه فاتورة"
+
+#. module: transport_boc
+#: model_terms:ir.ui.view,arch_db:transport_boc.view_boc_arrivee_form
+msgid ""
+"This mail is <strong>overdue</strong>!\n"
+"                        Deadline exceeded by"
+msgstr "هذه المراسلة <strong>متأخرة</strong>!\n"
+"                        تجاوز الأجل بـ"
+"هذه المراسلة <strong>متأخرة</strong>!\n"
+"                        تجاوز الأجل بـ"
+
+#. module: transport_boc
+#: model_terms:ir.ui.view,arch_db:transport_boc.bordereau_externe_transfere
+#: model_terms:ir.ui.view,arch_db:transport_boc.bordereau_interne_transfere
+msgid "Total"
+msgstr "المجموع"
+
+#. module: transport_boc
+#: model_terms:ir.ui.view,arch_db:transport_boc.rapport_boc_delais
+msgid "Total courriers"
+msgstr "مجموع المراسلات"
+
+#. module: transport_boc
+#: model_terms:ir.ui.view,arch_db:transport_boc.rapport_boc_depasse
+msgid "Total courriers avec dépassement"
+msgstr "مجموع البريد المتجاوز"
+
+#. module: transport_boc
+#: model_terms:ir.ui.view,arch_db:transport_boc.bordereau_rappel_echeance
+msgid "Total courriers en attente"
+msgstr "مجموع المراسلات المعلقة"
+
+#. module: transport_boc
+#: model_terms:ir.ui.view,arch_db:transport_boc.rapport_boc_echus
+msgid "Total courriers échus"
+msgstr "مجموع البريد المتأخر"
+
+#. module: transport_boc
+#: model_terms:ir.ui.view,arch_db:transport_boc.bordereau_externe_non_transfere
+#: model_terms:ir.ui.view,arch_db:transport_boc.bordereau_interne_non_transfere
+msgid "Total en attente"
+msgstr "مجموع المعلقة"
+
+#. module: transport_boc
+#: model:ir.model.fields.selection,name:transport_boc.selection__boc_courrier_arrivee__state__traite
+#: model:ir.model.fields.selection,name:transport_boc.selection__boc_transmission__state__traite
+msgid "Traité"
 msgstr "معالَج"
 
+#. module: transport_boc
+#: model_terms:ir.ui.view,arch_db:transport_boc.rapport_boc_delais
+msgid "Traités hors délai"
+msgstr "معالَج خارج الأجل"
+
+#. module: transport_boc
+#: model_terms:ir.ui.view,arch_db:transport_boc.view_boc_transmission_form
+msgid "Transfer"
+msgstr "إحالة"
+
+#. module: transport_boc
+#: model:ir.model.fields.selection,name:transport_boc.selection__boc_transmission__state__transfere
+#: model_terms:ir.ui.view,arch_db:transport_boc.view_boc_transmission_search
+msgid "Transferred"
+msgstr "مُحال"
+
+#. module: transport_boc
+#: model_terms:ir.ui.view,arch_db:transport_boc.view_boc_transmission_form
+msgid "Transmission"
+msgstr "التحويل"
+
+#. module: transport_boc
+#: model:ir.model,name:transport_boc.model_boc_transmission
+msgid "Transmission / Distribution"
+msgstr "الإحالة / التوزيع"
+
+#. module: transport_boc
+#: model:ir.model.fields,field_description:transport_boc.field_boc_transmission__date_transmission
+msgid "Transmission Date"
+msgstr "تاريخ الإحالة"
+
+#. module: transport_boc
+#: model_terms:ir.ui.view,arch_db:transport_boc.rapport_boc_arrivee
+msgid "Transmission date"
+msgstr "تاريخ الإحالة"
+
+#. module: transport_boc
+#: model:ir.ui.menu,name:transport_boc.menu_boc_transmission_root
+msgid "Transmissions"
+msgstr "الإحالات"
+
+#. module: transport_boc
+#: model:ir.model.fields,field_description:transport_boc.field_boc_organisme__type_organisme
+#: model:ir.model.fields,field_description:transport_boc.field_boc_transmission__type_transmission
+#: model_terms:ir.ui.view,arch_db:transport_boc.bordereau_rappel_echeance
+#: model_terms:ir.ui.view,arch_db:transport_boc.rapport_boc_depart
+#: model_terms:ir.ui.view,arch_db:transport_boc.rapport_boc_depasse
+#: model_terms:ir.ui.view,arch_db:transport_boc.rapport_boc_echus
+#: model_terms:ir.ui.view,arch_db:transport_boc.view_boc_depart_search
+#: model_terms:ir.ui.view,arch_db:transport_boc.view_boc_transmission_search
+msgid "Type"
+msgstr "النوع"
+
+#. module: transport_boc
+#: model_terms:ir.ui.view,arch_db:transport_boc.view_boc_arrivee_search
+msgid "Type (interne/externe)"
+msgstr "النوع (داخلي/خارجي)"
+
+#. module: transport_boc
+#: model:ir.model.fields,field_description:transport_boc.field_boc_wizard_rapport_delais__type_arrivee
+msgid "Type arrivée"
+msgstr "نوع الوارد"
+
+#. module: transport_boc
+#: model_terms:ir.ui.view,arch_db:transport_boc.bordereau_externe_non_transfere
+#: model_terms:ir.ui.view,arch_db:transport_boc.bordereau_externe_transfere
+#: model_terms:ir.ui.view,arch_db:transport_boc.bordereau_interne_non_transfere
+#: model_terms:ir.ui.view,arch_db:transport_boc.bordereau_interne_transfere
+msgid "Type courrier"
+msgstr "نوع المراسلة"
+
+#. module: transport_boc
+#: model:ir.model.fields,field_description:transport_boc.field_boc_wizard_bordereau__type_bordereau
+#: model_terms:ir.ui.view,arch_db:transport_boc.view_boc_wizard_bordereau_form
+msgid "Type de bordereau"
+msgstr "نوع البطاقة"
+
+#. module: transport_boc
+#: model:ir.model.fields,field_description:transport_boc.field_boc_courrier_periodique__type_courrier_id
+#: model_terms:ir.ui.view,arch_db:transport_boc.view_boc_periodique_search
+msgid "Type de courrier"
+msgstr "نوع المراسلة"
+
+#. module: transport_boc
+#: model:ir.model.fields,field_description:transport_boc.field_boc_wizard_rapport_delais__type_rapport
+msgid "Type de rapport"
+msgstr "نوع التقرير"
+
+#. module: transport_boc
+#: model:ir.model.fields,help:transport_boc.field_boc_courrier_arrivee__activity_exception_decoration
+#: model:ir.model.fields,help:transport_boc.field_boc_courrier_depart__activity_exception_decoration
+#: model:ir.model.fields,help:transport_boc.field_boc_courrier_periodique__activity_exception_decoration
+msgid "Type of the exception activity on record."
+msgstr "نوع نشاط الاستثناء في السجل."
+
+#. module: transport_boc
+#: model:ir.model.fields,help:transport_boc.field_boc_courrier_arrivee__ged_url
+#: model:ir.model.fields,help:transport_boc.field_boc_courrier_depart__ged_url
+msgid "URL direct vers le document archivé dans la GED externe"
+msgstr "رابط مباشر للوثيقة المؤرشفة في نظام إدارة الوثائق الخارجي"
+
+#. module: transport_boc
+#: model_terms:ir.ui.view,arch_db:transport_boc.bordereau_rappel_echeance
+msgid "Urgent (≤ 3 jours restants)"
+msgstr "عاجل (≤ 3 أيام متبقية)"
+
+#. module: transport_boc
+#: model_terms:ir.ui.view,arch_db:transport_boc.view_boc_periodique_form
+msgid "Voir tous les courriers"
+msgstr "عرض جميع المراسلات"
+
+#. module: transport_boc
+#: model:ir.model.fields,field_description:transport_boc.field_boc_courrier_arrivee__website_message_ids
+#: model:ir.model.fields,field_description:transport_boc.field_boc_courrier_depart__website_message_ids
+#: model:ir.model.fields,field_description:transport_boc.field_boc_courrier_periodique__website_message_ids
+msgid "Website Messages"
+msgstr "رسائل الموقع الإلكتروني"
+
+#. module: transport_boc
+#: model:ir.model.fields,help:transport_boc.field_boc_courrier_arrivee__website_message_ids
+#: model:ir.model.fields,help:transport_boc.field_boc_courrier_depart__website_message_ids
+#: model:ir.model.fields,help:transport_boc.field_boc_courrier_periodique__website_message_ids
+msgid "Website communication history"
+msgstr "سجل الاتصالات عبر الموقع"
+
+#. module: transport_boc
+#: model_terms:ir.ui.view,arch_db:transport_boc.rapport_boc_arrivee
+msgid "Year"
+msgstr "السنة"
+
+#. module: transport_boc
+#: model_terms:ir.ui.view,arch_db:transport_boc.bordereau_externe_non_transfere
+#: model_terms:ir.ui.view,arch_db:transport_boc.bordereau_externe_transfere
+#: model_terms:ir.ui.view,arch_db:transport_boc.bordereau_interne_non_transfere
+#: model_terms:ir.ui.view,arch_db:transport_boc.bordereau_interne_transfere
+#: model_terms:ir.ui.view,arch_db:transport_boc.bordereau_rappel_echeance
+#: model_terms:ir.ui.view,arch_db:transport_boc.rapport_boc_arrivee
+#: model_terms:ir.ui.view,arch_db:transport_boc.rapport_boc_delais
+#: model_terms:ir.ui.view,arch_db:transport_boc.rapport_boc_depart
+#: model_terms:ir.ui.view,arch_db:transport_boc.rapport_boc_depasse
+#: model_terms:ir.ui.view,arch_db:transport_boc.rapport_boc_echus
+msgid "___________________________"
+msgstr "___________________________"
+
+#. module: transport_boc
+#: model_terms:ir.ui.view,arch_db:transport_boc.bordereau_externe_non_transfere
+#: model_terms:ir.ui.view,arch_db:transport_boc.bordereau_externe_transfere
+#: model_terms:ir.ui.view,arch_db:transport_boc.bordereau_interne_non_transfere
+#: model_terms:ir.ui.view,arch_db:transport_boc.bordereau_interne_transfere
+#: model_terms:ir.ui.view,arch_db:transport_boc.bordereau_rappel_echeance
+#: model_terms:ir.ui.view,arch_db:transport_boc.rapport_boc_delais
+#: model_terms:ir.ui.view,arch_db:transport_boc.rapport_boc_depasse
+#: model_terms:ir.ui.view,arch_db:transport_boc.rapport_boc_echus
+msgid "au"
+msgstr "إلى"
+
+#. module: transport_boc
+#: model_terms:ir.ui.view,arch_db:transport_boc.view_boc_arrivee_form
+msgid "day(s)."
+msgstr "يوم (أيام)."
+
+#. module: transport_boc
+#: model:ir.model.fields,help:transport_boc.field_boc_transmission__instruction
+msgid "e.g.: For processing, For information, For signature..."
+msgstr "مثال: للمعالجة، للإعلام، للتوقيع..."
+
+#. module: transport_boc
+#: model_terms:ir.ui.view,arch_db:transport_boc.view_boc_arrivee_form
+#: model_terms:ir.ui.view,arch_db:transport_boc.view_boc_depart_form
+msgid "ex: DOC-2025-00123"
+msgstr "مثال: DOC-2025-00123"
+
+#. module: transport_boc
+#: model_terms:ir.ui.view,arch_db:transport_boc.view_boc_arrivee_form
+#: model_terms:ir.ui.view,arch_db:transport_boc.view_boc_depart_form
+msgid "https://ged.exemple.com/document/..."
+msgstr "https://ged.exemple.com/document/..."
+
+#. module: transport_boc
+#: model_terms:ir.ui.view,arch_db:transport_boc.rapport_boc_delais
+msgid "jours"
+msgstr "أيام"
+
+#. module: transport_boc
+#: model_terms:ir.ui.view,arch_db:transport_boc.rapport_boc_delais
+#: model_terms:ir.ui.view,arch_db:transport_boc.rapport_boc_echus
+msgid "| Type :"
+msgstr "| النوع :"
+
+#. module: transport_boc
+#: model_terms:ir.ui.view,arch_db:transport_boc.rapport_boc_delais
+msgid "Échus (non traités)"
+msgstr "منتهية الأجل (غير معالجة)"
+
+#. module: transport_boc
+#: model:ir.model.fields.selection,name:transport_boc.selection__boc_wizard_rapport_delais__type_rapport__delais
+msgid "Édition des délais de traitement"
+msgstr "طباعة آجال المعالجة"
+
+#. module: transport_boc
+#: model:ir.model.fields,field_description:transport_boc.field_boc_courrier_arrivee__state
+#: model:ir.model.fields,field_description:transport_boc.field_boc_courrier_depart__state
+#: model:ir.model.fields,field_description:transport_boc.field_boc_courrier_periodique__state
+#: model:ir.model.fields,field_description:transport_boc.field_boc_transmission__state
+#: model_terms:ir.ui.view,arch_db:transport_boc.bordereau_externe_transfere
+#: model_terms:ir.ui.view,arch_db:transport_boc.bordereau_interne_transfere
+#: model_terms:ir.ui.view,arch_db:transport_boc.rapport_boc_arrivee
+#: model_terms:ir.ui.view,arch_db:transport_boc.rapport_boc_echus
+#: model_terms:ir.ui.view,arch_db:transport_boc.view_boc_periodique_search
+msgid "État"
+msgstr "الحالة"
+
+#. module: transport_boc
+#: model_terms:ir.ui.view,arch_db:transport_boc.bordereau_rappel_echeance
+msgid "État courrier"
+msgstr "حالة المراسلة"
+
+#. module: transport_boc
+#: model_terms:ir.ui.view,arch_db:transport_boc.rapport_boc_delais
+msgid "جدول آجال المعالجة — Édition des Délais de Traitement"
+msgstr "جدول آجال المعالجة — Édition des Délais de Traitement"
+
+#. module: transport_boc
+#: model_terms:ir.ui.view,arch_db:transport_boc.rapport_boc_echus
+msgid "جدول البريد المتأخّر — État des Courriers Échus"
+msgstr "جدول البريد المتأخّر — État des Courriers Échus"
+
+#. module: transport_boc
+#: model_terms:ir.ui.view,arch_db:transport_boc.rapport_boc_depasse
+msgid "جدول تجاوز آجال الردّ — État des Dépassements de Délai"
+msgstr "جدول تجاوز آجال الردّ — État des Dépassements de Délai"
+
+#. module: transport_boc
+#: model_terms:ir.ui.view,arch_db:transport_boc.bordereau_externe_transfere
+msgid "قائمة الإرساليّات الخارجية المُحوَّلة"
+msgstr "قائمة الإرساليّات الخارجية المُحوَّلة"
+
+#. module: transport_boc
+#: model_terms:ir.ui.view,arch_db:transport_boc.bordereau_externe_non_transfere
+msgid "قائمة الإرساليّات الخارجية غير المُحوَّلة"
+msgstr "قائمة الإرساليّات الخارجية غير المُحوَّلة"
+
+#. module: transport_boc
+#: model_terms:ir.ui.view,arch_db:transport_boc.bordereau_interne_transfere
+msgid "قائمة الإرساليّات الداخلية المُحوَّلة"
+msgstr "قائمة الإرساليّات الداخلية المُحوَّلة"
+
+#. module: transport_boc
+#: model_terms:ir.ui.view,arch_db:transport_boc.bordereau_interne_non_transfere
+msgid "قائمة الإرساليّات الداخلية غير المُحوَّلة"
+msgstr "قائمة الإرساليّات الداخلية غير المُحوَّلة"
+
+#. module: transport_boc
+#: model_terms:ir.ui.view,arch_db:transport_boc.bordereau_rappel_echeance
+msgid "قائمة الإرساليّات المطلوب التصرّف فيها"
+msgstr "قائمة الإرساليّات المطلوب التصرّف فيها"
+
+#. module: transport_boc
+#: model_terms:ir.ui.view,arch_db:transport_boc.view_boc_arrivee_form
+msgid "✔️ Marquer Traité"
+msgstr "✔️ تحديد كمعالج"
+
+#. module: transport_boc
+#: model_terms:ir.ui.view,arch_db:transport_boc.view_boc_depart_form
+msgid "📨 Marquer Envoyé"
+msgstr "📨 تحديد كمُرسَل"

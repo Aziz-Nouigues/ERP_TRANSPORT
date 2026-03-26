@@ -21,6 +21,13 @@ class BocCourrierPeriodique(models.Model):
         required=True,
         translate=True,
     )
+    reference = fields.Char(
+        string='Référence',
+        readonly=True,
+        copy=False,
+        default='/',
+        help='Référence générée automatiquement : BOC/PER/YYYY/NNNN',
+    )
     type_courrier_id = fields.Many2one(
         'boc.type.courrier',
         string='Type de courrier',
@@ -105,6 +112,20 @@ class BocCourrierPeriodique(models.Model):
     )
 
     # ═══════════════════════════════════════════════════════════
+    # ORM
+    # ═══════════════════════════════════════════════════════════
+
+    @api.model_create_multi
+    def create(self, vals_list):
+        """Génère automatiquement la référence BOC/PER/YYYY/NNNN à la création."""
+        for vals in vals_list:
+            if vals.get('reference', '/') == '/':
+                vals['reference'] = (
+                    self.env['ir.sequence'].next_by_code('boc.courrier.periodique') or '/'
+                )
+        return super().create(vals_list)
+
+    # ═══════════════════════════════════════════════════════════
     # COMPUTE
     # ═══════════════════════════════════════════════════════════
 
@@ -118,7 +139,6 @@ class BocCourrierPeriodique(models.Model):
             if rec.periodicite == 'mensuel':
                 # Prochaine échéance : le 15 du mois suivant
                 if base.day >= 15:
-                    # Passer au mois suivant
                     if base.month == 12:
                         rec.prochaine_echeance = base.replace(year=base.year + 1, month=1, day=15)
                     else:
@@ -134,7 +154,6 @@ class BocCourrierPeriodique(models.Model):
                 elif base.month < 12:
                     rec.prochaine_echeance = base.replace(month=12, day=31)
                 else:
-                    # Janvier de l'année suivante → 30 juin
                     rec.prochaine_echeance = base.replace(year=base.year + 1, month=6, day=30)
             elif rec.periodicite == 'annuel':
                 # Annuel : 31 mars de l'année suivante
@@ -256,7 +275,10 @@ class BocCourrierPeriodique(models.Model):
                 subtype_xmlid='mail.mt_note',
                 partner_ids=[rec.responsable_id.partner_id.id] if rec.responsable_id else [],
             )
-            _logger.info('BOC Rappel périodique envoyé : %s (échéance %s)', rec.name, rec.prochaine_echeance)
+            _logger.info(
+                'BOC Rappel périodique envoyé : %s (échéance %s)',
+                rec.name, rec.prochaine_echeance,
+            )
 
         # Marquer aussi les retards
         retards = self.search([
@@ -280,62 +302,3 @@ class BocCourrierPeriodique(models.Model):
                 subtype_xmlid='mail.mt_note',
                 partner_ids=[rec.responsable_id.partner_id.id] if rec.responsable_id else [],
             )
-
-
-class BocOrganisme(models.Model):
-    """Organismes internes et externes (expéditeurs / destinataires)"""
-    _name = 'boc.organisme'
-    _description = "Organisme"
-    _order = 'name'
-
-    name = fields.Char(
-        string='Nom organisme',
-        required=True,
-        translate=True,
-    )
-    type_organisme = fields.Selection([
-        ('interne', 'Interne'),
-        ('externe', 'Externe'),
-    ], string='Type', required=True, default='externe')
-
-    code = fields.Char(string='Code')
-    adresse = fields.Text(string='Adresse')
-    telephone = fields.Char(string='Téléphone')
-    email = fields.Char(string='Email')
-    actif = fields.Boolean(string='Actif', default=True)
-
-    # Pour les organismes internes : lien avec direction/service
-    direction = fields.Char(string='Direction')
-    service = fields.Char(string='Service')
-    section = fields.Char(string='Section')
-
-
-class BocSujet(models.Model):
-    """Sujets prédéfinis pour les courriers"""
-    _name = 'boc.sujet'
-    _description = "Sujet Prédéfini"
-    _order = 'name'
-
-    name = fields.Char(string='Sujet', required=True, translate=True)
-    actif = fields.Boolean(string='Actif', default=True)
-
-
-class BocInstruction(models.Model):
-    """Instructions prédéfinies pour la diffusion"""
-    _name = 'boc.instruction'
-    _description = "Instruction Prédéfinie"
-    _order = 'name'
-
-    name = fields.Char(string='Instruction', required=True, translate=True)
-    # ex: "Pour traitement", "Pour information", "Pour signature", "Pour avis"
-    actif = fields.Boolean(string='Actif', default=True)
-
-
-class BocAnnotation(models.Model):
-    """Annotations prédéfinies"""
-    _name = 'boc.annotation'
-    _description = "Annotation Prédéfinie"
-    _order = 'name'
-
-    name = fields.Char(string='Annotation', required=True, translate=True)
-    actif = fields.Boolean(string='Actif', default=True)

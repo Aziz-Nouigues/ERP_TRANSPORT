@@ -773,6 +773,8 @@ msgid ""
 "Ce courrier est <strong>en retard</strong> !\n"
 "                        Échéance dépassée de"
 msgstr ""
+"Ce courrier est <strong>en retard</strong> !\n"
+"                        Échéance dépassée de"
 
 #. module: transport_boc
 #: model:ir.ui.menu,name:transport_boc.menu_boc_arrivee_sans_suite
@@ -1253,3 +1255,522 @@ msgstr "Filtres"
 msgid "Processed"
 msgstr "Traité(e)"
 
+#. module: transport_boc
+msgid "Actif"
+msgstr "Actif"
+
+#. module: transport_boc
+msgid "Alerte"
+msgstr "Alerte"
+
+#. module: transport_boc
+msgid "Annuel"
+msgstr "Annuel"
+
+#. module: transport_boc
+msgid "Aucun courrier échu sur cette période."
+msgstr "Aucun courrier échu sur cette période."
+
+#. module: transport_boc
+msgid "Aucun dépassement de délai sur cette période."
+msgstr "Aucun dépassement de délai sur cette période."
+
+#. module: transport_boc
+msgid "BOC — Rappels courriers périodiques"
+msgstr "BOC — Rappels courriers périodiques"
+
+#. module: transport_boc
+msgid "Bilan annuel et états financiers."
+msgstr "Bilan annuel et états financiers."
+
+#. module: transport_boc
+msgid "Bilan et notes aux états financiers"
+msgstr "Bilan et notes aux états financiers"
+
+#. module: transport_boc
+msgid "Bordereau des Courriers Externes Non Transférés"
+msgstr "Bordereau des Courriers Externes Non Transférés"
+
+#. module: transport_boc
+msgid "Bordereau des Courriers Externes Transférés"
+msgstr "Bordereau des Courriers Externes Transférés"
+
+#. module: transport_boc
+msgid "Bordereau des Courriers Internes Non Transférés"
+msgstr "Bordereau des Courriers Internes Non Transférés"
+
+#. module: transport_boc
+msgid "Bordereau des Courriers Internes Transférés"
+msgstr "Bordereau des Courriers Internes Transférés"
+
+#. module: transport_boc
+msgid "Bordereau des Courriers Nécessitant une Action"
+msgstr "Bordereau des Courriers Nécessitant une Action"
+
+#. module: transport_boc
+msgid "Bordereau — Externes non transférés"
+msgstr "Bordereau — Externes non transférés"
+
+#. module: transport_boc
+msgid "Bordereau — Externes transférés"
+msgstr "Bordereau — Externes transférés"
+
+#. module: transport_boc
+msgid "Bordereau — Internes non transférés"
+msgstr "Bordereau — Internes non transférés"
+
+#. module: transport_boc
+msgid "Bordereau — Internes transférés"
+msgstr "Bordereau — Internes transférés"
+
+#. module: transport_boc
+msgid "Bordereau — Rappels échéance (mi-délai)"
+msgstr "Bordereau — Rappels échéance (mi-délai)"
+
+#. module: transport_boc
+msgid "Bordereaux de Transmission"
+msgstr "Bordereaux de Transmission"
+
+#. module: transport_boc
+msgid "Budget prévisionnel"
+msgstr "Budget prévisionnel"
+
+#. module: transport_boc
+msgid "Budget prévisionnel annuel."
+msgstr "Budget prévisionnel annuel."
+
+#. module: transport_boc
+msgid "Calendrier"
+msgstr "Calendrier"
+
+#. module: transport_boc
+msgid "Ce courrier n'est pas encore archivé dans la GED."
+msgstr "Ce courrier n'est pas encore archivé dans la GED."
+
+#. module: transport_boc
+msgid "Cliquez sur"
+msgstr "Cliquez sur"
+
+#. module: transport_boc
+msgid "Clore"
+msgstr "Clore"
+
+#. module: transport_boc
+msgid "Contact"
+msgstr "Contact"
+
+#. module: transport_boc
+msgid "Contrat programme"
+msgstr "Contrat programme"
+
+#. module: transport_boc
+msgid "Contrat programme annuel."
+msgstr "Contrat programme annuel."
+
+#. module: transport_boc
+msgid "Courrier Périodique"
+msgstr "Courrier Périodique"
+
+#. module: transport_boc
+msgid "Courriers Périodiques"
+msgstr "Courriers Périodiques"
+
+#. module: transport_boc
+msgid "Courriers externes non transférés"
+msgstr "Courriers externes non transférés"
+
+#. module: transport_boc
+msgid "Courriers externes transférés"
+msgstr "Courriers externes transférés"
+
+#. module: transport_boc
+msgid "Courriers générés"
+msgstr "Courriers générés"
+
+#. module: transport_boc
+msgid "Courriers internes non transférés"
+msgstr "Courriers internes non transférés"
+
+#. module: transport_boc
+msgid "Courriers internes transférés"
+msgstr "Courriers internes transférés"
+
+#. module: transport_boc
+msgid "Courriers échus"
+msgstr "Courriers échus"
+
+#. module: transport_boc
+msgid "Date arrivée"
+msgstr "Date arrivée"
+
+#. module: transport_boc
+msgid "Date rappel"
+msgstr "Date rappel"
+
+#. module: transport_boc
+msgid "Date réponse"
+msgstr "Date réponse"
+
+#. module: transport_boc
+msgid "Date trans."
+msgstr "Date trans."
+
+#. module: transport_boc
+msgid "Date trans. prévue"
+msgstr "Date trans. prévue"
+
+#. module: transport_boc
+msgid "Directeur"
+msgstr "Directeur"
+
+#. module: transport_boc
+msgid "Direction / Service expéditeur"
+msgstr "Direction / Service expéditeur"
+
+#. module: transport_boc
+msgid "Documents attendus"
+msgstr "Documents attendus"
+
+#. module: transport_boc
+msgid "Documents attendus / Notes"
+msgstr "Documents attendus / Notes"
+
+#. module: transport_boc
+msgid "Dépassement de délai"
+msgstr "Dépassement de délai"
+
+#. module: transport_boc
+msgid "Désignation"
+msgstr "Désignation"
+
+#. module: transport_boc
+msgid "En retard (échéance dépassée)"
+msgstr "En retard (échéance dépassée)"
+
+#. module: transport_boc
+msgid "Expéditeur interne"
+msgstr "Expéditeur interne"
+
+#. module: transport_boc
+msgid "Fiche 18 — Rapport annuel"
+msgstr "Fiche 18 — Rapport annuel"
+
+#. module: transport_boc
+msgid "Fiche 7 : nombre d'effectifs, masse salariale et départs."
+msgstr "Fiche 7 : nombre d'effectifs, masse salariale et départs."
+
+#. module: transport_boc
+msgid "Fiche 7 — Effectifs et masse salariale"
+msgstr "Fiche 7 — Effectifs et masse salariale"
+
+#. module: transport_boc
+msgid "Fiches d'endettement et créances (n°12 et 13)"
+msgstr "Fiches d'endettement et créances (n°12 et 13)"
+
+#. module: transport_boc
+msgid "Fiches semestrielles d'endettement et créances."
+msgstr "Fiches semestrielles d'endettement et créances."
+
+#. module: transport_boc
+msgid "Générer le bordereau PDF"
+msgstr "Générer le bordereau PDF"
+
+#. module: transport_boc
+msgid "Générer un courrier"
+msgstr "Générer un courrier"
+
+#. module: transport_boc
+msgid "Information :"
+msgstr "Information :"
+
+#. module: transport_boc
+msgid "Mensuel"
+msgstr "Mensuel"
+
+#. module: transport_boc
+msgid "Nature courrier"
+msgstr "Nature courrier"
+
+#. module: transport_boc
+msgid "Nom (si non référencé)"
+msgstr "Nom (si non référencé)"
+
+#. module: transport_boc
+msgid "Nom expéditeur (libre)"
+msgstr "Nom expéditeur (libre)"
+
+#. module: transport_boc
+msgid "Nomination aux postes fonctionnels"
+msgstr "Nomination aux postes fonctionnels"
+
+#. module: transport_boc
+msgid "Non envoye"
+msgstr "Non envoye"
+
+#. module: transport_boc
+msgid "Nouveau"
+msgstr "Nouveau"
+
+#. module: transport_boc
+msgid "N° Arrivée"
+msgstr "N° Arrivée"
+
+#. module: transport_boc
+msgid "N° Ordre"
+msgstr "N° Ordre"
+
+#. module: transport_boc
+msgid "Objet"
+msgstr "Objet"
+
+#. module: transport_boc
+msgid "Organisme expéditeur"
+msgstr "Organisme expéditeur"
+
+#. module: transport_boc
+msgid "Périodicité"
+msgstr "Périodicité"
+
+#. module: transport_boc
+msgid "Rappel :"
+msgstr "Rappel :"
+
+#. module: transport_boc
+msgid "Rappel aujourd'hui"
+msgstr "Rappel aujourd'hui"
+
+#. module: transport_boc
+msgid "Rappels échéance (mi-délai)"
+msgstr "Rappels échéance (mi-délai)"
+
+#. module: transport_boc
+msgid "Rapport annuel."
+msgstr "Rapport annuel."
+
+#. module: transport_boc
+msgid "Rapport d'activité annuel"
+msgstr "Rapport d'activité annuel"
+
+#. module: transport_boc
+msgid "Rapport d'activité annuel."
+msgstr "Rapport d'activité annuel."
+
+#. module: transport_boc
+msgid "Remettre en brouillon"
+msgstr "Remettre en brouillon"
+
+#. module: transport_boc
+msgid "Responsable"
+msgstr "Responsable"
+
+#. module: transport_boc
+msgid "Réactiver"
+msgstr "Réactiver"
+
+#. module: transport_boc
+msgid "Récapitulatif des alertes"
+msgstr "Récapitulatif des alertes"
+
+#. module: transport_boc
+msgid "Semestriel"
+msgstr "Semestriel"
+
+#. module: transport_boc
+msgid "Service destinataire"
+msgstr "Service destinataire"
+
+#. module: transport_boc
+msgid "Situation de liquidité mensuelle"
+msgstr "Situation de liquidité mensuelle"
+
+#. module: transport_boc
+msgid "Situation de liquidité — à transmettre avant le 15 du mois suivant."
+msgstr "Situation de liquidité — à transmettre avant le 15 du mois suivant."
+
+#. module: transport_boc
+msgid "Sujet / Objet"
+msgstr "Sujet / Objet"
+
+#. module: transport_boc
+msgid "Suspendre"
+msgstr "Suspendre"
+
+#. module: transport_boc
+msgid "Total"
+msgstr "Total"
+
+#. module: transport_boc
+msgid "Total courriers"
+msgstr "Total courriers"
+
+#. module: transport_boc
+msgid "Total courriers en attente"
+msgstr "Total courriers en attente"
+
+#. module: transport_boc
+msgid "Total en attente"
+msgstr "Total en attente"
+
+#. module: transport_boc
+msgid "Transmission"
+msgstr "Transmission"
+
+#. module: transport_boc
+msgid "Type (interne/externe)"
+msgstr "Type (interne/externe)"
+
+#. module: transport_boc
+msgid "Type courrier"
+msgstr "Type courrier"
+
+#. module: transport_boc
+msgid "Type de bordereau"
+msgstr "Type de bordereau"
+
+#. module: transport_boc
+msgid "Urgent"
+msgstr "Urgent"
+
+#. module: transport_boc
+msgid "Urgent (≤ 3 jours restants)"
+msgstr "Urgent (≤ 3 jours restants)"
+
+#. module: transport_boc
+msgid "Voir tous les courriers"
+msgstr "Voir tous les courriers"
+
+#. module: transport_boc
+msgid "en retard"
+msgstr "en retard"
+
+#. module: transport_boc
+msgid "pour enregistrer un courrier."
+msgstr "pour enregistrer un courrier."
+
+#. module: transport_boc
+msgid "Échus (non traités)"
+msgstr "Échus (non traités)"
+
+#. module: transport_boc
+msgid "Édition des Délais de Traitement"
+msgstr "Édition des Délais de Traitement"
+
+#. module: transport_boc
+msgid "Édition des délais"
+msgstr "Édition des délais"
+
+#. module: transport_boc
+msgid "État Courriers Échus"
+msgstr "État Courriers Échus"
+
+#. module: transport_boc
+msgid "État courrier"
+msgstr "État courrier"
+
+#. module: transport_boc
+msgid "État semestriel des nominations."
+msgstr "État semestriel des nominations."
+
+#. module: transport_boc
+msgid "— En cours"
+msgstr "— En cours"
+
+#. module: transport_boc
+msgid "✔️ Marquer Traité"
+msgstr "✔️ Marquer Traité"
+
+#. module: transport_boc
+msgid "📨 Marquer Envoyé"
+msgstr "📨 Marquer Envoyé"
+
+#. module: transport_boc
+msgid "Adresse"
+msgstr "Adresse"
+
+#. module: transport_boc
+msgid "Autre"
+msgstr "Autre"
+
+#. module: transport_boc
+msgid "CD"
+msgstr "CD"
+
+#. module: transport_boc
+msgid "Clos"
+msgstr "Clos"
+
+#. module: transport_boc
+msgid "Code"
+msgstr "Code"
+
+#. module: transport_boc
+msgid "Courrier périodique"
+msgstr "Courrier périodique"
+
+#. module: transport_boc
+msgid "Courriers nécessitant une action (rappel mi-délai)"
+msgstr "Courriers nécessitant une action (rappel mi-délai)"
+
+#. module: transport_boc
+msgid "Date de début de suivi"
+msgstr "Date de début de suivi"
+
+#. module: transport_boc
+msgid "Dernière échéance traitée"
+msgstr "Dernière échéance traitée"
+
+#. module: transport_boc
+msgid "Direction"
+msgstr "Direction"
+
+#. module: transport_boc
+msgid "Email"
+msgstr "Email"
+
+#. module: transport_boc
+msgid "Issu d'un modèle périodique"
+msgstr "Issu d'un modèle périodique"
+
+#. module: transport_boc
+msgid "Modèle périodique"
+msgstr "Modèle périodique"
+
+#. module: transport_boc
+msgid "Nb courriers générés"
+msgstr "Nb courriers générés"
+
+#. module: transport_boc
+msgid "Notes"
+msgstr "Notes"
+
+#. module: transport_boc
+msgid "Notes / Documents attendus"
+msgstr "Notes / Documents attendus"
+
+#. module: transport_boc
+msgid "Organisme destinataire"
+msgstr "Organisme destinataire"
+
+#. module: transport_boc
+msgid "Prochaine échéance"
+msgstr "Prochaine échéance"
+
+#. module: transport_boc
+msgid "Rappel avant échéance (jours)"
+msgstr "Rappel avant échéance (jours)"
+
+#. module: transport_boc
+msgid "Rappel en attente"
+msgstr "Rappel en attente"
+
+#. module: transport_boc
+msgid "Section"
+msgstr "Section"
+
+#. module: transport_boc
+msgid "Suspendu"
+msgstr "Suspendu"
+
+#. module: transport_boc
+msgid "Édition des délais de traitement"
+msgstr "Édition des délais de traitement"
