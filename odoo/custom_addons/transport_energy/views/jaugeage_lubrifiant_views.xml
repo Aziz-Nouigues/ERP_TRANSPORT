@@ -1,0 +1,307 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <!-- ═══════════════════════════════════════════════════════
+         STOCK LUBRIFIANT MAGASIN — vue formulaire et liste
+         ═══════════════════════════════════════════════════════ -->
+
+    <record id="view_stock_lubrifiant_form" model="ir.ui.view">
+        <field name="name">transport.stock.lubrifiant.form</field>
+        <field name="model">transport.stock.lubrifiant</field>
+        <field name="arch" type="xml">
+            <form string="Stock lubrifiant magasin">
+                <sheet>
+                    <div class="oe_button_box" name="button_box">
+                        <field name="stock_status" widget="badge"
+                               decoration-success="stock_status == 'ok'"
+                               decoration-warning="stock_status == 'low'"
+                               decoration-danger="stock_status == 'critical'"/>
+                    </div>
+                    <div class="oe_title">
+                        <h1><field name="display_name" readonly="1"/></h1>
+                    </div>
+                    <group>
+                        <group string="Localisation">
+                            <field name="atelier"/>
+                            <field name="agence"/>
+                        </group>
+                        <group string="Lubrifiant">
+                            <field name="type_lubrifiant_id"/>
+                            <field name="unite" readonly="1"/>
+                        </group>
+                    </group>
+                    <group>
+                        <group string="Niveaux">
+                            <field name="stock_actuel" readonly="1"
+                                   decoration-danger="stock_status == 'critical'"
+                                   decoration-warning="stock_status == 'low'"/>
+                            <field name="stock_minimum"/>
+                        </group>
+                    </group>
+                    <group string="Notes">
+                        <field name="notes" widget="text" nolabel="1" colspan="2"/>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="view_stock_lubrifiant_list" model="ir.ui.view">
+        <field name="name">transport.stock.lubrifiant.list</field>
+        <field name="model">transport.stock.lubrifiant</field>
+        <field name="arch" type="xml">
+            <list string="Stocks lubrifiants"
+                  decoration-danger="stock_status == 'critical'"
+                  decoration-warning="stock_status == 'low'">
+                <field name="atelier"/>
+                <field name="agence" optional="show"/>
+                <field name="type_lubrifiant_id"/>
+                <field name="unite"/>
+                <field name="stock_actuel"/>
+                <field name="stock_minimum"/>
+                <field name="stock_status" widget="badge"
+                       decoration-success="stock_status == 'ok'"
+                       decoration-warning="stock_status == 'low'"
+                       decoration-danger="stock_status == 'critical'"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="view_stock_lubrifiant_search" model="ir.ui.view">
+        <field name="name">transport.stock.lubrifiant.search</field>
+        <field name="model">transport.stock.lubrifiant</field>
+        <field name="arch" type="xml">
+            <search>
+                <field name="atelier"/>
+                <field name="type_lubrifiant_id"/>
+                <filter name="alerte_bas"    string="Stock bas"     domain="[('stock_status','in',['low','critical'])]"/>
+                <filter name="alerte_crit"   string="Stock critique" domain="[('stock_status','=','critical')]"/>
+                <group>
+                    <filter name="gb_atelier" string="Atelier"    context="{'group_by':'atelier'}"/>
+                    <filter name="gb_agence"  string="Agence"     context="{'group_by':'agence'}"/>
+                    <filter name="gb_type"    string="Lubrifiant" context="{'group_by':'type_lubrifiant_id'}"/>
+                </group>
+            </search>
+        </field>
+    </record>
+
+    <record id="action_stock_lubrifiant" model="ir.actions.act_window">
+        <field name="name">Stocks lubrifiants magasins</field>
+        <field name="res_model">transport.stock.lubrifiant</field>
+        <field name="view_mode">list,form</field>
+        <field name="search_view_id" ref="view_stock_lubrifiant_search"/>
+    </record>
+
+    <!-- ═══════════════════════════════════════════════════════
+         JAUGEAGE LUBRIFIANT — vue formulaire
+         ═══════════════════════════════════════════════════════ -->
+
+    <record id="view_jaugeage_lubrifiant_form" model="ir.ui.view">
+        <field name="name">transport.jaugeage.lubrifiant.form</field>
+        <field name="model">transport.jaugeage.lubrifiant</field>
+        <field name="arch" type="xml">
+            <form string="Jaugeage lubrifiant magasin">
+                <header>
+                    <button name="action_confirmer" string="Confirmer"
+                            type="object" class="btn-primary"
+                            invisible="statut != 'brouillon'"/>
+                    <button name="action_approuver" string="Approuver et ajuster"
+                            type="object" class="btn-success"
+                            groups="transport_energy.group_directeur_energie"
+                            invisible="statut != 'confirme'"/>
+                    <button name="action_annuler" string="Annuler"
+                            type="object"
+                            invisible="statut in ('approuve','annule')"/>
+                    <button name="action_brouillon" string="Remettre en brouillon"
+                            type="object"
+                            invisible="statut != 'annule'"/>
+                    <field name="statut" widget="statusbar"
+                           statusbar_visible="brouillon,confirme,approuve"/>
+                </header>
+                <sheet>
+                    <!-- Badge alerte dans le coin -->
+                    <div class="oe_button_box" name="button_box">
+                        <field name="niveau_alerte" widget="badge"
+                               decoration-success="niveau_alerte == 'normal'"
+                               decoration-warning="niveau_alerte == 'attention'"
+                               decoration-danger="niveau_alerte == 'critique'"/>
+                    </div>
+                    <div class="oe_title">
+                        <h1><field name="name" readonly="1"/></h1>
+                    </div>
+
+                    <group>
+                        <group string="Identification">
+                            <field name="date"/>
+                            <field name="responsable"/>
+                        </group>
+                        <group string="Localisation">
+                            <field name="atelier"/>
+                            <field name="agence"/>
+                        </group>
+                    </group>
+
+                    <group>
+                        <group string="Lubrifiant">
+                            <field name="stock_lubrifiant_id"
+                                   domain="[('atelier','=',atelier)]"/>
+                            <field name="type_lubrifiant_id" readonly="1"/>
+                            <field name="unite" readonly="1"/>
+                        </group>
+                        <group string="Niveaux">
+                            <field name="stock_theorique" readonly="1"/>
+                            <field name="niveau_mesure"/>
+                            <field name="ecart" readonly="1"
+                                   decoration-danger="ecart &lt; 0"
+                                   decoration-warning="ecart != 0"/>
+                            <field name="ecart_pourcentage" readonly="1"
+                                   string="Ecart (%)"/>
+                        </group>
+                    </group>
+
+                    <!-- Section ajustement — visible seulement si écart significatif -->
+                    <group string="Ajustement et justification"
+                           invisible="niveau_alerte == 'normal'">
+                        <field name="ajustement_stock"
+                               groups="transport_energy.group_directeur_energie"/>
+                        <div class="alert alert-info" role="status"
+                             invisible="not ajustement_stock">
+                            A l'approbation, le stock du magasin sera mis a jour
+                            avec le niveau mesure.
+                            Cette operation est irreversible.
+                        </div>
+                        <field name="justification"
+                               placeholder="Expliquer l'ecart detecte : perte, evaporation, erreur de saisie..."
+                               colspan="2"/>
+                    </group>
+
+                    <group string="Notes">
+                        <field name="notes" widget="text" nolabel="1" colspan="2"/>
+                    </group>
+                </sheet>
+                <chatter reload_on_follower="True"/>
+            </form>
+        </field>
+    </record>
+
+    <!-- ═══════════════════════════════════════════════════════
+         JAUGEAGE LUBRIFIANT — vue liste
+         ═══════════════════════════════════════════════════════ -->
+
+    <record id="view_jaugeage_lubrifiant_list" model="ir.ui.view">
+        <field name="name">transport.jaugeage.lubrifiant.list</field>
+        <field name="model">transport.jaugeage.lubrifiant</field>
+        <field name="arch" type="xml">
+            <list string="Jaugeages lubrifiants"
+                  decoration-success="statut == 'approuve'"
+                  decoration-warning="statut == 'confirme'"
+                  decoration-danger="niveau_alerte == 'critique'"
+                  decoration-muted="statut == 'annule'">
+                <field name="name"/>
+                <field name="date"/>
+                <field name="atelier"/>
+                <field name="agence" optional="show"/>
+                <field name="type_lubrifiant_id"/>
+                <field name="stock_theorique"/>
+                <field name="niveau_mesure"/>
+                <field name="ecart"/>
+                <field name="ecart_pourcentage" string="Ecart %"/>
+                <field name="niveau_alerte" widget="badge"
+                       decoration-success="niveau_alerte == 'normal'"
+                       decoration-warning="niveau_alerte == 'attention'"
+                       decoration-danger="niveau_alerte == 'critique'"/>
+                <field name="statut" widget="badge"
+                       decoration-success="statut == 'approuve'"
+                       decoration-warning="statut == 'confirme'"/>
+            </list>
+        </field>
+    </record>
+
+    <!-- ═══════════════════════════════════════════════════════
+         JAUGEAGE LUBRIFIANT — vue recherche
+         ═══════════════════════════════════════════════════════ -->
+
+    <record id="view_jaugeage_lubrifiant_search" model="ir.ui.view">
+        <field name="name">transport.jaugeage.lubrifiant.search</field>
+        <field name="model">transport.jaugeage.lubrifiant</field>
+        <field name="arch" type="xml">
+            <search>
+                <field name="atelier"/>
+                <field name="type_lubrifiant_id"/>
+                <field name="responsable"/>
+                <filter name="brouillon"  string="Brouillons" domain="[('statut','=','brouillon')]"/>
+                <filter name="a_approuver" string="A approuver" domain="[('statut','=','confirme')]"/>
+                <filter name="approuve"   string="Approuves"   domain="[('statut','=','approuve')]"/>
+                <separator/>
+                <filter name="critique" string="Ecart critique"
+                        domain="[('niveau_alerte','=','critique')]"/>
+                <filter name="attention" string="Ecart attention"
+                        domain="[('niveau_alerte','=','attention')]"/>
+                <separator/>
+                <filter name="today" string="Aujourd hui"
+                        domain="[('date','&gt;=',datetime.datetime.now().strftime('%Y-%m-%d 00:00:00')),
+                                  ('date','&lt;=',datetime.datetime.now().strftime('%Y-%m-%d 23:59:59'))]"/>
+                <group>
+                    <filter name="gb_atelier" string="Atelier"    context="{'group_by':'atelier'}"/>
+                    <filter name="gb_agence"  string="Agence"     context="{'group_by':'agence'}"/>
+                    <filter name="gb_type"    string="Lubrifiant" context="{'group_by':'type_lubrifiant_id'}"/>
+                    <filter name="gb_date"    string="Jour"       context="{'group_by':'date:day'}"/>
+                    <filter name="gb_month"   string="Mois"       context="{'group_by':'date:month'}"/>
+                </group>
+            </search>
+        </field>
+    </record>
+
+    <!-- ═══════════════════════════════════════════════════════
+         ACTIONS
+         ═══════════════════════════════════════════════════════ -->
+
+    <!-- Action complète — responsable/directeur -->
+    <record id="action_jaugeage_lubrifiant" model="ir.actions.act_window">
+        <field name="name">Jaugeages lubrifiants</field>
+        <field name="res_model">transport.jaugeage.lubrifiant</field>
+        <field name="view_mode">list,form</field>
+        <field name="search_view_id" ref="view_jaugeage_lubrifiant_search"/>
+    </record>
+
+    <!-- Action pompiste — saisie fin de journée, filtrée sur brouillon/confirme -->
+    <record id="action_jaugeage_lubrifiant_pompiste" model="ir.actions.act_window">
+        <field name="name">Jaugeage lubrifiant fin de journee</field>
+        <field name="res_model">transport.jaugeage.lubrifiant</field>
+        <field name="view_mode">list,form</field>
+        <field name="domain">[('statut','in',['brouillon','confirme'])]</field>
+        <field name="context">{'default_statut': 'brouillon'}</field>
+        <field name="search_view_id" ref="view_jaugeage_lubrifiant_search"/>
+    </record>
+
+    <!-- ═══════════════════════════════════════════════════════
+         MENUS
+         ═══════════════════════════════════════════════════════ -->
+
+    <!-- Pompiste : saisie fin de journée sous Lubrifiants -->
+    <menuitem
+        id="menu_jaugeage_lubrifiant_pompiste"
+        name="Jaugeage fin de journee"
+        parent="menu_lubrifiants"
+        action="action_jaugeage_lubrifiant_pompiste"
+        sequence="20"/>
+
+    <!-- Responsable/Directeur : tous les jaugeages sous Controles -->
+    <menuitem
+        id="menu_jaugeage_lubrifiant"
+        name="Jaugeages lubrifiants"
+        parent="menu_controles"
+        action="action_jaugeage_lubrifiant"
+        sequence="20"
+        groups="transport_energy.group_responsable_energie"/>
+
+    <!-- Configuration : gestion des stocks magasin sous Configuration -->
+    <menuitem
+        id="menu_stock_lubrifiant"
+        name="Stocks lubrifiants magasins"
+        parent="menu_energy_config"
+        action="action_stock_lubrifiant"
+        sequence="20"
+        groups="transport_energy.group_responsable_energie"/>
+
+</odoo>

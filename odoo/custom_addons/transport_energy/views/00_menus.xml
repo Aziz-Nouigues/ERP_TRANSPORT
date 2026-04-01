@@ -1,0 +1,104 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!--
+        ARBORESCENCE DES MENUS — MODULE ENERGIE TRANSPORT
+        Organisee par processus metier (pas par modele technique).
+
+        Sequence :
+          10 - Ravitaillement  (pompiste)
+          20 - Approvisionnement  (chef depot)
+          30 - Lubrifiants  (mecanicien)
+          40 - Controles  (responsable)
+          50 - Energie STEG/SONEDE  (comptable)
+          60 - Rapports et statistiques  (direction)
+          90 - Configuration  (admin)
+    -->
+
+    <!-- RACINE APPLICATION -->
+    <menuitem
+        id="menu_transport_energy_root"
+        name="Energie Transport"
+        web_icon="transport_energy,static/description/icon.png"
+        sequence="50"/>
+
+    <!-- ═══════════════════════════════════════════════════════
+         1. RAVITAILLEMENT — saisie quotidienne terrain
+         ═══════════════════════════════════════════════════════ -->
+    <menuitem
+        id="menu_ravitaillement"
+        name="Ravitaillement"
+        parent="menu_transport_energy_root"
+        sequence="10"/>
+
+    <!-- Les actions BGI/BGE/Lubrifiant sont definies dans leurs vues respectives -->
+
+    <!-- ═══════════════════════════════════════════════════════
+         2. APPROVISIONNEMENT — reception citerne
+         ═══════════════════════════════════════════════════════ -->
+    <menuitem
+        id="menu_approvisionnement"
+        name="Approvisionnement"
+        parent="menu_transport_energy_root"
+        sequence="20"
+        groups="transport_energy.group_responsable_energie"/>
+
+    <!-- ═══════════════════════════════════════════════════════
+         3. LUBRIFIANTS — ateliers / magasins
+         ═══════════════════════════════════════════════════════ -->
+    <menuitem
+        id="menu_lubrifiants"
+        name="Lubrifiants"
+        parent="menu_transport_energy_root"
+        sequence="30"/>
+
+    <!-- ═══════════════════════════════════════════════════════
+         4. CONTROLES — jaugeage, alertes, supervision
+         ═══════════════════════════════════════════════════════ -->
+    <menuitem
+        id="menu_controles"
+        name="Controles"
+        parent="menu_transport_energy_root"
+        sequence="40"
+        groups="transport_energy.group_responsable_energie"/>
+
+    <!-- ═══════════════════════════════════════════════════════
+         5. ENERGIE STEG / SONEDE — factures eau et electricite
+         ═══════════════════════════════════════════════════════ -->
+    <menuitem
+        id="menu_energie_eau"
+        name="Energie STEG / SONEDE"
+        parent="menu_transport_energy_root"
+        sequence="50"
+        groups="transport_energy.group_responsable_energie"/>
+
+    <!-- ═══════════════════════════════════════════════════════
+         6. RAPPORTS ET STATISTIQUES — centre de reporting unifie
+         ═══════════════════════════════════════════════════════ -->
+    <menuitem
+        id="menu_rapports_root"
+        name="Rapports et statistiques"
+        parent="menu_transport_energy_root"
+        sequence="60"
+        groups="transport_energy.group_responsable_energie"/>
+
+    <!-- ═══════════════════════════════════════════════════════
+         7. CARTES AGILIS — gestion solde et recharges
+         ═══════════════════════════════════════════════════════ -->
+    <menuitem
+        id="menu_agilis_root"
+        name="Cartes AGILIS"
+        parent="menu_transport_energy_root"
+        sequence="70"
+        groups="transport_energy.group_responsable_energie"/>
+
+    <!-- ═══════════════════════════════════════════════════════
+         8. CONFIGURATION — referentiels et parametrage
+         ═══════════════════════════════════════════════════════ -->
+    <menuitem
+        id="menu_energy_config"
+        name="Configuration"
+        parent="menu_transport_energy_root"
+        sequence="90"
+        groups="transport_energy.group_responsable_energie"/>
+
+</odoo>

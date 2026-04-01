@@ -1,5 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <odoo>
+
+    <record id="seq_supply_order" model="ir.sequence">
+        <field name="name">Approvisionnement Citerne</field>
+        <field name="code">transport.supply.order</field>
+        <field name="prefix">APPRO/%(year)s/</field>
+        <field name="padding">5</field>
+        <field name="number_increment">1</field>
+    </record>
+
     <record id="seq_fuel_voucher_internal" model="ir.sequence">
         <field name="name">Bon Gasoil Interne</field>
         <field name="code">transport.fuel.voucher.internal</field>
@@ -17,27 +26,35 @@
     </record>
 
     <record id="seq_bon_lubrifiant" model="ir.sequence">
-    <field name="name">Bon Lubrifiant</field>
-    <field name="code">transport.bon.lubrifiant</field>
-    <field name="prefix">BL/%(year)s/</field>
-    <field name="padding">5</field>
-    <field name="number_increment">1</field>
+        <field name="name">Bon Lubrifiant</field>
+        <field name="code">transport.bon.lubrifiant</field>
+        <field name="prefix">BL/%(year)s/</field>
+        <field name="padding">5</field>
+        <field name="number_increment">1</field>
     </record>
 
     <record id="seq_jaugeage" model="ir.sequence">
-    <field name="name">Jaugeage</field>
-    <field name="code">transport.jaugeage</field>
-    <field name="prefix">JAU/%(year)s/</field>
-    <field name="padding">5</field>
-    <field name="number_increment">1</field>
+        <field name="name">Jaugeage</field>
+        <field name="code">transport.jaugeage</field>
+        <field name="prefix">JAU/%(year)s/</field>
+        <field name="padding">5</field>
+        <field name="number_increment">1</field>
+    </record>
+
+    <record id="seq_jaugeage_lubrifiant" model="ir.sequence">
+        <field name="name">Jaugeage Lubrifiant</field>
+        <field name="code">transport.jaugeage.lubrifiant</field>
+        <field name="prefix">JAUL/%(year)s/</field>
+        <field name="padding">5</field>
+        <field name="number_increment">1</field>
     </record>
 
     <record id="seq_agilis_utilisation" model="ir.sequence">
-    <field name="name">AGILIS Utilisation</field>
-    <field name="code">transport.agilis.utilisation</field>
-    <field name="prefix">AGILIS/%(year)s/</field>
-    <field name="padding">5</field>
-    <field name="number_increment">1</field>
+        <field name="name">AGILIS Utilisation</field>
+        <field name="code">transport.agilis.utilisation</field>
+        <field name="prefix">AGILIS/%(year)s/</field>
+        <field name="padding">5</field>
+        <field name="number_increment">1</field>
     </record>
 
 </odoo>

@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!--
+        CORRECTIF CRITIQUE : ce wizard etait code mais aucun menuitem
+        ne pointait vers lui — il etait totalement inaccessible.
+        Ce fichier cree la vue et le menu manquants.
+    -->
+
+    <record id="view_wizard_rapport_energie_form" model="ir.ui.view">
+        <field name="name">transport.wizard.rapport.energie.form</field>
+        <field name="model">transport.wizard.rapport.energie</field>
+        <field name="arch" type="xml">
+            <form string="Rapport energie STEG / SONEDE">
+                <group>
+                    <group string="Parametres">
+                        <field name="annee"/>
+                        <field name="type_energie"/>
+                    </group>
+                    <group string="Filtres optionnels">
+                        <field name="site_filtre"
+                               placeholder="Laisser vide pour tous les sites"/>
+                    </group>
+                </group>
+                <footer>
+                    <button name="action_generer"
+                            string="Generer rapport PDF"
+                            type="object" class="btn-primary"/>
+                    <button string="Annuler" class="btn-secondary" special="cancel"/>
+                </footer>
+            </form>
+        </field>
+    </record>
+
+    <record id="action_wizard_rapport_energie" model="ir.actions.act_window">
+        <field name="name">Rapport energie STEG / SONEDE</field>
+        <field name="res_model">transport.wizard.rapport.energie</field>
+        <field name="view_id" ref="view_wizard_rapport_energie_form"/>
+        <field name="view_mode">form</field>
+        <field name="target">new</field>
+    </record>
+
+    <!-- Ce menu etait manquant — le wizard etait orphelin -->
+    <menuitem
+        id="menu_rapport_energie_steg"
+        name="Rapport energie STEG / SONEDE"
+        parent="menu_rapports_root"
+        action="action_wizard_rapport_energie"
+        sequence="30"/>
+
+</odoo>

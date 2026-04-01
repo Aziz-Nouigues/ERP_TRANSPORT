@@ -1,36 +1,28 @@
 <?xml version="1.0" encoding="utf-8"?>
 <odoo>
 
-    <!-- ═══ VUE FORMULAIRE ═══ -->
     <record id="view_jaugeage_form" model="ir.ui.view">
         <field name="name">transport.jaugeage.form</field>
         <field name="model">transport.jaugeage</field>
         <field name="arch" type="xml">
             <form string="Jaugeage des cuves">
                 <header>
-                    <button name="action_approuver"
-                            string="Approuver"
-                            type="object"
-                            class="btn-success"
+                    <button name="action_confirmer" string="Confirmer"
+                            type="object" class="btn-primary"
+                            invisible="statut != 'brouillon'"/>
+                    <button name="action_approuver" string="Approuver"
+                            type="object" class="btn-success"
                             groups="transport_energy.group_directeur_energie"
                             invisible="statut != 'confirme'"/>
-                    <button name="action_confirmer"
-                            string="Confirmer"
-                            type="object"
-                            class="btn-primary"
-                            invisible="statut != 'brouillon'"/>
-                    <button name="action_annuler"
-                            string="Annuler"
+                    <button name="action_annuler" string="Annuler"
                             type="object"
                             invisible="statut in ('approuve','annule')"/>
-                    <button name="action_brouillon"
-                            string="Remettre en brouillon"
+                    <button name="action_brouillon" string="Remettre en brouillon"
                             type="object"
                             invisible="statut != 'annule'"/>
                     <field name="statut" widget="statusbar"
                            statusbar_visible="brouillon,confirme,approuve"/>
                 </header>
-
                 <sheet>
                     <div class="oe_button_box" name="button_box">
                         <field name="niveau_alerte" widget="badge"
@@ -38,45 +30,39 @@
                                decoration-warning="niveau_alerte == 'attention'"
                                decoration-danger="niveau_alerte == 'critique'"/>
                     </div>
-
                     <div class="oe_title">
-                        <h1>
-                            <field name="name" readonly="1"/>
-                        </h1>
+                        <h1><field name="name" readonly="1"/></h1>
                     </div>
-
                     <group>
                         <group string="Informations">
                             <field name="date"/>
                             <field name="responsable"/>
-                            <field name="station_id"/>
+                            <field name="cuve_id"/>
+                            <field name="station_id" readonly="1"/>
+                            <field name="fuel_type_id" readonly="1"/>
                         </group>
                         <group string="Niveaux">
-                            <field name="stock_theorique"/>
+                            <field name="stock_theorique" readonly="1"/>
                             <field name="niveau_mesure"/>
-                            <field name="ecart"/>
-                            <field name="ecart_pourcentage"/>
+                            <field name="ecart" readonly="1"/>
+                            <field name="ecart_pourcentage" readonly="1"/>
                         </group>
                     </group>
-
-                    <group string="Justification &amp; Ajustement"
+                    <group string="Ajustement et justification"
                            invisible="niveau_alerte == 'normal'">
                         <field name="ajustement_stock"/>
                         <field name="justification"
-                               placeholder="Expliquer l'écart..."/>
+                               placeholder="Expliquer l ecart detecte..."/>
                     </group>
-
                     <group string="Notes">
-                        <field name="notes" placeholder="Notes..." nolabel="1" colspan="2" widget="text"/>
+                        <field name="notes" widget="text" nolabel="1" colspan="2"/>
                     </group>
                 </sheet>
-
                 <chatter/>
             </form>
         </field>
     </record>
 
-    <!-- ═══ VUE LISTE ═══ -->
     <record id="view_jaugeage_list" model="ir.ui.view">
         <field name="name">transport.jaugeage.list</field>
         <field name="model">transport.jaugeage</field>
@@ -87,6 +73,7 @@
                   decoration-success="niveau_alerte == 'normal'">
                 <field name="name"/>
                 <field name="date"/>
+                <field name="cuve_id"/>
                 <field name="station_id"/>
                 <field name="responsable"/>
                 <field name="stock_theorique"/>
@@ -99,33 +86,32 @@
         </field>
     </record>
 
-    <!-- ═══ VUE RECHERCHE ═══ -->
     <record id="view_jaugeage_search" model="ir.ui.view">
         <field name="name">transport.jaugeage.search</field>
         <field name="model">transport.jaugeage</field>
         <field name="arch" type="xml">
             <search>
-                <filter name="critique" string="🔴 Critique"
+                <filter name="critique" string="Critique"
                         domain="[('niveau_alerte','=','critique')]"/>
-                <filter name="attention" string="⚠️ Attention"
+                <filter name="attention" string="Attention"
                         domain="[('niveau_alerte','=','attention')]"/>
-                <filter name="normal" string="✅ Normal"
+                <filter name="normal" string="Normal"
                         domain="[('niveau_alerte','=','normal')]"/>
-                <filter name="approuve" string="Approuvés"
+                <filter name="approuve" string="Approuves"
                         domain="[('statut','=','approuve')]"/>
                 <group>
-                    <filter name="groupe_station" string="Station"
-                            context="{'group_by': 'station_id'}"/>
-                    <filter name="groupe_alerte" string="Niveau alerte"
-                            context="{'group_by': 'niveau_alerte'}"/>
-                    <filter name="groupe_date" string="Date"
-                            context="{'group_by': 'date:month'}"/>
+                    <filter name="gb_station" string="Station"
+                            context="{'group_by':'station_id'}"/>
+                    <filter name="gb_cuve" string="Cuve" context="{'group_by':'cuve_id'}"/>
+                    <filter name="gb_alerte" string="Niveau alerte"
+                            context="{'group_by':'niveau_alerte'}"/>
+                    <filter name="gb_date" string="Mois"
+                            context="{'group_by':'date:month'}"/>
                 </group>
             </search>
         </field>
     </record>
 
-    <!-- ═══ ACTION ═══ -->
     <record id="action_jaugeage" model="ir.actions.act_window">
         <field name="name">Jaugeages</field>
         <field name="res_model">transport.jaugeage</field>
@@ -133,16 +119,29 @@
         <field name="search_view_id" ref="view_jaugeage_search"/>
     </record>
 
-    <!-- ═══ MENU ═══ -->
-    <menuitem id="menu_jaugeage_root"
-              name="📈 Jaugeage"
-              parent="menu_transport_energy_root"
-              sequence="40"/>
+    <!-- Jaugeage sous Controles — responsable (approbation, ajustement stock) -->
+    <menuitem
+        id="menu_jaugeage"
+        name="Jaugeages des cuves"
+        parent="menu_controles"
+        action="action_jaugeage"
+        sequence="10"/>
 
-    <menuitem id="menu_jaugeage"
-              name="Opérations de jaugeage"
-              parent="menu_jaugeage_root"
-              action="action_jaugeage"
-              sequence="10"/>
+    <!-- CORRECTION P4 : Jaugeage aussi sous Ravitaillement — pompiste saisie fin de journee -->
+    <record id="action_jaugeage_pompiste" model="ir.actions.act_window">
+        <field name="name">Jaugeage fin de journee</field>
+        <field name="res_model">transport.jaugeage</field>
+        <field name="view_mode">list,form</field>
+        <field name="domain">[('statut','in',['brouillon','confirme'])]</field>
+        <field name="context">{'default_statut': 'brouillon'}</field>
+        <field name="search_view_id" ref="view_jaugeage_search"/>
+    </record>
+
+    <menuitem
+        id="menu_jaugeage_pompiste"
+        name="Jaugeage fin de journee"
+        parent="menu_ravitaillement"
+        action="action_jaugeage_pompiste"
+        sequence="40"/>
 
 </odoo>

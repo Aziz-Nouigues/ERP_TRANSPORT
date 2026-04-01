@@ -42,7 +42,7 @@ class WizardRapportConsommation(models.TransientModel):
     # ── TYPE RAPPORT LUBRIFIANT ──────────────────────────────
     type_rapport_lubrifiant = fields.Selection([
         ('lubrifiant', 'كشف استهلاك المزيتات - Consommation par vehicule'),
-    ], string='Type de rapport', default='lubrifiant')
+    ], string='Type de rapport lubrifiant', default='lubrifiant')
 
     type_rapport = fields.Selection([
         ('recap', 'Recapitulatif'),
@@ -546,6 +546,13 @@ class WizardRapportConsommation(models.TransientModel):
 
     # ── DONNÉES BUS EXCESSIFS ────────────────────────────────
     def _get_donnees_excessif(self):
+        """Calcul de la consommation reelle par vehicule sur la periode.
+        Logique km :
+          - Compteur OK/replaced : delta entre la derniere et la premiere
+            valeur odometer_value du vehicule sur la periode (km reels).
+          - Compteur broken      : somme des distance_estimated (estimees
+            depuis conso theorique).
+        """
         domain = [('state', '=', 'done')]
         if self.date_debut:
             domain.append(('date', '>=', self.date_debut))
@@ -562,10 +569,29 @@ class WizardRapportConsommation(models.TransientModel):
                     continue
                 key = bus.id
                 if key not in data:
-                    data[key] = {'bus_name': bus.name, 'bus_type': self._get_bus_type_label(bus), 'conso_theorique': bus.theoretical_fuel_consumption or 0, 'total_litres': 0, 'total_km': 0, 'nb_sorties': 0}
+                    data[key] = {
+                        'bus_name': bus.name,
+                        'bus_type': self._get_bus_type_label(bus),
+                        'conso_theorique': bus.theoretical_fuel_consumption or 0,
+                        'total_litres': 0,
+                        'total_km': 0,
+                        'nb_sorties': 0,
+                        'odometer_broken': bus.odometer_status == 'broken',
+                        'odometer_values': [],
+                    }
                 data[key]['total_litres'] += ligne.quantity
-                data[key]['total_km'] += ligne.distance_estimated or 0
                 data[key]['nb_sorties'] += 1
+                if bus.odometer_status == 'broken':
+                    # Compteur en panne : cumuler les km estimes
+                    data[key]['total_km'] += ligne.distance_estimated or 0
+                else:
+                    # Compteur fonctionnel : collecter les valeurs pour delta
+                    if ligne.odometer_value > 0:
+                        data[key]['odometer_values'].append(ligne.odometer_value)
+        # Calculer le delta km pour les compteurs fonctionnels
+        for key, val in data.items():
+            if not val['odometer_broken'] and val['odometer_values']:
+                val['total_km'] = max(val['odometer_values']) - min(val['odometer_values'])
         result = []
         for key, val in data.items():
             total_km = val['total_km']
@@ -573,7 +599,16 @@ class WizardRapportConsommation(models.TransientModel):
             conso_reelle = (total_l / total_km * 100) if total_km > 0 else 0
             if conso_reelle > self.seuil_excessif:
                 ecart = conso_reelle - val['conso_theorique']
-                result.append({'bus_name': val['bus_name'], 'bus_type': val['bus_type'], 'nb_sorties': val['nb_sorties'], 'total_litres': round(total_l, 2), 'total_km': round(total_km, 2), 'conso_theorique': round(val['conso_theorique'], 2), 'conso_reelle': round(conso_reelle, 2), 'ecart': round(ecart, 2)})
+                result.append({
+                    'bus_name': val['bus_name'],
+                    'bus_type': val['bus_type'],
+                    'nb_sorties': val['nb_sorties'],
+                    'total_litres': round(total_l, 2),
+                    'total_km': round(total_km, 2),
+                    'conso_theorique': round(val['conso_theorique'], 2),
+                    'conso_reelle': round(conso_reelle, 2),
+                    'ecart': round(ecart, 2),
+                })
         return sorted(result, key=lambda x: x['conso_reelle'], reverse=True)
 
     # ── DONNÉES PAR VÉHICULE ─────────────────────────────────

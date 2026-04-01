@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <odoo>
 
-    <!-- ================= VUE WIZARD CARBURANT ================= -->
+    <!-- ═══ VUE WIZARD CARBURANT ═══ -->
     <record id="view_wizard_rapport_carburant_form" model="ir.ui.view">
         <field name="name">transport.wizard.rapport.carburant.form</field>
         <field name="model">transport.wizard.rapport</field>
         <field name="arch" type="xml">
-            <form string="Rapports Carburant">
+            <form string="Rapport carburant">
                 <group>
                     <group string="Type de rapport">
                         <field name="type_rapport_carburant" widget="radio"/>
@@ -14,6 +14,7 @@
                                invisible="type_rapport_carburant != 'excessif'"/>
                         <field name="agence_filtre"
                                invisible="type_rapport_carburant != 'rotation'"/>
+                        <field name="langue"/>
                     </group>
                     <group string="Filtres">
                         <field name="date_debut"/>
@@ -25,29 +26,26 @@
                 <footer>
                     <button name="action_generer_rapport_carburant"
                             string="Generer PDF"
-                            type="object"
-                            class="btn-primary"/>
+                            type="object" class="btn-primary"/>
                     <button name="action_export_excel_carburant"
                             string="Exporter Excel"
-                            type="object"
-                            class="btn-success"/>
-                    <button string="Annuler"
-                            class="btn-secondary"
-                            special="cancel"/>
+                            type="object" class="btn-success"/>
+                    <button string="Annuler" class="btn-secondary" special="cancel"/>
                 </footer>
             </form>
         </field>
     </record>
 
-    <!-- ================= VUE WIZARD LUBRIFIANT ================= -->
+    <!-- ═══ VUE WIZARD LUBRIFIANT ═══ -->
     <record id="view_wizard_rapport_lubrifiant_form" model="ir.ui.view">
         <field name="name">transport.wizard.rapport.lubrifiant.form</field>
         <field name="model">transport.wizard.rapport</field>
         <field name="arch" type="xml">
-            <form string="Rapports Lubrifiants">
+            <form string="Rapport lubrifiants">
                 <group>
                     <group string="Type de rapport">
                         <field name="type_rapport_lubrifiant" widget="radio"/>
+                        <field name="langue"/>
                     </group>
                     <group string="Filtres">
                         <field name="date_debut"/>
@@ -58,31 +56,19 @@
                 <footer>
                     <button name="action_generer_rapport_lubrifiant"
                             string="Generer PDF"
-                            type="object"
-                            class="btn-primary"/>
+                            type="object" class="btn-primary"/>
                     <button name="action_export_excel_lubrifiant"
                             string="Exporter Excel"
-                            type="object"
-                            class="btn-success"/>
-                    <button string="Annuler"
-                            class="btn-secondary"
-                            special="cancel"/>
+                            type="object" class="btn-success"/>
+                    <button string="Annuler" class="btn-secondary" special="cancel"/>
                 </footer>
             </form>
         </field>
     </record>
 
-    <!-- ===== ACTIONS ===== -->
+    <!-- ═══ ACTIONS ═══ -->
     <record id="action_rapport_carburant" model="ir.actions.act_window">
-        <field name="name">Rapports Carburant</field>
-        <field name="res_model">transport.wizard.rapport</field>
-        <field name="view_id" ref="view_wizard_rapport_carburant_form"/>
-        <field name="view_mode">form</field>
-        <field name="target">new</field>
-    </record>
-
-    <record id="action_wizard_rapport_excessif" model="ir.actions.act_window">
-        <field name="name">Rapports Carburant</field>
+        <field name="name">Rapports carburant</field>
         <field name="res_model">transport.wizard.rapport</field>
         <field name="view_id" ref="view_wizard_rapport_carburant_form"/>
         <field name="view_mode">form</field>
@@ -90,26 +76,108 @@
     </record>
 
     <record id="action_rapport_lubrifiant_wizard" model="ir.actions.act_window">
-        <field name="name">Rapports Lubrifiants</field>
+        <field name="name">Rapports lubrifiants</field>
         <field name="res_model">transport.wizard.rapport</field>
         <field name="view_id" ref="view_wizard_rapport_lubrifiant_form"/>
         <field name="view_mode">form</field>
         <field name="target">new</field>
     </record>
 
-    <!-- ===== MENUS ===== -->
+    <!-- ═══ MENUS — TOUS SOUS "RAPPORTS ET STATISTIQUES" ═══
+         Correction majeure : les rapports carburant et lubrifiant
+         etaient dans leurs menus respectifs (eparpilles).
+         Ils sont maintenant tous centralises ici. -->
+
     <menuitem
         id="menu_rapport_carburant"
-        name="Rapports"
-        parent="menu_fuel_vouchers"
+        name="Rapports carburant"
+        parent="menu_rapports_root"
         action="action_rapport_carburant"
-        sequence="30"/>
+        sequence="10"/>
 
     <menuitem
         id="menu_rapport_lubrifiant_menu"
-        name="Rapports"
-        parent="menu_lubrifiants"
+        name="Rapports lubrifiants"
+        parent="menu_rapports_root"
         action="action_rapport_lubrifiant_wizard"
-        sequence="30"/>
+        sequence="20"/>
+
+
+    <!-- ═══ CORRECTION P5 : vues analytiques tableau de bord direction ═══ -->
+
+    <record id="view_fuel_voucher_pivot" model="ir.ui.view">
+        <field name="name">transport.fuel.voucher.pivot</field>
+        <field name="model">transport.fuel.voucher</field>
+        <field name="arch" type="xml">
+            <pivot string="Consommation carburant">
+                <field name="date" type="col" interval="month"/>
+                <field name="voucher_type" type="row"/>
+                <field name="station_id" type="row"/>
+                <field name="total_quantity" type="measure"/>
+                <field name="total_cost" type="measure"/>
+            </pivot>
+        </field>
+    </record>
+
+    <record id="view_fuel_voucher_graph" model="ir.ui.view">
+        <field name="name">transport.fuel.voucher.graph</field>
+        <field name="model">transport.fuel.voucher</field>
+        <field name="arch" type="xml">
+            <graph string="Consommation carburant" type="bar">
+                <field name="date" interval="month"/>
+                <field name="total_quantity" type="measure"/>
+            </graph>
+        </field>
+    </record>
+
+    <record id="view_supply_order_pivot" model="ir.ui.view">
+        <field name="name">transport.supply.order.pivot</field>
+        <field name="model">transport.supply.order</field>
+        <field name="arch" type="xml">
+            <pivot string="Approvisionnements citerne">
+                <field name="date" type="col" interval="month"/>
+                <field name="station_id" type="row"/>
+                <field name="quantity_received" type="measure"/>
+                <field name="total_cost" type="measure"/>
+            </pivot>
+        </field>
+    </record>
+
+    <record id="action_tableau_bord_carburant" model="ir.actions.act_window">
+        <field name="name">Tableau de bord carburant</field>
+        <field name="res_model">transport.fuel.voucher</field>
+        <field name="view_mode">graph,pivot,list</field>
+        <field name="domain">[('state','=','done')]</field>
+        <field name="view_ids" eval="[(5,0,0),
+            (0,0,{'view_mode':'graph','view_id':ref('view_fuel_voucher_graph')}),
+            (0,0,{'view_mode':'pivot','view_id':ref('view_fuel_voucher_pivot')}),
+        ]"/>
+    </record>
+
+    <record id="action_tableau_bord_appro" model="ir.actions.act_window">
+        <field name="name">Tableau de bord approvisionnements</field>
+        <field name="res_model">transport.supply.order</field>
+        <field name="view_mode">pivot,list</field>
+        <field name="domain">[('state','=','validated')]</field>
+        <field name="view_ids" eval="[(5,0,0),
+            (0,0,{'view_mode':'pivot','view_id':ref('view_supply_order_pivot')}),
+        ]"/>
+    </record>
+
+    <menuitem
+        id="menu_tableau_bord_carburant"
+        name="Tableau de bord carburant"
+        parent="menu_rapports_root"
+        action="action_tableau_bord_carburant"
+        sequence="40"
+        groups="transport_energy.group_responsable_energie"/>
+
+    <menuitem
+        id="menu_tableau_bord_appro"
+        name="Tableau de bord approvisionnements"
+        parent="menu_rapports_root"
+        action="action_tableau_bord_appro"
+        sequence="50"
+        groups="transport_energy.group_responsable_energie"/>
 
 </odoo>

@@ -1,17 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <odoo>
 
-    <!-- Extension de la vue formulaire fleet.vehicle -->
     <record id="view_fleet_vehicle_transport_form" model="ir.ui.view">
         <field name="name">fleet.vehicle.transport.form</field>
         <field name="model">fleet.vehicle</field>
         <field name="inherit_id" ref="fleet.fleet_vehicle_view_form"/>
         <field name="arch" type="xml">
-
-            <!-- Ajouter un nouvel onglet "Transport" -->
             <xpath expr="//notebook" position="inside">
-                <page string="🚌 Transport" name="transport_info">
-
+                <page string="Transport" name="transport_info">
                     <group>
                         <group string="Classification">
                             <field name="bus_type"/>
@@ -25,14 +21,13 @@
                             <field name="fuel_station_id"/>
                         </group>
                     </group>
-
                     <group>
-                        <group string="Consommation Théorique">
+                        <group string="Consommation theorique">
                             <field name="theoretical_fuel_consumption"/>
                             <field name="theoretical_oil_consumption"/>
                             <field name="fuel_tank_capacity"/>
                         </group>
-                        <group string="Compteur Kilométrique">
+                        <group string="Compteur kilometrique">
                             <field name="odometer_status"/>
                             <field name="odometer_replacement_date"
                                    invisible="odometer_status == 'ok'"/>
@@ -40,10 +35,8 @@
                                    invisible="odometer_status == 'ok'"/>
                         </group>
                     </group>
-
                 </page>
             </xpath>
-
         </field>
     </record>
 

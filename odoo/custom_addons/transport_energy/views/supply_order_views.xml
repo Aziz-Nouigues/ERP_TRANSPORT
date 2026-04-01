@@ -1,0 +1,142 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <record id="view_supply_order_form" model="ir.ui.view">
+        <field name="name">transport.supply.order.form</field>
+        <field name="model">transport.supply.order</field>
+        <field name="arch" type="xml">
+            <form string="Approvisionnement citerne">
+                <header>
+                    <button name="action_confirm" string="Confirmer commande"
+                            type="object" class="btn-primary"
+                            invisible="state != 'draft'"
+                            groups="transport_energy.group_responsable_energie"/>
+                    <button name="action_receive" string="Enregistrer reception"
+                            type="object" class="btn-primary"
+                            invisible="state != 'confirmed'"/>
+                    <button name="action_validate" string="Valider et crediter cuve"
+                            type="object" class="btn-success"
+                            invisible="state != 'received'"
+                            groups="transport_energy.group_responsable_energie"/>
+                    <button name="action_cancel" string="Annuler"
+                            type="object"
+                            invisible="state in ('validated','cancelled')"
+                            groups="transport_energy.group_responsable_energie"/>
+                    <button name="action_reset_draft" string="Remettre en brouillon"
+                            type="object"
+                            invisible="state != 'cancelled'"/>
+                    <field name="state" widget="statusbar"
+                           statusbar_visible="draft,confirmed,received,validated"/>
+                </header>
+                <sheet>
+                    <div class="oe_title">
+                        <h1><field name="name" readonly="1"/></h1>
+                    </div>
+                    <group>
+                        <group string="Commande">
+                            <field name="date"/>
+                            <field name="date_reception"/>
+                            <field name="supplier_id"/>
+                        </group>
+                        <group string="Cuve cible">
+                            <field name="cuve_id"/>
+                            <field name="station_id" readonly="1"/>
+                            <field name="fuel_type_id" readonly="1"/>
+                            <field name="quantity_ordered"/>
+                            <field name="unit_price"/>
+                        </group>
+                    </group>
+                    <group string="Reception" invisible="state not in ('confirmed','received','validated')">
+                        <group>
+                            <field name="date_received"/>
+                            <field name="quantity_received"/>
+                            <field name="delivery_note"/>
+                        </group>
+                        <group>
+                            <field name="stock_before" readonly="1"/>
+                            <field name="stock_after" readonly="1"/>
+                            <field name="total_cost" readonly="1"/>
+                        </group>
+                    </group>
+                    <group string="Notes">
+                        <field name="notes" widget="text" nolabel="1" colspan="2"/>
+                    </group>
+                </sheet>
+                <chatter/>
+            </form>
+        </field>
+    </record>
+
+    <record id="view_supply_order_list" model="ir.ui.view">
+        <field name="name">transport.supply.order.list</field>
+        <field name="model">transport.supply.order</field>
+        <field name="arch" type="xml">
+            <list string="Approvisionnements citerne"
+                  decoration-success="state == 'validated'"
+                  decoration-warning="state == 'received'"
+                  decoration-muted="state == 'cancelled'">
+                <field name="name"/>
+                <field name="date"/>
+                <field name="cuve_id"/>
+                <field name="station_id"/>
+                <field name="fuel_type_id"/>
+                <field name="supplier_id"/>
+                <field name="quantity_ordered"/>
+                <field name="quantity_received"/>
+                <field name="unit_price"/>
+                <field name="total_cost"/>
+                <field name="state"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="view_supply_order_search" model="ir.ui.view">
+        <field name="name">transport.supply.order.search</field>
+        <field name="model">transport.supply.order</field>
+        <field name="arch" type="xml">
+            <search>
+                <filter name="draft" string="En cours" domain="[('state','in',['draft','confirmed','received'])]"/>
+                <filter name="validated" string="Valides" domain="[('state','=','validated')]"/>
+                <group>
+                    <filter name="gb_station" string="Station" context="{'group_by':'station_id'}"/>
+                    <filter name="gb_date" string="Mois" context="{'group_by':'date:month'}"/>
+                </group>
+            </search>
+        </field>
+    </record>
+
+    <record id="action_supply_order" model="ir.actions.act_window">
+        <field name="name">Approvisionnements citerne</field>
+        <field name="res_model">transport.supply.order</field>
+        <field name="view_mode">list,form</field>
+        <field name="search_view_id" ref="view_supply_order_search"/>
+        <field name="target">current</field>
+    </record>
+
+    <!-- Menu sous Approvisionnement (responsable uniquement) -->
+    <menuitem
+        id="menu_supply_order"
+        name="Commandes et receptions citerne"
+        parent="menu_approvisionnement"
+        action="action_supply_order"
+        sequence="10"/>
+
+    <!-- Menu sous Ravitaillement (pompiste) — reception citerne uniquement -->
+    <record id="action_supply_order_reception" model="ir.actions.act_window">
+        <field name="name">Reception citerne</field>
+        <field name="res_model">transport.supply.order</field>
+        <field name="view_mode">list,form</field>
+        <field name="domain">[('state','in',['confirmed','received'])]</field>
+        <field name="context">{'search_default_draft': 0}</field>
+        <field name="search_view_id" ref="view_supply_order_search"/>
+        <field name="target">current</field>
+    </record>
+
+    <menuitem
+        id="menu_supply_order_reception"
+        name="Reception citerne"
+        parent="menu_ravitaillement"
+        action="action_supply_order_reception"
+        sequence="30"/>
+
+</odoo>

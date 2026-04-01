@@ -1,33 +1,30 @@
 <?xml version="1.0" encoding="utf-8"?>
 <odoo>
 
-    <!-- ═══ VUE FORMULAIRE ═══ -->
     <record id="view_facture_energie_form" model="ir.ui.view">
         <field name="name">transport.facture.energie.form</field>
         <field name="model">transport.facture.energie</field>
         <field name="arch" type="xml">
-            <form string="Facture Énergie STEG/SONEDE">
+            <form string="Facture energie STEG / SONEDE">
                 <header>
-                    <button name="action_payer"
-                            string="Marquer Payée"
-                            type="object"
-                            class="btn-success"
+                    <button name="action_chercher_n1" string="Chercher N-1 automatique"
+                            type="object" class="btn-secondary"
                             invisible="statut != 'saisie'"/>
-                    <button name="action_annuler"
-                            string="Annuler"
+                    <button name="action_payer" string="Marquer payee"
+                            type="object" class="btn-success"
+                            invisible="statut != 'saisie'"
+                            groups="transport_energy.group_responsable_energie"/>
+                    <button name="action_annuler" string="Annuler"
                             type="object"
-                            invisible="statut == 'annulee'"/>
+                            invisible="statut == 'annulee'"
+                            groups="transport_energy.group_responsable_energie"/>
                     <field name="statut" widget="statusbar"
                            statusbar_visible="saisie,payee"/>
                 </header>
-
                 <sheet>
                     <div class="oe_title">
-                        <h1>
-                            <field name="name"/>
-                        </h1>
+                        <h1><field name="name"/></h1>
                     </div>
-
                     <group>
                         <group string="Informations facture">
                             <field name="type_facture"/>
@@ -39,52 +36,46 @@
                             <field name="site"/>
                         </group>
                     </group>
-
                     <group>
-                        <group string="Période de consommation">
+                        <group string="Periode de consommation">
                             <field name="date_debut_periode"/>
                             <field name="date_fin_periode"/>
                         </group>
                         <group string="Consommation">
                             <field name="quantite_consommee"/>
-                            <field name="unite_mesure"/>
+                            <field name="unite_mesure" readonly="1"/>
                             <field name="montant"/>
                         </group>
                     </group>
-
-                    <group string="📊 Comparaison avec N-1">
+                    <group string="Comparaison avec N-1">
                         <group>
                             <field name="consommation_n1"/>
                             <field name="montant_n1"/>
                         </group>
                         <group>
-                            <field name="ecart_consommation"/>
-                            <field name="ecart_pourcentage"/>
+                            <field name="ecart_consommation" readonly="1"/>
+                            <field name="ecart_pourcentage" readonly="1"/>
                         </group>
                     </group>
-
-                    <group string="Notes">
-                        <field name="notes" placeholder="Notes..." nolabel="1" colspan="2" widget="text"/>
-                    </group>
-
-                    <group string="Lien Bureau d'Ordre">
+                    <group string="Lien bureau d ordre (optionnel)">
                         <field name="boc_arrivee_id"/>
                         <field name="boc_reference" readonly="1"
                                invisible="not boc_arrivee_id"/>
                     </group>
+                    <group string="Notes">
+                        <field name="notes" widget="text" nolabel="1" colspan="2"/>
+                    </group>
                 </sheet>
-
                 <chatter/>
             </form>
         </field>
     </record>
 
-    <!-- ═══ VUE LISTE ═══ -->
     <record id="view_facture_energie_list" model="ir.ui.view">
         <field name="name">transport.facture.energie.list</field>
         <field name="model">transport.facture.energie</field>
         <field name="arch" type="xml">
-            <list string="Factures Énergie"
+            <list string="Factures energie"
                   decoration-success="statut == 'payee'"
                   decoration-muted="statut == 'annulee'">
                 <field name="name"/>
@@ -103,39 +94,31 @@
         </field>
     </record>
 
-    <!-- ═══ VUE RECHERCHE ═══ -->
     <record id="view_facture_energie_search" model="ir.ui.view">
         <field name="name">transport.facture.energie.search</field>
         <field name="model">transport.facture.energie</field>
         <field name="arch" type="xml">
             <search>
-                <filter name="steg" string="⚡ STEG"
-                        domain="[('type_facture','=','steg')]"/>
-                <filter name="sonede" string="💧 SONEDE"
-                        domain="[('type_facture','=','sonede')]"/>
-                <filter name="saisie" string="Non payées"
-                        domain="[('statut','=','saisie')]"/>
-                <filter name="payee" string="Payées"
-                        domain="[('statut','=','payee')]"/>
+                <filter name="steg" string="STEG" domain="[('type_facture','=','steg')]"/>
+                <filter name="sonede" string="SONEDE" domain="[('type_facture','=','sonede')]"/>
+                <filter name="saisie" string="Non payees" domain="[('statut','=','saisie')]"/>
+                <filter name="payee" string="Payees" domain="[('statut','=','payee')]"/>
                 <group>
-                    <filter name="groupe_site" string="Site"
-                            context="{'group_by': 'site'}"/>
-                    <filter name="groupe_type" string="Type"
-                            context="{'group_by': 'type_facture'}"/>
-                    <filter name="groupe_date" string="Période"
-                            context="{'group_by': 'date_debut_periode:month'}"/>
+                    <filter name="gb_site" string="Site" context="{'group_by':'site'}"/>
+                    <filter name="gb_type" string="Type" context="{'group_by':'type_facture'}"/>
+                    <filter name="gb_date" string="Periode" context="{'group_by':'date_debut_periode:month'}"/>
                 </group>
             </search>
         </field>
     </record>
 
-    <!-- ═══ ACTIONS ═══ -->
     <record id="action_facture_steg" model="ir.actions.act_window">
         <field name="name">Factures STEG</field>
         <field name="res_model">transport.facture.energie</field>
         <field name="view_mode">list,form</field>
         <field name="domain">[('type_facture','=','steg')]</field>
         <field name="context">{'default_type_facture': 'steg'}</field>
+        <field name="search_view_id" ref="view_facture_energie_search"/>
     </record>
 
     <record id="action_facture_sonede" model="ir.actions.act_window">
@@ -144,24 +127,21 @@
         <field name="view_mode">list,form</field>
         <field name="domain">[('type_facture','=','sonede')]</field>
         <field name="context">{'default_type_facture': 'sonede'}</field>
+        <field name="search_view_id" ref="view_facture_energie_search"/>
     </record>
 
-    <!-- ═══ MENUS ═══ -->
-    <menuitem id="menu_energie_eau"
-              name="Facture"
-              parent="menu_transport_energy_root"
-              sequence="30"/>
+    <menuitem
+        id="menu_facture_steg"
+        name="Factures STEG (electricite)"
+        parent="menu_energie_eau"
+        action="action_facture_steg"
+        sequence="10"/>
 
-    <menuitem id="menu_facture_steg"
-              name="⚡ Factures STEG"
-              parent="menu_energie_eau"
-              action="action_facture_steg"
-              sequence="10"/>
-
-    <menuitem id="menu_facture_sonede"
-              name="💧 Factures SONEDE"
-              parent="menu_energie_eau"
-              action="action_facture_sonede"
-              sequence="20"/>
+    <menuitem
+        id="menu_facture_sonede"
+        name="Factures SONEDE (eau)"
+        parent="menu_energie_eau"
+        action="action_facture_sonede"
+        sequence="20"/>
 
 </odoo>

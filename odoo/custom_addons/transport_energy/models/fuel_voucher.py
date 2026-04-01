@@ -1,212 +1,226 @@
+# -*- coding: utf-8 -*-
 from odoo import models, fields, api
 from odoo.exceptions import ValidationError
 
 
 class TransportFuelVoucher(models.Model):
-    """En-tête du Bon de Ravitaillement Carburant (BGI/BGE)"""
+    """Bon de ravitaillement carburant.
+    - BGI (interne) : cuve interne, compteur pompe, lignes bus.
+    - BGE (externe) : station externe libre, mode paiement, lien AGILIS optionnel.
+    A la validation BGI : debite current_stock de la cuve.
+    A la validation BGE AGILIS : cree automatiquement transport.agilis.utilisation.
+    """
     _name = 'transport.fuel.voucher'
-    _description = 'Bon de Gasoil Interne/Externe'
+    _description = 'Bon de ravitaillement carburant (BGI / BGE)'
     _inherit = ['mail.thread', 'mail.activity.mixin']
     _order = 'date desc, id desc'
 
-    # ── IDENTIFICATION ───────────────────────────────────────
     name = fields.Char(
-        string='N° du Bon',
-        required=True,
-        copy=False,
-        readonly=True,
-        default='Nouveau',
-        translate=False,
+        string='N du Bon', required=True, copy=False,
+        readonly=True, default='Nouveau', translate=False
     )
-
     voucher_type = fields.Selection([
         ('internal', 'Interne (BGI)'),
         ('external', 'Externe (BGE)'),
-    ], string='Type', required=True,
-       default='internal', tracking=True)
+    ], string='Type', required=True, default='internal', tracking=True)
 
     state = fields.Selection([
         ('draft',     'Brouillon'),
-        ('confirmed', 'Confirmé'),
-        ('done',      'Validé'),
-        ('cancelled', 'Annulé'),
+        ('confirmed', 'Confirme'),
+        ('done',      'Valide'),
+        ('cancelled', 'Annule'),
     ], string='Statut', default='draft', tracking=True)
 
-    # ── DATE ────────────────────────────────────────────────
-    date = fields.Date(
-        string='Date',
-        required=True,
-        default=fields.Date.today
-    )
+    date = fields.Date(string='Date', required=True, default=fields.Date.today)
+    time_start = fields.Float(string='Heure debut', default=7.0)
+    time_end = fields.Float(string='Heure fin', default=17.0)
 
-    time_start = fields.Float(
-        string='Heure début (بداية العمل)',
-        default=7.0
+    # ── CHAMPS BGI ────────────────────────────────────────────────
+    cuve_id = fields.Many2one(
+        'transport.fuel.cuve',
+        string='Cuve / Pompe',
     )
-
-    time_end = fields.Float(
-        string='Heure fin (نهاية العمل)',
-        default=17.0
-    )
-
-    # ── STATION ─────────────────────────────────────────────
     station_id = fields.Many2one(
         'transport.fuel.station',
-        string='Station / Pompe',
-        required=True,
-        tracking=True
+        string='Station',
+        related='cuve_id.station_id',
+        store=True,
+        readonly=True
     )
-
-    # FIX ODOO 19 : domain en STRING et non en liste Python
     fuel_type_id = fields.Many2one(
         'transport.energy.type',
-        string='Type de carburant',
-        required=True,
-        domain="[('category', '=', 'fuel')]"
+        string='Type carburant',
+        related='cuve_id.fuel_type_id',
+        store=True,
+        readonly=True
     )
+    distributor_code = fields.Char(string='Code agent distributeur', translate=False)
+    distributor_name = fields.Char(string='Nom agent distributeur', translate=True)
+    agency_main_code = fields.Char(string='Code principal agence')
+    agency_sub_code = fields.Char(string='Code secondaire agence')
+    pump_counter_start = fields.Float(string='Compteur pompe debut', digits=(12, 0))
+    pump_counter_end = fields.Float(string='Compteur pompe fin', digits=(12, 0))
+    remaining_stock = fields.Float(string='Stock restant estime (L)', digits=(10, 2))
 
-    # ── AGENT DISTRIBUTEUR ──────────────────────────────────
-    distributor_code = fields.Char(
-        string='Code agent distributeur (العون الموزع)',
-        translate=False,
+    # ── CHAMPS BGE ────────────────────────────────────────────────
+    station_externe = fields.Char(string='Station externe (nom)', translate=True)
+    station_externe_ville = fields.Char(string='Ville / Adresse', translate=True)
+    fuel_type_bge_id = fields.Many2one(
+        'transport.energy.type',
+        string='Type carburant (BGE)',
+        domain="[('category','=','fuel')]"
     )
-
-    distributor_name = fields.Char(
-        string='Nom agent distributeur',
-        translate=True,
+    payment_mode = fields.Selection([
+        ('cash',   'Especes'),
+        ('agilis', 'Carte AGILIS'),
+        ('credit', 'Credit fournisseur'),
+    ], string='Mode de paiement')
+    agilis_card_id = fields.Many2one(
+        'transport.agilis.carte',
+        string='Carte AGILIS',
+        domain="[('statut','=','active')]"
     )
+    ticket_reference = fields.Char(string='N ticket / recu externe', translate=False)
 
-    agency_main_code = fields.Char(
-        string='Code principal (التدرج الرئيسي)'
-    )
-
-    agency_sub_code = fields.Char(
-        string='Code secondaire (الفرعي)'
-    )
-
-    # ── COMPTEUR POMPE ───────────────────────────────────────
-    pump_counter_start = fields.Float(
-        string='Compteur pompe début (بداية عداد المضخة)',
-        digits=(12, 0)
-    )
-
-    pump_counter_end = fields.Float(
-        string='Compteur pompe fin (نهاية عداد المضخة)',
-        digits=(12, 0)
-    )
-
-    # ── QUANTITÉS ───────────────────────────────────────────
+    # ── TOTAUX ────────────────────────────────────────────────────
     total_quantity = fields.Float(
-        string='Quantité totale distribuée (L)',
+        string='Quantite totale (L)',
         compute='_compute_totals',
         store=True,
         digits=(10, 2)
     )
-
-    remaining_stock = fields.Float(
-        string='Stock restant (الكمية المتبقية)',
-        digits=(10, 2)
+    total_cost = fields.Float(
+        string='Cout total (TND)',
+        compute='_compute_totals',
+        store=True,
+        digits=(12, 3)
     )
 
-    # ── VALIDATION ──────────────────────────────────────────
-    is_validated = fields.Boolean(
-        string='Validé (مصادق)',
-        default=False
-    )
-
-    notes = fields.Text(string='Notes / Observations', translate=False)
-
-    # ── LIGNES ──────────────────────────────────────────────
+    notes = fields.Text(string='Notes', translate=False)
     line_ids = fields.One2many(
-        'transport.fuel.voucher.line',
-        'voucher_id',
+        'transport.fuel.voucher.line', 'voucher_id',
         string='Lignes de ravitaillement'
     )
 
-    # ── CALCULS ─────────────────────────────────────────────
-    @api.depends('line_ids.quantity')
+    @api.depends('line_ids.quantity', 'line_ids.unit_price')
     def _compute_totals(self):
         for rec in self:
-            rec.total_quantity = sum(
-                line.quantity for line in rec.line_ids
-            )
+            rec.total_quantity = sum(l.quantity for l in rec.line_ids)
+            rec.total_cost = sum(l.subtotal for l in rec.line_ids)
 
-    @api.onchange('station_id')
-    def _onchange_station(self):
-        """Remplir automatiquement les infos de la station"""
-        if self.station_id:
-            self.fuel_type_id = self.station_id.fuel_type_id
-            self.pump_counter_start = self.station_id.pump_counter_current
-            self.remaining_stock = self.station_id.current_stock
+    @api.onchange('cuve_id')
+    def _onchange_cuve(self):
+        if self.cuve_id:
+            self.pump_counter_start = self.cuve_id.pump_counter_current
+            self.remaining_stock = self.cuve_id.current_stock
 
-    # ── ACTIONS WORKFLOW ────────────────────────────────────
+    @api.onchange('voucher_type')
+    def _onchange_voucher_type(self):
+        if self.voucher_type == 'internal':
+            self.station_externe = False
+            self.station_externe_ville = False
+            self.payment_mode = False
+            self.agilis_card_id = False
+            self.ticket_reference = False
+            self.fuel_type_bge_id = False
+        else:
+            self.cuve_id = False
+            self.pump_counter_start = 0
+            self.pump_counter_end = 0
+            self.remaining_stock = 0
+
     @api.model_create_multi
     def create(self, vals_list):
         for vals in vals_list:
             if vals.get('name', 'Nouveau') == 'Nouveau':
-                if vals.get('voucher_type') == 'external':
-                    seq = 'transport.fuel.voucher.external'
-                else:
-                    seq = 'transport.fuel.voucher.internal'
+                seq = ('transport.fuel.voucher.external'
+                       if vals.get('voucher_type') == 'external'
+                       else 'transport.fuel.voucher.internal')
                 vals['name'] = self.env['ir.sequence'].next_by_code(seq) or 'Nouveau'
         return super().create(vals_list)
 
     def action_confirm(self):
         for rec in self:
             if not rec.line_ids:
-                raise ValidationError(
-                    "Impossible de confirmer un bon sans lignes de ravitaillement !"
-                )
+                raise ValidationError("Impossible de confirmer un bon sans lignes.")
+            if rec.voucher_type == 'internal' and not rec.cuve_id:
+                raise ValidationError("Selectionner une cuve pour un BGI.")
+            if rec.voucher_type == 'external' and not rec.station_externe:
+                raise ValidationError("Saisir le nom de la station externe pour un BGE.")
+            if rec.voucher_type == 'external' and not rec.payment_mode:
+                raise ValidationError("Selectionner un mode de paiement pour un BGE.")
             rec.write({'state': 'confirmed'})
 
     def action_validate(self):
         for rec in self:
             if rec.state != 'confirmed':
-                raise ValidationError(
-                    "Le bon doit être confirmé avant validation !"
-                )
-            if rec.station_id:
-                new_stock = rec.station_id.current_stock - rec.total_quantity
-                if new_stock < 0:
+                raise ValidationError("Le bon doit etre confirme avant validation.")
+
+            if rec.voucher_type == 'internal' and rec.cuve_id:
+                if rec.cuve_id.current_stock < rec.total_quantity:
                     raise ValidationError(
-                        f"Stock insuffisant ! Stock actuel : "
-                        f"{rec.station_id.current_stock} L, "
-                        f"Quantité demandée : {rec.total_quantity} L"
+                        f"Stock insuffisant ({rec.cuve_id.fuel_type_id.name}) : "
+                        f"disponible {rec.cuve_id.current_stock:.0f} L, "
+                        f"demande {rec.total_quantity:.0f} L."
                     )
-                rec.station_id.write({
-                    'current_stock': new_stock,
-                    'pump_counter_current': rec.pump_counter_end
+                rec.cuve_id._consume_stock(rec.total_quantity)
+                rec.cuve_id.write({
+                    'pump_counter_current': rec.pump_counter_end or rec.pump_counter_start
                 })
-            rec.write({
-                'state': 'done',
-                'is_validated': True
-            })
+
+            elif rec.voucher_type == 'external' and rec.payment_mode == 'agilis':
+                if not rec.agilis_card_id:
+                    raise ValidationError("Mode paiement AGILIS : selectionner une carte AGILIS.")
+                if rec.agilis_card_id.statut != 'active':
+                    raise ValidationError(
+                        f"La carte {rec.agilis_card_id.name} est {rec.agilis_card_id.statut}."
+                    )
+                fuel_type = rec.fuel_type_bge_id or rec.fuel_type_id
+                unit_price = 0.0
+                if rec.total_quantity > 0 and rec.total_cost > 0:
+                    unit_price = rec.total_cost / rec.total_quantity
+                for line in rec.line_ids:
+                    self.env['transport.agilis.utilisation'].create({
+                        'carte_id': rec.agilis_card_id.id,
+                        'voucher_id': rec.id,
+                        'date': fields.Datetime.now(),
+                        'station_externe': rec.station_externe or '',
+                        'chauffeur': line.driver_name or '',
+                        'fuel_type_id': fuel_type.id if fuel_type else False,
+                        'quantite': line.quantity,
+                        'prix_unitaire': line.unit_price or unit_price,
+                    })
+
+            rec.write({'state': 'done'})
 
     def action_cancel(self):
         for rec in self:
             if rec.state == 'done':
-                raise ValidationError(
-                    "Impossible d'annuler un bon déjà validé !"
-                )
+                raise ValidationError("Impossible d'annuler un bon valide. Contacter le responsable.")
             rec.write({'state': 'cancelled'})
 
     def action_reset_draft(self):
         self.write({'state': 'draft'})
 
-    # ── CONTRAINTES ─────────────────────────────────────────
     @api.constrains('pump_counter_start', 'pump_counter_end')
     def _check_pump_counters(self):
         for rec in self:
-            if (rec.pump_counter_end > 0 and
-                    rec.pump_counter_start > 0 and
-                    rec.pump_counter_end < rec.pump_counter_start):
-                raise ValidationError(
-                    "Le compteur fin ne peut pas être inférieur au compteur début !"
-                )
+            if (rec.voucher_type == 'internal'
+                    and rec.pump_counter_end > 0
+                    and rec.pump_counter_start > 0
+                    and rec.pump_counter_end < rec.pump_counter_start):
+                raise ValidationError("Compteur fin ne peut pas etre inferieur au compteur debut.")
+
+    @api.constrains('agilis_card_id', 'payment_mode')
+    def _check_agilis_card(self):
+        for rec in self:
+            if rec.voucher_type == 'external' and rec.payment_mode == 'agilis':
+                if not rec.agilis_card_id:
+                    raise ValidationError("Mode paiement AGILIS : une carte AGILIS doit etre selectionnee.")
 
 
 class TransportFuelVoucherLine(models.Model):
-    """Ligne de ravitaillement — 1 ligne = 1 bus"""
+    """Ligne de ravitaillement — 1 ligne = 1 bus ravitaille."""
     _name = 'transport.fuel.voucher.line'
     _description = 'Ligne de bon de carburant'
     _order = 'time asc'
@@ -217,79 +231,51 @@ class TransportFuelVoucherLine(models.Model):
         required=True,
         ondelete='cascade'
     )
+    time = fields.Float(string='Heure', default=8.0)
+    vehicle_id = fields.Many2one('fleet.vehicle', string='Bus / Vehicule', required=True)
+    service_code = fields.Char(string='Code service', translate=False)
+    driver_code = fields.Char(string='Code chauffeur', translate=False)
+    driver_name = fields.Char(string='Nom chauffeur', translate=True)
 
-    # ── HEURE ───────────────────────────────────────────────
-    time = fields.Float(
-        string='Heure (التوقيت)',
-        default=8.0
-    )
-
-    # ── VÉHICULE ────────────────────────────────────────────
-    vehicle_id = fields.Many2one(
-        'fleet.vehicle',
-        string='Bus (العربة)',
-        required=True
-    )
-
-    service_code = fields.Char(
-        string='Code service (المصلحة)',
-        translate=False,
-    )
-
-    # ── CHAUFFEUR ───────────────────────────────────────────
-    driver_code = fields.Char(
-        string='Code chauffeur (المعرف)',
-        translate=False,
-    )
-
-    driver_name = fields.Char(
-        string='Nom chauffeur (إسم السائق)',
-        translate=True,
-    )
-
-    # ── COMPTEUR BUS ────────────────────────────────────────
-    odometer_value = fields.Float(
-        string='Compteur bus (عداد العربة)',
-        digits=(12, 0)
-    )
-
+    odometer_value = fields.Float(string='Compteur bus (km)', digits=(12, 0))
     odometer_status = fields.Selection(
         related='vehicle_id.odometer_status',
-        string='État compteur',
+        string='Etat compteur',
         readonly=True
     )
-
     distance_estimated = fields.Float(
-        string='Distance estimée (km)',
+        string='Distance estimee (km)',
         compute='_compute_distance',
         store=True,
         digits=(10, 1)
     )
 
-    # ── CARBURANT ───────────────────────────────────────────
-    quantity = fields.Float(
-        string='Quantité distribuée (L)',
-        required=True,
-        digits=(10, 2)
+    quantity = fields.Float(string='Quantite (L)', required=True, digits=(10, 2))
+    unit_price = fields.Float(string='Prix unitaire (TND/L)', digits=(10, 3))
+    subtotal = fields.Float(
+        string='Montant (TND)',
+        compute='_compute_subtotal',
+        store=True,
+        digits=(12, 3)
     )
 
-    # ── CALCUL DISTANCE ESTIMÉE ─────────────────────────────
+    @api.depends('quantity', 'unit_price')
+    def _compute_subtotal(self):
+        for line in self:
+            line.subtotal = round(line.quantity * line.unit_price, 3)
+
     @api.depends('quantity', 'vehicle_id', 'odometer_status')
     def _compute_distance(self):
         for line in self:
-            if (line.odometer_status == 'broken' and
-                    line.vehicle_id and
-                    line.vehicle_id.theoretical_fuel_consumption > 0):
-                conso = line.vehicle_id.theoretical_fuel_consumption
-                line.distance_estimated = (line.quantity * 100) / conso
+            if (line.odometer_status == 'broken'
+                    and line.vehicle_id
+                    and line.vehicle_id.theoretical_fuel_consumption > 0):
+                line.distance_estimated = line.vehicle_id.estimate_distance_from_fuel(line.quantity)
             else:
                 line.distance_estimated = 0.0
 
-    # ── CONTRAINTES ─────────────────────────────────────────
     @api.constrains('quantity')
     def _check_quantity(self):
         for line in self:
             if line.quantity <= 0:
-                raise ValidationError(
-                    "La quantité doit être supérieure à 0 !"
-                )
+                raise ValidationError("La quantite distribuee doit etre superieure a 0.")

@@ -1,21 +1,26 @@
 <?xml version="1.0" encoding="utf-8"?>
 <odoo>
 
-    <!-- ═══ VUE FORMULAIRE ═══ -->
     <record id="view_bon_lubrifiant_form" model="ir.ui.view">
         <field name="name">transport.bon.lubrifiant.form</field>
         <field name="model">transport.bon.lubrifiant</field>
         <field name="arch" type="xml">
-            <form string="Bon de Ravitaillement Lubrifiant">
+            <form string="Bon de ravitaillement lubrifiant">
                 <header>
-                    <button name="action_confirmer" string="Confirmer" type="object"
-                            class="btn-primary" invisible="statut != 'brouillon'"/>
-                    <button name="action_valider" string="Valider" type="object"
-                            class="btn-success" invisible="statut != 'confirme'"/>
-                    <button name="action_annuler" string="Annuler" type="object"
-                            invisible="statut in ('valide', 'annule')"/>
+                    <button name="action_confirmer" string="Confirmer"
+                            type="object" class="btn-primary"
+                            invisible="statut != 'brouillon'"/>
+                    <button name="action_valider" string="Valider"
+                            type="object" class="btn-success"
+                            groups="transport_energy.group_responsable_energie"
+                            invisible="statut != 'confirme'"/>
+                    <button name="action_annuler" string="Annuler"
+                            type="object"
+                            groups="transport_energy.group_responsable_energie"
+                            invisible="statut in ('valide','annule')"/>
                     <button name="action_brouillon" string="Remettre en brouillon"
-                            type="object" invisible="statut != 'annule'"/>
+                            type="object"
+                            invisible="statut != 'annule'"/>
                     <field name="statut" widget="statusbar"
                            statusbar_visible="brouillon,confirme,valide"/>
                 </header>
@@ -31,7 +36,7 @@
                         </group>
                         <group string="Vehicule">
                             <field name="vehicule_id"/>
-                            <field name="code_service"/>
+                            <field name="code_service" readonly="1"/>
                             <field name="code_chauffeur"/>
                             <field name="nom_chauffeur"/>
                         </group>
@@ -40,7 +45,7 @@
                         <group string="Kilometrage">
                             <field name="kilometrage"/>
                             <field name="dernier_vidange_km"/>
-                            <field name="prochain_vidange_km"/>
+                            <field name="prochain_vidange_km" readonly="1"/>
                         </group>
                     </group>
                     <notebook>
@@ -50,20 +55,18 @@
                                     <field name="type_operation"/>
                                     <field name="type_lubrifiant_id"
                                            options="{'no_create': True, 'no_create_edit': True}"/>
-                                    <!-- CORRIGÉ : suppression de optional="show" combiné avec invisible= -->
-                                    <!-- En Odoo 17/19 Owl, les deux attributs sur le même champ dans -->
-                                    <!-- une liste editable provoquent le crash "this.child.mount is not a function" -->
+                                    <field name="unite" readonly="1" optional="show"/>
                                     <field name="quantite_videe"
                                            invisible="type_operation != 'vidange'"/>
                                     <field name="quantite"/>
                                 </list>
                             </field>
                             <group class="oe_subtotal_footer">
-                                <field name="quantite_totale" string="Total ajoute (L)"/>
+                                <field name="quantite_totale" string="Total ajoute"/>
                             </group>
                         </page>
                         <page string="Notes">
-                            <field name="notes" placeholder="Observations..."/>
+                            <field name="notes" widget="text"/>
                         </page>
                     </notebook>
                 </sheet>
@@ -72,12 +75,11 @@
         </field>
     </record>
 
-    <!-- ═══ VUE LISTE ═══ -->
     <record id="view_bon_lubrifiant_list" model="ir.ui.view">
         <field name="name">transport.bon.lubrifiant.list</field>
         <field name="model">transport.bon.lubrifiant</field>
         <field name="arch" type="xml">
-            <list string="Bons Lubrifiants"
+            <list string="Bons lubrifiants"
                   decoration-success="statut == 'valide'"
                   decoration-warning="statut == 'confirme'"
                   decoration-muted="statut == 'annule'">
@@ -93,47 +95,35 @@
         </field>
     </record>
 
-    <!-- ═══ VUE RECHERCHE ═══ -->
     <record id="view_bon_lubrifiant_search" model="ir.ui.view">
         <field name="name">transport.bon.lubrifiant.search</field>
         <field name="model">transport.bon.lubrifiant</field>
         <field name="arch" type="xml">
             <search>
-                <filter name="f_valide" string="Valides"
-                        domain="[('statut','=','valide')]"/>
-                <filter name="f_brouillon" string="Brouillons"
-                        domain="[('statut','=','brouillon')]"/>
-                <filter name="f_confirme" string="Confirmes"
-                        domain="[('statut','=','confirme')]"/>
+                <filter name="f_valide" string="Valides" domain="[('statut','=','valide')]"/>
+                <filter name="f_brouillon" string="Brouillons" domain="[('statut','=','brouillon')]"/>
+                <filter name="f_confirme" string="Confirmes" domain="[('statut','=','confirme')]"/>
                 <group>
-                    <filter name="gb_vehicule" string="Vehicule"
-                            context="{'group_by': 'vehicule_id'}"/>
-                    <filter name="gb_atelier" string="Atelier"
-                            context="{'group_by': 'atelier'}"/>
-                    <filter name="gb_date" string="Mois"
-                            context="{'group_by': 'date:month'}"/>
+                    <filter name="gb_vehicule" string="Vehicule" context="{'group_by':'vehicule_id'}"/>
+                    <filter name="gb_atelier" string="Atelier" context="{'group_by':'atelier'}"/>
+                    <filter name="gb_date" string="Mois" context="{'group_by':'date:month'}"/>
                 </group>
             </search>
         </field>
     </record>
 
-    <!-- ═══ ACTION ═══ -->
     <record id="action_bon_lubrifiant" model="ir.actions.act_window">
-        <field name="name">Bons Lubrifiants</field>
+        <field name="name">Bons lubrifiants</field>
         <field name="res_model">transport.bon.lubrifiant</field>
         <field name="view_mode">list,form</field>
         <field name="search_view_id" ref="view_bon_lubrifiant_search"/>
     </record>
 
-    <!-- ═══ MENU ═══ -->
-    <menuitem id="menu_lubrifiants"
-              name="Lubrifiants"
-              parent="menu_transport_energy_root"
-              sequence="20"/>
-    <menuitem id="menu_bon_lubrifiant"
-              name="Bons Lubrifiants"
-              parent="menu_lubrifiants"
-              action="action_bon_lubrifiant"
-              sequence="10"/>
+    <menuitem
+        id="menu_bon_lubrifiant"
+        name="Bons lubrifiants"
+        parent="menu_lubrifiants"
+        action="action_bon_lubrifiant"
+        sequence="10"/>
 
 </odoo>

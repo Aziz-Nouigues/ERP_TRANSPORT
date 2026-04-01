@@ -1,64 +1,62 @@
 <?xml version="1.0" encoding="utf-8"?>
 <odoo>
 
-    <!-- ================= FORM VIEW ================= -->
-    <record id="view_fuel_voucher_form" model="ir.ui.view">
-        <field name="name">transport.fuel.voucher.form</field>
+    <!-- ═══════════════════════════════════════════════
+         VUE FORMULAIRE BGI
+         priority=100 : jamais vue par defaut du modele
+         ═══════════════════════════════════════════════ -->
+    <record id="view_fuel_voucher_bgi_form" model="ir.ui.view">
+        <field name="name">transport.fuel.voucher.bgi.form</field>
         <field name="model">transport.fuel.voucher</field>
+        <field name="priority">100</field>
         <field name="arch" type="xml">
-            <form string="Bon de Ravitaillement Carburant">
+            <form string="Bon de Gasoil Interne (BGI)">
                 <header>
-                    <button name="action_validate"
-                            string="Valider"
-                            type="object"
-                            class="btn-success"
+                    <button name="action_confirm" string="Confirmer"
+                            type="object" class="btn-primary"
+                            invisible="state != 'draft'"/>
+                    <button name="action_validate" string="Valider"
+                            type="object" class="btn-success"
                             groups="transport_energy.group_responsable_energie"
                             invisible="state != 'confirmed'"/>
-                    <button name="action_cancel"
-                            string="Annuler"
+                    <button name="action_cancel" string="Annuler"
                             type="object"
                             groups="transport_energy.group_responsable_energie"
                             invisible="state in ('done','cancelled')"/>
-                    <button name="action_confirm"
-                            string="Confirmer"
-                            type="object"
-                            class="btn-primary"
-                            invisible="state != 'draft'"/>
-                    <button name="action_reset_draft"
-                            string="Remettre en brouillon"
+                    <button name="action_reset_draft" string="Remettre en brouillon"
                             type="object"
                             invisible="state != 'cancelled'"/>
-                    <field name="state"
-                           widget="statusbar"
-                           statusbar_visible="draft,confirmed,done,cancelled"/>
+                    <field name="state" widget="statusbar"
+                           statusbar_visible="draft,confirmed,done"/>
                 </header>
                 <sheet>
                     <div class="oe_title">
                         <h1><field name="name" readonly="1"/></h1>
                     </div>
+                    <field name="voucher_type" invisible="1"/>
                     <group>
-                        <group string="Informations">
-                            <field name="voucher_type"/>
+                        <group string="Station interne">
+                            <field name="cuve_id" required="1"/>
+                            <field name="station_id" readonly="1"/>
+                            <field name="fuel_type_id" readonly="1"/>
+                            <field name="agency_main_code"/>
+                            <field name="agency_sub_code"/>
+                        </group>
+                        <group string="Journee de distribution">
                             <field name="date"/>
                             <field name="time_start" widget="float_time"/>
                             <field name="time_end" widget="float_time"/>
                         </group>
-                        <group string="Station">
-                            <field name="station_id"/>
-                            <field name="fuel_type_id"/>
-                            <field name="agency_main_code"/>
-                            <field name="agency_sub_code"/>
-                        </group>
                     </group>
                     <group>
-                        <group string="Agent">
+                        <group string="Agent distributeur">
                             <field name="distributor_code"/>
                             <field name="distributor_name"/>
                         </group>
-                        <group string="Compteur">
+                        <group string="Compteur pompe">
                             <field name="pump_counter_start"/>
                             <field name="pump_counter_end"/>
-                            <field name="remaining_stock"/>
+                            <field name="remaining_stock" readonly="1"/>
                         </group>
                     </group>
                     <notebook>
@@ -71,85 +69,202 @@
                                     <field name="driver_code"/>
                                     <field name="driver_name"/>
                                     <field name="odometer_value"/>
-                                    <field name="odometer_status"/>
-                                    <field name="distance_estimated"/>
+                                    <field name="odometer_status" readonly="1"/>
+                                    <field name="distance_estimated" readonly="1" optional="show"/>
                                     <field name="quantity"/>
                                 </list>
                             </field>
-                            <group>
-                                <field name="total_quantity"
-                                       string="Total distribué (L)"
-                                       readonly="1"/>
+                            <group class="oe_subtotal_footer">
+                                <field name="total_quantity" string="Total distribue (L)" readonly="1"/>
                             </group>
                         </page>
                         <page string="Notes">
-                            <field name="notes"/>
+                            <field name="notes" widget="text"/>
                         </page>
                     </notebook>
                 </sheet>
-                <chatter/>
+                <chatter reload_on_follower="True"/>
             </form>
         </field>
     </record>
 
-    <!-- ================= LIST VIEW ================= -->
+    <!-- ═══════════════════════════════════════════════
+         VUE FORMULAIRE BGE
+         priority=100 : jamais vue par defaut du modele
+         ═══════════════════════════════════════════════ -->
+    <record id="view_fuel_voucher_bge_form" model="ir.ui.view">
+        <field name="name">transport.fuel.voucher.bge.form</field>
+        <field name="model">transport.fuel.voucher</field>
+        <field name="priority">100</field>
+        <field name="arch" type="xml">
+            <form string="Bon de Gasoil Externe (BGE)">
+                <header>
+                    <button name="action_confirm" string="Confirmer"
+                            type="object" class="btn-primary"
+                            invisible="state != 'draft'"/>
+                    <button name="action_validate" string="Valider"
+                            type="object" class="btn-success"
+                            groups="transport_energy.group_responsable_energie"
+                            invisible="state != 'confirmed'"/>
+                    <button name="action_cancel" string="Annuler"
+                            type="object"
+                            groups="transport_energy.group_responsable_energie"
+                            invisible="state in ('done','cancelled')"/>
+                    <button name="action_reset_draft" string="Remettre en brouillon"
+                            type="object"
+                            invisible="state != 'cancelled'"/>
+                    <field name="state" widget="statusbar"
+                           statusbar_visible="draft,confirmed,done"/>
+                </header>
+                <sheet>
+                    <div class="oe_title">
+                        <h1><field name="name" readonly="1"/></h1>
+                    </div>
+                    <field name="voucher_type" invisible="1"/>
+                    <div class="alert alert-warning" role="status"
+                         invisible="payment_mode != 'agilis' or not agilis_card_id">
+                        Verifier le solde de la carte AGILIS avant validation.
+                    </div>
+                    <group>
+                        <group string="Station externe">
+                            <field name="station_externe" required="1"/>
+                            <field name="station_externe_ville"/>
+                            <field name="fuel_type_id"/>
+                            <field name="ticket_reference"/>
+                        </group>
+                        <group string="Paiement">
+                            <field name="payment_mode" required="1"/>
+                            <field name="agilis_card_id"
+                                   invisible="payment_mode != 'agilis'"
+                                   required="payment_mode == 'agilis'"/>
+                            <field name="date"/>
+                        </group>
+                    </group>
+                    <notebook>
+                        <page string="Lignes de ravitaillement">
+                            <field name="line_ids">
+                                <list editable="bottom">
+                                    <field name="time" widget="float_time"/>
+                                    <field name="vehicle_id"/>
+                                    <field name="service_code"/>
+                                    <field name="driver_code"/>
+                                    <field name="driver_name"/>
+                                    <field name="odometer_value"/>
+                                    <field name="odometer_status" readonly="1"/>
+                                    <field name="distance_estimated" readonly="1" optional="show"/>
+                                    <field name="quantity"/>
+                                    <field name="unit_price"/>
+                                    <field name="subtotal" readonly="1"/>
+                                </list>
+                            </field>
+                            <group class="oe_subtotal_footer">
+                                <field name="total_quantity" string="Total distribue (L)" readonly="1"/>
+                                <field name="total_cost" string="Cout total (TND)" readonly="1"/>
+                            </group>
+                        </page>
+                        <page string="Notes">
+                            <field name="notes" widget="text"/>
+                        </page>
+                    </notebook>
+                </sheet>
+                <chatter reload_on_follower="True"/>
+            </form>
+        </field>
+    </record>
+
+    <!-- ═══════════════════════════════════════════════
+         VUE LISTE COMMUNE
+         ═══════════════════════════════════════════════ -->
     <record id="view_fuel_voucher_list" model="ir.ui.view">
         <field name="name">transport.fuel.voucher.list</field>
         <field name="model">transport.fuel.voucher</field>
         <field name="arch" type="xml">
-            <list string="Bons de Carburant"
+            <list string="Bons de carburant"
                   decoration-success="state == 'done'"
                   decoration-warning="state == 'confirmed'"
                   decoration-muted="state == 'cancelled'">
+                <field name="name"/>
                 <field name="date"/>
                 <field name="voucher_type"/>
+                <field name="cuve_id" optional="show"/>
+                <field name="station_id" optional="show"/>
+                <field name="station_externe" optional="show"/>
                 <field name="total_quantity"/>
-                <field name="remaining_stock"/>
+                <field name="total_cost" optional="show"/>
                 <field name="state"/>
             </list>
         </field>
     </record>
 
-    <!-- ================= ACTIONS ================= -->
+    <!-- ═══════════════════════════════════════════════
+         VUE RECHERCHE
+         ═══════════════════════════════════════════════ -->
+    <record id="view_fuel_voucher_search" model="ir.ui.view">
+        <field name="name">transport.fuel.voucher.search</field>
+        <field name="model">transport.fuel.voucher</field>
+        <field name="arch" type="xml">
+            <search>
+                <filter name="draft"     string="Brouillons"  domain="[('state','=','draft')]"/>
+                <filter name="confirmed" string="A valider"   domain="[('state','=','confirmed')]"/>
+                <filter name="done"      string="Valides"     domain="[('state','=','done')]"/>
+                <separator/>
+                <filter name="today" string="Aujourd hui"
+                        domain="[('date','=',context_today().strftime('%Y-%m-%d'))]"/>
+                <group>
+                    <filter name="gb_station" string="Station" context="{'group_by':'station_id'}"/>
+                    <filter name="gb_date"    string="Jour"    context="{'group_by':'date:day'}"/>
+                    <filter name="gb_month"   string="Mois"    context="{'group_by':'date:month'}"/>
+                </group>
+            </search>
+        </field>
+    </record>
+
+    <!-- ═══════════════════════════════════════════════
+         ACTIONS — ir.actions.act_window standard
+         La methode Python _get_default_form_view
+         retourne la bonne vue selon voucher_type
+         ═══════════════════════════════════════════════ -->
     <record id="action_fuel_voucher_internal" model="ir.actions.act_window">
-        <field name="name">Bons Internes (BGI)</field>
+        <field name="name">Bons internes (BGI)</field>
         <field name="res_model">transport.fuel.voucher</field>
         <field name="view_mode">list,form</field>
         <field name="domain">[('voucher_type','=','internal')]</field>
         <field name="context">{'default_voucher_type': 'internal'}</field>
-
+        <field name="search_view_id" ref="view_fuel_voucher_search"/>
+        <field name="view_ids" eval="[(5, 0, 0),
+            (0, 0, {'view_mode': 'list', 'view_id': ref('view_fuel_voucher_list')}),
+            (0, 0, {'view_mode': 'form', 'view_id': ref('view_fuel_voucher_bgi_form')}),
+        ]"/>
     </record>
 
     <record id="action_fuel_voucher_external" model="ir.actions.act_window">
-        <field name="name">Bons Externes (BGE)</field>
+        <field name="name">Bons externes (BGE)</field>
         <field name="res_model">transport.fuel.voucher</field>
         <field name="view_mode">list,form</field>
         <field name="domain">[('voucher_type','=','external')]</field>
         <field name="context">{'default_voucher_type': 'external'}</field>
-
+        <field name="search_view_id" ref="view_fuel_voucher_search"/>
+        <field name="view_ids" eval="[(5, 0, 0),
+            (0, 0, {'view_mode': 'list', 'view_id': ref('view_fuel_voucher_list')}),
+            (0, 0, {'view_mode': 'form', 'view_id': ref('view_fuel_voucher_bge_form')}),
+        ]"/>
     </record>
 
-    <!-- ================= MENUS ================= -->
-    <menuitem
-        id="menu_fuel_vouchers"
-        name="⛽ Carburant"
-        parent="menu_transport_energy_root"
-        sequence="10"/>
-
+    <!-- ═══════════════════════════════════════════════
+         MENUS
+         ═══════════════════════════════════════════════ -->
     <menuitem
         id="menu_fuel_voucher_internal"
-        name="Bons Internes (BGI)"
-        parent="menu_fuel_vouchers"
+        name="Bons carburant internes (BGI)"
+        parent="menu_ravitaillement"
         action="action_fuel_voucher_internal"
         sequence="10"/>
 
     <menuitem
         id="menu_fuel_voucher_external"
-        name="Bons Externes (BGE)"
-        parent="menu_fuel_vouchers"
+        name="Bons carburant externes (BGE)"
+        parent="menu_ravitaillement"
         action="action_fuel_voucher_external"
         sequence="20"/>
 
 </odoo>
-
-

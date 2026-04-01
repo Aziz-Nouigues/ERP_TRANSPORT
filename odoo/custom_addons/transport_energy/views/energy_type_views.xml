@@ -1,70 +1,50 @@
 <?xml version="1.0" encoding="utf-8"?>
 <odoo>
 
-    <!-- Vue Liste -->
     <record id="view_energy_type_list" model="ir.ui.view">
         <field name="name">transport.energy.type.list</field>
         <field name="model">transport.energy.type</field>
         <field name="arch" type="xml">
-            <list string="Types d'énergie">
+            <list string="Types d energie">
                 <field name="name"/>
                 <field name="category"/>
                 <field name="unite"/>
+                <field name="active"/>
             </list>
         </field>
     </record>
 
-    <!-- Vue Formulaire -->
     <record id="view_energy_type_form" model="ir.ui.view">
         <field name="name">transport.energy.type.form</field>
         <field name="model">transport.energy.type</field>
         <field name="arch" type="xml">
-            <form string="Type d'énergie">
+            <form string="Type d energie">
                 <sheet>
                     <group>
                         <field name="name"/>
                         <field name="category"/>
                         <field name="unite"/>
+                        <field name="active"/>
                     </group>
                     <group>
-                        <field name="notes"/>
+                        <field name="notes" widget="text"/>
                     </group>
                 </sheet>
             </form>
         </field>
     </record>
 
-    <!-- Action -->
     <record id="action_energy_type" model="ir.actions.act_window">
-        <field name="name">Types d'énergie</field>
+        <field name="name">Types d energie</field>
         <field name="res_model">transport.energy.type</field>
         <field name="view_mode">list,form</field>
     </record>
 
     <menuitem
-        id="menu_transport_energy_root"
-        name="Énergie Transport"
-        web_icon="transport_energy,static/description/icon.png"
-        sequence="50"/>
-
-    <menuitem
-        id="menu_energy_config"
-        name="Configuration"
-        parent="menu_transport_energy_root"
-        sequence="90"/>
-
-    <menuitem
         id="menu_energy_type"
-        name="Types d'énergie"
+        name="Types d energie"
         parent="menu_energy_config"
         action="action_energy_type"
         sequence="10"/>
-
-    <menuitem
-        id="menu_fuel_station"
-        name="Stations de pompage"
-        parent="menu_energy_config"
-        action="action_fuel_station"
-        sequence="20"/>
 
 </odoo>
