@@ -899,3 +899,18 @@ class WizardRapportConsommation(models.TransientModel):
                     ws3.write(row, col, val, f['data'])
                 ws3.write(row, len(donnees['types_list']) + 1, cr['total'], f['total'])
         return self._make_xlsx_response(f'StatsAgence_{self.date_debut}_{self.date_fin}.xlsx', build)
+
+class WizardRapportCarburant(models.TransientModel):
+    """Proxy transparent — permet a Odoo d afficher 'Rapport carburant'
+    dans le menu au lieu du nom generique du modele parent."""
+    _name = 'transport.wizard.rapport.carburant'
+    _description = 'Rapport carburant'
+    _inherit = 'transport.wizard.rapport'
+
+
+class WizardRapportLubrifiant(models.TransientModel):
+    """Proxy transparent — permet a Odoo d afficher 'Rapport lubrifiants'
+    dans le menu au lieu du nom generique du modele parent."""
+    _name = 'transport.wizard.rapport.lubrifiant'
+    _description = 'Rapport lubrifiants'
+    _inherit = 'transport.wizard.rapport'

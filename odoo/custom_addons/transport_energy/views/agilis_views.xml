@@ -136,11 +136,74 @@
         action="action_agilis_carte"
         sequence="10"/>
 
+    <!-- ═══ VUE LISTE RECHARGEMENTS ═══ -->
+    <record id="view_agilis_recharge_list" model="ir.ui.view">
+        <field name="name">transport.agilis.recharge.list</field>
+        <field name="model">transport.agilis.recharge</field>
+        <field name="arch" type="xml">
+            <list string="Rechargements AGILIS"
+                  decoration-success="montant > 0"
+                  default_order="date desc">
+                <field name="date"/>
+                <field name="carte_id"/>
+                <field name="montant"/>
+                <field name="reference"/>
+                <field name="notes"/>
+            </list>
+        </field>
+    </record>
+
+    <!-- ═══ VUE FORMULAIRE RECHARGEMENTS ═══ -->
+    <record id="view_agilis_recharge_form" model="ir.ui.view">
+        <field name="name">transport.agilis.recharge.form</field>
+        <field name="model">transport.agilis.recharge</field>
+        <field name="arch" type="xml">
+            <form string="Rechargement AGILIS">
+                <sheet>
+                    <group>
+                        <group string="Carte et date">
+                            <field name="carte_id" required="1"/>
+                            <field name="date" required="1"/>
+                        </group>
+                        <group string="Montant et reference">
+                            <field name="montant" required="1"/>
+                            <field name="reference"/>
+                        </group>
+                    </group>
+                    <group string="Notes">
+                        <field name="notes" widget="text" nolabel="1" colspan="2"/>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <!-- ═══ VUE RECHERCHE RECHARGEMENTS ═══ -->
+    <record id="view_agilis_recharge_search" model="ir.ui.view">
+        <field name="name">transport.agilis.recharge.search</field>
+        <field name="model">transport.agilis.recharge</field>
+        <field name="arch" type="xml">
+            <search>
+                <field name="carte_id"/>
+                <field name="reference"/>
+                <group>
+                    <filter name="gb_carte" string="Carte" context="{'group_by':'carte_id'}"/>
+                    <filter name="gb_date" string="Mois" context="{'group_by':'date:month'}"/>
+                </group>
+            </search>
+        </field>
+    </record>
+
     <!-- CORRECTION P3 : action distincte pour les rechargements (avant pointait sur action_agilis_carte) -->
     <record id="action_agilis_recharges" model="ir.actions.act_window">
         <field name="name">Rechargements AGILIS</field>
         <field name="res_model">transport.agilis.recharge</field>
         <field name="view_mode">list,form</field>
+        <field name="search_view_id" ref="view_agilis_recharge_search"/>
+        <field name="view_ids" eval="[(5, 0, 0),
+            (0, 0, {'view_mode': 'list', 'view_id': ref('view_agilis_recharge_list')}),
+            (0, 0, {'view_mode': 'form', 'view_id': ref('view_agilis_recharge_form')}),
+        ]"/>
     </record>
 
     <menuitem

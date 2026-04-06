@@ -7,6 +7,9 @@
         <field name="arch" type="xml">
             <form string="Facture energie STEG / SONEDE">
                 <header>
+                    <button name="action_open_invoice" string="Voir facture comptable"
+                            type="object" class="btn-primary"
+                            invisible="not invoice_id"/>
                     <button name="action_chercher_n1" string="Chercher N-1 automatique"
                             type="object" class="btn-secondary"
                             invisible="statut != 'saisie'"/>
@@ -64,6 +67,12 @@
                     </group>
                     <group string="Notes">
                         <field name="notes" widget="text" nolabel="1" colspan="2"/>
+                    </group>
+                    <group string="Facture comptable Odoo">
+                        <field name="invoice_id" readonly="1"
+                               widget="many2one_avatar"/>
+                        <field name="invoice_state" readonly="1"
+                               invisible="not invoice_id"/>
                     </group>
                 </sheet>
                 <chatter/>

@@ -31,5 +31,20 @@
             <field name="comment">Acces total : approbation jaugeage critique, tous les rapports.</field>
         </record>
 
+        <!-- Écrase la règle bloquante créée en base.
+             Le Responsable et Directeur héritent du groupe Pompiste via implied_ids,
+             donc la règle restrictive s'appliquait à eux aussi.
+             On la redéfinit ici avec un domaine ouvert pour tous. -->
+        <record id="rule_fuel_voucher_pompiste" model="ir.rule">
+            <field name="name">BGI/BGE — Accès par station (pompiste)</field>
+            <field name="model_id" ref="model_transport_fuel_voucher"/>
+            <field name="groups" eval="[(4, ref('group_agent_pompiste'))]"/>
+            <field name="domain_force">[(1, '=', 1)]</field>
+            <field name="perm_read"   eval="True"/>
+            <field name="perm_write"  eval="True"/>
+            <field name="perm_create" eval="True"/>
+            <field name="perm_unlink" eval="False"/>
+        </record>
+
     </data>
 </odoo>
