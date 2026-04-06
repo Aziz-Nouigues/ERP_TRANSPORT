@@ -44,11 +44,20 @@
                     </group>
                     <notebook>
                         <page string="Rechargements">
-                            <field name="recharge_ids">
-                                <list editable="bottom">
+                            <!-- Saisie réservée au Responsable et Directeur -->
+                            <field name="recharge_ids"
+                                   groups="transport_energy.group_responsable_energie">
+                                <list editable="bottom"
+                                      decoration-success="state == 'valide'"
+                                      decoration-muted="state == 'annule'">
                                     <field name="date"/>
                                     <field name="montant"/>
                                     <field name="reference"/>
+                                    <field name="state" widget="badge"
+                                           decoration-success="state == 'valide'"
+                                           decoration-warning="state == 'brouillon'"
+                                           decoration-danger="state == 'annule'"/>
+                                    <field name="valide_par"/>
                                     <field name="notes"/>
                                 </list>
                             </field>
@@ -135,6 +144,49 @@
         parent="menu_agilis_root"
         action="action_agilis_carte"
         sequence="10"/>
+
+    <!-- ═══ VUE FORM RECHARGEMENT AGILIS ═══ -->
+    <record id="view_agilis_recharge_form" model="ir.ui.view">
+        <field name="name">transport.agilis.recharge.form</field>
+        <field name="model">transport.agilis.recharge</field>
+        <field name="arch" type="xml">
+            <form string="Rechargement AGILIS">
+                <header>
+                    <button name="action_valider" string="Valider"
+                            type="object"
+                            invisible="state != 'brouillon'"
+                            class="btn-primary"
+                            groups="transport_energy.group_responsable_energie"/>
+                    <button name="action_annuler" string="Annuler"
+                            type="object"
+                            invisible="state != 'valide'"
+                            groups="transport_energy.group_directeur_energie"/>
+                    <button name="action_reset_brouillon" string="Remettre en brouillon"
+                            type="object"
+                            invisible="state != 'annule'"
+                            groups="transport_energy.group_directeur_energie"/>
+                    <field name="state" widget="statusbar"
+                           statusbar_visible="brouillon,valide"/>
+                </header>
+                <sheet>
+                    <group>
+                        <group string="Rechargement">
+                            <field name="carte_id"/>
+                            <field name="date"/>
+                            <field name="montant"/>
+                            <field name="reference"/>
+                        </group>
+                        <group string="Validation">
+                            <field name="valide_par" readonly="1"/>
+                            <field name="date_validation" readonly="1"/>
+                        </group>
+                    </group>
+                    <field name="notes" widget="text" placeholder="Notes..."/>
+                </sheet>
+                <chatter/>
+            </form>
+        </field>
+    </record>
 
     <!-- CORRECTION P3 : action distincte pour les rechargements (avant pointait sur action_agilis_carte) -->
     <record id="action_agilis_recharges" model="ir.actions.act_window">

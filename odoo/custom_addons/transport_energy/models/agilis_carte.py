@@ -61,6 +61,7 @@ class AgilisCarte(models.Model):
 class AgilisRecharge(models.Model):
     _name = 'transport.agilis.recharge'
     _description = 'Rechargement carte AGILIS'
+    _inherit = ['mail.thread', 'mail.activity.mixin']
     _order = 'date desc'
 
     carte_id = fields.Many2one(
@@ -68,15 +69,65 @@ class AgilisRecharge(models.Model):
         required=True, ondelete='cascade'
     )
     date = fields.Date(string='Date rechargement', required=True, default=fields.Date.today)
-    montant = fields.Float(string='Montant recharge (TND)', required=True, digits=(10, 3))
+    montant = fields.Float(string='Montant recharge (TND)', required=True, digits=(10, 3), tracking=True)
     reference = fields.Char(string='Reference virement', translate=False)
     notes = fields.Text(string='Notes', translate=False)
 
+    state = fields.Selection([
+        ('brouillon', 'Brouillon'),
+        ('valide',    'Validé'),
+        ('annule',    'Annulé'),
+    ], string='État', default='brouillon', tracking=True, readonly=True)
+    valide_par = fields.Many2one('res.users', string='Validé par', readonly=True, copy=False)
+    date_validation = fields.Datetime(string='Date validation', readonly=True, copy=False)
+
+    def action_valider(self):
+        """Valider le rechargement — réservé au Responsable Energie et Directeur."""
+        for rec in self:
+            if not self.env.user.has_group('transport_energy.group_responsable_energie'):
+                raise ValidationError(
+                    "Seul un Responsable Energie ou un Directeur peut valider un rechargement."
+                )
+            rec.write({
+                'state': 'valide',
+                'valide_par': self.env.user.id,
+                'date_validation': fields.Datetime.now(),
+            })
+
+    def action_annuler(self):
+        """Annuler le rechargement — réservé au Directeur (admin)."""
+        for rec in self:
+            if not self.env.user.has_group('transport_energy.group_directeur_energie'):
+                raise ValidationError(
+                    "Seul le Directeur peut annuler un rechargement."
+                )
+            rec.write({'state': 'annule'})
+
+    def action_reset_brouillon(self):
+        """Remettre en brouillon — réservé au Directeur (admin)."""
+        for rec in self:
+            if not self.env.user.has_group('transport_energy.group_directeur_energie'):
+                raise ValidationError(
+                    "Seul le Directeur peut remettre un rechargement en brouillon."
+                )
+            rec.write({
+                'state': 'brouillon',
+                'valide_par': False,
+                'date_validation': False,
+            })
+
     @api.constrains('montant')
     def _verifier_montant(self):
+        montant_max = float(self.env['ir.config_parameter'].sudo().get_param(
+            'transport_energy.agilis_montant_max_recharge', default='0'
+        ))
         for r in self:
             if r.montant <= 0:
                 raise ValidationError("Le montant de rechargement doit etre positif.")
+            if montant_max > 0 and r.montant > montant_max:
+                raise ValidationError(
+                    f"Le montant ({r.montant:.3f} TND) dépasse le plafond configuré ({montant_max:.3f} TND)."
+                )
 
 
 class AgilisUtilisation(models.Model):

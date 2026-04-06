@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <!-- Configuration admin Transport Energie — accès Directeur uniquement -->
+    <record id="res_config_settings_view_transport_energy" model="ir.ui.view">
+        <field name="name">res.config.settings.view.transport.energy</field>
+        <field name="model">res.config.settings</field>
+        <field name="inherit_id" ref="base_setup.action_general_configuration"/>
+        <field name="arch" type="xml">
+            <xpath expr="//div[hasclass('settings')]" position="inside">
+                <div class="app_settings_block"
+                     data-string="Transport Energie"
+                     string="Transport Energie"
+                     data-key="transport_energy"
+                     groups="transport_energy.group_directeur_energie">
+
+                    <h2>Cartes AGILIS — Rechargements</h2>
+                    <div class="row mt16 o_settings_container">
+
+                        <div class="col-12 col-lg-6 o_setting_box">
+                            <div class="o_setting_left_pane">
+                                <field name="agilis_approbation_obligatoire"/>
+                            </div>
+                            <div class="o_setting_right_pane">
+                                <label for="agilis_approbation_obligatoire"/>
+                                <div class="text-muted">
+                                    Chaque rechargement doit être validé par un Responsable
+                                    avant d'être comptabilisé dans le solde de la carte.
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-12 col-lg-6 o_setting_box">
+                            <div class="o_setting_left_pane"/>
+                            <div class="o_setting_right_pane">
+                                <label for="agilis_montant_max_recharge"
+                                       string="Plafond par rechargement (TND)"/>
+                                <div class="text-muted">
+                                    Montant maximum autorisé par opération de rechargement.
+                                    Mettre 0 pour ne pas limiter.
+                                </div>
+                                <div class="content-group">
+                                    <div class="row">
+                                        <label for="agilis_montant_max_recharge"
+                                               class="col-lg-4 o_light_label"/>
+                                        <field name="agilis_montant_max_recharge"
+                                               class="col-lg-4"/>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-12 col-lg-6 o_setting_box">
+                            <div class="o_setting_left_pane"/>
+                            <div class="o_setting_right_pane">
+                                <label for="agilis_solde_minimum_defaut"
+                                       string="Seuil d'alerte solde par défaut (TND)"/>
+                                <div class="text-muted">
+                                    Valeur pré-remplie lors de la création d'une nouvelle carte AGILIS.
+                                </div>
+                                <div class="content-group">
+                                    <div class="row">
+                                        <label for="agilis_solde_minimum_defaut"
+                                               class="col-lg-4 o_light_label"/>
+                                        <field name="agilis_solde_minimum_defaut"
+                                               class="col-lg-4"/>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+            </xpath>
+        </field>
+    </record>
+
+</odoo>

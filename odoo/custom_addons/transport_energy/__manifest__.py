@@ -21,6 +21,7 @@
         'views/jaugeage_views.xml',
         'views/jaugeage_lubrifiant_views.xml',
         'views/agilis_views.xml',
+        'views/res_config_settings_views.xml',
         'views/facture_energie_views.xml',
         'views/wizard_rapport_views.xml',
         'views/wizard_rapport_energie_views.xml',
