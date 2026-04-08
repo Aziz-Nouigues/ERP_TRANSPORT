@@ -1,0 +1,385 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <!-- ═══════════════════════════════════════════════════════════
+         FICHE IMMOBILISATION — FORM VIEW
+    ═══════════════════════════════════════════════════════════ -->
+    <record id="view_patrimoine_immobilisation_form" model="ir.ui.view">
+        <field name="name">patrimoine.immobilisation.form</field>
+        <field name="model">patrimoine.immobilisation</field>
+        <field name="arch" type="xml">
+            <form string="Fiche Immobilisation">
+                <header>
+                    <button name="action_mettre_en_service" string="Mettre en service"
+                            type="object" class="btn-primary"
+                            invisible="statut != 'en_cours'"/>
+                    <button name="action_generer_tableau_amortissement" string="Générer tableau amort."
+                            type="object" class="btn-secondary"
+                            invisible="statut not in ('en_service','hors_service')"/>
+                    <button name="action_mettre_hors_service" string="Mettre hors service"
+                            type="object"
+                            invisible="statut != 'en_service'"/>
+                    <button name="action_reset_en_service" string="Remettre en service"
+                            type="object"
+                            invisible="statut != 'hors_service'"/>
+                    <field name="statut" widget="statusbar"
+                           statusbar_visible="en_cours,en_service,hors_service,cede,rebut"/>
+                </header>
+                <sheet>
+                    <!-- Bandeau alertes -->
+                    <div class="alert alert-warning" role="alert"
+                         invisible="not entierement_amorti or statut not in ('en_service',)">
+                        Cette immobilisation est entièrement amortie mais encore en service.
+                    </div>
+                    <div class="alert alert-info" role="alert"
+                         invisible="quantite_non_distribuee == 0 or statut != 'en_service'">
+                        <strong>Quantité non distribuée :</strong>
+                        <field name="quantite_non_distribuee" readonly="1"/> unité(s) en attente d'affectation.
+                    </div>
+
+                    <div class="oe_title">
+                        <label for="name"/>
+                        <h1><field name="name" placeholder="Désignation de l'immobilisation"/></h1>
+                        <div class="o_row">
+                            <span class="o_field_widget o_field_char">
+                                N° Inventaire : <field name="numero_inventaire" readonly="1" class="oe_inline"/>
+                            </span>
+                        </div>
+                    </div>
+
+                    <!-- Indicateurs clés -->
+                    <div class="o_stat_buttons">
+                        <button class="o_stat_button" type="object"
+                                name="action_voir_tableau_amortissement" icon="fa-table">
+                            <div class="o_field_widget o_stat_info">
+                                <span class="o_stat_value">
+                                    <field name="amortissements_cumules" widget="monetary"
+                                           options="{'currency_field': false}"/>
+                                </span>
+                                <span class="o_stat_text">Amort. cumulés</span>
+                            </div>
+                        </button>
+                        <button class="o_stat_button" type="object"
+                                name="action_voir_tableau_amortissement" icon="fa-balance-scale">
+                            <div class="o_field_widget o_stat_info">
+                                <span class="o_stat_value">
+                                    <field name="valeur_nette_comptable" widget="monetary"
+                                           options="{'currency_field': false}"/>
+                                </span>
+                                <span class="o_stat_text">VNC</span>
+                            </div>
+                        </button>
+                        <button class="o_stat_button" type="object"
+                                name="action_voir_mouvements" icon="fa-arrows">
+                            <div class="o_field_widget o_stat_info">
+                                <span class="o_stat_value">
+                                    <field name="quantite_distribuee"/>/<field name="quantite"/>
+                                </span>
+                                <span class="o_stat_text">Distribuées</span>
+                            </div>
+                        </button>
+                    </div>
+
+                    <group>
+                        <!-- Colonne gauche -->
+                        <group string="Identification">
+                            <field name="name"/>
+                            <field name="numero_inventaire" readonly="1"/>
+                            <field name="reference"/>
+                            <field name="numero_serie"/>
+                            <field name="marque"/>
+                            <field name="type_entree"/>
+                            <field name="statut" readonly="1"/>
+                        </group>
+                        <!-- Colonne droite -->
+                        <group string="Classification">
+                            <field name="categorie_id"/>
+                            <field name="sous_categorie_id"
+                                   domain="[('categorie_id','=',categorie_id)]"/>
+                            <field name="projet"/>
+                            <field name="annee_budget"/>
+                            <field name="quantite"/>
+                        </group>
+                    </group>
+
+                    <group>
+                        <group string="Dates">
+                            <field name="date_acquisition"/>
+                            <field name="date_mise_en_service"/>
+                            <field name="fin_amortissement" readonly="1"/>
+                            <field name="date_hors_service"
+                                   invisible="statut not in ('hors_service','cede','rebut')"/>
+                            <field name="motif_hors_service"
+                                   invisible="statut not in ('hors_service','cede','rebut')"/>
+                            <field name="date_cession" invisible="statut != 'cede'"/>
+                            <field name="date_rebut" invisible="statut != 'rebut'"/>
+                        </group>
+                        <group string="Affectation">
+                            <field name="emplacement_id"/>
+                            <field name="department_id" readonly="1"/>
+                            <field name="responsable_id"/>
+                            <field name="quantite_distribuee" readonly="1"/>
+                            <field name="quantite_non_distribuee" readonly="1"/>
+                        </group>
+                    </group>
+
+                    <notebook>
+                        <!-- Onglet Valeurs financières -->
+                        <page string="Valeurs financières" name="finances">
+                            <group>
+                                <group string="Coût d'entrée">
+                                    <field name="cout_acquisition"/>
+                                    <field name="frais_accessoires"/>
+                                    <field name="depenses_posterieures" readonly="1"/>
+                                    <field name="cout_entree" readonly="1"/>
+                                    <field name="valeur_residuelle"/>
+                                    <field name="base_amortissable" readonly="1"/>
+                                </group>
+                                <group string="Situation comptable">
+                                    <field name="amortissements_cumules" readonly="1"/>
+                                    <field name="depreciation_cumule" readonly="1"/>
+                                    <field name="valeur_nette_comptable" readonly="1"/>
+                                    <field name="entierement_amorti" readonly="1"/>
+                                    <field name="move_entree_id" readonly="1"
+                                           invisible="not move_entree_id"/>
+                                </group>
+                            </group>
+                            <group string="Fournisseur et achat">
+                                <field name="fournisseur_id"/>
+                                <field name="bon_commande_ref"/>
+                                <field name="facture_ref"/>
+                                <field name="facture_achat_ids" widget="many2many_tags"/>
+                            </group>
+                        </page>
+
+                        <!-- Onglet Amortissement -->
+                        <page string="Amortissement" name="amortissement">
+                            <group>
+                                <group string="Paramètres">
+                                    <field name="methode_amortissement"/>
+                                    <field name="duree_amortissement"/>
+                                    <field name="taux_amortissement" readonly="1"/>
+                                    <field name="coefficient_degressif"
+                                           invisible="methode_amortissement != 'degressif'"/>
+                                    <field name="journal_id"/>
+                                </group>
+                                <group string="État">
+                                    <field name="amortissement_en_cours" readonly="1"/>
+                                    <field name="entierement_amorti" readonly="1"/>
+                                    <field name="fin_amortissement" readonly="1"/>
+                                </group>
+                            </group>
+                            <separator string="Tableau d'amortissement prévisionnel"/>
+                            <field name="ligne_amortissement_ids" mode="list">
+                                <list string="Tableau d'amortissement" editable="bottom">
+                                    <field name="annee"/>
+                                    <field name="date_debut"/>
+                                    <field name="date_fin"/>
+                                    <field name="taux_applique" string="Taux (%)"/>
+                                    <field name="montant_amortissement" string="Dotation (DT)"/>
+                                    <field name="amortissements_cumules" string="Cumulé (DT)"/>
+                                    <field name="valeur_nette" string="VNC (DT)"/>
+                                    <field name="state" widget="badge"
+                                           decoration-success="state == 'valide'"
+                                           decoration-warning="state == 'brouillon'"
+                                           decoration-danger="state == 'annule'"/>
+                                    <field name="move_id" string="Écriture" optional="show"/>
+                                    <button name="action_valider" string="Comptabiliser"
+                                            type="object" class="btn-sm btn-primary"
+                                            invisible="state != 'brouillon'"/>
+                                </list>
+                            </field>
+                        </page>
+
+                        <!-- Onglet Dépréciations -->
+                        <page string="Dépréciations" name="depreciations">
+                            <field name="depreciation_ids" mode="list">
+                                <list string="Dépréciations" editable="bottom">
+                                    <field name="date"/>
+                                    <field name="motif"/>
+                                    <field name="montant"/>
+                                    <field name="state" widget="badge"
+                                           decoration-success="state == 'valide'"
+                                           decoration-warning="state == 'brouillon'"/>
+                                    <button name="action_valider" string="Valider"
+                                            type="object" class="btn-sm btn-primary"
+                                            invisible="state != 'brouillon'"/>
+                                </list>
+                            </field>
+                        </page>
+
+                        <!-- Onglet Dépenses postérieures -->
+                        <page string="Dépenses postérieures" name="depenses_post">
+                            <field name="depense_posterieure_ids" mode="list">
+                                <list string="Dépenses postérieures" editable="bottom">
+                                    <field name="date"/>
+                                    <field name="name"/>
+                                    <field name="nature"/>
+                                    <field name="montant"/>
+                                    <field name="facture_id" string="Facture"/>
+                                    <field name="state" widget="badge"
+                                           decoration-success="state == 'valide'"
+                                           decoration-warning="state == 'brouillon'"/>
+                                    <button name="action_valider" string="Valider"
+                                            type="object" class="btn-sm btn-primary"
+                                            invisible="state != 'brouillon'"/>
+                                </list>
+                            </field>
+                        </page>
+
+                        <!-- Onglet Affectations -->
+                        <page string="Distribution / Affectations" name="affectations">
+                            <field name="affectation_ids" mode="list">
+                                <list string="Affectations" editable="bottom">
+                                    <field name="name" readonly="1"/>
+                                    <field name="date"/>
+                                    <field name="beneficiaire_id"/>
+                                    <field name="department_id"/>
+                                    <field name="emplacement_id"/>
+                                    <field name="quantite"/>
+                                    <field name="est_premiere_affectation"/>
+                                    <field name="state" widget="badge"
+                                           decoration-success="state == 'active'"
+                                           decoration-muted="state == 'retiree'"/>
+                                    <button name="action_imprimer_bon_sortie"
+                                            string="Bon sortie" type="object"
+                                            class="btn-sm btn-secondary"
+                                            invisible="not est_premiere_affectation or bon_sortie_imprime"/>
+                                    <button name="action_retirer" string="Retirer"
+                                            type="object" class="btn-sm"
+                                            invisible="state != 'active'"/>
+                                </list>
+                            </field>
+                        </page>
+
+                        <!-- Onglet Historique transferts -->
+                        <page string="Historique transferts" name="transferts">
+                            <field name="mouvement_ids" mode="list" readonly="1">
+                                <list string="Transferts">
+                                    <field name="name"/>
+                                    <field name="date"/>
+                                    <field name="emplacement_origine_id" string="Origine"/>
+                                    <field name="emplacement_destination_id" string="Destination"/>
+                                    <field name="responsable_destination_id" string="Responsable"/>
+                                    <field name="motif"/>
+                                    <field name="state" widget="badge"
+                                           decoration-success="state == 'confirme'"
+                                           decoration-warning="state == 'brouillon'"/>
+                                </list>
+                            </field>
+                        </page>
+
+                        <!-- Onglet Notes -->
+                        <page string="Notes" name="notes">
+                            <field name="description" placeholder="Description complémentaire…"/>
+                        </page>
+                    </notebook>
+                </sheet>
+                <chatter/>
+            </form>
+        </field>
+    </record>
+
+    <!-- ═══ LIST VIEW ═══ -->
+    <record id="view_patrimoine_immobilisation_list" model="ir.ui.view">
+        <field name="name">patrimoine.immobilisation.list</field>
+        <field name="model">patrimoine.immobilisation</field>
+        <field name="arch" type="xml">
+            <list string="Immobilisations" decoration-muted="statut in ('cede','rebut')"
+                  decoration-warning="entierement_amorti and statut == 'en_service'">
+                <field name="numero_inventaire"/>
+                <field name="name"/>
+                <field name="categorie_id"/>
+                <field name="sous_categorie_id" optional="show"/>
+                <field name="emplacement_id"/>
+                <field name="date_acquisition"/>
+                <field name="date_mise_en_service" optional="show"/>
+                <field name="cout_entree" string="Coût entrée"/>
+                <field name="amortissements_cumules" string="Amort. cumulés" optional="show"/>
+                <field name="valeur_nette_comptable" string="VNC"/>
+                <field name="methode_amortissement" optional="show"/>
+                <field name="duree_amortissement" optional="show"/>
+                <field name="statut" widget="badge"
+                       decoration-success="statut == 'en_service'"
+                       decoration-warning="statut == 'hors_service'"
+                       decoration-danger="statut in ('cede','rebut')"
+                       decoration-info="statut == 'en_cours'"/>
+                <field name="entierement_amorti" optional="show"/>
+            </list>
+        </field>
+    </record>
+
+    <!-- ═══ SEARCH VIEW ═══ -->
+    <record id="view_patrimoine_immobilisation_search" model="ir.ui.view">
+        <field name="name">patrimoine.immobilisation.search</field>
+        <field name="model">patrimoine.immobilisation</field>
+        <field name="arch" type="xml">
+            <search string="Rechercher une immobilisation">
+                <field name="name" string="Désignation"/>
+                <field name="numero_inventaire"/>
+                <field name="reference"/>
+                <field name="categorie_id"/>
+                <field name="sous_categorie_id"/>
+                <field name="emplacement_id"/>
+                <field name="projet"/>
+                <field name="fournisseur_id"/>
+
+                <!-- Filtres prédéfinis -->
+                <filter string="En service" name="en_service"
+                        domain="[('statut','=','en_service')]"/>
+                <filter string="Hors service" name="hors_service"
+                        domain="[('statut','=','hors_service')]"/>
+                <filter string="En cours" name="en_cours"
+                        domain="[('statut','=','en_cours')]"/>
+                <filter string="Cédés" name="cedes"
+                        domain="[('statut','=','cede')]"/>
+                <filter string="Mis en rebut" name="rebuts"
+                        domain="[('statut','=','rebut')]"/>
+                <separator/>
+                <filter string="Entièrement amortis" name="amortis"
+                        domain="[('entierement_amorti','=',True)]"/>
+                <filter string="Non distribués" name="non_distribues"
+                        domain="[('quantite_non_distribuee','>',0)]"/>
+                <separator/>
+                <filter string="Linéaire" name="lineaire"
+                        domain="[('methode_amortissement','=','lineaire')]"/>
+                <filter string="Dégressif" name="degressif"
+                        domain="[('methode_amortissement','=','degressif')]"/>
+
+                <!-- Groupes -->
+                <group>
+                    <filter string="Catégorie" name="group_categorie"
+                            context="{'group_by':'categorie_id'}"/>
+                    <filter string="Sous-catégorie" name="group_sous_cat"
+                            context="{'group_by':'sous_categorie_id'}"/>
+                    <filter string="Emplacement" name="group_emplacement"
+                            context="{'group_by':'emplacement_id'}"/>
+                    <filter string="Statut" name="group_statut"
+                            context="{'group_by':'statut'}"/>
+                    <filter string="Méthode amort." name="group_methode"
+                            context="{'group_by':'methode_amortissement'}"/>
+                    <filter string="Année d'acquisition" name="group_annee"
+                            context="{'group_by':'date_acquisition:year'}"/>
+                    <filter string="Projet" name="group_projet"
+                            context="{'group_by':'projet'}"/>
+                </group>
+            </search>
+        </field>
+    </record>
+
+    <!-- ═══ ACTION ═══ -->
+    <record id="action_patrimoine_immobilisation" model="ir.actions.act_window">
+        <field name="name">Immobilisations</field>
+        <field name="res_model">patrimoine.immobilisation</field>
+        <field name="view_mode">list,kanban,form</field>
+        <field name="search_view_id" ref="view_patrimoine_immobilisation_search"/>
+        <field name="context">{'search_default_en_service': 1}</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                Créer votre première fiche d'immobilisation
+            </p>
+            <p>Gérez votre patrimoine : acquisitions, amortissements, transferts, cessions.</p>
+        </field>
+    </record>
+
+</odoo>

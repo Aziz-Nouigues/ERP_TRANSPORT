@@ -1,0 +1,140 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- ═══ BORDEREAU D'INVENTAIRE ═══ -->
+    <template id="rapport_bordereau_inventaire_template">
+        <t t-call="web.html_container">
+            <t t-call="web.external_layout">
+                <div class="page">
+                    <h2 style="text-align:center">BORDEREAU D'INVENTAIRE DES IMMOBILISATIONS</h2>
+                    <div style="display:flex;justify-content:space-between;margin-bottom:8px;font-size:11px">
+                        <div><strong>N° Inventaire :</strong> <t t-esc="docs.name"/></div>
+                        <div><strong>Date :</strong> <t t-esc="docs.date.strftime('%d/%m/%Y')"/></div>
+                        <div><strong>Responsable :</strong> <t t-esc="docs.responsable_id.name"/></div>
+                    </div>
+                    <table style="width:100%;border-collapse:collapse;font-size:10px">
+                        <thead>
+                            <tr style="background:#2c5f8a;color:white">
+                                <th style="padding:4px 6px">N° Inv.</th>
+                                <th style="padding:4px 6px">Désignation</th>
+                                <th style="padding:4px 6px">Catégorie</th>
+                                <th style="padding:4px 6px">Emplacement</th>
+                                <th style="padding:4px 6px;text-align:right">Qté théor.</th>
+                                <th style="padding:4px 6px;text-align:right">Qté constatée</th>
+                                <th style="padding:4px 6px;text-align:right">Écart</th>
+                                <th style="padding:4px 6px">État</th>
+                                <th style="padding:4px 6px">Remarques</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <t t-foreach="docs.ligne_ids" t-as="l">
+                                <tr t-attf-style="background:#{'#ffebee' if l.etat_constate == 'manquant' else '#e8f5e9' if l.etat_constate == 'retrouve' else 'white'}">
+                                    <td style="border:1px solid #ddd;padding:3px 6px"><t t-esc="l.numero_inventaire"/></td>
+                                    <td style="border:1px solid #ddd;padding:3px 6px"><t t-esc="l.immobilisation_id.name"/></td>
+                                    <td style="border:1px solid #ddd;padding:3px 6px"><t t-esc="l.categorie_id.name if l.categorie_id else '-'"/></td>
+                                    <td style="border:1px solid #ddd;padding:3px 6px"><t t-esc="l.emplacement_id.display_name if l.emplacement_id else '-'"/></td>
+                                    <td style="border:1px solid #ddd;padding:3px 6px;text-align:right"><t t-esc="'%.0f' % l.quantite_theorique"/></td>
+                                    <td style="border:1px solid #ddd;padding:3px 6px;text-align:right"><t t-esc="'%.0f' % l.quantite_constatee"/></td>
+                                    <td style="border:1px solid #ddd;padding:3px 6px;text-align:right"
+                                        t-attf-style="color:#{'red' if l.ecart_quantite != 0 else 'inherit'}">
+                                        <t t-esc="'%.0f' % l.ecart_quantite"/>
+                                    </td>
+                                    <td style="border:1px solid #ddd;padding:3px 6px">
+                                        <t t-esc="dict(l._fields['etat_constate'].selection).get(l.etat_constate,'')"/>
+                                    </td>
+                                    <td style="border:1px solid #ddd;padding:3px 6px"><t t-esc="l.remarques or ''"/></td>
+                                </tr>
+                            </t>
+                        </tbody>
+                    </table>
+                    <!-- Zone signature -->
+                    <div style="margin-top:30px;display:flex;justify-content:space-between;font-size:11px">
+                        <div style="text-align:center;width:45%;border-top:1px solid #333;padding-top:4px">Responsable inventaire</div>
+                        <div style="text-align:center;width:45%;border-top:1px solid #333;padding-top:4px">Directeur / Superviseur</div>
+                    </div>
+                </div>
+            </t>
+        </t>
+    </template>
+
+    <record id="action_rapport_bordereau_inventaire" model="ir.actions.report">
+        <field name="name">Bordereau d'inventaire</field>
+        <field name="model">patrimoine.inventaire</field>
+        <field name="report_type">qweb-pdf</field>
+        <field name="report_name">transport_patrimoine.rapport_bordereau_inventaire_template</field>
+        <field name="binding_model_id" ref="model_patrimoine_inventaire"/>
+        <field name="binding_type">report</field>
+    </record>
+
+    <!-- ═══ BORDEREAU DES ÉCARTS ═══ -->
+    <template id="rapport_bordereau_ecarts_template">
+        <t t-call="web.html_container">
+            <t t-call="web.external_layout">
+                <div class="page">
+                    <h2 style="text-align:center">BORDEREAU DES ÉCARTS D'INVENTAIRE</h2>
+                    <div style="display:flex;justify-content:space-between;margin-bottom:8px;font-size:11px">
+                        <div><strong>N° Inventaire :</strong> <t t-esc="docs.name"/></div>
+                        <div><strong>Date :</strong> <t t-esc="docs.date.strftime('%d/%m/%Y')"/></div>
+                    </div>
+                    <t t-set="lignes_ecart" t-value="docs.ligne_ids.filtered(lambda l: l.ecart_quantite != 0 or l.etat_constate in ('manquant','excedent','deteriore'))"/>
+                    <table style="width:100%;border-collapse:collapse;font-size:10px">
+                        <thead>
+                            <tr style="background:#c0392b;color:white">
+                                <th style="padding:4px 6px">N° Inv.</th>
+                                <th style="padding:4px 6px">Désignation</th>
+                                <th style="padding:4px 6px">Catégorie</th>
+                                <th style="padding:4px 6px;text-align:right">Qté théor.</th>
+                                <th style="padding:4px 6px;text-align:right">Qté constatée</th>
+                                <th style="padding:4px 6px;text-align:right">Écart</th>
+                                <th style="padding:4px 6px">État constaté</th>
+                                <th style="padding:4px 6px">Mesure proposée</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <t t-foreach="lignes_ecart" t-as="l">
+                                <tr style="background:#fff0f0">
+                                    <td style="border:1px solid #ddd;padding:3px 6px"><t t-esc="l.numero_inventaire"/></td>
+                                    <td style="border:1px solid #ddd;padding:3px 6px"><t t-esc="l.immobilisation_id.name"/></td>
+                                    <td style="border:1px solid #ddd;padding:3px 6px"><t t-esc="l.categorie_id.name if l.categorie_id else '-'"/></td>
+                                    <td style="border:1px solid #ddd;padding:3px 6px;text-align:right"><t t-esc="'%.0f' % l.quantite_theorique"/></td>
+                                    <td style="border:1px solid #ddd;padding:3px 6px;text-align:right"><t t-esc="'%.0f' % l.quantite_constatee"/></td>
+                                    <td style="border:1px solid #ddd;padding:3px 6px;text-align:right;color:red;font-weight:bold">
+                                        <t t-esc="'%.0f' % l.ecart_quantite"/>
+                                    </td>
+                                    <td style="border:1px solid #ddd;padding:3px 6px">
+                                        <t t-esc="dict(l._fields['etat_constate'].selection).get(l.etat_constate,'')"/>
+                                    </td>
+                                    <td style="border:1px solid #ddd;padding:3px 6px">
+                                        <t t-if="l.etat_constate == 'manquant'">Sortie pour perte</t>
+                                        <t t-elif="l.etat_constate == 'excedent'">Régularisation stock</t>
+                                        <t t-elif="l.etat_constate == 'deteriore'">Évaluation dépréciation</t>
+                                        <t t-else="">À régulariser</t>
+                                    </td>
+                                </tr>
+                            </t>
+                            <t t-if="not lignes_ecart">
+                                <tr>
+                                    <td colspan="8" style="text-align:center;padding:12px;color:green;font-style:italic">
+                                        Aucun écart constaté — inventaire conforme.
+                                    </td>
+                                </tr>
+                            </t>
+                        </tbody>
+                    </table>
+                    <p style="font-size:9px;color:#777;margin-top:8px">
+                        Nombre d'écarts : <t t-esc="len(lignes_ecart)"/>
+                    </p>
+                </div>
+            </t>
+        </t>
+    </template>
+
+    <record id="action_rapport_bordereau_ecarts" model="ir.actions.report">
+        <field name="name">Bordereau des écarts</field>
+        <field name="model">patrimoine.inventaire</field>
+        <field name="report_type">qweb-pdf</field>
+        <field name="report_name">transport_patrimoine.rapport_bordereau_ecarts_template</field>
+        <field name="binding_model_id" ref="model_patrimoine_inventaire"/>
+        <field name="binding_type">report</field>
+    </record>
+
+</odoo>

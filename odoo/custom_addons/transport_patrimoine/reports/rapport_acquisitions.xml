@@ -1,0 +1,333 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- ═══ ÉTAT DES ACQUISITIONS ═══ -->
+    <template id="rapport_acquisitions_template">
+        <t t-call="web.html_container">
+            <t t-call="web.external_layout">
+                <div class="page">
+                    <h2 style="text-align:center">ÉTAT DES ACQUISITIONS DE LA PÉRIODE</h2>
+                    <p style="text-align:center;color:#555">
+                        Du <t t-esc="docs.date_debut.strftime('%d/%m/%Y')"/>
+                        au <t t-esc="docs.date_fin.strftime('%d/%m/%Y')"/>
+                    </p>
+                    <t t-set="immobilisations" t-value="docs._get_acquisitions()"/>
+                    <table style="width:100%;border-collapse:collapse;font-size:10px;margin-top:12px">
+                        <thead>
+                            <tr style="background:#2c5f8a;color:white">
+                                <th style="padding:4px 6px">N° Inv.</th>
+                                <th style="padding:4px 6px">Désignation</th>
+                                <th style="padding:4px 6px">Catégorie</th>
+                                <th style="padding:4px 6px">Mode entrée</th>
+                                <th style="padding:4px 6px">Emplacement</th>
+                                <th style="padding:4px 6px;text-align:center">Date acq.</th>
+                                <th style="padding:4px 6px;text-align:center">Date M.E.S.</th>
+                                <th style="padding:4px 6px;text-align:right">Coût acq. (DT)</th>
+                                <th style="padding:4px 6px;text-align:right">Frais acc. (DT)</th>
+                                <th style="padding:4px 6px;text-align:right">Coût total (DT)</th>
+                                <th style="padding:4px 6px">Méthode</th>
+                                <th style="padding:4px 6px;text-align:center">Durée</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <t t-set="total" t-value="0"/>
+                            <t t-foreach="immobilisations" t-as="immo">
+                                <tr t-attf-style="background-color: #{'#f5f5f5' if immo_odd else 'white'}">
+                                    <td style="border:1px solid #ddd;padding:3px 6px"><t t-esc="immo.numero_inventaire"/></td>
+                                    <td style="border:1px solid #ddd;padding:3px 6px"><t t-esc="immo.name"/></td>
+                                    <td style="border:1px solid #ddd;padding:3px 6px"><t t-esc="immo.categorie_id.name"/></td>
+                                    <td style="border:1px solid #ddd;padding:3px 6px"><t t-esc="dict(immo._fields['type_entree'].selection).get(immo.type_entree,'')"/></td>
+                                    <td style="border:1px solid #ddd;padding:3px 6px"><t t-esc="immo.emplacement_id.display_name if immo.emplacement_id else '-'"/></td>
+                                    <td style="border:1px solid #ddd;padding:3px 6px;text-align:center"><t t-esc="immo.date_acquisition.strftime('%d/%m/%Y')"/></td>
+                                    <td style="border:1px solid #ddd;padding:3px 6px;text-align:center"><t t-esc="immo.date_mise_en_service.strftime('%d/%m/%Y') if immo.date_mise_en_service else '-'"/></td>
+                                    <td style="border:1px solid #ddd;padding:3px 6px;text-align:right"><t t-esc="'%.3f' % immo.cout_acquisition"/></td>
+                                    <td style="border:1px solid #ddd;padding:3px 6px;text-align:right"><t t-esc="'%.3f' % immo.frais_accessoires"/></td>
+                                    <td style="border:1px solid #ddd;padding:3px 6px;text-align:right"><t t-esc="'%.3f' % immo.cout_entree"/></td>
+                                    <td style="border:1px solid #ddd;padding:3px 6px;text-align:center"><t t-esc="dict(immo._fields['methode_amortissement'].selection).get(immo.methode_amortissement,'')"/></td>
+                                    <td style="border:1px solid #ddd;padding:3px 6px;text-align:center"><t t-esc="immo.duree_amortissement"/> ans</td>
+                                </tr>
+                                <t t-set="total" t-value="total + immo.cout_entree"/>
+                            </t>
+                            <tr style="background:#2c5f8a;color:white;font-weight:bold">
+                                <td colspan="9" style="padding:4px 6px;text-align:right">TOTAL ACQUISITIONS :</td>
+                                <td style="padding:4px 6px;text-align:right"><t t-esc="'%.3f' % total"/> DT</td>
+                                <td colspan="2"></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                    <p style="font-size:9px;color:#777;margin-top:8px">
+                        Nombre d'immobilisations acquises : <t t-esc="len(immobilisations)"/>
+                    </p>
+                </div>
+            </t>
+        </t>
+    </template>
+
+    <record id="action_rapport_acquisitions" model="ir.actions.report">
+        <field name="name">État des acquisitions</field>
+        <field name="model">patrimoine.wizard.rapport</field>
+        <field name="report_type">qweb-pdf</field>
+        <field name="report_name">transport_patrimoine.rapport_acquisitions_template</field>
+    </record>
+
+    <!-- ═══ ÉTAT DES CESSIONS ═══ -->
+    <template id="rapport_cessions_template">
+        <t t-call="web.html_container">
+            <t t-call="web.external_layout">
+                <div class="page">
+                    <h2 style="text-align:center">ÉTAT DES CESSIONS DE LA PÉRIODE</h2>
+                    <p style="text-align:center;color:#555">
+                        Du <t t-esc="docs.date_debut.strftime('%d/%m/%Y')"/>
+                        au <t t-esc="docs.date_fin.strftime('%d/%m/%Y')"/>
+                    </p>
+                    <t t-set="cessions" t-value="docs._get_cessions()"/>
+                    <table style="width:100%;border-collapse:collapse;font-size:10px;margin-top:12px">
+                        <thead>
+                            <tr style="background:#2c5f8a;color:white">
+                                <th style="padding:4px 6px">N° Sortie</th>
+                                <th style="padding:4px 6px">N° Inv.</th>
+                                <th style="padding:4px 6px">Désignation</th>
+                                <th style="padding:4px 6px;text-align:center">Date</th>
+                                <th style="padding:4px 6px;text-align:right">Coût (DT)</th>
+                                <th style="padding:4px 6px;text-align:right">Amort. cumulés</th>
+                                <th style="padding:4px 6px;text-align:right">VNC sortie</th>
+                                <th style="padding:4px 6px;text-align:right">Prix cession</th>
+                                <th style="padding:4px 6px;text-align:right">+/- value</th>
+                                <th style="padding:4px 6px">Résultat</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <t t-set="total_vnc" t-value="0"/>
+                            <t t-set="total_prix" t-value="0"/>
+                            <t t-set="total_pmv" t-value="0"/>
+                            <t t-foreach="cessions" t-as="ces">
+                                <tr>
+                                    <td style="border:1px solid #ddd;padding:3px 6px"><t t-esc="ces.name"/></td>
+                                    <td style="border:1px solid #ddd;padding:3px 6px"><t t-esc="ces.numero_inventaire"/></td>
+                                    <td style="border:1px solid #ddd;padding:3px 6px"><t t-esc="ces.immobilisation_id.name"/></td>
+                                    <td style="border:1px solid #ddd;padding:3px 6px;text-align:center"><t t-esc="ces.date.strftime('%d/%m/%Y')"/></td>
+                                    <td style="border:1px solid #ddd;padding:3px 6px;text-align:right"><t t-esc="'%.3f' % ces.cout_entree"/></td>
+                                    <td style="border:1px solid #ddd;padding:3px 6px;text-align:right"><t t-esc="'%.3f' % ces.amortissements_cumules"/></td>
+                                    <td style="border:1px solid #ddd;padding:3px 6px;text-align:right"><t t-esc="'%.3f' % ces.vnc_sortie"/></td>
+                                    <td style="border:1px solid #ddd;padding:3px 6px;text-align:right"><t t-esc="'%.3f' % ces.prix_cession"/></td>
+                                    <td style="border:1px solid #ddd;padding:3px 6px;text-align:right"
+                                        t-attf-style="color: #{'green' if ces.plus_moins_value >= 0 else 'red'}">
+                                        <t t-esc="'%.3f' % ces.plus_moins_value"/>
+                                    </td>
+                                    <td style="border:1px solid #ddd;padding:3px 6px">
+                                        <t t-esc="dict(ces._fields['type_resultat'].selection).get(ces.type_resultat,'')"/>
+                                    </td>
+                                </tr>
+                                <t t-set="total_vnc" t-value="total_vnc + ces.vnc_sortie"/>
+                                <t t-set="total_prix" t-value="total_prix + ces.prix_cession"/>
+                                <t t-set="total_pmv" t-value="total_pmv + ces.plus_moins_value"/>
+                            </t>
+                            <tr style="background:#2c5f8a;color:white;font-weight:bold">
+                                <td colspan="6" style="padding:4px 6px;text-align:right">TOTAUX :</td>
+                                <td style="padding:4px 6px;text-align:right"><t t-esc="'%.3f' % total_vnc"/></td>
+                                <td style="padding:4px 6px;text-align:right"><t t-esc="'%.3f' % total_prix"/></td>
+                                <td style="padding:4px 6px;text-align:right"><t t-esc="'%.3f' % total_pmv"/></td>
+                                <td></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </t>
+        </t>
+    </template>
+
+    <record id="action_rapport_cessions" model="ir.actions.report">
+        <field name="name">État des cessions</field>
+        <field name="model">patrimoine.wizard.rapport</field>
+        <field name="report_type">qweb-pdf</field>
+        <field name="report_name">transport_patrimoine.rapport_cessions_template</field>
+    </record>
+
+    <!-- ═══ ÉTAT DES REBUTS ═══ (même template, filtre rebut) -->
+    <record id="action_rapport_rebuts" model="ir.actions.report">
+        <field name="name">État des mises en rebut</field>
+        <field name="model">patrimoine.wizard.rapport</field>
+        <field name="report_type">qweb-pdf</field>
+        <field name="report_name">transport_patrimoine.rapport_cessions_template</field>
+    </record>
+
+    <!-- ═══ TABLEAU DE VARIATION ═══ -->
+    <template id="rapport_variation_template">
+        <t t-call="web.html_container">
+            <t t-call="web.external_layout">
+                <div class="page">
+                    <h2 style="text-align:center">TABLEAU DE VARIATION DES IMMOBILISATIONS</h2>
+                    <p style="text-align:center;color:#555">
+                        Période : du <t t-esc="docs.date_debut.strftime('%d/%m/%Y')"/>
+                        au <t t-esc="docs.date_fin.strftime('%d/%m/%Y')"/>
+                    </p>
+                    <t t-set="stats" t-value="docs._get_stats_variation()"/>
+                    <table style="width:100%;border-collapse:collapse;font-size:10px;margin-top:12px">
+                        <thead>
+                            <tr style="background:#2c5f8a;color:white">
+                                <th style="padding:4px 8px">Code</th>
+                                <th style="padding:4px 8px">Catégorie</th>
+                                <th style="padding:4px 8px;text-align:right">Val. début</th>
+                                <th style="padding:4px 8px;text-align:right">+ Acquisitions</th>
+                                <th style="padding:4px 8px;text-align:right">- Cessions</th>
+                                <th style="padding:4px 8px;text-align:right">Val. fin</th>
+                                <th style="padding:4px 8px;text-align:right">Amort. cumulés</th>
+                                <th style="padding:4px 8px;text-align:right">VNC</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <t t-set="gt_debut" t-value="0"/>
+                            <t t-set="gt_acq" t-value="0"/>
+                            <t t-set="gt_ces" t-value="0"/>
+                            <t t-set="gt_fin" t-value="0"/>
+                            <t t-set="gt_amort" t-value="0"/>
+                            <t t-set="gt_vnc" t-value="0"/>
+                            <t t-foreach="stats" t-as="row">
+                                <tr t-attf-style="background: #{'#f5f5f5' if row_odd else 'white'}">
+                                    <td style="border:1px solid #ddd;padding:3px 8px"><t t-esc="row['code']"/></td>
+                                    <td style="border:1px solid #ddd;padding:3px 8px"><t t-esc="row['categorie']"/></td>
+                                    <td style="border:1px solid #ddd;padding:3px 8px;text-align:right"><t t-esc="'%.3f' % row['valeur_debut']"/></td>
+                                    <td style="border:1px solid #ddd;padding:3px 8px;text-align:right;color:green"><t t-esc="'%.3f' % row['acquisitions']"/></td>
+                                    <td style="border:1px solid #ddd;padding:3px 8px;text-align:right;color:red"><t t-esc="'%.3f' % row['cessions']"/></td>
+                                    <td style="border:1px solid #ddd;padding:3px 8px;text-align:right;font-weight:bold"><t t-esc="'%.3f' % row['valeur_fin']"/></td>
+                                    <td style="border:1px solid #ddd;padding:3px 8px;text-align:right"><t t-esc="'%.3f' % row['amort_cumules']"/></td>
+                                    <td style="border:1px solid #ddd;padding:3px 8px;text-align:right;font-weight:bold"><t t-esc="'%.3f' % row['vnc']"/></td>
+                                </tr>
+                                <t t-set="gt_debut" t-value="gt_debut + row['valeur_debut']"/>
+                                <t t-set="gt_acq" t-value="gt_acq + row['acquisitions']"/>
+                                <t t-set="gt_ces" t-value="gt_ces + row['cessions']"/>
+                                <t t-set="gt_fin" t-value="gt_fin + row['valeur_fin']"/>
+                                <t t-set="gt_amort" t-value="gt_amort + row['amort_cumules']"/>
+                                <t t-set="gt_vnc" t-value="gt_vnc + row['vnc']"/>
+                            </t>
+                            <tr style="background:#2c5f8a;color:white;font-weight:bold">
+                                <td colspan="2" style="padding:4px 8px;text-align:right">TOTAL :</td>
+                                <td style="padding:4px 8px;text-align:right"><t t-esc="'%.3f' % gt_debut"/></td>
+                                <td style="padding:4px 8px;text-align:right"><t t-esc="'%.3f' % gt_acq"/></td>
+                                <td style="padding:4px 8px;text-align:right"><t t-esc="'%.3f' % gt_ces"/></td>
+                                <td style="padding:4px 8px;text-align:right"><t t-esc="'%.3f' % gt_fin"/></td>
+                                <td style="padding:4px 8px;text-align:right"><t t-esc="'%.3f' % gt_amort"/></td>
+                                <td style="padding:4px 8px;text-align:right"><t t-esc="'%.3f' % gt_vnc"/></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </t>
+        </t>
+    </template>
+
+    <record id="action_rapport_variation" model="ir.actions.report">
+        <field name="name">Tableau de variation des immobilisations</field>
+        <field name="model">patrimoine.wizard.rapport</field>
+        <field name="report_type">qweb-pdf</field>
+        <field name="report_name">transport_patrimoine.rapport_variation_template</field>
+    </record>
+
+    <!-- ═══ RAPPORT IMMOBILISATIONS ENTIÈREMENT AMORTIES ═══ -->
+    <template id="rapport_entierement_amortis_template">
+        <t t-call="web.html_container">
+            <t t-call="web.external_layout">
+                <div class="page">
+                    <h2 style="text-align:center">IMMOBILISATIONS ENTIÈREMENT AMORTIES ENCORE EN SERVICE</h2>
+                    <t t-set="immobilisations" t-value="docs._get_immobilisations_entierement_amorties()"/>
+                    <table style="width:100%;border-collapse:collapse;font-size:10px;margin-top:12px">
+                        <thead>
+                            <tr style="background:#c0392b;color:white">
+                                <th style="padding:4px 6px">N° Inv.</th>
+                                <th style="padding:4px 6px">Désignation</th>
+                                <th style="padding:4px 6px">Catégorie</th>
+                                <th style="padding:4px 6px">Emplacement</th>
+                                <th style="padding:4px 6px;text-align:center">Date M.E.S.</th>
+                                <th style="padding:4px 6px;text-align:right">Coût brut (DT)</th>
+                                <th style="padding:4px 6px;text-align:right">Amort. cumulés</th>
+                                <th style="padding:4px 6px;text-align:right">VNC</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <t t-set="total_cout" t-value="0"/>
+                            <t t-foreach="immobilisations" t-as="immo">
+                                <tr t-attf-style="background:#{'#fff0f0' if immo_odd else 'white'}">
+                                    <td style="border:1px solid #ddd;padding:3px 6px"><t t-esc="immo.numero_inventaire"/></td>
+                                    <td style="border:1px solid #ddd;padding:3px 6px"><t t-esc="immo.name"/></td>
+                                    <td style="border:1px solid #ddd;padding:3px 6px"><t t-esc="immo.categorie_id.name"/></td>
+                                    <td style="border:1px solid #ddd;padding:3px 6px"><t t-esc="immo.emplacement_id.display_name if immo.emplacement_id else '-'"/></td>
+                                    <td style="border:1px solid #ddd;padding:3px 6px;text-align:center"><t t-esc="immo.date_mise_en_service.strftime('%d/%m/%Y') if immo.date_mise_en_service else '-'"/></td>
+                                    <td style="border:1px solid #ddd;padding:3px 6px;text-align:right"><t t-esc="'%.3f' % immo.cout_entree"/></td>
+                                    <td style="border:1px solid #ddd;padding:3px 6px;text-align:right"><t t-esc="'%.3f' % immo.amortissements_cumules"/></td>
+                                    <td style="border:1px solid #ddd;padding:3px 6px;text-align:right;color:green">0.000</td>
+                                </tr>
+                                <t t-set="total_cout" t-value="total_cout + immo.cout_entree"/>
+                            </t>
+                            <tr style="background:#c0392b;color:white;font-weight:bold">
+                                <td colspan="5" style="padding:4px 6px;text-align:right">TOTAL (valeur brute encore en service) :</td>
+                                <td style="padding:4px 6px;text-align:right"><t t-esc="'%.3f' % total_cout"/> DT</td>
+                                <td colspan="2"></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                    <p style="font-size:9px;color:#777;margin-top:8px">
+                        Nb immobilisations entièrement amorties encore en service : <t t-esc="len(immobilisations)"/>
+                    </p>
+                </div>
+            </t>
+        </t>
+    </template>
+
+    <record id="action_rapport_entierement_amortis" model="ir.actions.report">
+        <field name="name">Immobilisations entièrement amorties en service</field>
+        <field name="model">patrimoine.wizard.rapport</field>
+        <field name="report_type">qweb-pdf</field>
+        <field name="report_name">transport_patrimoine.rapport_entierement_amortis_template</field>
+    </record>
+
+    <!-- ═══ RAPPORT HORS SERVICE ═══ -->
+    <template id="rapport_hors_usage_template">
+        <t t-call="web.html_container">
+            <t t-call="web.external_layout">
+                <div class="page">
+                    <h2 style="text-align:center">IMMOBILISATIONS HORS SERVICE / INUTILISÉES</h2>
+                    <t t-set="immobilisations" t-value="docs._get_immobilisations_hors_usage()"/>
+                    <table style="width:100%;border-collapse:collapse;font-size:10px;margin-top:12px">
+                        <thead>
+                            <tr style="background:#e67e22;color:white">
+                                <th style="padding:4px 6px">N° Inv.</th>
+                                <th style="padding:4px 6px">Désignation</th>
+                                <th style="padding:4px 6px">Catégorie</th>
+                                <th style="padding:4px 6px">Emplacement</th>
+                                <th style="padding:4px 6px;text-align:center">Date H.S.</th>
+                                <th style="padding:4px 6px">Motif</th>
+                                <th style="padding:4px 6px;text-align:right">VNC (DT)</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <t t-set="total_vnc" t-value="0"/>
+                            <t t-foreach="immobilisations" t-as="immo">
+                                <tr>
+                                    <td style="border:1px solid #ddd;padding:3px 6px"><t t-esc="immo.numero_inventaire"/></td>
+                                    <td style="border:1px solid #ddd;padding:3px 6px"><t t-esc="immo.name"/></td>
+                                    <td style="border:1px solid #ddd;padding:3px 6px"><t t-esc="immo.categorie_id.name"/></td>
+                                    <td style="border:1px solid #ddd;padding:3px 6px"><t t-esc="immo.emplacement_id.display_name if immo.emplacement_id else '-'"/></td>
+                                    <td style="border:1px solid #ddd;padding:3px 6px;text-align:center"><t t-esc="immo.date_hors_service.strftime('%d/%m/%Y') if immo.date_hors_service else '-'"/></td>
+                                    <td style="border:1px solid #ddd;padding:3px 6px"><t t-esc="immo.motif_hors_service or '-'"/></td>
+                                    <td style="border:1px solid #ddd;padding:3px 6px;text-align:right"><t t-esc="'%.3f' % immo.valeur_nette_comptable"/></td>
+                                </tr>
+                                <t t-set="total_vnc" t-value="total_vnc + immo.valeur_nette_comptable"/>
+                            </t>
+                            <tr style="background:#e67e22;color:white;font-weight:bold">
+                                <td colspan="6" style="padding:4px 6px;text-align:right">VNC TOTAL HORS SERVICE :</td>
+                                <td style="padding:4px 6px;text-align:right"><t t-esc="'%.3f' % total_vnc"/> DT</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </t>
+        </t>
+    </template>
+
+    <record id="action_rapport_hors_usage" model="ir.actions.report">
+        <field name="name">Immobilisations hors service</field>
+        <field name="model">patrimoine.wizard.rapport</field>
+        <field name="report_type">qweb-pdf</field>
+        <field name="report_name">transport_patrimoine.rapport_hors_usage_template</field>
+    </record>
+
+</odoo>

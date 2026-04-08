@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_patrimoine_cession_form" model="ir.ui.view">
+        <field name="name">patrimoine.cession.form</field>
+        <field name="model">patrimoine.cession</field>
+        <field name="arch" type="xml">
+            <form string="Sortie d'immobilisation">
+                <header>
+                    <button name="action_confirmer" string="Confirmer"
+                            type="object" class="btn-primary"
+                            invisible="state != 'brouillon'"/>
+                    <button name="action_comptabiliser" string="Comptabiliser"
+                            type="object" class="btn-primary"
+                            invisible="state != 'confirme'"/>
+                    <button name="action_annuler" string="Annuler"
+                            type="object"
+                            invisible="state in ('comptabilise','annule')"/>
+                    <field name="state" widget="statusbar"
+                           statusbar_visible="brouillon,confirme,comptabilise"/>
+                </header>
+                <sheet>
+                    <div class="alert alert-warning" role="alert"
+                         invisible="type_resultat != 'perte'">
+                        Perte sur sortie : <field name="plus_moins_value" readonly="1"/> DT
+                    </div>
+                    <div class="alert alert-success" role="alert"
+                         invisible="type_resultat != 'gain'">
+                        Plus-value : <field name="plus_moins_value" readonly="1"/> DT
+                    </div>
+                    <div class="oe_title">
+                        <h1><field name="name" readonly="1"/></h1>
+                    </div>
+                    <group>
+                        <group string="Identification">
+                            <field name="type_sortie"/>
+                            <field name="immobilisation_id"
+                                   domain="[('statut','in',('en_service','hors_service'))]"/>
+                            <field name="numero_inventaire" readonly="1"/>
+                            <field name="date"/>
+                            <field name="motif"/>
+                            <field name="acheteur_id"
+                                   invisible="type_sortie not in ('cession','echange')"/>
+                        </group>
+                        <group string="Calcul">
+                            <field name="cout_entree" readonly="1"/>
+                            <field name="amortissements_cumules" readonly="1"/>
+                            <field name="dotation_complementaire" readonly="1"/>
+                            <field name="vnc_sortie" readonly="1"/>
+                            <field name="prix_cession"
+                                   invisible="type_sortie == 'rebut'"/>
+                            <field name="plus_moins_value" readonly="1"/>
+                            <field name="type_resultat" readonly="1" widget="badge"
+                                   decoration-success="type_resultat == 'gain'"
+                                   decoration-danger="type_resultat == 'perte'"
+                                   decoration-warning="type_resultat == 'neutre'"/>
+                        </group>
+                    </group>
+                    <group string="Écritures générées" invisible="state != 'comptabilise'">
+                        <field name="move_dotation_id" readonly="1"/>
+                        <field name="move_sortie_id" readonly="1"/>
+                    </group>
+                    <field name="notes" placeholder="Observations…"/>
+                </sheet>
+                <chatter/>
+            </form>
+        </field>
+    </record>
+
+    <record id="view_patrimoine_cession_list" model="ir.ui.view">
+        <field name="name">patrimoine.cession.list</field>
+        <field name="model">patrimoine.cession</field>
+        <field name="arch" type="xml">
+            <list string="Cessions / Sorties"
+                  decoration-danger="type_resultat == 'perte'"
+                  decoration-success="type_resultat == 'gain'">
+                <field name="name"/>
+                <field name="date"/>
+                <field name="type_sortie"/>
+                <field name="numero_inventaire"/>
+                <field name="immobilisation_id"/>
+                <field name="cout_entree"/>
+                <field name="vnc_sortie" string="VNC sortie"/>
+                <field name="prix_cession"/>
+                <field name="plus_moins_value"/>
+                <field name="type_resultat" widget="badge"
+                       decoration-success="type_resultat == 'gain'"
+                       decoration-danger="type_resultat == 'perte'"/>
+                <field name="state" widget="badge"
+                       decoration-success="state == 'comptabilise'"
+                       decoration-warning="state == 'confirme'"
+                       decoration-info="state == 'brouillon'"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="action_patrimoine_cession" model="ir.actions.act_window">
+        <field name="name">Cessions / Sorties</field>
+        <field name="res_model">patrimoine.cession</field>
+        <field name="view_mode">list,form</field>
+    </record>
+</odoo>

@@ -1,0 +1,195 @@
+# Traduction du module transport_patrimoine — Français
+# This file contains the translation of the following modules:
+# 	* transport_patrimoine
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: Odoo Server 19.0\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2026-04-01 08:00+0000\n"
+"PO-Revision-Date: 2026-04-01 08:00+0000\n"
+"Last-Translator: ERP Transport\n"
+"Language-Team: \n"
+"Language: fr_FR\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+
+# ── MODÈLE PRINCIPAL ─────────────────────────────────────────────────────────
+
+#. module: transport_patrimoine
+#: model:ir.model,name:transport_patrimoine.model_patrimoine_immobilisation
+msgid "patrimoine.immobilisation"
+msgstr "Immobilisation"
+
+#. module: transport_patrimoine
+#: model:ir.model.fields,field_description:transport_patrimoine.field_patrimoine_immobilisation__name
+msgid "Désignation"
+msgstr "Désignation"
+
+#. module: transport_patrimoine
+#: model:ir.model.fields,field_description:transport_patrimoine.field_patrimoine_immobilisation__numero_inventaire
+msgid "N° Inventaire"
+msgstr "N° Inventaire"
+
+#. module: transport_patrimoine
+#: model:ir.model.fields,field_description:transport_patrimoine.field_patrimoine_immobilisation__statut
+msgid "Statut"
+msgstr "Statut"
+
+#. module: transport_patrimoine
+#: model:ir.model.fields.selection,name:transport_patrimoine.selection__patrimoine_immobilisation__statut__en_cours
+msgid "en_cours"
+msgstr "En cours"
+
+#. module: transport_patrimoine
+#: model:ir.model.fields.selection,name:transport_patrimoine.selection__patrimoine_immobilisation__statut__en_service
+msgid "en_service"
+msgstr "En service"
+
+#. module: transport_patrimoine
+#: model:ir.model.fields.selection,name:transport_patrimoine.selection__patrimoine_immobilisation__statut__hors_service
+msgid "hors_service"
+msgstr "Hors service"
+
+#. module: transport_patrimoine
+#: model:ir.model.fields.selection,name:transport_patrimoine.selection__patrimoine_immobilisation__statut__cede
+msgid "cede"
+msgstr "Cédé"
+
+#. module: transport_patrimoine
+#: model:ir.model.fields.selection,name:transport_patrimoine.selection__patrimoine_immobilisation__statut__rebut
+msgid "rebut"
+msgstr "Mis en rebut"
+
+#. module: transport_patrimoine
+#: model:ir.model.fields.selection,name:transport_patrimoine.selection__patrimoine_immobilisation__type_entree__acquisition
+msgid "acquisition"
+msgstr "Acquisition"
+
+#. module: transport_patrimoine
+#: model:ir.model.fields.selection,name:transport_patrimoine.selection__patrimoine_immobilisation__type_entree__echange
+msgid "echange"
+msgstr "Échange"
+
+#. module: transport_patrimoine
+#: model:ir.model.fields.selection,name:transport_patrimoine.selection__patrimoine_immobilisation__type_entree__livraison_soi
+msgid "livraison_soi"
+msgstr "Livraison à soi-même"
+
+#. module: transport_patrimoine
+#: model:ir.model.fields.selection,name:transport_patrimoine.selection__patrimoine_immobilisation__methode_amortissement__lineaire
+msgid "lineaire"
+msgstr "Linéaire"
+
+#. module: transport_patrimoine
+#: model:ir.model.fields.selection,name:transport_patrimoine.selection__patrimoine_immobilisation__methode_amortissement__degressif
+msgid "degressif"
+msgstr "Dégressif"
+
+#. module: transport_patrimoine
+#: model:ir.model.fields.selection,name:transport_patrimoine.selection__patrimoine_immobilisation__methode_amortissement__manuel
+msgid "manuel"
+msgstr "Manuel"
+
+# ── AMORTISSEMENT ──────────────────────────────────────────────────────────
+
+#. module: transport_patrimoine
+#: model:ir.model.fields.selection,name:transport_patrimoine.selection__patrimoine_amortissement_ligne__state__brouillon
+msgid "Prévisionnel"
+msgstr "Prévisionnel"
+
+#. module: transport_patrimoine
+#: model:ir.model.fields.selection,name:transport_patrimoine.selection__patrimoine_amortissement_ligne__state__valide
+msgid "Comptabilisé"
+msgstr "Comptabilisé"
+
+#. module: transport_patrimoine
+#: model:ir.model.fields.selection,name:transport_patrimoine.selection__patrimoine_amortissement_ligne__state__annule
+msgid "Annulé"
+msgstr "Annulé"
+
+# ── CESSION ───────────────────────────────────────────────────────────────
+
+#. module: transport_patrimoine
+#: model:ir.model.fields.selection,name:transport_patrimoine.selection__patrimoine_cession__type_sortie__cession
+msgid "Cession (vente)"
+msgstr "Cession (vente)"
+
+#. module: transport_patrimoine
+#: model:ir.model.fields.selection,name:transport_patrimoine.selection__patrimoine_cession__type_sortie__rebut
+msgid "Mise en rebut / Destruction"
+msgstr "Mise en rebut / Destruction"
+
+#. module: transport_patrimoine
+#: model:ir.model.fields.selection,name:transport_patrimoine.selection__patrimoine_cession__type_resultat__gain
+msgid "Plus-value"
+msgstr "Plus-value"
+
+#. module: transport_patrimoine
+#: model:ir.model.fields.selection,name:transport_patrimoine.selection__patrimoine_cession__type_resultat__perte
+msgid "Moins-value / Perte"
+msgstr "Moins-value / Perte"
+
+# ── INVENTAIRE ────────────────────────────────────────────────────────────
+
+#. module: transport_patrimoine
+#: model:ir.model.fields.selection,name:transport_patrimoine.selection__patrimoine_inventaire_ligne__etat_constate__retrouve
+msgid "Retrouvé"
+msgstr "Retrouvé"
+
+#. module: transport_patrimoine
+#: model:ir.model.fields.selection,name:transport_patrimoine.selection__patrimoine_inventaire_ligne__etat_constate__manquant
+msgid "Manquant"
+msgstr "Manquant"
+
+#. module: transport_patrimoine
+#: model:ir.model.fields.selection,name:transport_patrimoine.selection__patrimoine_inventaire_ligne__etat_constate__deteriore
+msgid "Détérioré"
+msgstr "Détérioré"
+
+# ── MENUS & ACTIONS ───────────────────────────────────────────────────────
+
+#. module: transport_patrimoine
+#: model:ir.ui.menu,name:transport_patrimoine.menu_patrimoine_root
+msgid "Patrimoine"
+msgstr "Patrimoine"
+
+#. module: transport_patrimoine
+#: model:ir.actions.act_window,name:transport_patrimoine.action_patrimoine_immobilisation
+msgid "Immobilisations"
+msgstr "Immobilisations"
+
+#. module: transport_patrimoine
+#: model:ir.actions.act_window,name:transport_patrimoine.action_patrimoine_cession
+msgid "Cessions / Sorties"
+msgstr "Cessions / Sorties"
+
+#. module: transport_patrimoine
+#: model:ir.actions.act_window,name:transport_patrimoine.action_patrimoine_inventaire
+msgid "Inventaires"
+msgstr "Inventaires"
+
+#. module: transport_patrimoine
+#: model:ir.actions.act_window,name:transport_patrimoine.action_patrimoine_mouvement
+msgid "Transferts"
+msgstr "Transferts"
+
+# ── MESSAGES D'ERREUR ─────────────────────────────────────────────────────
+
+#. module: transport_patrimoine
+msgid "La date de mise en service ne peut pas être antérieure à la date d'acquisition."
+msgstr "La date de mise en service ne peut pas être antérieure à la date d'acquisition."
+
+#. module: transport_patrimoine
+msgid "Le coût d'acquisition ne peut pas être négatif."
+msgstr "Le coût d'acquisition ne peut pas être négatif."
+
+#. module: transport_patrimoine
+msgid "La durée d'amortissement doit être supérieure à 0."
+msgstr "La durée d'amortissement doit être supérieure à 0."
+
+#. module: transport_patrimoine
+msgid "Veuillez renseigner la date de mise en service avant de générer le tableau d'amortissement."
+msgstr "Veuillez renseigner la date de mise en service avant de générer le tableau d'amortissement."

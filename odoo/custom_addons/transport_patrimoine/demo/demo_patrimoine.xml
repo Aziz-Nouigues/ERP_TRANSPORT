@@ -1,0 +1,238 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- ═══════════════════════════════════════════════════════
+         DONNÉES DE DÉMONSTRATION — PATRIMOINE IMMOBILISATIONS
+         Société de transport terrestre fictive
+    ══════════════════════════════════════════════════════════ -->
+
+    <!-- Emplacements -->
+    <record id="demo_emplacement_siege" model="patrimoine.emplacement">
+        <field name="site">Siège Social</field>
+        <field name="name">Direction Générale</field>
+        <field name="batiment">Bâtiment A</field>
+        <field name="etage">3ème étage</field>
+        <field name="code">SIE-DG-03</field>
+    </record>
+
+    <record id="demo_emplacement_atelier" model="patrimoine.emplacement">
+        <field name="site">Dépôt Central</field>
+        <field name="name">Atelier Mécanique</field>
+        <field name="batiment">Hangar 1</field>
+        <field name="code">DEP-ATL-01</field>
+    </record>
+
+    <record id="demo_emplacement_agence_nord" model="patrimoine.emplacement">
+        <field name="site">Agence Nord</field>
+        <field name="name">Bureau d'exploitation</field>
+        <field name="code">AGN-BUR-01</field>
+    </record>
+
+    <record id="demo_emplacement_garage" model="patrimoine.emplacement">
+        <field name="site">Dépôt Central</field>
+        <field name="name">Parc Véhicules</field>
+        <field name="batiment">Zone parking couverte</field>
+        <field name="code">DEP-PKG-01</field>
+    </record>
+
+    <!-- ═══ IMMOBILISATIONS DE DÉMONSTRATION ═══ -->
+
+    <!-- 1. Autobus urbain standard -->
+    <record id="demo_immo_bus_001" model="patrimoine.immobilisation">
+        <field name="name">Autobus urbain standard — 15362001</field>
+        <field name="reference">BUS-URB-001</field>
+        <field name="numero_serie">15362001</field>
+        <field name="marque">Irisbus Citelis 12m</field>
+        <field name="categorie_id" ref="cat_materiel_roulant"/>
+        <field name="sous_categorie_id" ref="sous_cat_autobus_urbain"/>
+        <field name="type_entree">acquisition</field>
+        <field name="statut">en_service</field>
+        <field name="date_acquisition">2021-03-15</field>
+        <field name="date_mise_en_service">2021-04-01</field>
+        <field name="emplacement_id" ref="demo_emplacement_garage"/>
+        <field name="cout_acquisition">380000.000</field>
+        <field name="frais_accessoires">12500.000</field>
+        <field name="valeur_residuelle">5000.000</field>
+        <field name="methode_amortissement">lineaire</field>
+        <field name="duree_amortissement">7</field>
+        <field name="projet">Programme Renouvellement Flotte 2021</field>
+        <field name="annee_budget">2021</field>
+        <field name="description">Autobus urbain climatisé acquis dans le cadre du programme de renouvellement de la flotte.</field>
+    </record>
+
+    <!-- 2. Autocar régional -->
+    <record id="demo_immo_bus_002" model="patrimoine.immobilisation">
+        <field name="name">Autocar régional climatisé — 15363005</field>
+        <field name="reference">BUS-REG-001</field>
+        <field name="numero_serie">15363005</field>
+        <field name="marque">Mercedes-Benz Tourismo 16RHD</field>
+        <field name="categorie_id" ref="cat_materiel_roulant"/>
+        <field name="sous_categorie_id" ref="sous_cat_autobus_regional"/>
+        <field name="type_entree">acquisition</field>
+        <field name="statut">en_service</field>
+        <field name="date_acquisition">2020-09-01</field>
+        <field name="date_mise_en_service">2020-10-01</field>
+        <field name="emplacement_id" ref="demo_emplacement_garage"/>
+        <field name="cout_acquisition">520000.000</field>
+        <field name="frais_accessoires">18000.000</field>
+        <field name="valeur_residuelle">8000.000</field>
+        <field name="methode_amortissement">lineaire</field>
+        <field name="duree_amortissement">10</field>
+        <field name="projet">Ligne régionale Nord-Sud</field>
+        <field name="annee_budget">2020</field>
+    </record>
+
+    <!-- 3. Voiture de service Direction -->
+    <record id="demo_immo_voiture_dg" model="patrimoine.immobilisation">
+        <field name="name">Voiture de service DG — Peugeot 508</field>
+        <field name="reference">VS-DG-001</field>
+        <field name="numero_serie">VF38AHRHFKL123456</field>
+        <field name="marque">Peugeot 508 SW</field>
+        <field name="categorie_id" ref="cat_materiel_roulant"/>
+        <field name="sous_categorie_id" ref="sous_cat_voitures_service"/>
+        <field name="type_entree">acquisition</field>
+        <field name="statut">en_service</field>
+        <field name="date_acquisition">2022-06-10</field>
+        <field name="date_mise_en_service">2022-06-15</field>
+        <field name="emplacement_id" ref="demo_emplacement_siege"/>
+        <field name="cout_acquisition">58000.000</field>
+        <field name="frais_accessoires">1200.000</field>
+        <field name="valeur_residuelle">3000.000</field>
+        <field name="methode_amortissement">lineaire</field>
+        <field name="duree_amortissement">5</field>
+    </record>
+
+    <!-- 4. Serveur informatique (entièrement amorti) -->
+    <record id="demo_immo_serveur_old" model="patrimoine.immobilisation">
+        <field name="name">Serveur HP ProLiant DL380 — Ancien</field>
+        <field name="reference">INF-SRV-001</field>
+        <field name="numero_serie">SRV-HP-001-2019</field>
+        <field name="marque">HP ProLiant DL380 Gen9</field>
+        <field name="categorie_id" ref="cat_materiel_informatique"/>
+        <field name="sous_categorie_id" ref="sous_cat_serveurs"/>
+        <field name="type_entree">acquisition</field>
+        <field name="statut">en_service</field>
+        <field name="date_acquisition">2019-01-15</field>
+        <field name="date_mise_en_service">2019-02-01</field>
+        <field name="emplacement_id" ref="demo_emplacement_siege"/>
+        <field name="cout_acquisition">22000.000</field>
+        <field name="frais_accessoires">800.000</field>
+        <field name="valeur_residuelle">0.000</field>
+        <field name="methode_amortissement">lineaire</field>
+        <field name="duree_amortissement">5</field>
+        <field name="description">Serveur entièrement amorti depuis 2024 mais encore en service.</field>
+    </record>
+
+    <!-- 5. Poste de travail bureau -->
+    <record id="demo_immo_pc_001" model="patrimoine.immobilisation">
+        <field name="name">Postes informatiques — Lot 2023 (x10)</field>
+        <field name="reference">INF-PC-LOT2023</field>
+        <field name="categorie_id" ref="cat_materiel_informatique"/>
+        <field name="sous_categorie_id" ref="sous_cat_postes_travail"/>
+        <field name="type_entree">acquisition</field>
+        <field name="statut">en_service</field>
+        <field name="date_acquisition">2023-09-01</field>
+        <field name="date_mise_en_service">2023-09-15</field>
+        <field name="emplacement_id" ref="demo_emplacement_siege"/>
+        <field name="quantite">10</field>
+        <field name="cout_acquisition">28000.000</field>
+        <field name="frais_accessoires">500.000</field>
+        <field name="valeur_residuelle">0.000</field>
+        <field name="methode_amortissement">lineaire</field>
+        <field name="duree_amortissement">3</field>
+    </record>
+
+    <!-- 6. Mobilier de bureau -->
+    <record id="demo_immo_mobilier" model="patrimoine.immobilisation">
+        <field name="name">Mobilier bureaux direction — Aménagement 2020</field>
+        <field name="reference">MOB-DG-2020</field>
+        <field name="categorie_id" ref="cat_materiel_bureau"/>
+        <field name="type_entree">acquisition</field>
+        <field name="statut">en_service</field>
+        <field name="date_acquisition">2020-02-01</field>
+        <field name="date_mise_en_service">2020-03-01</field>
+        <field name="emplacement_id" ref="demo_emplacement_siege"/>
+        <field name="cout_acquisition">35000.000</field>
+        <field name="frais_accessoires">2000.000</field>
+        <field name="valeur_residuelle">500.000</field>
+        <field name="methode_amortissement">lineaire</field>
+        <field name="duree_amortissement">5</field>
+    </record>
+
+    <!-- 7. Autobus hors service (pour démonstration workflow) -->
+    <record id="demo_immo_bus_hs" model="patrimoine.immobilisation">
+        <field name="name">Autobus urbain — 14250012 (Hors service)</field>
+        <field name="reference">BUS-HS-001</field>
+        <field name="numero_serie">14250012</field>
+        <field name="marque">Van Hool A300</field>
+        <field name="categorie_id" ref="cat_materiel_roulant"/>
+        <field name="sous_categorie_id" ref="sous_cat_autobus_urbain"/>
+        <field name="type_entree">acquisition</field>
+        <field name="statut">hors_service</field>
+        <field name="date_acquisition">2015-06-01</field>
+        <field name="date_mise_en_service">2015-07-01</field>
+        <field name="date_hors_service">2024-12-31</field>
+        <field name="motif_hors_service">Panne moteur irréparable — en attente de décision de réforme</field>
+        <field name="emplacement_id" ref="demo_emplacement_garage"/>
+        <field name="cout_acquisition">310000.000</field>
+        <field name="valeur_residuelle">2000.000</field>
+        <field name="methode_amortissement">lineaire</field>
+        <field name="duree_amortissement">7</field>
+    </record>
+
+    <!-- 8. Logiciel de gestion (livraison à soi-même) -->
+    <record id="demo_immo_logiciel_erp" model="patrimoine.immobilisation">
+        <field name="name">ERP Transport — Développement interne</field>
+        <field name="reference">LOG-ERP-2023</field>
+        <field name="categorie_id" ref="cat_logiciels"/>
+        <field name="type_entree">livraison_soi</field>
+        <field name="statut">en_service</field>
+        <field name="date_acquisition">2023-01-01</field>
+        <field name="date_mise_en_service">2023-06-01</field>
+        <field name="emplacement_id" ref="demo_emplacement_siege"/>
+        <field name="cout_acquisition">180000.000</field>
+        <field name="frais_accessoires">0.000</field>
+        <field name="valeur_residuelle">0.000</field>
+        <field name="methode_amortissement">lineaire</field>
+        <field name="duree_amortissement">3</field>
+        <field name="description">Système ERP développé en interne (livraison à soi-même). Coût valorisé au coût de revient des développements.</field>
+    </record>
+
+    <!-- 9. Construction (bâtiment dépôt) -->
+    <record id="demo_immo_batiment_depot" model="patrimoine.immobilisation">
+        <field name="name">Bâtiment Dépôt Central — Hangar technique</field>
+        <field name="reference">BAT-DEP-001</field>
+        <field name="categorie_id" ref="cat_constructions"/>
+        <field name="type_entree">acquisition</field>
+        <field name="statut">en_service</field>
+        <field name="date_acquisition">2010-03-01</field>
+        <field name="date_mise_en_service">2010-09-01</field>
+        <field name="emplacement_id" ref="demo_emplacement_atelier"/>
+        <field name="cout_acquisition">2400000.000</field>
+        <field name="frais_accessoires">85000.000</field>
+        <field name="valeur_residuelle">50000.000</field>
+        <field name="methode_amortissement">lineaire</field>
+        <field name="duree_amortissement">20</field>
+    </record>
+
+    <!-- 10. Autobus en cours d'acquisition -->
+    <record id="demo_immo_bus_encours" model="patrimoine.immobilisation">
+        <field name="name">Autobus articulé 18m — En cours d'acquisition</field>
+        <field name="reference">BUS-ART-2024</field>
+        <field name="marque">Solaris Urbino 18</field>
+        <field name="categorie_id" ref="cat_materiel_roulant"/>
+        <field name="sous_categorie_id" ref="sous_cat_autobus_urbain"/>
+        <field name="type_entree">acquisition</field>
+        <field name="statut">en_cours</field>
+        <field name="date_acquisition">2024-11-01</field>
+        <field name="emplacement_id" ref="demo_emplacement_garage"/>
+        <field name="cout_acquisition">450000.000</field>
+        <field name="frais_accessoires">15000.000</field>
+        <field name="valeur_residuelle">6000.000</field>
+        <field name="methode_amortissement">lineaire</field>
+        <field name="duree_amortissement">7</field>
+        <field name="projet">Programme Renouvellement Flotte 2024</field>
+        <field name="annee_budget">2024</field>
+        <field name="description">Autobus articulé en attente de réception et de mise en service.</field>
+    </record>
+
+</odoo>

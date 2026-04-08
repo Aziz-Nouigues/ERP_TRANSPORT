@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Rapport cessions lié au modèle patrimoine.cession (standalone) -->
+    <template id="rapport_cession_standalone_template">
+        <t t-call="web.html_container">
+            <t t-call="web.external_layout">
+                <div class="page">
+                    <h2 style="text-align:center">FICHE DE CESSION / SORTIE</h2>
+                    <div style="display:flex;justify-content:space-between;font-size:11px;margin-bottom:10px">
+                        <div><strong>N° Sortie :</strong> <t t-esc="docs.name"/></div>
+                        <div><strong>Type :</strong> <t t-esc="dict(docs._fields['type_sortie'].selection).get(docs.type_sortie,'')"/></div>
+                        <div><strong>Date :</strong> <t t-esc="docs.date.strftime('%d/%m/%Y')"/></div>
+                    </div>
+                    <table style="width:100%;border-collapse:collapse;font-size:11px">
+                        <tr>
+                            <td style="border:1px solid #aaa;padding:5px;width:50%"><strong>Immobilisation :</strong> <t t-esc="docs.immobilisation_id.name"/></td>
+                            <td style="border:1px solid #aaa;padding:5px"><strong>N° Inventaire :</strong> <t t-esc="docs.numero_inventaire"/></td>
+                        </tr>
+                        <tr>
+                            <td style="border:1px solid #aaa;padding:5px"><strong>Motif :</strong> <t t-esc="docs.motif"/></td>
+                            <td style="border:1px solid #aaa;padding:5px"><strong>Acquéreur :</strong> <t t-esc="docs.acheteur_id.name if docs.acheteur_id else '-'"/></td>
+                        </tr>
+                    </table>
+                    <h4 style="margin-top:12px">Calcul financier</h4>
+                    <table style="width:60%;border-collapse:collapse;font-size:11px">
+                        <tr>
+                            <td style="border:1px solid #ddd;padding:4px 8px">Coût d'entrée</td>
+                            <td style="border:1px solid #ddd;padding:4px 8px;text-align:right"><t t-esc="'%.3f' % docs.cout_entree"/> DT</td>
+                        </tr>
+                        <tr>
+                            <td style="border:1px solid #ddd;padding:4px 8px">Amortissements cumulés</td>
+                            <td style="border:1px solid #ddd;padding:4px 8px;text-align:right"><t t-esc="'%.3f' % docs.amortissements_cumules"/> DT</td>
+                        </tr>
+                        <tr>
+                            <td style="border:1px solid #ddd;padding:4px 8px">Dotation complémentaire</td>
+                            <td style="border:1px solid #ddd;padding:4px 8px;text-align:right"><t t-esc="'%.3f' % docs.dotation_complementaire"/> DT</td>
+                        </tr>
+                        <tr style="font-weight:bold;background:#f5f5f5">
+                            <td style="border:1px solid #ddd;padding:4px 8px">VNC à la date de sortie</td>
+                            <td style="border:1px solid #ddd;padding:4px 8px;text-align:right"><t t-esc="'%.3f' % docs.vnc_sortie"/> DT</td>
+                        </tr>
+                        <tr>
+                            <td style="border:1px solid #ddd;padding:4px 8px">Prix de cession</td>
+                            <td style="border:1px solid #ddd;padding:4px 8px;text-align:right"><t t-esc="'%.3f' % docs.prix_cession"/> DT</td>
+                        </tr>
+                        <tr t-attf-style="font-weight:bold;color:#{'green' if docs.plus_moins_value >= 0 else 'red'}">
+                            <td style="border:1px solid #ddd;padding:4px 8px">Plus/Moins-value</td>
+                            <td style="border:1px solid #ddd;padding:4px 8px;text-align:right"><t t-esc="'%.3f' % docs.plus_moins_value"/> DT</td>
+                        </tr>
+                    </table>
+                    <div style="margin-top:30px;display:flex;justify-content:space-between;font-size:11px">
+                        <div style="text-align:center;width:45%;border-top:1px solid #333;padding-top:4px">Responsable patrimoine</div>
+                        <div style="text-align:center;width:45%;border-top:1px solid #333;padding-top:4px">Direction générale</div>
+                    </div>
+                </div>
+            </t>
+        </t>
+    </template>
+
+    <record id="action_rapport_cession_standalone" model="ir.actions.report">
+        <field name="name">Fiche de cession</field>
+        <field name="model">patrimoine.cession</field>
+        <field name="report_type">qweb-pdf</field>
+        <field name="report_name">transport_patrimoine.rapport_cession_standalone_template</field>
+        <field name="binding_model_id" ref="model_patrimoine_cession"/>
+        <field name="binding_type">report</field>
+    </record>
+</odoo>

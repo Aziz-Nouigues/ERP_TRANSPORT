@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- ═══ MOUVEMENT (TRANSFERT) ═══ -->
+    <record id="view_patrimoine_mouvement_form" model="ir.ui.view">
+        <field name="name">patrimoine.mouvement.form</field>
+        <field name="model">patrimoine.mouvement</field>
+        <field name="arch" type="xml">
+            <form string="Transfert d'immobilisation">
+                <header>
+                    <button name="action_confirmer" string="Confirmer le transfert"
+                            type="object" class="btn-primary"
+                            invisible="state != 'brouillon'"/>
+                    <button name="action_annuler" string="Annuler"
+                            type="object"
+                            invisible="state == 'annule'"/>
+                    <button name="action_imprimer_bon_sortie" string="Bon de sortie"
+                            type="object" class="btn-secondary"
+                            invisible="state != 'confirme'"/>
+                    <field name="state" widget="statusbar"
+                           statusbar_visible="brouillon,confirme"/>
+                </header>
+                <sheet>
+                    <div class="oe_title">
+                        <h1><field name="name" readonly="1"/></h1>
+                    </div>
+                    <group>
+                        <group string="Immobilisation">
+                            <field name="immobilisation_id"/>
+                            <field name="numero_inventaire" readonly="1"/>
+                            <field name="date"/>
+                        </group>
+                        <group string="Emplacements">
+                            <field name="emplacement_origine_id"/>
+                            <field name="responsable_origine_id"/>
+                            <field name="emplacement_destination_id"/>
+                            <field name="responsable_destination_id"/>
+                        </group>
+                    </group>
+                    <group>
+                        <field name="motif"/>
+                        <field name="notes"/>
+                    </group>
+                </sheet>
+                <chatter/>
+            </form>
+        </field>
+    </record>
+
+    <record id="view_patrimoine_mouvement_list" model="ir.ui.view">
+        <field name="name">patrimoine.mouvement.list</field>
+        <field name="model">patrimoine.mouvement</field>
+        <field name="arch" type="xml">
+            <list string="Transferts" decoration-muted="state == 'annule'">
+                <field name="name"/>
+                <field name="date"/>
+                <field name="numero_inventaire"/>
+                <field name="immobilisation_id"/>
+                <field name="emplacement_origine_id" string="Origine"/>
+                <field name="emplacement_destination_id" string="Destination"/>
+                <field name="motif"/>
+                <field name="state" widget="badge"
+                       decoration-success="state == 'confirme'"
+                       decoration-warning="state == 'brouillon'"
+                       decoration-danger="state == 'annule'"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="action_patrimoine_mouvement" model="ir.actions.act_window">
+        <field name="name">Transferts</field>
+        <field name="res_model">patrimoine.mouvement</field>
+        <field name="view_mode">list,form</field>
+    </record>
+</odoo>

@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="seq_patrimoine_immobilisation" model="ir.sequence">
+        <field name="name">Immobilisation — N° Inventaire</field>
+        <field name="code">patrimoine.immobilisation</field>
+        <field name="prefix">IMM/%(year)s/</field>
+        <field name="padding">5</field>
+        <field name="number_next">1</field>
+        <field name="number_increment">1</field>
+    </record>
+
+    <record id="seq_patrimoine_mouvement" model="ir.sequence">
+        <field name="name">Patrimoine — Transfert</field>
+        <field name="code">patrimoine.mouvement</field>
+        <field name="prefix">TRF/%(year)s/</field>
+        <field name="padding">4</field>
+        <field name="number_next">1</field>
+        <field name="number_increment">1</field>
+    </record>
+
+    <record id="seq_patrimoine_affectation" model="ir.sequence">
+        <field name="name">Patrimoine — Affectation</field>
+        <field name="code">patrimoine.affectation</field>
+        <field name="prefix">AFF/%(year)s/</field>
+        <field name="padding">4</field>
+        <field name="number_next">1</field>
+        <field name="number_increment">1</field>
+    </record>
+
+    <record id="seq_patrimoine_inventaire" model="ir.sequence">
+        <field name="name">Patrimoine — Inventaire</field>
+        <field name="code">patrimoine.inventaire</field>
+        <field name="prefix">INV/%(year)s/</field>
+        <field name="padding">4</field>
+        <field name="number_next">1</field>
+        <field name="number_increment">1</field>
+    </record>
+
+    <record id="seq_patrimoine_cession" model="ir.sequence">
+        <field name="name">Patrimoine — Cession/Rebut</field>
+        <field name="code">patrimoine.cession</field>
+        <field name="prefix">CES/%(year)s/</field>
+        <field name="padding">4</field>
+        <field name="number_next">1</field>
+        <field name="number_increment">1</field>
+    </record>
+</odoo>

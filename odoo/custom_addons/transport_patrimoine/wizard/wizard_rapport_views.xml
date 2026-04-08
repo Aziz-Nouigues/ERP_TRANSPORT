@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_wizard_rapport_patrimoine_form" model="ir.ui.view">
+        <field name="name">patrimoine.wizard.rapport.form</field>
+        <field name="model">patrimoine.wizard.rapport</field>
+        <field name="arch" type="xml">
+            <form string="Rapports Patrimoine / Immobilisations">
+                <group string="Type de rapport">
+                    <field name="type_rapport" widget="radio" nolabel="1"/>
+                </group>
+                <group string="Période et filtres">
+                    <group>
+                        <field name="annee"/>
+                        <field name="date_debut"/>
+                        <field name="date_fin"/>
+                    </group>
+                    <group>
+                        <field name="categorie_id"/>
+                        <field name="sous_categorie_id"/>
+                        <field name="emplacement_id"/>
+                    </group>
+                </group>
+                <group string="Options avancées">
+                    <group>
+                        <field name="methode_amort_filtre"/>
+                        <field name="taux_filtre"/>
+                        <field name="statut_filtre"/>
+                    </group>
+                    <group>
+                        <field name="projet_filtre"/>
+                        <field name="grouper_par"/>
+                        <field name="inclure_amortis"/>
+                    </group>
+                </group>
+                <footer>
+                    <button name="action_generer" string="Générer le rapport"
+                            type="object" class="btn-primary"/>
+                    <button string="Fermer" class="btn-secondary" special="cancel"/>
+                </footer>
+            </form>
+        </field>
+    </record>
+
+    <record id="action_wizard_rapport_patrimoine" model="ir.actions.act_window">
+        <field name="name">Rapports Patrimoine</field>
+        <field name="res_model">patrimoine.wizard.rapport</field>
+        <field name="view_mode">form</field>
+        <field name="target">new</field>
+    </record>
+</odoo>

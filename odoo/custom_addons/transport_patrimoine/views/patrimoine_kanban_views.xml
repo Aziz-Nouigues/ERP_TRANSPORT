@@ -1,0 +1,153 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <!-- ═══════════════════════════════════════════════════════════
+         VUE KANBAN — IMMOBILISATIONS PAR STATUT
+    ═══════════════════════════════════════════════════════════ -->
+    <record id="view_patrimoine_immobilisation_kanban" model="ir.ui.view">
+        <field name="name">patrimoine.immobilisation.kanban</field>
+        <field name="model">patrimoine.immobilisation</field>
+        <field name="arch" type="xml">
+            <kanban default_group_by="statut" class="o_kanban_small_column"
+                    quick_create="false">
+                <field name="name"/>
+                <field name="numero_inventaire"/>
+                <field name="categorie_id"/>
+                <field name="emplacement_id"/>
+                <field name="statut"/>
+                <field name="cout_entree"/>
+                <field name="valeur_nette_comptable"/>
+                <field name="amortissements_cumules"/>
+                <field name="entierement_amorti"/>
+                <field name="taux_amortissement"/>
+                <field name="date_mise_en_service"/>
+                <field name="methode_amortissement"/>
+                <templates>
+                    <t t-name="card">
+                        <div class="o_kanban_card_header">
+                            <div class="o_kanban_card_header_title">
+                                <div class="o_primary">
+                                    <field name="numero_inventaire"/>
+                                </div>
+                                <div class="o_secondary">
+                                    <field name="name"/>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="o_kanban_card_content">
+                            <div class="o_field_widget">
+                                <span class="badge text-bg-secondary">
+                                    <field name="categorie_id"/>
+                                </span>
+                            </div>
+                            <div t-if="record.emplacement_id.raw_value" class="mt-1">
+                                <i class="fa fa-map-marker me-1 text-muted"/>
+                                <field name="emplacement_id"/>
+                            </div>
+                            <div class="mt-2 row g-0">
+                                <div class="col-6">
+                                    <small class="text-muted">Coût</small>
+                                    <div>
+                                        <field name="cout_entree" widget="monetary"
+                                               options="{'currency_field': false}"/>
+                                    </div>
+                                </div>
+                                <div class="col-6 text-end">
+                                    <small class="text-muted">VNC</small>
+                                    <div>
+                                        <field name="valeur_nette_comptable" widget="monetary"
+                                               options="{'currency_field': false}"/>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="mt-2" t-if="record.cout_entree.raw_value > 0">
+                                <small class="text-muted">
+                                    Amorti : <field name="taux_amortissement"/>%/an —
+                                    <field name="methode_amortissement"/>
+                                </small>
+                                <div class="progress mt-1" style="height: 6px;">
+                                    <div class="progress-bar bg-primary"
+                                         t-att-style="'width:' + Math.min(100, Math.round(record.amortissements_cumules.raw_value / record.cout_entree.raw_value * 100)) + '%'">
+                                    </div>
+                                </div>
+                            </div>
+                            <div t-if="record.entierement_amorti.raw_value"
+                                 class="alert alert-warning py-1 px-2 mt-2 mb-0">
+                                <small><i class="fa fa-warning me-1"/>Entièrement amorti</small>
+                            </div>
+                        </div>
+                    </t>
+                </templates>
+            </kanban>
+        </field>
+    </record>
+
+    <!-- ═══════════════════════════════════════════════════════════
+         VUE PIVOT — ANALYSE DES IMMOBILISATIONS
+    ═══════════════════════════════════════════════════════════ -->
+    <record id="view_patrimoine_immobilisation_pivot" model="ir.ui.view">
+        <field name="name">patrimoine.immobilisation.pivot</field>
+        <field name="model">patrimoine.immobilisation</field>
+        <field name="arch" type="xml">
+            <pivot string="Analyse Patrimoine" disable_linking="True">
+                <field name="categorie_id" type="row"/>
+                <field name="statut" type="col"/>
+                <field name="cout_entree" type="measure" string="Coût total"/>
+                <field name="amortissements_cumules" type="measure" string="Amort. cumulés"/>
+                <field name="valeur_nette_comptable" type="measure" string="VNC"/>
+            </pivot>
+        </field>
+    </record>
+
+    <!-- ═══════════════════════════════════════════════════════════
+         VUE GRAPHIQUE — RÉPARTITION PAR CATÉGORIE
+    ═══════════════════════════════════════════════════════════ -->
+    <record id="view_patrimoine_immobilisation_graph" model="ir.ui.view">
+        <field name="name">patrimoine.immobilisation.graph</field>
+        <field name="model">patrimoine.immobilisation</field>
+        <field name="arch" type="xml">
+            <graph string="Répartition du patrimoine" type="bar" stacked="True">
+                <field name="categorie_id" type="row"/>
+                <field name="cout_entree" type="measure" string="Coût brut"/>
+                <field name="amortissements_cumules" type="measure" string="Amort. cumulés"/>
+                <field name="valeur_nette_comptable" type="measure" string="VNC"/>
+            </graph>
+        </field>
+    </record>
+
+    <!-- Action analyse patrimoine (pivot + graph) — action séparée, pas de redéfinition -->
+    <record id="action_patrimoine_analyse" model="ir.actions.act_window">
+        <field name="name">Analyse Patrimoine</field>
+        <field name="res_model">patrimoine.immobilisation</field>
+        <field name="view_mode">pivot,graph,list,form</field>
+    </record>
+
+    <!-- ═══════════════════════════════════════════════════════════
+         VUE GRAPHIQUE AMORTISSEMENT — DOTATIONS PAR EXERCICE
+    ═══════════════════════════════════════════════════════════ -->
+    <record id="view_patrimoine_amortissement_graph" model="ir.ui.view">
+        <field name="name">patrimoine.amortissement.ligne.graph</field>
+        <field name="model">patrimoine.amortissement.ligne</field>
+        <field name="arch" type="xml">
+            <graph string="Dotations par exercice" type="bar">
+                <field name="annee" type="row"/>
+                <field name="categorie_id" type="col"/>
+                <field name="montant_amortissement" type="measure" string="Dotation (DT)"/>
+            </graph>
+        </field>
+    </record>
+
+    <record id="view_patrimoine_amortissement_pivot" model="ir.ui.view">
+        <field name="name">patrimoine.amortissement.ligne.pivot</field>
+        <field name="model">patrimoine.amortissement.ligne</field>
+        <field name="arch" type="xml">
+            <pivot string="Tableau de bord amortissements">
+                <field name="annee" type="row"/>
+                <field name="categorie_id" type="col"/>
+                <field name="montant_amortissement" type="measure" string="Dotation"/>
+                <field name="amortissements_cumules" type="measure" string="Cumulé"/>
+            </pivot>
+        </field>
+    </record>
+
+</odoo>

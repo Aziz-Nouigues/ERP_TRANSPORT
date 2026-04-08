@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Vue liste globale des lignes d'amortissement -->
+    <record id="view_patrimoine_amortissement_liste" model="ir.ui.view">
+        <field name="name">patrimoine.amortissement.ligne.list</field>
+        <field name="model">patrimoine.amortissement.ligne</field>
+        <field name="arch" type="xml">
+            <list string="Tableau d'amortissement" decoration-success="state == 'valide'"
+                  decoration-muted="state == 'annule'">
+                <field name="immobilisation_id"/>
+                <field name="categorie_id"/>
+                <field name="annee"/>
+                <field name="date_debut"/>
+                <field name="date_fin"/>
+                <field name="taux_applique" string="Taux (%)"/>
+                <field name="montant_amortissement" string="Dotation (DT)"/>
+                <field name="amortissements_cumules" string="Cumulé (DT)"/>
+                <field name="valeur_nette" string="VNC (DT)"/>
+                <field name="state" widget="badge"
+                       decoration-success="state == 'valide'"
+                       decoration-warning="state == 'brouillon'"
+                       decoration-danger="state == 'annule'"/>
+                <field name="move_id" string="Écriture" optional="show"/>
+                <button name="action_valider" string="Comptabiliser"
+                        type="object" class="btn-sm btn-primary"
+                        invisible="state != 'brouillon'"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="view_patrimoine_amortissement_search" model="ir.ui.view">
+        <field name="name">patrimoine.amortissement.ligne.search</field>
+        <field name="model">patrimoine.amortissement.ligne</field>
+        <field name="arch" type="xml">
+            <search>
+                <field name="immobilisation_id"/>
+                <field name="categorie_id"/>
+                <field name="annee"/>
+                <filter string="Prévisionnels" name="brouillon"
+                        domain="[('state','=','brouillon')]"/>
+                <filter string="Comptabilisés" name="valide"
+                        domain="[('state','=','valide')]"/>
+                <group>
+                    <filter string="Catégorie" name="g_cat"
+                            context="{'group_by':'categorie_id'}"/>
+                    <filter string="Exercice" name="g_annee"
+                            context="{'group_by':'annee'}"/>
+                    <filter string="Immobilisation" name="g_immo"
+                            context="{'group_by':'immobilisation_id'}"/>
+                </group>
+            </search>
+        </field>
+    </record>
+
+    <record id="action_patrimoine_amortissement" model="ir.actions.act_window">
+        <field name="name">Tableau d'amortissement</field>
+        <field name="res_model">patrimoine.amortissement.ligne</field>
+        <field name="view_mode">list,pivot,graph</field>
+        <field name="search_view_id" ref="view_patrimoine_amortissement_search"/>
+        <field name="context">{'search_default_brouillon': 1}</field>
+    </record>
+</odoo>

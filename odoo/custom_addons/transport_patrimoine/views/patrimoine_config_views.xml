@@ -1,0 +1,125 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <!-- ═══ CATÉGORIE ═══ -->
+    <record id="view_patrimoine_categorie_form" model="ir.ui.view">
+        <field name="name">patrimoine.categorie.form</field>
+        <field name="model">patrimoine.categorie</field>
+        <field name="arch" type="xml">
+            <form string="Catégorie d'immobilisation">
+                <sheet>
+                    <group>
+                        <group string="Identification">
+                            <field name="name"/>
+                            <field name="code"/>
+                            <field name="actif"/>
+                        </group>
+                        <group string="Amortissement par défaut">
+                            <field name="methode_amortissement"/>
+                            <field name="duree_amortissement"/>
+                            <field name="taux_degressif"
+                                   invisible="methode_amortissement != 'degressif'"/>
+                        </group>
+                    </group>
+                    <group string="Comptes comptables">
+                        <group>
+                            <field name="compte_immobilisation_id"
+                                   domain="[('account_type','like','asset')]"/>
+                            <field name="compte_amortissement_id"/>
+                            <field name="compte_dotation_id"/>
+                        </group>
+                        <group>
+                            <field name="compte_cession_id"/>
+                            <field name="compte_perte_id"/>
+                            <field name="compte_depreciation_id"/>
+                        </group>
+                    </group>
+                    <separator string="Sous-catégories"/>
+                    <field name="sous_categorie_ids" mode="list">
+                        <list string="Sous-catégories" editable="bottom">
+                            <field name="code"/>
+                            <field name="name"/>
+                            <field name="methode_amortissement"/>
+                            <field name="duree_amortissement"/>
+                            <field name="actif"/>
+                        </list>
+                    </field>
+                    <field name="notes" placeholder="Notes…"/>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="view_patrimoine_categorie_list" model="ir.ui.view">
+        <field name="name">patrimoine.categorie.list</field>
+        <field name="model">patrimoine.categorie</field>
+        <field name="arch" type="xml">
+            <list string="Catégories">
+                <field name="code"/>
+                <field name="name"/>
+                <field name="methode_amortissement"/>
+                <field name="duree_amortissement"/>
+                <field name="nb_immobilisations"/>
+                <field name="actif"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="action_patrimoine_categorie" model="ir.actions.act_window">
+        <field name="name">Catégories</field>
+        <field name="res_model">patrimoine.categorie</field>
+        <field name="view_mode">list,form</field>
+    </record>
+
+    <!-- ═══ EMPLACEMENT ═══ -->
+    <record id="view_patrimoine_emplacement_form" model="ir.ui.view">
+        <field name="name">patrimoine.emplacement.form</field>
+        <field name="model">patrimoine.emplacement</field>
+        <field name="arch" type="xml">
+            <form string="Emplacement">
+                <sheet>
+                    <group>
+                        <group string="Localisation">
+                            <field name="name"/>
+                            <field name="site"/>
+                            <field name="batiment"/>
+                            <field name="etage"/>
+                            <field name="bureau"/>
+                            <field name="code"/>
+                        </group>
+                        <group string="Responsabilité">
+                            <field name="department_id"/>
+                            <field name="responsable_id"/>
+                            <field name="actif"/>
+                        </group>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="view_patrimoine_emplacement_list" model="ir.ui.view">
+        <field name="name">patrimoine.emplacement.list</field>
+        <field name="model">patrimoine.emplacement</field>
+        <field name="arch" type="xml">
+            <list string="Emplacements" editable="bottom">
+                <field name="name"/>
+                <field name="site"/>
+                <field name="batiment"/>
+                <field name="etage"/>
+                <field name="bureau"/>
+                <field name="code"/>
+                <field name="department_id"/>
+                <field name="responsable_id"/>
+                <field name="actif"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="action_patrimoine_emplacement" model="ir.actions.act_window">
+        <field name="name">Emplacements</field>
+        <field name="res_model">patrimoine.emplacement</field>
+        <field name="view_mode">list,form</field>
+    </record>
+
+</odoo>

@@ -1,0 +1,260 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- ═══════════════════════════════════════════════
+         TEMPLATE : TABLEAU D'AMORTISSEMENT
+    ═══════════════════════════════════════════════ -->
+    <template id="rapport_tableau_amortissement_template">
+        <t t-call="web.html_container">
+            <t t-call="web.external_layout">
+                <div class="page">
+                    <style>
+                        .pat-header { border-bottom: 2px solid #333; margin-bottom: 12px; }
+                        .pat-title { font-size: 16px; font-weight: bold; text-align: center; margin-bottom: 4px; }
+                        .pat-subtitle { font-size: 12px; text-align: center; color: #555; }
+                        .pat-table { width: 100%; border-collapse: collapse; font-size: 10px; margin-top: 8px; }
+                        .pat-table th { background-color: #2c5f8a; color: white; padding: 4px 6px; text-align: center; font-size: 9px; }
+                        .pat-table td { padding: 3px 6px; border: 1px solid #ddd; }
+                        .pat-table tr:nth-child(even) { background-color: #f5f5f5; }
+                        .pat-table .total-row { font-weight: bold; background-color: #e8f0fe; }
+                        .pat-cat-header { background-color: #d4e6f1; font-weight: bold; font-size: 10px; }
+                        .text-right { text-align: right; }
+                        .text-center { text-align: center; }
+                        .badge-valide { color: green; font-weight: bold; }
+                        .badge-brouillon { color: orange; }
+                    </style>
+
+                    <!-- En-tête -->
+                    <div class="pat-header">
+                        <div class="pat-title">TABLEAU D'AMORTISSEMENT DES IMMOBILISATIONS</div>
+                        <div class="pat-subtitle">
+                            Exercice : <t t-esc="docs.annee"/> —
+                            Catégorie : <t t-esc="docs.categorie_id.name if docs.categorie_id else 'Toutes'"/> —
+                            Méthode : <t t-esc="docs.methode_amort_filtre"/>
+                        </div>
+                        <div class="pat-subtitle">Édité le : <span t-esc="context_timestamp(datetime.datetime.now()).strftime('%d/%m/%Y')"/></div>
+                    </div>
+
+                    <!-- Tableau groupé par immobilisation -->
+                    <t t-set="lignes" t-value="docs._get_lignes_amortissement_annee()"/>
+                    <t t-set="immobilisations_vues" t-value="[]"/>
+
+                    <table class="pat-table">
+                        <thead>
+                            <tr>
+                                <th>N° Inv.</th>
+                                <th>Désignation</th>
+                                <th>Catégorie</th>
+                                <th>Date M.E.S.</th>
+                                <th>Coût entrée</th>
+                                <th>Méthode</th>
+                                <th>Durée</th>
+                                <th>Taux (%)</th>
+                                <th>Exercice</th>
+                                <th>Dotation (DT)</th>
+                                <th>Cumulé (DT)</th>
+                                <th>VNC (DT)</th>
+                                <th>État</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <t t-set="total_dotation" t-value="0"/>
+                            <t t-foreach="lignes" t-as="ligne">
+                                <tr>
+                                    <td><t t-esc="ligne.immobilisation_id.numero_inventaire"/></td>
+                                    <td><t t-esc="ligne.immobilisation_id.name"/></td>
+                                    <td><t t-esc="ligne.categorie_id.name"/></td>
+                                    <td class="text-center">
+                                        <t t-esc="ligne.immobilisation_id.date_mise_en_service.strftime('%d/%m/%Y') if ligne.immobilisation_id.date_mise_en_service else '-'"/>
+                                    </td>
+                                    <td class="text-right">
+                                        <t t-esc="'%.3f' % ligne.immobilisation_id.cout_entree"/>
+                                    </td>
+                                    <td class="text-center">
+                                        <t t-esc="dict(ligne.immobilisation_id._fields['methode_amortissement'].selection).get(ligne.immobilisation_id.methode_amortissement,'')"/>
+                                    </td>
+                                    <td class="text-center"><t t-esc="ligne.immobilisation_id.duree_amortissement"/> ans</td>
+                                    <td class="text-center"><t t-esc="'%.2f' % ligne.taux_applique"/>%</td>
+                                    <td class="text-center"><t t-esc="ligne.annee"/></td>
+                                    <td class="text-right"><t t-esc="'%.3f' % ligne.montant_amortissement"/></td>
+                                    <td class="text-right"><t t-esc="'%.3f' % ligne.amortissements_cumules"/></td>
+                                    <td class="text-right"><t t-esc="'%.3f' % ligne.valeur_nette"/></td>
+                                    <td class="text-center">
+                                        <span t-attf-class="badge-#{ligne.state}">
+                                            <t t-esc="dict(ligne._fields['state'].selection).get(ligne.state,'')"/>
+                                        </span>
+                                    </td>
+                                </tr>
+                                <t t-set="total_dotation" t-value="total_dotation + ligne.montant_amortissement"/>
+                            </t>
+                            <!-- Ligne total -->
+                            <tr class="total-row">
+                                <td colspan="9" class="text-right">TOTAL DOTATIONS EXERCICE <t t-esc="docs.annee"/> :</td>
+                                <td class="text-right"><t t-esc="'%.3f' % total_dotation"/> DT</td>
+                                <td colspan="3"></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </t>
+        </t>
+    </template>
+
+    <!-- ═══ ACTION RAPPORT ═══ -->
+    <record id="action_rapport_tableau_amortissement" model="ir.actions.report">
+        <field name="name">Tableau d'amortissement</field>
+        <field name="model">patrimoine.wizard.rapport</field>
+        <field name="report_type">qweb-pdf</field>
+        <field name="report_name">transport_patrimoine.rapport_tableau_amortissement_template</field>
+        <field name="report_file">transport_patrimoine.rapport_tableau_amortissement_template</field>
+        <field name="binding_model_id" ref="model_patrimoine_wizard_rapport"/>
+        <field name="binding_type">report</field>
+    </record>
+
+    <!-- ═══ RAPPORT PAR TYPE ═══ -->
+    <template id="rapport_tableau_par_type_template">
+        <t t-call="web.html_container">
+            <t t-call="web.external_layout">
+                <div class="page">
+                    <h2 style="text-align:center">TABLEAU D'AMORTISSEMENT PAR TYPE</h2>
+                    <p style="text-align:center;color:#555">Exercice <t t-esc="docs.annee"/></p>
+                    <t t-set="categories" t-value="docs.env['patrimoine.categorie'].search([('actif','=',True)])"/>
+                    <t t-foreach="categories" t-as="cat">
+                        <t t-set="lignes_cat" t-value="docs._get_lignes_amortissement_annee().filtered(lambda l: l.categorie_id.id == cat.id)"/>
+                        <t t-if="lignes_cat">
+                            <h4 style="background:#2c5f8a;color:white;padding:4px 8px;margin-top:12px">
+                                <t t-esc="cat.code"/> — <t t-esc="cat.name"/>
+                            </h4>
+                            <table style="width:100%;border-collapse:collapse;font-size:10px">
+                                <thead>
+                                    <tr style="background:#d4e6f1">
+                                        <th style="padding:3px 6px;border:1px solid #ccc">N° Inv.</th>
+                                        <th style="padding:3px 6px;border:1px solid #ccc">Désignation</th>
+                                        <th style="padding:3px 6px;border:1px solid #ccc;text-align:right">Coût entrée</th>
+                                        <th style="padding:3px 6px;border:1px solid #ccc;text-align:right">Dotation</th>
+                                        <th style="padding:3px 6px;border:1px solid #ccc;text-align:right">Cumulé</th>
+                                        <th style="padding:3px 6px;border:1px solid #ccc;text-align:right">VNC</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <t t-set="sous_total" t-value="0"/>
+                                    <t t-foreach="lignes_cat" t-as="l">
+                                        <tr>
+                                            <td style="border:1px solid #ddd;padding:3px 6px"><t t-esc="l.immobilisation_id.numero_inventaire"/></td>
+                                            <td style="border:1px solid #ddd;padding:3px 6px"><t t-esc="l.immobilisation_id.name"/></td>
+                                            <td style="border:1px solid #ddd;padding:3px 6px;text-align:right"><t t-esc="'%.3f' % l.immobilisation_id.cout_entree"/></td>
+                                            <td style="border:1px solid #ddd;padding:3px 6px;text-align:right"><t t-esc="'%.3f' % l.montant_amortissement"/></td>
+                                            <td style="border:1px solid #ddd;padding:3px 6px;text-align:right"><t t-esc="'%.3f' % l.amortissements_cumules"/></td>
+                                            <td style="border:1px solid #ddd;padding:3px 6px;text-align:right"><t t-esc="'%.3f' % l.valeur_nette"/></td>
+                                        </tr>
+                                        <t t-set="sous_total" t-value="sous_total + l.montant_amortissement"/>
+                                    </t>
+                                    <tr style="background:#e8f0fe;font-weight:bold">
+                                        <td colspan="3" style="border:1px solid #ddd;padding:3px 6px;text-align:right">Sous-total <t t-esc="cat.name"/> :</td>
+                                        <td style="border:1px solid #ddd;padding:3px 6px;text-align:right"><t t-esc="'%.3f' % sous_total"/> DT</td>
+                                        <td colspan="2"></td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </t>
+                    </t>
+                </div>
+            </t>
+        </t>
+    </template>
+
+    <record id="action_rapport_tableau_par_type" model="ir.actions.report">
+        <field name="name">Tableau d'amortissement par type</field>
+        <field name="model">patrimoine.wizard.rapport</field>
+        <field name="report_type">qweb-pdf</field>
+        <field name="report_name">transport_patrimoine.rapport_tableau_par_type_template</field>
+    </record>
+
+    <!-- ═══ RAPPORT RÉSUMÉ PAR CATÉGORIE ═══ -->
+    <template id="rapport_resume_categorie_template">
+        <t t-call="web.html_container">
+            <t t-call="web.external_layout">
+                <div class="page">
+                    <h2 style="text-align:center">RÉSUMÉ DES AMORTISSEMENTS PAR CATÉGORIE</h2>
+                    <p style="text-align:center;color:#555">Exercice <t t-esc="docs.annee"/></p>
+                    <table style="width:100%;border-collapse:collapse;font-size:11px;margin-top:12px">
+                        <thead>
+                            <tr style="background:#2c5f8a;color:white">
+                                <th style="padding:5px 8px">Code</th>
+                                <th style="padding:5px 8px">Catégorie</th>
+                                <th style="padding:5px 8px;text-align:right">Nb immo.</th>
+                                <th style="padding:5px 8px;text-align:right">Coût total</th>
+                                <th style="padding:5px 8px;text-align:right">Dotation année</th>
+                                <th style="padding:5px 8px;text-align:right">Cumulé total</th>
+                                <th style="padding:5px 8px;text-align:right">VNC total</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <t t-set="grand_total_dot" t-value="0"/>
+                            <t t-set="grand_total_vnc" t-value="0"/>
+                            <t t-set="grand_total_cout" t-value="0"/>
+                            <t t-set="categories" t-value="docs.env['patrimoine.categorie'].search([('actif','=',True)])"/>
+                            <t t-foreach="categories" t-as="cat">
+                                <t t-set="immos_cat" t-value="docs.env['patrimoine.immobilisation'].search([('categorie_id','=',cat.id),('statut','not in',['cede','rebut'])])"/>
+                                <t t-if="immos_cat">
+                                    <t t-set="cout_cat" t-value="sum(i.cout_entree for i in immos_cat)"/>
+                                    <t t-set="dot_cat" t-value="sum(l.montant_amortissement for l in docs._get_lignes_amortissement_annee() if l.categorie_id.id == cat.id)"/>
+                                    <t t-set="cumul_cat" t-value="sum(i.amortissements_cumules for i in immos_cat)"/>
+                                    <t t-set="vnc_cat" t-value="sum(i.valeur_nette_comptable for i in immos_cat)"/>
+                                    <tr>
+                                        <td style="border:1px solid #ddd;padding:4px 8px"><t t-esc="cat.code"/></td>
+                                        <td style="border:1px solid #ddd;padding:4px 8px"><t t-esc="cat.name"/></td>
+                                        <td style="border:1px solid #ddd;padding:4px 8px;text-align:right"><t t-esc="len(immos_cat)"/></td>
+                                        <td style="border:1px solid #ddd;padding:4px 8px;text-align:right"><t t-esc="'%.3f' % cout_cat"/></td>
+                                        <td style="border:1px solid #ddd;padding:4px 8px;text-align:right"><t t-esc="'%.3f' % dot_cat"/></td>
+                                        <td style="border:1px solid #ddd;padding:4px 8px;text-align:right"><t t-esc="'%.3f' % cumul_cat"/></td>
+                                        <td style="border:1px solid #ddd;padding:4px 8px;text-align:right"><t t-esc="'%.3f' % vnc_cat"/></td>
+                                    </tr>
+                                    <t t-set="grand_total_dot" t-value="grand_total_dot + dot_cat"/>
+                                    <t t-set="grand_total_vnc" t-value="grand_total_vnc + vnc_cat"/>
+                                    <t t-set="grand_total_cout" t-value="grand_total_cout + cout_cat"/>
+                                </t>
+                            </t>
+                            <tr style="background:#2c5f8a;color:white;font-weight:bold">
+                                <td colspan="3" style="padding:5px 8px;text-align:right">TOTAL GÉNÉRAL :</td>
+                                <td style="padding:5px 8px;text-align:right"><t t-esc="'%.3f' % grand_total_cout"/> DT</td>
+                                <td style="padding:5px 8px;text-align:right"><t t-esc="'%.3f' % grand_total_dot"/> DT</td>
+                                <td style="padding:5px 8px;text-align:right"></td>
+                                <td style="padding:5px 8px;text-align:right"><t t-esc="'%.3f' % grand_total_vnc"/> DT</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </t>
+        </t>
+    </template>
+
+    <record id="action_rapport_resume_categorie" model="ir.actions.report">
+        <field name="name">Résumé amortissements par catégorie</field>
+        <field name="model">patrimoine.wizard.rapport</field>
+        <field name="report_type">qweb-pdf</field>
+        <field name="report_name">transport_patrimoine.rapport_resume_categorie_template</field>
+    </record>
+
+    <!-- Actions placeholder pour les autres types de rapport (même pattern) -->
+    <record id="action_rapport_tableau_par_categorie" model="ir.actions.report">
+        <field name="name">Tableau d'amortissement par catégorie</field>
+        <field name="model">patrimoine.wizard.rapport</field>
+        <field name="report_type">qweb-pdf</field>
+        <field name="report_name">transport_patrimoine.rapport_tableau_par_type_template</field>
+    </record>
+
+    <record id="action_rapport_tableau_par_projet" model="ir.actions.report">
+        <field name="name">Tableau d'amortissement par projet</field>
+        <field name="model">patrimoine.wizard.rapport</field>
+        <field name="report_type">qweb-pdf</field>
+        <field name="report_name">transport_patrimoine.rapport_tableau_par_type_template</field>
+    </record>
+
+    <record id="action_rapport_resume_groupe" model="ir.actions.report">
+        <field name="name">Résumé par groupe</field>
+        <field name="model">patrimoine.wizard.rapport</field>
+        <field name="report_type">qweb-pdf</field>
+        <field name="report_name">transport_patrimoine.rapport_resume_categorie_template</field>
+    </record>
+
+</odoo>

@@ -1,0 +1,219 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- ═══ RAPPORT DISTRIBUTION (liste distribution des actifs) ═══ -->
+    <template id="rapport_distribution_template">
+        <t t-call="web.html_container">
+            <t t-call="web.external_layout">
+                <div class="page">
+                    <h2 style="text-align:center">LISTE DE DISTRIBUTION DES IMMOBILISATIONS</h2>
+                    <p style="text-align:center;color:#555">
+                        Édité le : <t t-esc="docs.env['res.lang'].search([('code','=','fr_FR')],limit=1).format_date(docs.env, fields.Date.today()) if True else ''"/>
+                    </p>
+                    <t t-set="affectations" t-value="docs._get_distribution()"/>
+                    <table style="width:100%;border-collapse:collapse;font-size:10px;margin-top:12px">
+                        <thead>
+                            <tr style="background:#2c5f8a;color:white">
+                                <th style="padding:4px 6px">N° Affectation</th>
+                                <th style="padding:4px 6px">N° Inv.</th>
+                                <th style="padding:4px 6px">Désignation</th>
+                                <th style="padding:4px 6px">Catégorie</th>
+                                <th style="padding:4px 6px">Bénéficiaire</th>
+                                <th style="padding:4px 6px">Département</th>
+                                <th style="padding:4px 6px">Emplacement</th>
+                                <th style="padding:4px 6px;text-align:center">Date aff.</th>
+                                <th style="padding:4px 6px;text-align:right">Qté</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <t t-foreach="affectations" t-as="aff">
+                                <tr t-attf-style="background:#{'#f5f5f5' if aff_odd else 'white'}">
+                                    <td style="border:1px solid #ddd;padding:3px 6px"><t t-esc="aff.name"/></td>
+                                    <td style="border:1px solid #ddd;padding:3px 6px"><t t-esc="aff.numero_inventaire"/></td>
+                                    <td style="border:1px solid #ddd;padding:3px 6px"><t t-esc="aff.immobilisation_id.name"/></td>
+                                    <td style="border:1px solid #ddd;padding:3px 6px"><t t-esc="aff.immobilisation_id.categorie_id.name"/></td>
+                                    <td style="border:1px solid #ddd;padding:3px 6px"><t t-esc="aff.beneficiaire_id.name if aff.beneficiaire_id else '-'"/></td>
+                                    <td style="border:1px solid #ddd;padding:3px 6px"><t t-esc="aff.department_id.name if aff.department_id else '-'"/></td>
+                                    <td style="border:1px solid #ddd;padding:3px 6px"><t t-esc="aff.emplacement_id.display_name if aff.emplacement_id else '-'"/></td>
+                                    <td style="border:1px solid #ddd;padding:3px 6px;text-align:center"><t t-esc="aff.date.strftime('%d/%m/%Y')"/></td>
+                                    <td style="border:1px solid #ddd;padding:3px 6px;text-align:right"><t t-esc="'%.0f' % aff.quantite"/></td>
+                                </tr>
+                            </t>
+                            <t t-if="not affectations">
+                                <tr>
+                                    <td colspan="9" style="text-align:center;padding:12px;color:#777;font-style:italic">
+                                        Aucune affectation active trouvée.
+                                    </td>
+                                </tr>
+                            </t>
+                        </tbody>
+                    </table>
+                    <p style="font-size:9px;color:#777;margin-top:8px">
+                        Nombre d'affectations actives : <t t-esc="len(affectations)"/>
+                    </p>
+                </div>
+            </t>
+        </t>
+    </template>
+
+    <record id="action_rapport_distribution" model="ir.actions.report">
+        <field name="name">Liste de distribution des actifs</field>
+        <field name="model">patrimoine.wizard.rapport</field>
+        <field name="report_type">qweb-pdf</field>
+        <field name="report_name">transport_patrimoine.rapport_distribution_template</field>
+    </record>
+
+    <!-- ═══ LISTE DES TRANSFERTS ═══ -->
+    <template id="rapport_transferts_template">
+        <t t-call="web.html_container">
+            <t t-call="web.external_layout">
+                <div class="page">
+                    <h2 style="text-align:center">LISTE DES TRANSFERTS D'IMMOBILISATIONS</h2>
+                    <p style="text-align:center;color:#555">
+                        Du <t t-esc="docs.date_debut.strftime('%d/%m/%Y')"/>
+                        au <t t-esc="docs.date_fin.strftime('%d/%m/%Y')"/>
+                    </p>
+                    <t t-set="transferts" t-value="docs._get_transferts()"/>
+                    <table style="width:100%;border-collapse:collapse;font-size:10px;margin-top:12px">
+                        <thead>
+                            <tr style="background:#2c5f8a;color:white">
+                                <th style="padding:4px 6px">N° Transfert</th>
+                                <th style="padding:4px 6px;text-align:center">Date</th>
+                                <th style="padding:4px 6px">N° Inv.</th>
+                                <th style="padding:4px 6px">Désignation</th>
+                                <th style="padding:4px 6px">Origine</th>
+                                <th style="padding:4px 6px">Destination</th>
+                                <th style="padding:4px 6px">Responsable</th>
+                                <th style="padding:4px 6px">Motif</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <t t-foreach="transferts" t-as="t">
+                                <tr t-attf-style="background:#{'#f5f5f5' if t_odd else 'white'}">
+                                    <td style="border:1px solid #ddd;padding:3px 6px"><t t-esc="t.name"/></td>
+                                    <td style="border:1px solid #ddd;padding:3px 6px;text-align:center"><t t-esc="t.date.strftime('%d/%m/%Y')"/></td>
+                                    <td style="border:1px solid #ddd;padding:3px 6px"><t t-esc="t.numero_inventaire"/></td>
+                                    <td style="border:1px solid #ddd;padding:3px 6px"><t t-esc="t.immobilisation_id.name"/></td>
+                                    <td style="border:1px solid #ddd;padding:3px 6px"><t t-esc="t.emplacement_origine_id.display_name if t.emplacement_origine_id else '-'"/></td>
+                                    <td style="border:1px solid #ddd;padding:3px 6px"><t t-esc="t.emplacement_destination_id.display_name if t.emplacement_destination_id else '-'"/></td>
+                                    <td style="border:1px solid #ddd;padding:3px 6px"><t t-esc="t.responsable_destination_id.name if t.responsable_destination_id else '-'"/></td>
+                                    <td style="border:1px solid #ddd;padding:3px 6px"><t t-esc="t.motif or '-'"/></td>
+                                </tr>
+                            </t>
+                        </tbody>
+                    </table>
+                    <p style="font-size:9px;color:#777;margin-top:8px">
+                        Nombre de transferts : <t t-esc="len(transferts)"/>
+                    </p>
+                </div>
+            </t>
+        </t>
+    </template>
+
+    <record id="action_rapport_transferts" model="ir.actions.report">
+        <field name="name">Liste des transferts</field>
+        <field name="model">patrimoine.wizard.rapport</field>
+        <field name="report_type">qweb-pdf</field>
+        <field name="report_name">transport_patrimoine.rapport_transferts_template</field>
+    </record>
+
+    <!-- ═══ LISTE ÉCARTS (depuis wizard) ═══ -->
+    <record id="action_rapport_ecarts" model="ir.actions.report">
+        <field name="name">Liste des écarts d'inventaire</field>
+        <field name="model">patrimoine.wizard.rapport</field>
+        <field name="report_type">qweb-pdf</field>
+        <field name="report_name">transport_patrimoine.rapport_bordereau_ecarts_template</field>
+    </record>
+
+    <!-- ═══ BON DE SORTIE MAGASIN (Mouvement) ═══ -->
+    <template id="rapport_bon_sortie_template">
+        <t t-call="web.html_container">
+            <t t-call="web.external_layout">
+                <div class="page">
+                    <h2 style="text-align:center;border:2px solid #333;padding:8px">
+                        BON DE SORTIE MAGASIN
+                    </h2>
+                    <div style="display:flex;justify-content:space-between;margin:12px 0;font-size:11px">
+                        <div><strong>N° Transfert :</strong> <t t-esc="docs.name"/></div>
+                        <div><strong>Date :</strong> <t t-esc="docs.date.strftime('%d/%m/%Y')"/></div>
+                    </div>
+                    <table style="width:100%;border-collapse:collapse;font-size:11px;margin-top:8px">
+                        <tr>
+                            <td style="border:1px solid #aaa;padding:6px;width:50%"><strong>Immobilisation :</strong> <t t-esc="docs.immobilisation_id.name"/></td>
+                            <td style="border:1px solid #aaa;padding:6px"><strong>N° Inventaire :</strong> <t t-esc="docs.numero_inventaire"/></td>
+                        </tr>
+                        <tr>
+                            <td style="border:1px solid #aaa;padding:6px"><strong>Emplacement origine :</strong> <t t-esc="docs.emplacement_origine_id.display_name"/></td>
+                            <td style="border:1px solid #aaa;padding:6px"><strong>Emplacement destination :</strong> <t t-esc="docs.emplacement_destination_id.display_name"/></td>
+                        </tr>
+                        <tr>
+                            <td style="border:1px solid #aaa;padding:6px"><strong>Responsable sortant :</strong> <t t-esc="docs.responsable_origine_id.name if docs.responsable_origine_id else '-'"/></td>
+                            <td style="border:1px solid #aaa;padding:6px"><strong>Responsable entrant :</strong> <t t-esc="docs.responsable_destination_id.name if docs.responsable_destination_id else '-'"/></td>
+                        </tr>
+                        <tr>
+                            <td colspan="2" style="border:1px solid #aaa;padding:6px"><strong>Motif :</strong> <t t-esc="docs.motif"/></td>
+                        </tr>
+                    </table>
+                    <div style="margin-top:40px;display:flex;justify-content:space-between;font-size:11px">
+                        <div style="text-align:center;width:30%;border-top:1px solid #333;padding-top:4px">Remis par</div>
+                        <div style="text-align:center;width:30%;border-top:1px solid #333;padding-top:4px">Reçu par</div>
+                        <div style="text-align:center;width:30%;border-top:1px solid #333;padding-top:4px">Visa responsable</div>
+                    </div>
+                </div>
+            </t>
+        </t>
+    </template>
+
+    <record id="action_rapport_bon_sortie" model="ir.actions.report">
+        <field name="name">Bon de sortie magasin (Transfert)</field>
+        <field name="model">patrimoine.mouvement</field>
+        <field name="report_type">qweb-pdf</field>
+        <field name="report_name">transport_patrimoine.rapport_bon_sortie_template</field>
+        <field name="binding_model_id" ref="model_patrimoine_mouvement"/>
+        <field name="binding_type">report</field>
+    </record>
+
+    <!-- ═══ BON DE SORTIE AFFECTATION ═══ -->
+    <template id="rapport_bon_sortie_affectation_template">
+        <t t-call="web.html_container">
+            <t t-call="web.external_layout">
+                <div class="page">
+                    <h2 style="text-align:center;border:2px solid #333;padding:8px">
+                        BON DE SORTIE — PREMIÈRE AFFECTATION
+                    </h2>
+                    <table style="width:100%;border-collapse:collapse;font-size:11px;margin-top:12px">
+                        <tr>
+                            <td style="border:1px solid #aaa;padding:6px"><strong>N° Affectation :</strong> <t t-esc="docs.name"/></td>
+                            <td style="border:1px solid #aaa;padding:6px"><strong>Date :</strong> <t t-esc="docs.date.strftime('%d/%m/%Y')"/></td>
+                        </tr>
+                        <tr>
+                            <td style="border:1px solid #aaa;padding:6px"><strong>Immobilisation :</strong> <t t-esc="docs.immobilisation_id.name"/></td>
+                            <td style="border:1px solid #aaa;padding:6px"><strong>N° Inventaire :</strong> <t t-esc="docs.numero_inventaire"/></td>
+                        </tr>
+                        <tr>
+                            <td style="border:1px solid #aaa;padding:6px"><strong>Bénéficiaire :</strong> <t t-esc="docs.beneficiaire_id.name if docs.beneficiaire_id else '-'"/></td>
+                            <td style="border:1px solid #aaa;padding:6px"><strong>Département :</strong> <t t-esc="docs.department_id.name if docs.department_id else '-'"/></td>
+                        </tr>
+                        <tr>
+                            <td style="border:1px solid #aaa;padding:6px"><strong>Emplacement :</strong> <t t-esc="docs.emplacement_id.display_name if docs.emplacement_id else '-'"/></td>
+                            <td style="border:1px solid #aaa;padding:6px"><strong>Quantité :</strong> <t t-esc="'%.0f' % docs.quantite"/></td>
+                        </tr>
+                    </table>
+                    <div style="margin-top:40px;display:flex;justify-content:space-between;font-size:11px">
+                        <div style="text-align:center;width:45%;border-top:1px solid #333;padding-top:4px">Remis par (magasinier)</div>
+                        <div style="text-align:center;width:45%;border-top:1px solid #333;padding-top:4px">Reçu par (bénéficiaire)</div>
+                    </div>
+                </div>
+            </t>
+        </t>
+    </template>
+
+    <record id="action_rapport_bon_sortie_affectation" model="ir.actions.report">
+        <field name="name">Bon de sortie — Affectation</field>
+        <field name="model">patrimoine.affectation</field>
+        <field name="report_type">qweb-pdf</field>
+        <field name="report_name">transport_patrimoine.rapport_bon_sortie_affectation_template</field>
+        <field name="binding_model_id" ref="model_patrimoine_affectation"/>
+        <field name="binding_type">report</field>
+    </record>
+
+</odoo>

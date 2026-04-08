@@ -1,0 +1,122 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_patrimoine_inventaire_form" model="ir.ui.view">
+        <field name="name">patrimoine.inventaire.form</field>
+        <field name="model">patrimoine.inventaire</field>
+        <field name="arch" type="xml">
+            <form string="Inventaire des immobilisations">
+                <header>
+                    <button name="action_charger_immobilisations"
+                            string="Charger les immobilisations"
+                            type="object" class="btn-primary"
+                            invisible="state not in ('ouvert','en_cours')"/>
+                    <button name="action_valider" string="Valider et appliquer les écarts"
+                            type="object" class="btn-primary"
+                            invisible="state != 'en_cours'"/>
+                    <button name="action_imprimer_bordereau" string="Bordereau d'inventaire"
+                            type="object" class="btn-secondary"/>
+                    <button name="action_imprimer_ecarts" string="Bordereau des écarts"
+                            type="object" class="btn-secondary"
+                            invisible="state not in ('en_cours','cloture','valide')"/>
+                    <field name="state" widget="statusbar"
+                           statusbar_visible="ouvert,en_cours,valide"/>
+                </header>
+                <sheet>
+                    <div class="o_stat_buttons">
+                        <div class="o_stat_button" icon="fa-list">
+                            <div class="o_stat_info">
+                                <span class="o_stat_value"><field name="nb_immobilisations"/></span>
+                                <span class="o_stat_text">Total</span>
+                            </div>
+                        </div>
+                        <div class="o_stat_button" icon="fa-check-circle">
+                            <div class="o_stat_info">
+                                <span class="o_stat_value"><field name="nb_retrouvees"/></span>
+                                <span class="o_stat_text">Retrouvées</span>
+                            </div>
+                        </div>
+                        <div class="o_stat_button" icon="fa-exclamation-triangle">
+                            <div class="o_stat_info">
+                                <span class="o_stat_value"><field name="nb_manquantes"/></span>
+                                <span class="o_stat_text">Manquantes</span>
+                            </div>
+                        </div>
+                        <div class="o_stat_button" icon="fa-balance-scale">
+                            <div class="o_stat_info">
+                                <span class="o_stat_value"><field name="nb_ecarts"/></span>
+                                <span class="o_stat_text">Écarts</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="oe_title">
+                        <h1><field name="name" readonly="1"/></h1>
+                    </div>
+                    <group>
+                        <group string="Paramètres">
+                            <field name="date"/>
+                            <field name="date_debut"/>
+                            <field name="date_fin"/>
+                            <field name="responsable_id"/>
+                        </group>
+                        <group string="Filtres">
+                            <field name="categorie_filtre_id"/>
+                            <field name="site_filtre"/>
+                        </group>
+                    </group>
+                    <field name="notes" placeholder="Observations générales…"/>
+                    <separator string="Lignes d'inventaire"/>
+                    <field name="ligne_ids" mode="list">
+                        <list string="Inventaire" editable="bottom"
+                              decoration-danger="etat_constate == 'manquant'"
+                              decoration-success="etat_constate == 'retrouve'"
+                              decoration-warning="etat_constate == 'deteriore'">
+                            <field name="numero_inventaire" readonly="1"/>
+                            <field name="immobilisation_id" readonly="1"/>
+                            <field name="categorie_id" readonly="1"/>
+                            <field name="emplacement_id" readonly="1"/>
+                            <field name="quantite_theorique" readonly="1"/>
+                            <field name="quantite_constatee"/>
+                            <field name="ecart_quantite" readonly="1"/>
+                            <field name="etat_constate"/>
+                            <field name="remarques"/>
+                            <field name="inventorie"/>
+                            <button name="action_marquer_retrouve" string="✓ Retrouvé"
+                                    type="object" class="btn-sm btn-success"
+                                    invisible="etat_constate == 'retrouve'"/>
+                            <button name="action_marquer_manquant" string="✗ Manquant"
+                                    type="object" class="btn-sm btn-danger"
+                                    invisible="etat_constate == 'manquant'"/>
+                        </list>
+                    </field>
+                </sheet>
+                <chatter/>
+            </form>
+        </field>
+    </record>
+
+    <record id="view_patrimoine_inventaire_list" model="ir.ui.view">
+        <field name="name">patrimoine.inventaire.list</field>
+        <field name="model">patrimoine.inventaire</field>
+        <field name="arch" type="xml">
+            <list string="Inventaires">
+                <field name="name"/>
+                <field name="date"/>
+                <field name="responsable_id"/>
+                <field name="nb_immobilisations"/>
+                <field name="nb_retrouvees"/>
+                <field name="nb_manquantes"/>
+                <field name="nb_ecarts"/>
+                <field name="state" widget="badge"
+                       decoration-success="state == 'valide'"
+                       decoration-info="state == 'en_cours'"
+                       decoration-warning="state == 'ouvert'"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="action_patrimoine_inventaire" model="ir.actions.act_window">
+        <field name="name">Inventaires</field>
+        <field name="res_model">patrimoine.inventaire</field>
+        <field name="view_mode">list,form</field>
+    </record>
+</odoo>

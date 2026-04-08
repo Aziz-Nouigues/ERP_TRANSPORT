@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_patrimoine_affectation_form" model="ir.ui.view">
+        <field name="name">patrimoine.affectation.form</field>
+        <field name="model">patrimoine.affectation</field>
+        <field name="arch" type="xml">
+            <form string="Affectation / Distribution">
+                <header>
+                    <button name="action_retirer" string="Retirer l'affectation"
+                            type="object" invisible="state != 'active'"/>
+                    <button name="action_imprimer_bon_sortie" string="Bon de sortie magasin"
+                            type="object" class="btn-secondary"
+                            invisible="not est_premiere_affectation"/>
+                    <field name="state" widget="statusbar" statusbar_visible="active,retiree"/>
+                </header>
+                <sheet>
+                    <div class="oe_title">
+                        <h1><field name="name" readonly="1"/></h1>
+                    </div>
+                    <group>
+                        <group string="Immobilisation">
+                            <field name="immobilisation_id"/>
+                            <field name="numero_inventaire" readonly="1"/>
+                            <field name="date"/>
+                            <field name="quantite"/>
+                            <field name="est_premiere_affectation"/>
+                        </group>
+                        <group string="Affectataire">
+                            <field name="beneficiaire_id"/>
+                            <field name="department_id"/>
+                            <field name="emplacement_id"/>
+                        </group>
+                    </group>
+                    <group>
+                        <field name="date_retour" invisible="state == 'active'"/>
+                        <field name="motif_retour" invisible="state == 'active'"/>
+                        <field name="notes"/>
+                    </group>
+                </sheet>
+                <chatter/>
+            </form>
+        </field>
+    </record>
+
+    <record id="view_patrimoine_affectation_list" model="ir.ui.view">
+        <field name="name">patrimoine.affectation.list</field>
+        <field name="model">patrimoine.affectation</field>
+        <field name="arch" type="xml">
+            <list string="Affectations" decoration-muted="state != 'active'">
+                <field name="name"/>
+                <field name="date"/>
+                <field name="numero_inventaire"/>
+                <field name="immobilisation_id"/>
+                <field name="beneficiaire_id"/>
+                <field name="department_id"/>
+                <field name="emplacement_id"/>
+                <field name="quantite"/>
+                <field name="est_premiere_affectation" optional="show"/>
+                <field name="state" widget="badge"
+                       decoration-success="state == 'active'"
+                       decoration-muted="state != 'active'"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="action_patrimoine_affectation" model="ir.actions.act_window">
+        <field name="name">Affectations / Distribution</field>
+        <field name="res_model">patrimoine.affectation</field>
+        <field name="view_mode">list,form</field>
+        <field name="context">{'search_default_active': 1}</field>
+    </record>
+</odoo>

@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+
+        <!-- Privilege = catégorie Odoo 19 -->
+        <record model="res.groups.privilege" id="privilege_transport_patrimoine">
+            <field name="name">Patrimoine &amp; Immobilisations</field>
+            <field name="sequence">70</field>
+        </record>
+
+        <!-- Utilisateur : lecture seule -->
+        <record id="patrimoine_group_user" model="res.groups">
+            <field name="name">Utilisateur</field>
+            <field name="sequence">10</field>
+            <field name="privilege_id" ref="privilege_transport_patrimoine"/>
+            <field name="comment">Lecture seule sur les immobilisations et les rapports.</field>
+        </record>
+
+        <!-- Gestionnaire : saisie et gestion courante -->
+        <record id="patrimoine_group_gestionnaire" model="res.groups">
+            <field name="name">Gestionnaire</field>
+            <field name="sequence">20</field>
+            <field name="privilege_id" ref="privilege_transport_patrimoine"/>
+            <field name="implied_ids" eval="[(4, ref('patrimoine_group_user'))]"/>
+            <field name="comment">Peut créer et gérer les immobilisations, amortissements, inventaires et cessions.</field>
+        </record>
+
+        <!-- Responsable : accès complet + configuration -->
+        <record id="patrimoine_group_manager" model="res.groups">
+            <field name="name">Responsable</field>
+            <field name="sequence">30</field>
+            <field name="privilege_id" ref="privilege_transport_patrimoine"/>
+            <field name="implied_ids" eval="[(4, ref('patrimoine_group_gestionnaire'))]"/>
+            <field name="comment">Accès complet au module Patrimoine, y compris la configuration des catégories et des comptes.</field>
+        </record>
+
+    </data>
+</odoo>

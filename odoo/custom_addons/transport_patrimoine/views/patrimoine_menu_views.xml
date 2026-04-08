@@ -1,0 +1,105 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- ═══ MENU PRINCIPAL ═══ -->
+    <menuitem id="menu_patrimoine_root"
+              name="Patrimoine"
+              sequence="85"
+              web_icon="transport_patrimoine,static/description/icon.png"/>
+
+    <!-- ═══ IMMOBILISATIONS ═══ -->
+    <menuitem id="menu_patrimoine_immo"
+              name="Immobilisations"
+              parent="menu_patrimoine_root"
+              sequence="10"/>
+
+    <menuitem id="menu_patrimoine_immo_list"
+              name="Toutes les immobilisations"
+              parent="menu_patrimoine_immo"
+              action="action_patrimoine_immobilisation"
+              sequence="10"/>
+
+    <menuitem id="menu_patrimoine_affectation"
+              name="Distribution / Affectations"
+              parent="menu_patrimoine_immo"
+              action="action_patrimoine_affectation"
+              sequence="20"/>
+
+    <!-- ═══ MOUVEMENTS ═══ -->
+    <menuitem id="menu_patrimoine_mouvements"
+              name="Mouvements"
+              parent="menu_patrimoine_root"
+              sequence="20"/>
+
+    <menuitem id="menu_patrimoine_transferts"
+              name="Transferts"
+              parent="menu_patrimoine_mouvements"
+              action="action_patrimoine_mouvement"
+              sequence="10"/>
+
+    <menuitem id="menu_patrimoine_cessions"
+              name="Cessions / Sorties"
+              parent="menu_patrimoine_mouvements"
+              action="action_patrimoine_cession"
+              sequence="20"/>
+
+    <!-- ═══ AMORTISSEMENTS ═══ -->
+    <menuitem id="menu_patrimoine_amortissements"
+              name="Amortissements"
+              parent="menu_patrimoine_root"
+              sequence="30"/>
+
+    <menuitem id="menu_patrimoine_tableau_amort"
+              name="Tableau d'amortissement"
+              parent="menu_patrimoine_amortissements"
+              action="action_patrimoine_amortissement"
+              sequence="10"/>
+
+    <menuitem id="menu_patrimoine_calcul_amort"
+              name="Calcul des dotations"
+              parent="menu_patrimoine_amortissements"
+              action="action_wizard_calcul_amortissement"
+              sequence="20"/>
+
+    <!-- ═══ INVENTAIRE ═══ -->
+    <menuitem id="menu_patrimoine_inventaire_root"
+              name="Inventaire"
+              parent="menu_patrimoine_root"
+              sequence="40"/>
+
+    <menuitem id="menu_patrimoine_inventaires"
+              name="Sessions d'inventaire"
+              parent="menu_patrimoine_inventaire_root"
+              action="action_patrimoine_inventaire"
+              sequence="10"/>
+
+    <!-- ═══ RAPPORTS ═══ -->
+    <menuitem id="menu_patrimoine_rapports"
+              name="Rapports"
+              parent="menu_patrimoine_root"
+              sequence="50"/>
+
+    <menuitem id="menu_patrimoine_rapports_wizard"
+              name="Générer un rapport"
+              parent="menu_patrimoine_rapports"
+              action="action_wizard_rapport_patrimoine"
+              sequence="10"/>
+
+    <!-- ═══ CONFIGURATION ═══ -->
+    <menuitem id="menu_patrimoine_config"
+              name="Configuration"
+              parent="menu_patrimoine_root"
+              sequence="90"
+              groups="transport_patrimoine.patrimoine_group_manager"/>
+
+    <menuitem id="menu_patrimoine_categories"
+              name="Catégories"
+              parent="menu_patrimoine_config"
+              action="action_patrimoine_categorie"
+              sequence="10"/>
+
+    <menuitem id="menu_patrimoine_emplacements"
+              name="Emplacements"
+              parent="menu_patrimoine_config"
+              action="action_patrimoine_emplacement"
+              sequence="20"/>
+</odoo>
