@@ -533,7 +533,17 @@ class PatrimoineImmobilisation(models.Model):
         ).sorted('annee')
 
         deja_amorti = sum(l.montant_amortissement for l in lignes_validees)
-        annee_en_cours = len(lignes_validees)
+
+        # CORRECTION : calculer l'index de départ à partir de la dernière année validée
+        # et non pas du nombre de lignes (qui peut être incorrect si des lignes ont été annulées)
+        if lignes_validees:
+            derniere_annee_validee = max(lignes_validees.mapped('annee'))
+            annee_en_cours = derniere_annee_validee - date_debut.year + 1
+        else:
+            annee_en_cours = 0
+
+        # Sécurité : ne pas dépasser la durée totale
+        annee_en_cours = min(annee_en_cours, duree)
 
         # Base restante réelle à amortir sur les années restantes
         # On soustrait aussi la valeur résiduelle pour ne pas l'amortir
