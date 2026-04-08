@@ -1,10 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <odoo>
-    <!--
-        CORRECTIF CRITIQUE : ce wizard etait code mais aucun menuitem
-        ne pointait vers lui — il etait totalement inaccessible.
-        Ce fichier cree la vue et le menu manquants.
-    -->
 
     <record id="view_wizard_rapport_energie_form" model="ir.ui.view">
         <field name="name">transport.wizard.rapport.energie.form</field>
@@ -12,15 +7,34 @@
         <field name="arch" type="xml">
             <form string="Rapport energie STEG / SONEDE">
                 <group>
-                    <group string="Parametres">
-                        <field name="annee"/>
-                        <field name="type_energie"/>
+                    <group string="Type de rapport">
+                        <field name="type_rapport" widget="radio"/>
                     </group>
-                    <group string="Filtres optionnels">
+                    <group string="Filtres">
+                        <field name="annee"/>
                         <field name="site_filtre"
                                placeholder="Laisser vide pour tous les sites"/>
                     </group>
                 </group>
+
+                <!-- Description contextuelle selon le type choisi -->
+                <div class="alert alert-info" role="alert"
+                     invisible="type_rapport != 'steg'">
+                    Rapport détaillé consommation électrique (kWh) par site et par
+                    période, avec comparaison année N vs N-1.
+                </div>
+                <div class="alert alert-info" role="alert"
+                     invisible="type_rapport != 'sonede'">
+                    Rapport détaillé consommation eau (m³) par site et par période,
+                    avec comparaison année N vs N-1.
+                </div>
+                <div class="alert alert-warning" role="alert"
+                     invisible="type_rapport != 'synthese'">
+                    Synthèse financière globale en TND. STEG et SONEDE sont présentés
+                    dans des sections distinctes — les quantités (kWh et m³) ne sont
+                    jamais additionnées ensemble.
+                </div>
+
                 <footer>
                     <button name="action_generer"
                             string="Generer rapport PDF"
@@ -39,7 +53,6 @@
         <field name="target">new</field>
     </record>
 
-    <!-- Ce menu etait manquant — le wizard etait orphelin -->
     <menuitem
         id="menu_rapport_energie_steg"
         name="Rapport energie STEG / SONEDE"

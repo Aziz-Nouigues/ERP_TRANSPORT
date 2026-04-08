@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <odoo>
 
-    <!-- ═══ VUE WIZARD CARBURANT ═══ -->
+    <!-- ═══ VUE WIZARD RAPPORT CARBURANT ═══ -->
     <record id="view_wizard_rapport_carburant_form" model="ir.ui.view">
         <field name="name">transport.wizard.rapport.carburant.form</field>
-        <field name="model">transport.wizard.rapport.carburant</field>
+        <field name="model">transport.wizard.rapport</field>
         <field name="arch" type="xml">
             <form string="Rapport carburant">
                 <group>
@@ -13,14 +13,16 @@
                         <field name="seuil_excessif"
                                invisible="type_rapport_carburant != 'excessif'"/>
                         <field name="agence_filtre"
-                               invisible="type_rapport_carburant != 'rotation'"/>
+                               invisible="type_rapport_carburant == 'par_station'"/>
                         <field name="langue"/>
                     </group>
                     <group string="Filtres">
                         <field name="date_debut"/>
                         <field name="date_fin"/>
                         <field name="station_id"
-                               invisible="type_rapport_carburant == 'rotation'"/>
+                               invisible="type_rapport_carburant not in ['recap','excessif','par_vehicule','par_station']"/>
+                        <field name="type_bus_filtre"/>
+                        <field name="activite_filtre"/>
                     </group>
                 </group>
                 <footer>
@@ -36,12 +38,12 @@
         </field>
     </record>
 
-    <!-- ═══ VUE WIZARD LUBRIFIANT ═══ -->
+    <!-- ═══ VUE WIZARD RAPPORT LUBRIFIANT ═══ -->
     <record id="view_wizard_rapport_lubrifiant_form" model="ir.ui.view">
         <field name="name">transport.wizard.rapport.lubrifiant.form</field>
-        <field name="model">transport.wizard.rapport.lubrifiant</field>
+        <field name="model">transport.wizard.rapport</field>
         <field name="arch" type="xml">
-            <form string="Rapport lubrifiants">
+            <form string="Rapport lubrifiant">
                 <group>
                     <group string="Type de rapport">
                         <field name="type_rapport_lubrifiant" widget="radio"/>
@@ -51,6 +53,8 @@
                         <field name="date_debut"/>
                         <field name="date_fin"/>
                         <field name="atelier_filtre"/>
+                        <field name="agence_filtre"/>
+                        <field name="type_bus_filtre"/>
                     </group>
                 </group>
                 <footer>
@@ -68,29 +72,26 @@
 
     <!-- ═══ ACTIONS ═══ -->
     <record id="action_rapport_carburant" model="ir.actions.act_window">
-        <field name="name">Rapports carburant</field>
-        <field name="res_model">transport.wizard.rapport.carburant</field>
+        <field name="name">Rapport carburant</field>
+        <field name="res_model">transport.wizard.rapport</field>
         <field name="view_id" ref="view_wizard_rapport_carburant_form"/>
         <field name="view_mode">form</field>
         <field name="target">new</field>
     </record>
 
     <record id="action_rapport_lubrifiant_wizard" model="ir.actions.act_window">
-        <field name="name">Rapports lubrifiants</field>
-        <field name="res_model">transport.wizard.rapport.lubrifiant</field>
+        <field name="name">Rapport lubrifiant</field>
+        <field name="res_model">transport.wizard.rapport</field>
         <field name="view_id" ref="view_wizard_rapport_lubrifiant_form"/>
         <field name="view_mode">form</field>
         <field name="target">new</field>
     </record>
 
-    <!-- ═══ MENUS — TOUS SOUS "RAPPORTS ET STATISTIQUES" ═══
-         Correction majeure : les rapports carburant et lubrifiant
-         etaient dans leurs menus respectifs (eparpilles).
-         Ils sont maintenant tous centralises ici. -->
+    <!-- ═══ MENUS RAPPORTS ET STATISTIQUES ═══ -->
 
     <menuitem
         id="menu_rapport_carburant"
-        name="Rapports carburant"
+        name="Rapport carburant"
         parent="menu_rapports_root"
         action="action_rapport_carburant"
         sequence="10"
@@ -98,14 +99,13 @@
 
     <menuitem
         id="menu_rapport_lubrifiant_menu"
-        name="Rapports lubrifiants"
+        name="Rapport lubrifiant"
         parent="menu_rapports_root"
         action="action_rapport_lubrifiant_wizard"
         sequence="20"
         groups="transport_energy.group_responsable_energie"/>
 
-
-    <!-- ═══ CORRECTION P5 : vues analytiques tableau de bord direction ═══ -->
+    <!-- ═══ VUES ANALYTIQUES TABLEAU DE BORD ═══ -->
 
     <record id="view_fuel_voucher_pivot" model="ir.ui.view">
         <field name="name">transport.fuel.voucher.pivot</field>

@@ -212,6 +212,16 @@ class FactureEnergie(models.Model):
     # ── ACTIONS METIER ────────────────────────────────────────────
 
     @api.depends('type_facture')
+    @api.constrains('date_debut_periode', 'date_fin_periode')
+    def _verifier_periode(self):
+        for facture in self:
+            if (facture.date_debut_periode and facture.date_fin_periode
+                    and facture.date_fin_periode < facture.date_debut_periode):
+                raise ValidationError(
+                    "La date de fin de periode ne peut pas etre anterieure "
+                    "a la date de debut."
+                )
+
     def _calcul_unite(self):
         for f in self:
             f.unite_mesure = 'kWh' if f.type_facture == 'steg' else 'm3' if f.type_facture == 'sonede' else ''

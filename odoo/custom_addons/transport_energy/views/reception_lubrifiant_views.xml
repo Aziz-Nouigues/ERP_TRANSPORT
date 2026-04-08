@@ -1,0 +1,113 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <record id="view_reception_lubrifiant_form" model="ir.ui.view">
+        <field name="name">transport.reception.lubrifiant.form</field>
+        <field name="model">transport.reception.lubrifiant</field>
+        <field name="arch" type="xml">
+            <form string="Reception lubrifiant">
+                <header>
+                    <button name="action_confirm" string="Confirmer"
+                            type="object" class="btn-primary"
+                            invisible="state != 'draft'"/>
+                    <button name="action_validate" string="Valider"
+                            type="object" class="btn-success"
+                            invisible="state != 'confirmed'"
+                            groups="transport_energy.group_responsable_energie"/>
+                    <button name="action_cancel" string="Annuler"
+                            type="object"
+                            invisible="state in ('validated','cancelled')"/>
+                    <button name="action_reset_draft" string="Remettre en brouillon"
+                            type="object"
+                            invisible="state != 'cancelled'"/>
+                    <field name="state" widget="statusbar"
+                           statusbar_visible="draft,confirmed,validated"/>
+                </header>
+                <sheet>
+                    <div class="oe_title">
+                        <h1><field name="name" readonly="1"/></h1>
+                    </div>
+                    <group>
+                        <group string="Localisation">
+                            <field name="date"/>
+                            <field name="atelier"/>
+                            <field name="agence"/>
+                        </group>
+                        <group string="Fournisseur">
+                            <field name="fournisseur_id"/>
+                            <field name="bon_livraison"/>
+                        </group>
+                    </group>
+                    <notebook>
+                        <page string="Lubrifiants recus">
+                            <field name="ligne_ids">
+                                <list editable="bottom">
+                                    <field name="type_lubrifiant_id"
+                                           options="{'no_create': True}"/>
+                                    <field name="unite" readonly="1"/>
+                                    <field name="conditionnement" readonly="1" optional="show"/>
+                                    <field name="nb_unites"
+                                           string="Nb unites"
+                                           invisible="not volume_conditionnement"
+                                           help="Saisir le nb de bidons/futs : la quantite en litres sera calculee auto."/>
+                                    <field name="volume_conditionnement" column_invisible="1"/>
+                                    <field name="quantite_litres" string="Quantite (L)"/>
+                                    <field name="prix_unitaire"/>
+                                    <field name="sous_total" readonly="1"/>
+                                </list>
+                            </field>
+                        </page>
+                        <page string="Notes">
+                            <field name="notes" widget="text" nolabel="1"/>
+                        </page>
+                    </notebook>
+                    <group class="oe_subtotal_footer">
+                        <field name="total_cout" widget="monetary"
+                               options="{'currency_field': 'currency_id'}"
+                               string="Coût total (TND)"/>
+                    </group>
+                </sheet>
+                <chatter/>
+            </form>
+        </field>
+    </record>
+
+    <record id="view_reception_lubrifiant_list" model="ir.ui.view">
+        <field name="name">transport.reception.lubrifiant.list</field>
+        <field name="model">transport.reception.lubrifiant</field>
+        <field name="arch" type="xml">
+            <list string="Receptions lubrifiant"
+                  decoration-success="state == 'validated'"
+                  decoration-muted="state == 'cancelled'">
+                <field name="name"/>
+                <field name="date"/>
+                <field name="atelier"/>
+                <field name="agence" optional="show"/>
+                <field name="fournisseur_id" optional="show"/>
+                <field name="bon_livraison" optional="show"/>
+                <field name="total_cout"/>
+                <field name="state" widget="badge"
+                       decoration-success="state == 'validated'"
+                       decoration-warning="state == 'confirmed'"
+                       decoration-danger="state == 'cancelled'"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="action_reception_lubrifiant" model="ir.actions.act_window">
+        <field name="name">Receptions lubrifiant</field>
+        <field name="res_model">transport.reception.lubrifiant</field>
+        <field name="view_mode">list,form</field>
+        <field name="domain">[('state','!=','cancelled')]</field>
+    </record>
+
+    <!-- Menu sous Lubrifiants -->
+    <menuitem
+        id="menu_reception_lubrifiant"
+        name="Receptions lubrifiant"
+        parent="menu_lubrifiants"
+        action="action_reception_lubrifiant"
+        sequence="15"
+        groups="transport_energy.group_responsable_energie"/>
+
+</odoo>

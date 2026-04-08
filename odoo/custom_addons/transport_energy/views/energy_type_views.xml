@@ -9,6 +9,9 @@
                 <field name="name"/>
                 <field name="category"/>
                 <field name="unite"/>
+                <field name="conditionnement" optional="show"/>
+                <field name="volume_conditionnement" optional="show"
+                       string="Vol/unite (L)"/>
                 <field name="active"/>
             </list>
         </field>
@@ -21,13 +24,29 @@
             <form string="Type d energie">
                 <sheet>
                     <group>
-                        <field name="name"/>
-                        <field name="category"/>
-                        <field name="unite"/>
-                        <field name="active"/>
+                        <group string="Identification">
+                            <field name="name"/>
+                            <field name="category"/>
+                            <field name="unite"/>
+                            <field name="active"/>
+                        </group>
+                        <group string="Conditionnement (optionnel)">
+                            <field name="conditionnement"
+                                   placeholder="Ex: Bidon, Fut, Cartouche"/>
+                            <field name="volume_conditionnement"
+                                   string="Volume par unite (L)"
+                                   invisible="not conditionnement"
+                                   help="Volume en litres dans 1 unite. Ex: 1 Bidon = 10 L"/>
+                            <div invisible="not conditionnement or not volume_conditionnement"
+                                 class="alert alert-info" role="alert" style="font-size:12px;">
+                                Saisie possible en litres OU en nombre d'unités
+                                dans les bons lubrifiant.
+                                Ex: 5 unités × volume_par_unite = quantité totale en litres.
+                            </div>
+                        </group>
                     </group>
-                    <group>
-                        <field name="notes" widget="text"/>
+                    <group string="Notes">
+                        <field name="notes" widget="text" nolabel="1" colspan="2"/>
                     </group>
                 </sheet>
             </form>

@@ -11,3 +11,4 @@ from . import agilis_carte
 from . import facture_energie
 from . import wizard_rapport
 from . import wizard_rapport_energie
+from . import reception_lubrifiant

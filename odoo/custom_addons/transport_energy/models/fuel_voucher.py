@@ -8,7 +8,7 @@ class TransportFuelVoucher(models.Model):
     - BGI (interne) : cuve interne, compteur pompe, lignes bus.
     - BGE (externe) : station externe libre, mode paiement, lien AGILIS optionnel.
     A la validation BGI : debite current_stock de la cuve.
-    A la validation BGE AGILIS : cree automatiquement transport.agilis.utilisation.
+    A la validation BGE AGILIS : cree automatiquement 1 transport.agilis.utilisation par bon.
     """
     _name = 'transport.fuel.voucher'
     _description = 'Bon de ravitaillement carburant (BGI / BGE)'
@@ -36,23 +36,14 @@ class TransportFuelVoucher(models.Model):
     time_end = fields.Float(string='Heure fin', default=17.0)
 
     # ── CHAMPS BGI ────────────────────────────────────────────────
-    cuve_id = fields.Many2one(
-        'transport.fuel.cuve',
-        string='Cuve / Pompe',
-    )
+    cuve_id = fields.Many2one('transport.fuel.cuve', string='Cuve / Pompe')
     station_id = fields.Many2one(
-        'transport.fuel.station',
-        string='Station',
-        related='cuve_id.station_id',
-        store=True,
-        readonly=True
+        'transport.fuel.station', string='Station',
+        related='cuve_id.station_id', store=True, readonly=True
     )
     fuel_type_id = fields.Many2one(
-        'transport.energy.type',
-        string='Type carburant',
-        related='cuve_id.fuel_type_id',
-        store=True,
-        readonly=True
+        'transport.energy.type', string='Type carburant',
+        related='cuve_id.fuel_type_id', store=True, readonly=True
     )
     distributor_code = fields.Char(string='Code agent distributeur', translate=False)
     distributor_name = fields.Char(string='Nom agent distributeur', translate=True)
@@ -66,8 +57,7 @@ class TransportFuelVoucher(models.Model):
     station_externe = fields.Char(string='Station externe (nom)', translate=True)
     station_externe_ville = fields.Char(string='Ville / Adresse', translate=True)
     fuel_type_bge_id = fields.Many2one(
-        'transport.energy.type',
-        string='Type carburant (BGE)',
+        'transport.energy.type', string='Type carburant (BGE)',
         domain="[('category','=','fuel')]"
     )
     payment_mode = fields.Selection([
@@ -76,24 +66,19 @@ class TransportFuelVoucher(models.Model):
         ('credit', 'Credit fournisseur'),
     ], string='Mode de paiement')
     agilis_card_id = fields.Many2one(
-        'transport.agilis.carte',
-        string='Carte AGILIS',
+        'transport.agilis.carte', string='Carte AGILIS',
         domain="[('statut','=','active')]"
     )
     ticket_reference = fields.Char(string='N ticket / recu externe', translate=False)
 
     # ── TOTAUX ────────────────────────────────────────────────────
     total_quantity = fields.Float(
-        string='Quantite totale (L)',
-        compute='_compute_totals',
-        store=True,
-        digits=(10, 2)
+        string='Quantite totale (L)', compute='_compute_totals',
+        store=True, digits=(10, 2)
     )
     total_cost = fields.Float(
-        string='Cout total (TND)',
-        compute='_compute_totals',
-        store=True,
-        digits=(12, 3)
+        string='Cout total (TND)', compute='_compute_totals',
+        store=True, digits=(12, 3)
     )
 
     notes = fields.Text(string='Notes', translate=False)
@@ -164,9 +149,9 @@ class TransportFuelVoucher(models.Model):
                         f"demande {rec.total_quantity:.0f} L."
                     )
                 rec.cuve_id._consume_stock(rec.total_quantity)
-                rec.cuve_id.write({
-                    'pump_counter_current': rec.pump_counter_end or rec.pump_counter_start
-                })
+                # FIX : mettre à jour compteur uniquement si pump_counter_end > 0
+                if rec.pump_counter_end > 0:
+                    rec.cuve_id.write({'pump_counter_current': rec.pump_counter_end})
 
             elif rec.voucher_type == 'external' and rec.payment_mode == 'agilis':
                 if not rec.agilis_card_id:
@@ -175,28 +160,67 @@ class TransportFuelVoucher(models.Model):
                     raise ValidationError(
                         f"La carte {rec.agilis_card_id.name} est {rec.agilis_card_id.statut}."
                     )
+                # FIX : vérifier solde suffisant avant utilisation
+                if rec.agilis_card_id.solde_actuel < rec.total_cost:
+                    raise ValidationError(
+                        f"Solde insuffisant sur la carte {rec.agilis_card_id.name} : "
+                        f"solde {rec.agilis_card_id.solde_actuel:.3f} TND, "
+                        f"montant requis {rec.total_cost:.3f} TND."
+                    )
                 fuel_type = rec.fuel_type_bge_id or rec.fuel_type_id
-                unit_price = 0.0
-                if rec.total_quantity > 0 and rec.total_cost > 0:
-                    unit_price = rec.total_cost / rec.total_quantity
-                for line in rec.line_ids:
-                    self.env['transport.agilis.utilisation'].create({
-                        'carte_id': rec.agilis_card_id.id,
-                        'voucher_id': rec.id,
-                        'date': fields.Datetime.now(),
-                        'station_externe': rec.station_externe or '',
-                        'chauffeur': line.driver_name or '',
-                        'fuel_type_id': fuel_type.id if fuel_type else False,
-                        'quantite': line.quantity,
-                        'prix_unitaire': line.unit_price or unit_price,
-                    })
+                # FIX : créer UNE SEULE utilisation par bon (pas par ligne)
+                # pour éviter le double débit de la carte AGILIS
+                self.env['transport.agilis.utilisation'].create({
+                    'carte_id': rec.agilis_card_id.id,
+                    'voucher_id': rec.id,
+                    'date': fields.Datetime.now(),
+                    'station_externe': rec.station_externe or '',
+                    'chauffeur': ', '.join(
+                        l.driver_name for l in rec.line_ids if l.driver_name
+                    ) or '',
+                    'fuel_type_id': fuel_type.id if fuel_type else False,
+                    'quantite': rec.total_quantity,
+                    'prix_unitaire': (rec.total_cost / rec.total_quantity)
+                        if rec.total_quantity > 0 else 0.0,
+                })
 
             rec.write({'state': 'done'})
 
     def action_cancel(self):
+        """Annulation uniquement pour les bons non validés."""
         for rec in self:
             if rec.state == 'done':
-                raise ValidationError("Impossible d'annuler un bon valide. Contacter le responsable.")
+                raise ValidationError(
+                    "Impossible d'annuler un bon valide. "
+                    "Utiliser 'Annuler (directeur)' pour restituer le stock."
+                )
+            rec.write({'state': 'cancelled'})
+
+    def action_cancel_done(self):
+        """FIX : Annulation d'un bon validé avec restitution du stock (directeur)."""
+        for rec in self:
+            if rec.state != 'done':
+                raise ValidationError("Ce bon n'est pas dans l'etat 'Valide'.")
+            # Restituer le stock cuve si BGI
+            if rec.voucher_type == 'internal' and rec.cuve_id:
+                rec.cuve_id._add_stock(rec.total_quantity)
+                rec.message_post(
+                    body=(
+                        f"Annulation BGI — Stock restitue : "
+                        f"+{rec.total_quantity:.0f} L sur {rec.cuve_id.display_name}"
+                    ),
+                    message_type='notification'
+                )
+            # Supprimer l'utilisation AGILIS liée si BGE AGILIS
+            if rec.voucher_type == 'external' and rec.payment_mode == 'agilis':
+                utilisations = self.env['transport.agilis.utilisation'].search([
+                    ('voucher_id', '=', rec.id)
+                ])
+                utilisations.unlink()
+                rec.message_post(
+                    body="Annulation BGE AGILIS — Utilisation carte supprimee.",
+                    message_type='notification'
+                )
             rec.write({'state': 'cancelled'})
 
     def action_reset_draft(self):
@@ -226,10 +250,8 @@ class TransportFuelVoucherLine(models.Model):
     _order = 'time asc'
 
     voucher_id = fields.Many2one(
-        'transport.fuel.voucher',
-        string='Bon de carburant',
-        required=True,
-        ondelete='cascade'
+        'transport.fuel.voucher', string='Bon de carburant',
+        required=True, ondelete='cascade'
     )
     time = fields.Float(string='Heure', default=8.0)
     vehicle_id = fields.Many2one('fleet.vehicle', string='Bus / Vehicule', required=True)
@@ -240,23 +262,18 @@ class TransportFuelVoucherLine(models.Model):
     odometer_value = fields.Float(string='Compteur bus (km)', digits=(12, 0))
     odometer_status = fields.Selection(
         related='vehicle_id.odometer_status',
-        string='Etat compteur',
-        readonly=True
+        string='Etat compteur', readonly=True
     )
     distance_estimated = fields.Float(
         string='Distance estimee (km)',
-        compute='_compute_distance',
-        store=True,
-        digits=(10, 1)
+        compute='_compute_distance', store=True, digits=(10, 1)
     )
 
     quantity = fields.Float(string='Quantite (L)', required=True, digits=(10, 2))
     unit_price = fields.Float(string='Prix unitaire (TND/L)', digits=(10, 3))
     subtotal = fields.Float(
-        string='Montant (TND)',
-        compute='_compute_subtotal',
-        store=True,
-        digits=(12, 3)
+        string='Montant (TND)', compute='_compute_subtotal',
+        store=True, digits=(12, 3)
     )
 
     @api.depends('quantity', 'unit_price')
@@ -266,11 +283,17 @@ class TransportFuelVoucherLine(models.Model):
 
     @api.depends('quantity', 'vehicle_id', 'odometer_status')
     def _compute_distance(self):
+        """Calcule la distance estimée uniquement si le compteur est en panne.
+        Si le compteur est fonctionnel, la distance réelle est calculée
+        via delta odometer_value dans les rapports (_get_donnees_excessif etc.)
+        """
         for line in self:
             if (line.odometer_status == 'broken'
                     and line.vehicle_id
                     and line.vehicle_id.theoretical_fuel_consumption > 0):
-                line.distance_estimated = line.vehicle_id.estimate_distance_from_fuel(line.quantity)
+                line.distance_estimated = line.vehicle_id.estimate_distance_from_fuel(
+                    line.quantity
+                )
             else:
                 line.distance_estimated = 0.0
 

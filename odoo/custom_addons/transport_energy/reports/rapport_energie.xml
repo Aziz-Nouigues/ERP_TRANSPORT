@@ -1,165 +1,195 @@
 <?xml version="1.0" encoding="utf-8"?>
 <odoo>
 
-    <!-- ═══════════════════════════════════════════════════════
-         WIZARD RAPPORT ENERGIE
-    ═══════════════════════════════════════════════════════ -->
-
-    <record id="view_wizard_rapport_energie_form" model="ir.ui.view">
-        <field name="name">transport.wizard.rapport.energie.form</field>
-        <field name="model">transport.wizard.rapport.energie</field>
-        <field name="arch" type="xml">
-            <form string="Rapport Energie STEG/SONEDE">
-                <group>
-                    <group string="Type de rapport">
-                        <field name="type_energie" widget="radio"/>
-                    </group>
-                    <group string="Filtres">
-                        <field name="annee"/>
-                        <field name="site_filtre"/>
-                    </group>
-                </group>
-                <footer>
-                    <button name="action_generer"
-                            string="Generer le Rapport"
-                            type="object"
-                            class="btn-primary"/>
-                    <button string="Annuler"
-                            class="btn-secondary"
-                            special="cancel"/>
-                </footer>
-            </form>
-        </field>
-    </record>
-
-    <record id="action_wizard_rapport_energie" model="ir.actions.act_window">
-        <field name="name">Rapport STEG/SONEDE</field>
-        <field name="res_model">transport.wizard.rapport.energie</field>
-        <field name="view_mode">form</field>
-        <field name="target">new</field>
-    </record>
-
-    <!-- MENUS -->
-    <menuitem
-        id="menu_rapport_steg"
-        name="Rapports STEG/SONEDE"
-        parent="menu_energie_eau"
-        action="action_wizard_rapport_energie"
-        sequence="30"/>
-
-    <!-- ═══════════════════════════════════════════════════════
-         TEMPLATE PDF COMPARAISON N vs N-1
-    ═══════════════════════════════════════════════════════ -->
-
+    <!-- Template PDF rapport energie STEG / SONEDE -->
     <template id="rapport_energie_template">
         <t t-call="web.html_container">
             <t t-foreach="docs" t-as="wizard">
                 <t t-call="web.external_layout">
-                    <div class="page" style="direction:rtl; font-family: Arial, sans-serif;">
+                    <t t-set="donnees" t-value="wizard._get_donnees()"/>
+                    <div class="page" style="font-family: Arial, sans-serif;">
 
                         <!-- TITRE -->
                         <div style="text-align:center; margin-bottom:20px;">
                             <h2 style="color:#1a5276; border-bottom:3px solid #1a5276; padding-bottom:8px;">
-                                <t t-if="wizard.type_energie == 'steg'">
-                                    مقارنة استهلاك الكهرباء (STEG) - N / N-1
+                                <t t-if="wizard.type_rapport == 'steg'">
+                                    Rapport Consommation Electricite (STEG) — kWh
                                 </t>
-                                <t t-elif="wizard.type_energie == 'sonede'">
-                                    مقارنة استهلاك الماء (SONEDE) - N / N-1
+                                <t t-elif="wizard.type_rapport == 'sonede'">
+                                    Rapport Consommation Eau (SONEDE) — m³
                                 </t>
                                 <t t-else="">
-                                    مقارنة استهلاك الطاقة STEG و SONEDE - N / N-1
+                                    Synthese Financiere Energie STEG + SONEDE — TND
                                 </t>
                             </h2>
-                            <h4 style="color:#555;">
-                                Comparaison Consommation Energie N vs N-1
-                            </h4>
                             <p>
-                                <strong>السنة:</strong> <t t-esc="wizard.annee"/>
+                                <strong>Annee :</strong> <t t-esc="wizard.annee"/>
                                 <t t-if="wizard.site_filtre">
-                                    | <strong>الموقع:</strong> <t t-esc="wizard.site_filtre"/>
+                                    | <strong>Site :</strong> <t t-esc="wizard.site_filtre"/>
                                 </t>
+                                | <strong>Nb factures :</strong> <t t-esc="donnees['nb_factures']"/>
                             </p>
                         </div>
 
-                        <t t-set="donnees" t-value="wizard._get_donnees()"/>
+                        <!-- ══ MODE DETAIL (STEG ou SONEDE) ══ -->
+                        <t t-if="donnees['mode'] == 'detail'">
 
-                        <!-- RÉSUMÉ GLOBAL -->
-                        <div style="background:#eaf2ff; padding:10px; border-radius:5px; margin-bottom:15px;">
-                            <strong>ملخص: </strong>
-                            عدد الفواتير: <strong><t t-esc="donnees['nb_factures']"/></strong>
-                            | اجمالي الاستهلاك N: <strong><t t-esc="donnees['total_n']"/> <t t-esc="donnees['unite']"/></strong>
-                            | اجمالي الاستهلاك N-1: <strong><t t-esc="donnees['total_n1']"/> <t t-esc="donnees['unite']"/></strong>
-                            | الفارق: <strong
-                                t-attf-style="color: {{ 'red' if donnees['total_ecart'] > 0 else 'green' }}">
-                                <t t-esc="donnees['total_ecart']"/> <t t-esc="donnees['unite']"/>
-                                (<t t-esc="donnees['ecart_pct']"/>%)
-                            </strong>
-                        </div>
+                            <!-- Résumé global -->
+                            <div style="background:#eaf2ff; padding:10px; border-radius:5px; margin-bottom:15px;">
+                                <strong>Résumé :</strong>
+                                Total N : <strong><t t-esc="donnees['total_n']"/> <t t-esc="donnees['unite']"/></strong>
+                                | Total N-1 : <strong><t t-esc="donnees['total_n1']"/> <t t-esc="donnees['unite']"/></strong>
+                                | Montant N : <strong><t t-esc="donnees['total_montant_n']"/> TND</strong>
+                                | Ecart :
+                                <strong t-attf-style="color: {{ 'red' if donnees['total_ecart'] > 0 else 'green' }}">
+                                    <t t-esc="donnees['total_ecart']"/> <t t-esc="donnees['unite']"/>
+                                    (<t t-esc="donnees['ecart_pct']"/>%)
+                                </strong>
+                            </div>
 
-                        <!-- TABLEAU PAR SITE -->
-                        <table class="table table-sm table-bordered" style="width:100%; font-size:11px; direction:rtl;">
-                            <thead style="background:#1a5276; color:white;">
-                                <tr>
-                                    <th style="text-align:center;">الموقع</th>
-                                    <th style="text-align:center;">رقم العداد</th>
-                                    <th style="text-align:center;">النوع</th>
-                                    <th style="text-align:center;">الفترة</th>
-                                    <th style="text-align:center;">الاستهلاك N</th>
-                                    <th style="text-align:center;">المبلغ N (TND)</th>
-                                    <th style="text-align:center;">الاستهلاك N-1</th>
-                                    <th style="text-align:center;">المبلغ N-1 (TND)</th>
-                                    <th style="text-align:center;">الفارق</th>
-                                    <th style="text-align:center;">النسبة %</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <t t-foreach="donnees['lignes']" t-as="ligne">
-                                    <tr t-attf-style="background: {{ '#fdecea' if ligne['ecart_pct'] > 10 else '#eafaf1' if ligne['ecart_pct'] &lt; -5 else 'white' }}">
-                                        <td style="font-weight:bold;"><t t-esc="ligne['site']"/></td>
-                                        <td style="text-align:center;"><t t-esc="ligne['compteur']"/></td>
-                                        <td style="text-align:center;"><t t-esc="ligne['type']"/></td>
-                                        <td style="text-align:center; font-size:10px;"><t t-esc="ligne['periode']"/></td>
-                                        <td style="text-align:center; font-weight:bold;"><t t-esc="ligne['qte_n']"/></td>
-                                        <td style="text-align:center;"><t t-esc="ligne['montant_n']"/></td>
-                                        <td style="text-align:center;"><t t-esc="ligne['qte_n1']"/></td>
-                                        <td style="text-align:center;"><t t-esc="ligne['montant_n1']"/></td>
-                                        <td t-attf-style="text-align:center; color: {{ 'red' if ligne['ecart'] > 0 else 'green' }}; font-weight:bold;">
-                                            <t t-esc="ligne['ecart']"/>
-                                        </td>
-                                        <td t-attf-style="text-align:center; color: {{ 'red' if ligne['ecart_pct'] > 0 else 'green' }}; font-weight:bold;">
-                                            <t t-esc="ligne['ecart_pct']"/>%
-                                        </td>
+                            <!-- Tableau détail par facture -->
+                            <table class="table table-sm table-bordered" style="width:100%; font-size:11px;">
+                                <thead style="background:#1a5276; color:white;">
+                                    <tr>
+                                        <th>Site</th>
+                                        <th>N° Compteur</th>
+                                        <th>Période</th>
+                                        <th style="text-align:center;">Conso N (<t t-esc="donnees['unite']"/>)</th>
+                                        <th style="text-align:center;">Montant N (TND)</th>
+                                        <th style="text-align:center;">Conso N-1 (<t t-esc="donnees['unite']"/>)</th>
+                                        <th style="text-align:center;">Montant N-1 (TND)</th>
+                                        <th style="text-align:center;">Ecart</th>
+                                        <th style="text-align:center;">%</th>
                                     </tr>
-                                </t>
-                            </tbody>
-                            <tfoot style="background:#d5e8d4; font-weight:bold;">
-                                <tr>
-                                    <td colspan="4" style="text-align:right;">الجملة</td>
-                                    <td style="text-align:center;"><t t-esc="donnees['total_n']"/></td>
-                                    <td style="text-align:center;"><t t-esc="donnees['total_montant_n']"/></td>
-                                    <td style="text-align:center;"><t t-esc="donnees['total_n1']"/></td>
-                                    <td style="text-align:center;"><t t-esc="donnees['total_montant_n1']"/></td>
-                                    <td style="text-align:center;"><t t-esc="donnees['total_ecart']"/></td>
-                                    <td style="text-align:center;"><t t-esc="donnees['ecart_pct']"/>%</td>
-                                </tr>
-                            </tfoot>
-                        </table>
+                                </thead>
+                                <tbody>
+                                    <t t-foreach="donnees['lignes']" t-as="ligne">
+                                        <tr t-attf-style="background: {{ '#fdecea' if ligne['ecart_pct'] > 10 else '#eafaf1' if ligne['ecart_pct'] &lt; -5 else 'white' }}">
+                                            <td><strong><t t-esc="ligne['site']"/></strong></td>
+                                            <td style="text-align:center;"><t t-esc="ligne['compteur']"/></td>
+                                            <td style="font-size:10px;"><t t-esc="ligne['periode']"/></td>
+                                            <td style="text-align:center; font-weight:bold;"><t t-esc="ligne['qte_n']"/></td>
+                                            <td style="text-align:center;"><t t-esc="ligne['montant_n']"/></td>
+                                            <td style="text-align:center;"><t t-esc="ligne['qte_n1']"/></td>
+                                            <td style="text-align:center;"><t t-esc="ligne['montant_n1']"/></td>
+                                            <td t-attf-style="text-align:center; color: {{ 'red' if ligne['ecart'] > 0 else 'green' }}; font-weight:bold;">
+                                                <t t-esc="ligne['ecart']"/>
+                                            </td>
+                                            <td t-attf-style="text-align:center; color: {{ 'red' if ligne['ecart_pct'] > 0 else 'green' }}; font-weight:bold;">
+                                                <t t-esc="ligne['ecart_pct']"/>%
+                                            </td>
+                                        </tr>
+                                    </t>
+                                </tbody>
+                                <tfoot style="background:#d5e8d4; font-weight:bold;">
+                                    <tr>
+                                        <td colspan="3" style="text-align:right;">TOTAL</td>
+                                        <td style="text-align:center;"><t t-esc="donnees['total_n']"/></td>
+                                        <td style="text-align:center;"><t t-esc="donnees['total_montant_n']"/></td>
+                                        <td style="text-align:center;"><t t-esc="donnees['total_n1']"/></td>
+                                        <td style="text-align:center;"><t t-esc="donnees['total_montant_n1']"/></td>
+                                        <td style="text-align:center;"><t t-esc="donnees['total_ecart']"/></td>
+                                        <td style="text-align:center;"><t t-esc="donnees['ecart_pct']"/>%</td>
+                                    </tr>
+                                </tfoot>
+                            </table>
 
-                        <!-- GRAPHIQUE TEXTUEL PAR SITE -->
-                        <div style="margin-top:20px;">
-                            <h4 style="color:#1a5276;">مقارنة حسب الموقع</h4>
-                            <t t-foreach="donnees['par_site']" t-as="site">
-                                <div style="margin-bottom:8px; border:1px solid #ddd; padding:8px; border-radius:4px;">
-                                    <strong><t t-esc="site['site']"/></strong>
-                                    <span style="margin-right:10px; color:#1a5276;">
-                                        N: <t t-esc="site['total_n']"/> | N-1: <t t-esc="site['total_n1']"/>
-                                    </span>
-                                    <span t-attf-style="color: {{ 'red' if site['ecart'] > 0 else 'green' }}; font-weight:bold;">
-                                        فارق: <t t-esc="site['ecart']"/> (<t t-esc="site['ecart_pct']"/>%)
-                                    </span>
-                                </div>
-                            </t>
-                        </div>
+                            <!-- Comparaison par site -->
+                            <div style="margin-top:20px;">
+                                <h4 style="color:#1a5276;">Comparaison par site</h4>
+                                <t t-foreach="donnees['par_site']" t-as="site">
+                                    <div style="margin-bottom:8px; border:1px solid #ddd; padding:8px; border-radius:4px;">
+                                        <strong><t t-esc="site['site']"/></strong>
+                                        <span style="margin-left:10px; color:#1a5276;">
+                                            N : <t t-esc="site['total_n']"/> <t t-esc="donnees['unite']"/>
+                                            | N-1 : <t t-esc="site['total_n1']"/> <t t-esc="donnees['unite']"/>
+                                        </span>
+                                        <span t-attf-style="color: {{ 'red' if site['ecart'] > 0 else 'green' }}; font-weight:bold; margin-left:10px;">
+                                            Ecart : <t t-esc="site['ecart']"/> (<t t-esc="site['ecart_pct']"/>%)
+                                        </span>
+                                    </div>
+                                </t>
+                            </div>
+
+                        </t>
+
+                        <!-- ══ MODE SYNTHESE FINANCIERE ══ -->
+                        <t t-if="donnees['mode'] == 'synthese'">
+
+                            <!-- Résumé financier global -->
+                            <div style="background:#eaf2ff; padding:10px; border-radius:5px; margin-bottom:15px;">
+                                <strong>Résumé financier :</strong>
+                                STEG N : <strong><t t-esc="donnees['total_steg_n']"/> TND</strong>
+                                | SONEDE N : <strong><t t-esc="donnees['total_sonede_n']"/> TND</strong>
+                                | Total N : <strong><t t-esc="donnees['total_n']"/> TND</strong>
+                                | Total N-1 : <strong><t t-esc="donnees['total_n1']"/> TND</strong>
+                                | Ecart :
+                                <strong t-attf-style="color: {{ 'red' if donnees['ecart_global'] > 0 else 'green' }}">
+                                    <t t-esc="donnees['ecart_global']"/> TND
+                                    (<t t-esc="donnees['ecart_pct']"/>%)
+                                </strong>
+                            </div>
+
+                            <!-- Tableau synthèse par site -->
+                            <h4 style="color:#1a5276;">Synthèse financière par site (TND)</h4>
+                            <table class="table table-sm table-bordered" style="width:100%; font-size:11px;">
+                                <thead style="background:#1a5276; color:white;">
+                                    <tr>
+                                        <th>Site</th>
+                                        <th style="text-align:center;">STEG N (kWh)</th>
+                                        <th style="text-align:center;">STEG N (TND)</th>
+                                        <th style="text-align:center;">STEG N-1 (TND)</th>
+                                        <th style="text-align:center;">SONEDE N (m³)</th>
+                                        <th style="text-align:center;">SONEDE N (TND)</th>
+                                        <th style="text-align:center;">SONEDE N-1 (TND)</th>
+                                        <th style="text-align:center;">Total N (TND)</th>
+                                        <th style="text-align:center;">Ecart TND</th>
+                                        <th style="text-align:center;">%</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <t t-foreach="donnees['par_site']" t-as="site">
+                                        <tr>
+                                            <td><strong><t t-esc="site['site']"/></strong></td>
+                                            <td style="text-align:center; color:#555;"><t t-esc="site['steg_qte_n']"/></td>
+                                            <td style="text-align:center;"><t t-esc="site['steg_montant_n']"/></td>
+                                            <td style="text-align:center;"><t t-esc="site['steg_montant_n1']"/></td>
+                                            <td style="text-align:center; color:#555;"><t t-esc="site['sonede_qte_n']"/></td>
+                                            <td style="text-align:center;"><t t-esc="site['sonede_montant_n']"/></td>
+                                            <td style="text-align:center;"><t t-esc="site['sonede_montant_n1']"/></td>
+                                            <td style="text-align:center; font-weight:bold;"><t t-esc="site['total_n']"/></td>
+                                            <td t-attf-style="text-align:center; color: {{ 'red' if site['ecart'] > 0 else 'green' }}; font-weight:bold;">
+                                                <t t-esc="site['ecart']"/>
+                                            </td>
+                                            <td t-attf-style="text-align:center; color: {{ 'red' if site['ecart_pct'] > 0 else 'green' }}; font-weight:bold;">
+                                                <t t-esc="site['ecart_pct']"/>%
+                                            </td>
+                                        </tr>
+                                    </t>
+                                </tbody>
+                                <tfoot style="background:#d5e8d4; font-weight:bold;">
+                                    <tr>
+                                        <td>TOTAL</td>
+                                        <td></td>
+                                        <td style="text-align:center;"><t t-esc="donnees['total_steg_n']"/></td>
+                                        <td style="text-align:center;"><t t-esc="donnees['total_steg_n1']"/></td>
+                                        <td></td>
+                                        <td style="text-align:center;"><t t-esc="donnees['total_sonede_n']"/></td>
+                                        <td style="text-align:center;"><t t-esc="donnees['total_sonede_n1']"/></td>
+                                        <td style="text-align:center;"><t t-esc="donnees['total_n']"/></td>
+                                        <td style="text-align:center;"><t t-esc="donnees['ecart_global']"/></td>
+                                        <td style="text-align:center;"><t t-esc="donnees['ecart_pct']"/>%</td>
+                                    </tr>
+                                </tfoot>
+                            </table>
+
+                            <!-- Note unités -->
+                            <div style="margin-top:10px; font-size:10px; color:#777; border-top:1px solid #ddd; padding-top:8px;">
+                                Note : Les quantités STEG (kWh) et SONEDE (m³) sont affichées à titre indicatif.
+                                Seuls les montants en TND sont comparables entre les deux types d'énergie.
+                            </div>
+
+                        </t>
 
                     </div>
                 </t>

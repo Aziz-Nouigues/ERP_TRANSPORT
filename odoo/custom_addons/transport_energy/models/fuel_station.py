@@ -131,20 +131,8 @@ class TransportFuelCuve(models.Model):
             if rec.capacity > 0 and rec.current_stock > rec.capacity:
                 raise ValidationError("Le stock depasse la capacite de la cuve.")
 
-    @api.constrains('station_id', 'fuel_type_id')
-    def _check_unique_fuel_per_station(self):
-        for rec in self:
-            duplicate = self.search([
-                ('station_id', '=', rec.station_id.id),
-                ('fuel_type_id', '=', rec.fuel_type_id.id),
-                ('id', '!=', rec.id),
-            ], limit=1)
-            if duplicate:
-                raise ValidationError(
-                    f"La station '{rec.station_id.name}' a deja une cuve "
-                    f"'{rec.fuel_type_id.name}'. "
-                    f"Une seule cuve par type de carburant par station."
-                )
+    # Contrainte supprimee : une station peut avoir plusieurs cuves
+    # du meme type de carburant (exemple : 2 cuves diesel en parallele)
 
     def _add_stock(self, qty):
         """Credite le stock (appele par supply.order a la validation)."""

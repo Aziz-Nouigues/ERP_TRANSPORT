@@ -57,4 +57,13 @@
         <field name="number_increment">1</field>
     </record>
 
+    <record id="seq_reception_lubrifiant" model="ir.sequence">
+        <field name="name">Reception Lubrifiant</field>
+        <field name="code">transport.reception.lubrifiant</field>
+        <field name="prefix">RL/%(year)s/</field>
+        <field name="padding">4</field>
+        <field name="number_next">1</field>
+        <field name="number_increment">1</field>
+    </record>
+
 </odoo>

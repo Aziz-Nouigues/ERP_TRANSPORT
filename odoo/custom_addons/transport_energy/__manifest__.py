@@ -18,6 +18,7 @@
         'views/supply_order_views.xml',
         'views/fuel_voucher_views.xml',
         'views/bon_lubrifiant_views.xml',
+        'views/reception_lubrifiant_views.xml',
         'views/jaugeage_views.xml',
         'views/jaugeage_lubrifiant_views.xml',
         'views/agilis_views.xml',

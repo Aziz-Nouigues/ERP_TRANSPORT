@@ -23,6 +23,13 @@
                             type="object"
                             groups="transport_energy.group_responsable_energie"
                             invisible="state in ('done','cancelled')"/>
+                    <button name="action_cancel_done"
+                            string="Annuler bon valide (directeur)"
+                            type="object"
+                            groups="transport_energy.group_directeur_energie"
+                            invisible="state != 'done'"
+                            confirm="Annuler ce bon VALIDE restituera le stock cuve. Continuer ?"
+                            class="btn-danger"/>
                     <button name="action_reset_draft" string="Remettre en brouillon"
                             type="object"
                             invisible="state != 'cancelled'"/>
@@ -110,6 +117,13 @@
                             type="object"
                             groups="transport_energy.group_responsable_energie"
                             invisible="state in ('done','cancelled')"/>
+                    <button name="action_cancel_done"
+                            string="Annuler bon valide (directeur)"
+                            type="object"
+                            groups="transport_energy.group_directeur_energie"
+                            invisible="state != 'done'"
+                            confirm="Annuler ce bon VALIDE restituera le stock cuve. Continuer ?"
+                            class="btn-danger"/>
                     <button name="action_reset_draft" string="Remettre en brouillon"
                             type="object"
                             invisible="state != 'cancelled'"/>

@@ -18,6 +18,13 @@
                             type="object"
                             groups="transport_energy.group_responsable_energie"
                             invisible="statut in ('valide','annule')"/>
+                    <button name="action_annuler_valide"
+                            string="Annuler bon valide (directeur)"
+                            type="object"
+                            groups="transport_energy.group_directeur_energie"
+                            invisible="statut != 'valide'"
+                            confirm="Annuler ce bon VALIDE restituera le stock lubrifiant. Continuer ?"
+                            class="btn-danger"/>
                     <button name="action_brouillon" string="Remettre en brouillon"
                             type="object"
                             invisible="statut != 'annule'"/>
@@ -56,9 +63,15 @@
                                     <field name="type_lubrifiant_id"
                                            options="{'no_create': True, 'no_create_edit': True}"/>
                                     <field name="unite" readonly="1" optional="show"/>
+                                    <field name="conditionnement" readonly="1" optional="show"/>
+                                    <field name="nb_unites"
+                                           string="Nb unites (bidons...)"
+                                           invisible="not volume_conditionnement"
+                                           help="Saisir le nb de bidons/futs : la quantite en litres sera calculee auto."/>
+                                    <field name="volume_conditionnement" column_invisible="1"/>
                                     <field name="quantite_videe"
                                            invisible="type_operation != 'vidange'"/>
-                                    <field name="quantite"/>
+                                    <field name="quantite" string="Quantite (L)"/>
                                 </list>
                             </field>
                             <group class="oe_subtotal_footer">

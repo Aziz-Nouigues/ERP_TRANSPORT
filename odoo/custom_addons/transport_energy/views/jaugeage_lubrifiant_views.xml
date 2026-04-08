@@ -35,9 +35,21 @@
                             <field name="stock_actuel" readonly="1"
                                    decoration-danger="stock_status == 'critical'"
                                    decoration-warning="stock_status == 'low'"/>
+                            <field name="nb_unites_actuel" readonly="1"
+                                   string="Stock actuel (unites)"
+                                   invisible="not nb_unites_actuel"
+                                   help="Stock converti en bidons/futs selon le conditionnement du lubrifiant."/>
                             <field name="stock_minimum"/>
                         </group>
                     </group>
+                    <div class="o_row" style="margin-bottom:8px;">
+                        <button name="action_initialiser_stock"
+                                string="Initialiser / Ajuster le stock"
+                                type="object"
+                                class="btn-warning"
+                                groups="transport_energy.group_directeur_energie"
+                                help="Saisir le stock initial ou corriger manuellement. Reservé au directeur."/>
+                    </div>
                     <group string="Notes">
                         <field name="notes" widget="text" nolabel="1" colspan="2"/>
                     </group>
@@ -304,4 +316,56 @@
         sequence="20"
         groups="transport_energy.group_responsable_energie"/>
 
+
+    <!-- ═══ WIZARD INIT STOCK LUBRIFIANT ═══ -->
+    <record id="view_wizard_init_stock_lubrifiant_form" model="ir.ui.view">
+        <field name="name">transport.wizard.init.stock.lubrifiant.form</field>
+        <field name="model">transport.wizard.init.stock.lubrifiant</field>
+        <field name="arch" type="xml">
+            <form string="Initialiser / Ajuster le stock lubrifiant">
+                <group string="Stock concerné">
+                    <field name="stock_lubrifiant_id" readonly="1"/>
+                    <field name="atelier" readonly="1"/>
+                    <field name="type_lubrifiant_id" readonly="1"/>
+                    <field name="stock_actuel" readonly="1" string="Stock actuel (L)"/>
+                </group>
+                <group string="Nouvelle quantité">
+                    <field name="mode_saisie" widget="radio"/>
+                    <field name="quantite_litres"
+                           invisible="mode_saisie != 'litres'"
+                           string="Quantité (L)"/>
+                    <field name="nb_unites"
+                           invisible="mode_saisie != 'unites'"
+                           string="Nombre d'unités (ou litres si pas de conditionnement)"/>
+                    <field name="conditionnement" readonly="1"
+                           invisible="mode_saisie != 'unites'"/>
+                    <field name="volume_unitaire" readonly="1"
+                           invisible="mode_saisie != 'unites'"
+                           string="Volume par unité (L)"/>
+                    <field name="quantite_calculee" readonly="1"
+                           string="= Quantité en litres"
+                           decoration-info="quantite_calculee > 0"
+                           decoration-warning="quantite_calculee == 0"/>
+                    <div invisible="mode_saisie != 'unites' or volume_unitaire != 0"
+                         class="alert alert-warning" role="alert" style="font-size:12px;">
+                        Aucun conditionnement défini sur ce lubrifiant.
+                        La valeur saisie sera interprétée directement en litres.
+                        Pour gérer en bidons, configurez le conditionnement dans
+                        Configuration &gt; Types d'énergie.
+                    </div>
+                </group>
+                <group string="Justification">
+                    <field name="motif" widget="text" nolabel="1" colspan="2"
+                           placeholder="Ex: Stock initial migration, Correction inventaire physique..."/>
+                </group>
+                <footer>
+                    <button name="action_valider"
+                            string="Valider"
+                            type="object"
+                            class="btn-primary"/>
+                    <button string="Annuler" class="btn-secondary" special="cancel"/>
+                </footer>
+            </form>
+        </field>
+    </record>
 </odoo>
