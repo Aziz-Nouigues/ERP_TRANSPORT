@@ -1,0 +1,462 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <!-- ═══════════════════════════════════════════════════════════════
+         1. ÉTAT DES MISES EN REBUT DE LA PÉRIODE
+         CDC : "État des mises en rebut de la période"
+         Filtre : patrimoine.cession où type_sortie='rebut' dans la période
+    ═══════════════════════════════════════════════════════════════ -->
+    <template id="rapport_rebuts_template">
+        <t t-call="web.html_container">
+            <t t-call="web.external_layout">
+                <div class="page">
+                    <style>
+                        .pat-title { font-size:15px; font-weight:bold; text-align:center; margin-bottom:4px; }
+                        .pat-sub   { font-size:11px; text-align:center; color:#555; margin-bottom:10px; }
+                        .pat-table { width:100%; border-collapse:collapse; font-size:10px; margin-top:8px; }
+                        .pat-table th { background:#8B2222; color:white; padding:4px 6px; }
+                        .pat-table td { padding:3px 6px; border:1px solid #ddd; }
+                        .pat-table tr:nth-child(even) { background:#fdf0f0; }
+                        .pat-total  { background:#8B2222; color:white; font-weight:bold; }
+                        .tr { text-align:right; }
+                        .tc { text-align:center; }
+                    </style>
+
+                    <div class="pat-title">ÉTAT DES MISES EN REBUT DE LA PÉRIODE</div>
+                    <div class="pat-sub">
+                        Du <t t-esc="docs.date_debut.strftime('%d/%m/%Y')"/>
+                        au <t t-esc="docs.date_fin.strftime('%d/%m/%Y')"/>
+                        <t t-if="docs.categorie_id"> — Catégorie : <t t-esc="docs.categorie_id.name"/></t>
+                    </div>
+
+                    <t t-set="rebuts" t-value="docs._get_rebuts()"/>
+
+                    <t t-if="not rebuts">
+                        <p style="text-align:center;color:#888;font-style:italic;margin-top:20px;">
+                            Aucune mise en rebut sur la période sélectionnée.
+                        </p>
+                    </t>
+                    <t t-else="">
+                        <table class="pat-table">
+                            <thead>
+                                <tr>
+                                    <th>N° Sortie</th>
+                                    <th>N° Inventaire</th>
+                                    <th>Désignation</th>
+                                    <th>Catégorie</th>
+                                    <th class="tc">Date rebut</th>
+                                    <th>Motif</th>
+                                    <th class="tr">Coût entrée (DT)</th>
+                                    <th class="tr">Amort. cumulés (DT)</th>
+                                    <th class="tr">Dot. complémentaire (DT)</th>
+                                    <th class="tr">VNC sortie (DT)</th>
+                                    <th class="tr">Perte (DT)</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <t t-set="tot_cout"  t-value="0"/>
+                                <t t-set="tot_amort" t-value="0"/>
+                                <t t-set="tot_dot"   t-value="0"/>
+                                <t t-set="tot_vnc"   t-value="0"/>
+                                <t t-set="tot_perte" t-value="0"/>
+                                <t t-foreach="rebuts" t-as="r">
+                                    <tr>
+                                        <td><t t-esc="r.name"/></td>
+                                        <td><t t-esc="r.numero_inventaire"/></td>
+                                        <td><t t-esc="r.immobilisation_id.name"/></td>
+                                        <td><t t-esc="r.immobilisation_id.categorie_id.name"/></td>
+                                        <td class="tc"><t t-esc="r.date.strftime('%d/%m/%Y')"/></td>
+                                        <td><t t-esc="r.motif"/></td>
+                                        <td class="tr"><t t-esc="'%.3f' % r.cout_entree"/></td>
+                                        <td class="tr"><t t-esc="'%.3f' % r.amortissements_cumules"/></td>
+                                        <td class="tr"><t t-esc="'%.3f' % r.dotation_complementaire"/></td>
+                                        <td class="tr"><t t-esc="'%.3f' % r.vnc_sortie"/></td>
+                                        <td class="tr" style="color:red"><t t-esc="'%.3f' % abs(r.plus_moins_value)"/></td>
+                                    </tr>
+                                    <t t-set="tot_cout"  t-value="tot_cout  + r.cout_entree"/>
+                                    <t t-set="tot_amort" t-value="tot_amort + r.amortissements_cumules"/>
+                                    <t t-set="tot_dot"   t-value="tot_dot   + r.dotation_complementaire"/>
+                                    <t t-set="tot_vnc"   t-value="tot_vnc   + r.vnc_sortie"/>
+                                    <t t-set="tot_perte" t-value="tot_perte + abs(r.plus_moins_value)"/>
+                                </t>
+                                <tr class="pat-total">
+                                    <td colspan="6" style="text-align:right">TOTAUX :</td>
+                                    <td class="tr"><t t-esc="'%.3f' % tot_cout"/></td>
+                                    <td class="tr"><t t-esc="'%.3f' % tot_amort"/></td>
+                                    <td class="tr"><t t-esc="'%.3f' % tot_dot"/></td>
+                                    <td class="tr"><t t-esc="'%.3f' % tot_vnc"/></td>
+                                    <td class="tr"><t t-esc="'%.3f' % tot_perte"/></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                        <p style="font-size:9px;color:#777;margin-top:8px;">
+                            Nombre de mises en rebut : <t t-esc="len(rebuts)"/>
+                        </p>
+                    </t>
+                </div>
+            </t>
+        </t>
+    </template>
+
+    <record id="action_rapport_rebuts_periode" model="ir.actions.report">
+        <field name="name">État des mises en rebut de la période</field>
+        <field name="model">patrimoine.wizard.rapport</field>
+        <field name="report_type">qweb-pdf</field>
+        <field name="report_name">transport_patrimoine.rapport_rebuts_template</field>
+    </record>
+
+
+    <!-- ═══════════════════════════════════════════════════════════════
+         2. ÉTAT RÉCAPITULATIF VENTILÉ
+         CDC : "État récapitulatif ou détaillé de la valeur des immobilisations
+                ventilée par catégorie, par taux d'amortissement, par année
+                d'acquisition, par emplacement, …"
+         Paramètre : wizard.grouper_par
+    ═══════════════════════════════════════════════════════════════ -->
+    <template id="rapport_recap_ventile_template">
+        <t t-call="web.html_container">
+            <t t-call="web.external_layout">
+                <div class="page">
+                    <style>
+                        .pat-title { font-size:15px; font-weight:bold; text-align:center; margin-bottom:4px; }
+                        .pat-sub   { font-size:11px; text-align:center; color:#555; margin-bottom:10px; }
+                        .pat-table { width:100%; border-collapse:collapse; font-size:10px; margin-top:8px; }
+                        .pat-table th { background:#2c5f8a; color:white; padding:4px 8px; }
+                        .pat-table td { padding:3px 8px; border:1px solid #ddd; }
+                        .pat-table tr:nth-child(even) { background:#f5f9ff; }
+                        .pat-total  { background:#2c5f8a; color:white; font-weight:bold; }
+                        .tr { text-align:right; }
+                        .tc { text-align:center; }
+                        .pct-bar-bg  { background:#e0e0e0; border-radius:3px; height:8px; }
+                        .pct-bar-fill{ background:#2c5f8a; border-radius:3px; height:8px; }
+                    </style>
+
+                    <div class="pat-title">ÉTAT RÉCAPITULATIF DES IMMOBILISATIONS</div>
+                    <div class="pat-sub">
+                        Ventilation par :
+                        <strong><t t-esc="dict([
+                            ('categorie','Catégorie'),('sous_categorie','Sous-catégorie'),
+                            ('emplacement','Emplacement'),('annee_acq','Année d\'acquisition'),
+                            ('methode','Méthode d\'amortissement')
+                        ]).get(docs.grouper_par, docs.grouper_par)"/></strong>
+                        <t t-if="docs.categorie_id"> — Catégorie : <t t-esc="docs.categorie_id.name"/></t>
+                        <t t-if="docs.emplacement_id"> — Emplacement : <t t-esc="docs.emplacement_id.display_name"/></t>
+                        <t t-if="docs.taux_filtre > 0"> — Taux : <t t-esc="docs.taux_filtre"/>%</t>
+                    </div>
+
+                    <t t-set="rows" t-value="docs._get_recap_ventile()"/>
+                    <t t-set="gt_nb"    t-value="0"/>
+                    <t t-set="gt_brut"  t-value="0"/>
+                    <t t-set="gt_amort" t-value="0"/>
+                    <t t-set="gt_vnc"   t-value="0"/>
+
+                    <table class="pat-table">
+                        <thead>
+                            <tr>
+                                <th>Groupe</th>
+                                <th class="tc">Nb immo.</th>
+                                <th class="tr">Valeur brute (DT)</th>
+                                <th class="tr">Amort. cumulés (DT)</th>
+                                <th class="tr">VNC (DT)</th>
+                                <th class="tr">Taux moy. (%)</th>
+                                <th class="tc">Taux amort.</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <t t-foreach="rows" t-as="row">
+                                <t t-set="pct_amort" t-value="round(row['amort_cumule'] / row['cout_brut'] * 100, 1) if row['cout_brut'] else 0"/>
+                                <tr>
+                                    <td><t t-esc="row['groupe']"/></td>
+                                    <td class="tc"><t t-esc="row['nb']"/></td>
+                                    <td class="tr"><t t-esc="'%.3f' % row['cout_brut']"/></td>
+                                    <td class="tr"><t t-esc="'%.3f' % row['amort_cumule']"/></td>
+                                    <td class="tr" style="font-weight:bold"><t t-esc="'%.3f' % row['vnc']"/></td>
+                                    <td class="tr"><t t-esc="'%.2f' % row['taux_moy']"/>%</td>
+                                    <td class="tc" style="min-width:80px;">
+                                        <div class="pct-bar-bg">
+                                            <div class="pct-bar-fill" t-attf-style="width:#{min(pct_amort,100)}%"/>
+                                        </div>
+                                        <span style="font-size:9px"><t t-esc="pct_amort"/>%</span>
+                                    </td>
+                                </tr>
+                                <t t-set="gt_nb"    t-value="gt_nb    + row['nb']"/>
+                                <t t-set="gt_brut"  t-value="gt_brut  + row['cout_brut']"/>
+                                <t t-set="gt_amort" t-value="gt_amort + row['amort_cumule']"/>
+                                <t t-set="gt_vnc"   t-value="gt_vnc   + row['vnc']"/>
+                            </t>
+                            <tr class="pat-total">
+                                <td>TOTAL GÉNÉRAL</td>
+                                <td class="tc"><t t-esc="gt_nb"/></td>
+                                <td class="tr"><t t-esc="'%.3f' % gt_brut"/></td>
+                                <td class="tr"><t t-esc="'%.3f' % gt_amort"/></td>
+                                <td class="tr"><t t-esc="'%.3f' % gt_vnc"/></td>
+                                <td colspan="2"></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                    <p style="font-size:9px;color:#777;margin-top:8px;">
+                        Édité le : <span t-esc="context_timestamp(datetime.datetime.now()).strftime('%d/%m/%Y à %H:%M')"/>
+                    </p>
+                </div>
+            </t>
+        </t>
+    </template>
+
+    <record id="action_rapport_recap_ventile" model="ir.actions.report">
+        <field name="name">État récapitulatif ventilé</field>
+        <field name="model">patrimoine.wizard.rapport</field>
+        <field name="report_type">qweb-pdf</field>
+        <field name="report_name">transport_patrimoine.rapport_recap_ventile_template</field>
+    </record>
+
+
+    <!-- ═══════════════════════════════════════════════════════════════
+         3. TABLEAU D'AMORTISSEMENT PAR SOUS-CATÉGORIE ET PAR IMMOBILISATION
+         CDC : "Tableau d'amortissement des immobilisations (par catégorie,
+                par sous-catégorie et par immobilisation)"
+         Arabe : "تلخيص جدول الإستهلاكات حسب الأصناف"
+    ═══════════════════════════════════════════════════════════════ -->
+    <template id="rapport_amort_par_sous_categorie_template">
+        <t t-call="web.html_container">
+            <t t-call="web.external_layout">
+                <div class="page">
+                    <style>
+                        .pat-title  { font-size:15px; font-weight:bold; text-align:center; margin-bottom:4px; }
+                        .pat-sub    { font-size:11px; text-align:center; color:#555; margin-bottom:10px; }
+                        .pat-table  { width:100%; border-collapse:collapse; font-size:9px; margin-top:6px; }
+                        .pat-table th { background:#2c5f8a; color:white; padding:3px 5px; font-size:9px; }
+                        .pat-table td { padding:2px 5px; border:1px solid #ddd; }
+                        .h-cat      { background:#1a4060; color:white; font-weight:bold; font-size:10px; padding:4px 6px; }
+                        .h-scat     { background:#d4e6f1; color:#1a4060; font-weight:bold; font-size:9px; padding:3px 6px; }
+                        .t-scat     { background:#eaf3fb; font-weight:bold; }
+                        .t-cat      { background:#1a4060; color:white; font-weight:bold; }
+                        .t-gen      { background:#0d2d45; color:white; font-weight:bold; font-size:10px; }
+                        .tr { text-align:right; }
+                        .tc { text-align:center; }
+                    </style>
+
+                    <div class="pat-title">TABLEAU D'AMORTISSEMENT PAR CATÉGORIE ET SOUS-CATÉGORIE</div>
+                    <div class="pat-subtitle2" style="font-size:11px;text-align:center;color:#555;margin-bottom:4px">
+                        تلخيص جدول الإستهلاكات حسب الأصناف
+                    </div>
+                    <div class="pat-sub">
+                        Exercice : <t t-esc="docs.annee"/>
+                        <t t-if="docs.categorie_id"> — Catégorie : <t t-esc="docs.categorie_id.name"/></t>
+                    </div>
+
+                    <t t-set="structure" t-value="docs._get_lignes_par_sous_categorie()"/>
+                    <t t-set="gt_dot"   t-value="0"/>
+                    <t t-set="gt_cumul" t-value="0"/>
+
+                    <table class="pat-table">
+                        <thead>
+                            <tr>
+                                <th>N° Inv.</th>
+                                <th>Désignation</th>
+                                <th class="tc">M.E.S.</th>
+                                <th class="tr">Coût entrée</th>
+                                <th class="tc">Méthode</th>
+                                <th class="tc">Taux%</th>
+                                <th class="tr">Dotation <t t-esc="docs.annee"/> (DT)</th>
+                                <th class="tr">Amort. cumulés (DT)</th>
+                                <th class="tr">VNC (DT)</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <t t-foreach="structure" t-as="cat_block">
+                                <t t-set="cat_dot"   t-value="0"/>
+                                <t t-set="cat_cumul" t-value="0"/>
+                                <!-- Entête catégorie -->
+                                <tr>
+                                    <td colspan="9" class="h-cat"><t t-esc="cat_block['cat']"/></td>
+                                </tr>
+                                <t t-foreach="cat_block['sous_cats']" t-as="sc">
+                                    <!-- Entête sous-catégorie -->
+                                    <tr>
+                                        <td colspan="9" class="h-scat">&#160;&#160;<t t-esc="sc['scat']"/></td>
+                                    </tr>
+                                    <!-- Lignes immobilisations -->
+                                    <t t-foreach="sc['lignes']" t-as="l">
+                                        <tr>
+                                            <td>&#160;&#160;&#160;&#160;<t t-esc="l.immobilisation_id.numero_inventaire"/></td>
+                                            <td><t t-esc="l.immobilisation_id.name"/></td>
+                                            <td class="tc">
+                                                <t t-esc="l.immobilisation_id.date_mise_en_service.strftime('%d/%m/%Y') if l.immobilisation_id.date_mise_en_service else '-'"/>
+                                            </td>
+                                            <td class="tr"><t t-esc="'%.3f' % l.immobilisation_id.cout_entree"/></td>
+                                            <td class="tc">
+                                                <t t-esc="dict(l.immobilisation_id._fields['methode_amortissement'].selection).get(l.immobilisation_id.methode_amortissement,'')"/>
+                                            </td>
+                                            <td class="tc"><t t-esc="'%.2f' % l.taux_applique"/>%</td>
+                                            <td class="tr"><t t-esc="'%.3f' % l.montant_amortissement"/></td>
+                                            <td class="tr"><t t-esc="'%.3f' % l.amortissements_cumules"/></td>
+                                            <td class="tr"><t t-esc="'%.3f' % l.valeur_nette"/></td>
+                                        </tr>
+                                    </t>
+                                    <!-- Sous-total sous-catégorie -->
+                                    <tr class="t-scat">
+                                        <td colspan="6" style="text-align:right;font-style:italic;">
+                                            Sous-total <t t-esc="sc['scat']"/> :
+                                        </td>
+                                        <td class="tr"><t t-esc="'%.3f' % sc['total_dot']"/></td>
+                                        <td class="tr"><t t-esc="'%.3f' % sc['total_cumul']"/></td>
+                                        <td></td>
+                                    </tr>
+                                    <t t-set="cat_dot"   t-value="cat_dot   + sc['total_dot']"/>
+                                    <t t-set="cat_cumul" t-value="cat_cumul + sc['total_cumul']"/>
+                                </t>
+                                <!-- Total catégorie -->
+                                <tr class="t-cat">
+                                    <td colspan="6" style="text-align:right">Total <t t-esc="cat_block['cat']"/> :</td>
+                                    <td class="tr"><t t-esc="'%.3f' % cat_dot"/></td>
+                                    <td class="tr"><t t-esc="'%.3f' % cat_cumul"/></td>
+                                    <td></td>
+                                </tr>
+                                <t t-set="gt_dot"   t-value="gt_dot   + cat_dot"/>
+                                <t t-set="gt_cumul" t-value="gt_cumul + cat_cumul"/>
+                            </t>
+                            <!-- Total général -->
+                            <tr class="t-gen">
+                                <td colspan="6" style="text-align:right">TOTAL GÉNÉRAL :</td>
+                                <td class="tr"><t t-esc="'%.3f' % gt_dot"/></td>
+                                <td class="tr"><t t-esc="'%.3f' % gt_cumul"/></td>
+                                <td></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                    <p style="font-size:9px;color:#777;margin-top:8px;">
+                        Édité le : <span t-esc="context_timestamp(datetime.datetime.now()).strftime('%d/%m/%Y à %H:%M')"/>
+                    </p>
+                </div>
+            </t>
+        </t>
+    </template>
+
+    <record id="action_rapport_amort_par_sous_categorie" model="ir.actions.report">
+        <field name="name">Tableau amortissement par catégorie et sous-catégorie</field>
+        <field name="model">patrimoine.wizard.rapport</field>
+        <field name="report_type">qweb-pdf</field>
+        <field name="report_name">transport_patrimoine.rapport_amort_par_sous_categorie_template</field>
+    </record>
+
+
+    <!-- ═══════════════════════════════════════════════════════════════
+         4. TABLEAU D'AMORTISSEMENT PAR PROJET / PROGRAMME
+         CDC arabe : "طبع جدول الإستهلاكات حسب المشاريع"
+                     "تلخيص جدول الإستهلاكات حسب المجموعة"
+    ═══════════════════════════════════════════════════════════════ -->
+    <template id="rapport_amort_par_projet_template">
+        <t t-call="web.html_container">
+            <t t-call="web.external_layout">
+                <div class="page">
+                    <style>
+                        .pat-title  { font-size:15px; font-weight:bold; text-align:center; margin-bottom:4px; }
+                        .pat-sub    { font-size:11px; text-align:center; color:#555; margin-bottom:10px; }
+                        .pat-table  { width:100%; border-collapse:collapse; font-size:9px; margin-top:6px; }
+                        .pat-table th { background:#1a5276; color:white; padding:3px 5px; }
+                        .pat-table td { padding:2px 5px; border:1px solid #ddd; }
+                        .h-proj     { background:#1a5276; color:white; font-weight:bold; font-size:10px; padding:4px 6px; }
+                        .t-proj     { background:#aed6f1; color:#1a2740; font-weight:bold; }
+                        .t-gen      { background:#1a2740; color:white; font-weight:bold; font-size:10px; }
+                        .badge-proj { display:inline-block; background:#d6eaf8; color:#1a5276;
+                                      border-radius:3px; padding:1px 6px; font-size:9px; }
+                        .tr { text-align:right; }
+                        .tc { text-align:center; }
+                    </style>
+
+                    <div class="pat-title">TABLEAU D'AMORTISSEMENT PAR PROJET / PROGRAMME</div>
+                    <div style="font-size:11px;text-align:center;color:#555;margin-bottom:4px">
+                        طبع جدول الإستهلاكات حسب المشاريع
+                    </div>
+                    <div class="pat-sub">
+                        Exercice : <t t-esc="docs.annee"/>
+                        <t t-if="docs.projet_filtre"> — Projet : <t t-esc="docs.projet_filtre"/></t>
+                    </div>
+
+                    <t t-set="projets"  t-value="docs._get_lignes_par_projet()"/>
+                    <t t-set="gt_dot"   t-value="0"/>
+                    <t t-set="gt_cumul" t-value="0"/>
+                    <t t-set="gt_immo"  t-value="0"/>
+
+                    <table class="pat-table">
+                        <thead>
+                            <tr>
+                                <th>N° Inv.</th>
+                                <th>Désignation</th>
+                                <th>Catégorie</th>
+                                <th class="tc">M.E.S.</th>
+                                <th class="tr">Coût entrée</th>
+                                <th class="tc">Taux%</th>
+                                <th class="tr">Dotation <t t-esc="docs.annee"/> (DT)</th>
+                                <th class="tr">Amort. cumulés (DT)</th>
+                                <th class="tr">VNC (DT)</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <t t-foreach="projets" t-as="proj_block">
+                                <!-- Entête projet -->
+                                <tr>
+                                    <td colspan="9" class="h-proj">
+                                        Projet : <t t-esc="proj_block['projet']"/>
+                                        <span style="float:right;font-size:9px">
+                                            <t t-esc="proj_block['nb_immo']"/> immobilisation(s)
+                                        </span>
+                                    </td>
+                                </tr>
+                                <!-- Lignes -->
+                                <t t-foreach="proj_block['lignes']" t-as="l">
+                                    <tr>
+                                        <td>&#160;&#160;<t t-esc="l.immobilisation_id.numero_inventaire"/></td>
+                                        <td><t t-esc="l.immobilisation_id.name"/></td>
+                                        <td><t t-esc="l.immobilisation_id.categorie_id.name"/></td>
+                                        <td class="tc">
+                                            <t t-esc="l.immobilisation_id.date_mise_en_service.strftime('%d/%m/%Y') if l.immobilisation_id.date_mise_en_service else '-'"/>
+                                        </td>
+                                        <td class="tr"><t t-esc="'%.3f' % l.immobilisation_id.cout_entree"/></td>
+                                        <td class="tc"><t t-esc="'%.2f' % l.taux_applique"/>%</td>
+                                        <td class="tr"><t t-esc="'%.3f' % l.montant_amortissement"/></td>
+                                        <td class="tr"><t t-esc="'%.3f' % l.amortissements_cumules"/></td>
+                                        <td class="tr"><t t-esc="'%.3f' % l.valeur_nette"/></td>
+                                    </tr>
+                                </t>
+                                <!-- Sous-total projet -->
+                                <tr class="t-proj">
+                                    <td colspan="6" style="text-align:right;font-style:italic;">
+                                        Sous-total projet « <t t-esc="proj_block['projet']"/> » :
+                                    </td>
+                                    <td class="tr"><t t-esc="'%.3f' % proj_block['total_dot']"/></td>
+                                    <td class="tr"><t t-esc="'%.3f' % proj_block['total_cumul']"/></td>
+                                    <td></td>
+                                </tr>
+                                <t t-set="gt_dot"   t-value="gt_dot   + proj_block['total_dot']"/>
+                                <t t-set="gt_cumul" t-value="gt_cumul + proj_block['total_cumul']"/>
+                                <t t-set="gt_immo"  t-value="gt_immo  + proj_block['nb_immo']"/>
+                            </t>
+                            <!-- Total général -->
+                            <tr class="t-gen">
+                                <td colspan="3" style="text-align:right">
+                                    TOTAL GÉNÉRAL (<t t-esc="gt_immo"/> immobilisations) :
+                                </td>
+                                <td colspan="3"></td>
+                                <td class="tr"><t t-esc="'%.3f' % gt_dot"/></td>
+                                <td class="tr"><t t-esc="'%.3f' % gt_cumul"/></td>
+                                <td></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                    <p style="font-size:9px;color:#777;margin-top:8px;">
+                        Édité le : <span t-esc="context_timestamp(datetime.datetime.now()).strftime('%d/%m/%Y à %H:%M')"/>
+                    </p>
+                </div>
+            </t>
+        </t>
+    </template>
+
+    <record id="action_rapport_amort_par_projet" model="ir.actions.report">
+        <field name="name">Tableau amortissement par projet / programme</field>
+        <field name="model">patrimoine.wizard.rapport</field>
+        <field name="report_type">qweb-pdf</field>
+        <field name="report_name">transport_patrimoine.rapport_amort_par_projet_template</field>
+    </record>
+
+</odoo>

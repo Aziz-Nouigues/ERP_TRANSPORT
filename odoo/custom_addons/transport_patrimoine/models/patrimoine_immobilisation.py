@@ -303,12 +303,64 @@ class PatrimoineImmobilisation(models.Model):
                 if d.state == 'valide'
             )
 
-    @api.depends('cout_acquisition', 'frais_accessoires', 'depenses_posterieures')
+    # ── COÛT D'ENTRÉE SPÉCIFIQUE PAR TYPE (CDC §) ────────────────
+    # Acquisition      : coût d'achat + frais accessoires + dépenses postérieures
+    # Échange          : valeur vénale du bien remis + frais d'acte + dépenses postérieures
+    # Livraison à soi-même : coût de production + dépenses postérieures (sans frais_accessoires)
+    # Don / Apport     : valeur vénale/convenue + frais mise en service + dépenses postérieures
+
+    cout_entree_detaille = fields.Text(
+        string='Détail calcul coût d\'entrée',
+        compute='_compute_cout_entree_detaille',
+        store=False,
+        help='Règle de calcul appliquée selon le mode d\'entrée',
+    )
+
+    @staticmethod
+    def _calcul_cout_par_type(type_entree, ca, fa, dp):
+        """Retourne (montant, libellé) selon le type d'entrée."""
+        if type_entree == 'acquisition':
+            return ca + fa + dp, (
+                'Acquisition : coût achat (%.3f) + frais access. (%.3f) + dép. post. (%.3f)' % (ca, fa, dp)
+            )
+        elif type_entree == 'echange':
+            return ca + fa + dp, (
+                "Échange : valeur vénale (%.3f) + frais acte (%.3f) + dép. post. (%.3f)" % (ca, fa, dp)
+            )
+        elif type_entree == 'livraison_soi':
+            return ca + dp, (
+                'Livraison à soi-même : coût production (%.3f) + dép. post. (%.3f) — frais exclus' % (ca, dp)
+            )
+        elif type_entree in ('don', 'apport'):
+            label = 'Don' if type_entree == 'don' else 'Apport'
+            return ca + fa + dp, (
+                '%s : valeur vénale/convenue (%.3f) + frais MES (%.3f) + dép. post. (%.3f)' % (label, ca, fa, dp)
+            )
+        else:
+            return ca + fa + dp, 'Calcul standard : %.3f + %.3f + %.3f' % (ca, fa, dp)
+
+    @api.depends('type_entree', 'cout_acquisition', 'frais_accessoires', 'depenses_posterieures')
     def _compute_cout_entree(self):
         for rec in self:
-            rec.cout_entree = (
-                rec.cout_acquisition + rec.frais_accessoires + rec.depenses_posterieures
+            montant, _ = self._calcul_cout_par_type(
+                rec.type_entree, rec.cout_acquisition,
+                rec.frais_accessoires, rec.depenses_posterieures
             )
+            rec.cout_entree = montant
+
+    @api.depends('type_entree', 'cout_acquisition', 'frais_accessoires', 'depenses_posterieures')
+    def _compute_cout_entree_detaille(self):
+        for rec in self:
+            _, libelle = self._calcul_cout_par_type(
+                rec.type_entree, rec.cout_acquisition,
+                rec.frais_accessoires, rec.depenses_posterieures
+            )
+            rec.cout_entree_detaille = libelle
+
+    @api.depends('type_entree', 'cout_acquisition', 'frais_accessoires', 'depenses_posterieures')
+    def _compute_base_amortissable_trigger(self):
+        """Trigger recalcul base si type_entree change (cout_entree dépend de type_entree)."""
+        self._compute_base_amortissable()
 
     @api.depends('cout_entree', 'valeur_residuelle')
     def _compute_base_amortissable(self):
@@ -760,6 +812,38 @@ class PatrimoineImmobilisation(models.Model):
         _logger.info(
             'Patrimoine — Tableau amort. traité pour %d immobilisation(s).',
             len(immobilisations)
+        )
+
+    @api.model
+    def _cron_comptabiliser_dotations_periode(self):
+        """
+        Cron mensuel (CDC §) : comptabilise automatiquement toutes les lignes
+        d'amortissement prévisionnelles dont la date_fin est <= date d'arrêté (aujourd'hui).
+        Implémente la comptabilisation selon la périodicité des arrêtés.
+        """
+        today = fields.Date.today()
+        Ligne = self.env['patrimoine.amortissement.ligne']
+        lignes_a_comptabiliser = Ligne.search([
+            ('state', '=', 'brouillon'),
+            ('date_fin', '<=', today),
+            ('montant_amortissement', '>', 0),
+            ('immobilisation_id.statut', 'in', ['en_service', 'hors_service']),
+        ])
+        nb_ok = 0
+        nb_err = 0
+        for ligne in lignes_a_comptabiliser:
+            try:
+                ligne.action_valider()
+                nb_ok += 1
+            except Exception as e:
+                _logger.error(
+                    'Erreur comptabilisation dotation immo %s année %s : %s',
+                    ligne.immobilisation_id.numero_inventaire, ligne.annee, str(e)
+                )
+                nb_err += 1
+        _logger.info(
+            'Patrimoine — Dotations comptabilisées automatiquement : %d OK / %d erreurs.',
+            nb_ok, nb_err
         )
 
     @api.model

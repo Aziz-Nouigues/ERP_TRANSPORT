@@ -50,6 +50,7 @@
         'reports/rapport_cessions.xml',
         'reports/rapport_variation.xml',
         'reports/rapport_distribution.xml',
+        'reports/rapport_manquants.xml',
         # Menu — en dernier (dépend des actions)
         'views/patrimoine_menu_views.xml',
     ],
