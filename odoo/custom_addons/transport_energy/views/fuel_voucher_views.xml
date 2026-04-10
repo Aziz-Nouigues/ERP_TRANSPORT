@@ -79,10 +79,13 @@
                                     <field name="odometer_status" readonly="1"/>
                                     <field name="distance_estimated" readonly="1" optional="show"/>
                                     <field name="quantity"/>
+                                    <field name="unit_price"/>
+                                    <field name="subtotal" readonly="1"/>
                                 </list>
                             </field>
                             <group class="oe_subtotal_footer">
                                 <field name="total_quantity" string="Total distribue (L)" readonly="1"/>
+                                <field name="total_cost" string="Cout total (TND)" readonly="1"/>
                             </group>
                         </page>
                         <page string="Notes">

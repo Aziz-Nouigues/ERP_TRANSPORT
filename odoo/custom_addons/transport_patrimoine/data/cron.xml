@@ -43,8 +43,10 @@
             <field name="code">model._cron_comptabiliser_dotations_periode()</field>
             <field name="interval_number">1</field>
             <field name="interval_type">months</field>
+            <field name="numbercall">-1</field>
             <field name="active" eval="False"/>
             <field name="user_id" ref="base.user_root"/>
+            <field name="priority">10</field>
         </record>
 
     </data>

@@ -217,9 +217,35 @@ class PatrimoineCession(models.Model):
         journal = immo.journal_id or self.env['account.journal'].search(
             [('type', '=', 'general')], limit=1
         )
-        if not journal or not cat.compte_immobilisation_id:
-            _logger.warning('Comptes non configurés pour la catégorie %s', cat.name)
-            return
+
+        # B3 FIX — Vérifications préalables des comptes obligatoires
+        erreurs = []
+        if not journal:
+            erreurs.append("Aucun journal comptable général disponible.")
+        if not cat.compte_immobilisation_id:
+            erreurs.append("Compte immobilisation non configuré sur la catégorie '%s'." % cat.name)
+        if not cat.compte_amortissement_id:
+            erreurs.append("Compte amortissements cumulés non configuré sur la catégorie '%s'." % cat.name)
+        if self.type_sortie != 'rebut' and self.prix_cession > 0 and not cat.compte_cession_id:
+            erreurs.append(
+                "Compte produit de cession non configuré sur la catégorie '%s' "
+                "(requis car prix de cession = %.3f DT)." % (cat.name, self.prix_cession)
+            )
+        if self.plus_moins_value < 0 and not cat.compte_perte_id:
+            erreurs.append(
+                "Compte perte sur cession non configuré sur la catégorie '%s' "
+                "(requis car moins-value = %.3f DT)." % (cat.name, abs(self.plus_moins_value))
+            )
+        if self.plus_moins_value > 0 and not cat.compte_cession_id:
+            erreurs.append(
+                "Compte produit de cession non configuré sur la catégorie '%s' "
+                "(requis car plus-value = %.3f DT)." % (cat.name, self.plus_moins_value)
+            )
+        if erreurs:
+            raise UserError(
+                "Impossible de comptabiliser la sortie — configuration incomplète :\n\n"
+                + "\n".join("• " + e for e in erreurs)
+            )
 
         # 1. Écriture dotation complémentaire
         if self.dotation_complementaire > 0 and cat.compte_dotation_id and cat.compte_amortissement_id:
@@ -246,23 +272,23 @@ class PatrimoineCession(models.Model):
         amort_total = self.amortissements_cumules + self.dotation_complementaire
         lines = []
 
-        # Sortir l'actif
+        # B3 FIX — Débit amortissements cumulés (compte 28xx) — jamais fallback sur le compte actif
         lines.append((0, 0, {
             'name': libelle_sortie,
-            'account_id': cat.compte_amortissement_id.id if cat.compte_amortissement_id else cat.compte_immobilisation_id.id,
+            'account_id': cat.compte_amortissement_id.id,
             'debit': amort_total,
             'credit': 0.0,
         }))
 
-        # Perte ou gain
-        if self.plus_moins_value < 0 and cat.compte_perte_id:
+        # Perte ou gain sur sortie
+        if self.plus_moins_value < 0:
             lines.append((0, 0, {
-                'name': libelle_sortie + ' — perte',
+                'name': libelle_sortie + ' — moins-value',
                 'account_id': cat.compte_perte_id.id,
                 'debit': abs(self.plus_moins_value),
                 'credit': 0.0,
             }))
-        elif self.plus_moins_value > 0 and cat.compte_cession_id:
+        elif self.plus_moins_value > 0:
             lines.append((0, 0, {
                 'name': libelle_sortie + ' — plus-value',
                 'account_id': cat.compte_cession_id.id,
@@ -270,16 +296,16 @@ class PatrimoineCession(models.Model):
                 'credit': self.plus_moins_value,
             }))
 
-        # Produit de cession
+        # Produit de cession (prix encaissé ou à encaisser)
         if self.prix_cession > 0:
             lines.append((0, 0, {
                 'name': 'Produit cession %s' % immo.numero_inventaire,
-                'account_id': cat.compte_cession_id.id if cat.compte_cession_id else cat.compte_immobilisation_id.id,
+                'account_id': cat.compte_cession_id.id,
                 'debit': 0.0,
                 'credit': self.prix_cession,
             }))
 
-        # Solde actif
+        # Sortie de l'actif brut au coût d'entrée (crédit compte immobilisation 2xx)
         lines.append((0, 0, {
             'name': libelle_sortie,
             'account_id': cat.compte_immobilisation_id.id,

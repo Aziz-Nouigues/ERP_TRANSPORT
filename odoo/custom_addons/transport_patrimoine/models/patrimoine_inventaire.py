@@ -1,7 +1,9 @@
 # -*- coding: utf-8 -*-
 from odoo import models, fields, api
 from odoo.exceptions import ValidationError, UserError
+import logging
 
+_logger = logging.getLogger(__name__)
 
 class PatrimoineInventaire(models.Model):
     """
@@ -124,18 +126,73 @@ class PatrimoineInventaire(models.Model):
     def action_valider(self):
         """Valider l'inventaire et appliquer les ajustements."""
         self.ensure_one()
-        # Sortir les immobilisations non retrouvées
+
+        # A3 FIX — Pour chaque immobilisation non retrouvée, créer une patrimoine.cession
+        # de type 'rebut' et la comptabiliser afin que les écritures de sortie d'actif
+        # soient générées correctement. L'ancien code changeait seulement le statut
+        # sans produire d'écriture comptable, laissant des actifs fantômes en comptabilité.
+        Cession = self.env['patrimoine.cession']
         lignes_manquantes = self.ligne_ids.filtered(lambda l: l.etat_constate == 'manquant')
+        erreurs_cession = []
+
         for ligne in lignes_manquantes:
-            ligne.immobilisation_id.write({
-                'statut': 'rebut',
-                'date_rebut': fields.Date.today(),
-            })
-            ligne.immobilisation_id.message_post(
-                body="Mise en rebut suite inventaire %s — immobilisation non retrouvée." % self.name,
-                message_type='comment',
-            )
+            immo = ligne.immobilisation_id
+            # Ne traiter que les immobilisations encore actives (pas déjà cédées/rebutées)
+            if immo.statut not in ('en_service', 'hors_service'):
+                continue
+            try:
+                cession = Cession.create({
+                    'type_sortie': 'rebut',
+                    'immobilisation_id': immo.id,
+                    'date': fields.Date.today(),
+                    'motif': 'Mise en rebut suite inventaire %s — immobilisation non retrouvée.' % self.name,
+                    'prix_cession': 0.0,
+                    'notes': 'Généré automatiquement par la validation de l\'inventaire %s.' % self.name,
+                })
+                cession.action_confirmer()
+                try:
+                    cession.action_comptabiliser()
+                except Exception as e_compta:
+                    # La comptabilisation peut échouer si les comptes ne sont pas configurés.
+                    # On passe quand même en rebut et on signale l'erreur dans le chatter.
+                    _logger.warning(
+                        'Inventaire %s — comptabilisation rebut immo %s impossible : %s',
+                        self.name, immo.numero_inventaire, str(e_compta),
+                    )
+                    erreurs_cession.append(immo.numero_inventaire)
+                    # Forcer le statut rebut même sans écriture
+                    immo.write({'statut': 'rebut', 'date_rebut': fields.Date.today()})
+
+                immo.message_post(
+                    body=(
+                        "Mise en rebut suite inventaire <strong>%s</strong> — "
+                        "immobilisation non retrouvée. "
+                        "Fiche cession : <strong>%s</strong>."
+                    ) % (self.name, cession.name),
+                    message_type='comment',
+                )
+            except Exception as e:
+                _logger.error(
+                    'Inventaire %s — erreur création cession pour immo %s : %s',
+                    self.name, immo.numero_inventaire, str(e),
+                )
+                erreurs_cession.append(immo.numero_inventaire)
+
         self.state = 'valide'
+
+        if erreurs_cession:
+            self.message_post(
+                body=(
+                    "<strong>Inventaire validé avec avertissements</strong><br/>"
+                    "Les immobilisations suivantes ont été mises en rebut mais "
+                    "leur écriture comptable de sortie n'a pas pu être générée "
+                    "(comptes non configurés sur la catégorie) :<br/>"
+                    + "<br/>".join("• %s" % n for n in erreurs_cession)
+                    + "<br/>Vérifiez la configuration des comptes et créez les écritures manuellement."
+                ),
+                message_type='comment',
+                subtype_xmlid='mail.mt_note',
+            )
 
     def action_imprimer_bordereau(self):
         return self.env.ref(

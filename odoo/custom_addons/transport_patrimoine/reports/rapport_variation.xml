@@ -1,5 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <odoo>
-    <!-- Ce fichier regroupe les actions de rapport variation déjà définies dans rapport_acquisitions.xml -->
-    <!-- Ajout des actions manquantes pour compléter la liste des rapports -->
+    <!--
+    CDC — Tableau de variation des immobilisations
+    Le template rapport_variation_template et l'action action_rapport_variation
+    sont définis dans reports/rapport_acquisitions.xml (fichier regroupant les
+    rapports de synthèse de la période : acquisitions, cessions, rebuts, variation).
+    Ce fichier est conservé pour compatibilité manifest mais ne définit rien.
+    -->
 </odoo>

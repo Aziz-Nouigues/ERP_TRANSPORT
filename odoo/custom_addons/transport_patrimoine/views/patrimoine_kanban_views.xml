@@ -1,9 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <odoo>
 
-    <!-- ═══════════════════════════════════════════════════════════
-         VUE KANBAN — IMMOBILISATIONS PAR STATUT
-    ═══════════════════════════════════════════════════════════ -->
     <record id="view_patrimoine_immobilisation_kanban" model="ir.ui.view">
         <field name="name">patrimoine.immobilisation.kanban</field>
         <field name="model">patrimoine.immobilisation</field>
@@ -41,7 +38,7 @@
                                 </span>
                             </div>
                             <div t-if="record.emplacement_id.raw_value" class="mt-1">
-                                <i class="fa fa-map-marker me-1 text-muted"/>
+                                <i class="fa fa-map-marker me-1 text-muted" title="Emplacement"/>
                                 <field name="emplacement_id"/>
                             </div>
                             <div class="mt-2 row g-0">
@@ -72,7 +69,7 @@
                                 </div>
                             </div>
                             <div t-if="record.entierement_amorti.raw_value"
-                                 class="alert alert-warning py-1 px-2 mt-2 mb-0">
+                                 class="bg-warning-subtle border border-warning rounded py-1 px-2 mt-2 mb-0" role="status">
                                 <small><i class="fa fa-warning me-1"/>Entièrement amorti</small>
                             </div>
                         </div>
@@ -81,6 +78,8 @@
             </kanban>
         </field>
     </record>
+
+    <!-- ... reste du fichier inchangé ... -->
 
     <!-- ═══════════════════════════════════════════════════════════
          VUE PIVOT — ANALYSE DES IMMOBILISATIONS

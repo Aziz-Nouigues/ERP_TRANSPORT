@@ -27,6 +27,10 @@
                                    domain="[('account_type','like','asset')]"/>
                             <field name="compte_amortissement_id"/>
                             <field name="compte_dotation_id"/>
+                            <!-- B1 FIX — compte contrepartie obligatoire si pas de facture rattachée -->
+                            <field name="compte_contrepartie_id"
+                                   required="0"
+                                   help="Compte crédité lors de la mise en service (ex: 404, 101, 131). Obligatoire si aucune facture d'achat n'est rattachée à l'immobilisation."/>
                         </group>
                         <group>
                             <field name="compte_cession_id"/>

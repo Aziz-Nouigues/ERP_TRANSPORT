@@ -5,7 +5,7 @@
     'category': 'Transport',
     'summary': 'Gestion energie : carburant, lubrifiants, AGILIS, STEG, SONEDE',
     'author': 'ERP Transport',
-    'depends': ['base', 'mail', 'fleet', 'purchase', 'stock', 'transport_boc', 'account'],
+    'depends': ['base', 'mail', 'fleet', 'purchase', 'stock', 'transport_boc', 'account', 'transport_patrimoine'],
     'license': 'LGPL-3',
     'data': [
         'security/groups.xml',

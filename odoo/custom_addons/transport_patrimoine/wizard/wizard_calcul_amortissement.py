@@ -100,10 +100,17 @@ class WizardCalculAmortissement(models.TransientModel):
         }
 
     def _get_lignes_a_valider(self):
-        """Retourne les lignes d'amortissement prévisionnelles de la période."""
+        """Retourne les lignes d'amortissement prévisionnelles de la période.
+
+        A2 FIX — On filtre désormais sur date_fin <= date_arrete (et non sur annee seul)
+        pour ne comptabiliser que les dotations réellement échues à la date d'arrêté.
+        Cela évite de comptabiliser des dotations futures lors d'un arrêté intermédiaire
+        (ex : arrêté au 30/06 ne doit pas valider la dotation dont date_fin = 31/12).
+        """
         domain = [
             ('annee', '=', self.annee),
             ('state', '=', 'brouillon'),
+            ('date_fin', '<=', self.date_arrete),          # A2 FIX — respect de la date d'arrêté
             ('immobilisation_id.statut', 'in', ('en_service', 'hors_service')),
         ]
         if self.categorie_id:

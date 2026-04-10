@@ -35,6 +35,13 @@
                                    invisible="odometer_status == 'ok'"/>
                         </group>
                     </group>
+                    <group>
+                        <group string="Patrimoine">
+                            <field name="immobilisation_id"
+                                   options="{'no_create': True}"
+                                   help="Fiche immobilisation liée à ce véhicule"/>
+                        </group>
+                    </group>
                 </page>
             </xpath>
         </field>

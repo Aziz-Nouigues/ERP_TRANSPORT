@@ -45,6 +45,15 @@ class PatrimoineCategorie(models.Model):
         string='Compte dépréciation',
         help='Compte perte de valeur exceptionnelle',
     )
+    compte_contrepartie_id = fields.Many2one(
+        'account.account',
+        string='Compte contrepartie entrée',
+        help=(
+            'Compte crédité lors de la mise en service (ex: 404 Fournisseurs d\'immobilisations, '
+            '101 Capital, 131 Subventions d\'équipement). '
+            'Obligatoire si aucune facture d\'achat n\'est rattachée à l\'immobilisation.'
+        ),
+    )
 
     # ── AMORTISSEMENT PAR DÉFAUT ─────────────────────────────────
     methode_amortissement = fields.Selection([

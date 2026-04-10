@@ -68,8 +68,10 @@ class PatrimoineImmobilisation(models.Model):
         ('hors_service', 'Hors service'),
         ('cede',         'Cédé'),
         ('rebut',        'Mis en rebut'),
-        ('inventorie',   'Inventorié'),
     ], string='Statut', default='en_cours', tracking=True, required=True)
+    # A4 FIX — statut 'inventorie' retiré : il n'était assigné nulle part dans le code
+    # et créait une confusion dans l'interface. Le résultat d'inventaire est porté
+    # par patrimoine.inventaire.ligne (etat_constate), pas par le statut de l'immobilisation.
 
     # ── DATES ────────────────────────────────────────────────────
     date_acquisition = fields.Date(
@@ -284,6 +286,18 @@ class PatrimoineImmobilisation(models.Model):
     bon_commande_ref = fields.Char(string='N° Bon de commande')
     facture_ref = fields.Char(string='N° Facture d\'achat')
 
+    # ── LIEN VÉHICULE (fleet) ────────────────────────────────────
+    # Lien simple vers fleet.vehicle — pas de champ related
+    # pour éviter toute dépendance croisée avec transport_energy.
+    # Accès aux données énergie via : self.vehicle_id.theoretical_fuel_consumption
+    vehicle_id = fields.Many2one(
+        'fleet.vehicle',
+        string='Véhicule associé (Flotte)',
+        ondelete='set null',
+        copy=False,
+        help='Lien vers la fiche fleet.vehicle : suivi carburant, kilométrage, carte AGILIS.',
+    )
+
     # ── PROJET (pour rapports par projet) ─────────────────────────
     projet = fields.Char(string='Projet / Programme', translate=True)
     annee_budget = fields.Char(
@@ -308,13 +322,6 @@ class PatrimoineImmobilisation(models.Model):
     # Échange          : valeur vénale du bien remis + frais d'acte + dépenses postérieures
     # Livraison à soi-même : coût de production + dépenses postérieures (sans frais_accessoires)
     # Don / Apport     : valeur vénale/convenue + frais mise en service + dépenses postérieures
-
-    cout_entree_detaille = fields.Text(
-        string='Détail calcul coût d\'entrée',
-        compute='_compute_cout_entree_detaille',
-        store=False,
-        help='Règle de calcul appliquée selon le mode d\'entrée',
-    )
 
     @staticmethod
     def _calcul_cout_par_type(type_entree, ca, fa, dp):
@@ -348,25 +355,33 @@ class PatrimoineImmobilisation(models.Model):
             )
             rec.cout_entree = montant
 
-    @api.depends('type_entree', 'cout_acquisition', 'frais_accessoires', 'depenses_posterieures')
-    def _compute_cout_entree_detaille(self):
-        for rec in self:
-            _, libelle = self._calcul_cout_par_type(
-                rec.type_entree, rec.cout_acquisition,
-                rec.frais_accessoires, rec.depenses_posterieures
-            )
-            rec.cout_entree_detaille = libelle
+    @property
+    def cout_entree_detaille(self):
+        """Propriété Python (non-ORM) : libellé du calcul du coût d'entrée."""
+        _, libelle = self._calcul_cout_par_type(
+            self.type_entree, self.cout_acquisition,
+            self.frais_accessoires, self.depenses_posterieures
+        )
+        return libelle
 
     @api.depends('type_entree', 'cout_acquisition', 'frais_accessoires', 'depenses_posterieures')
     def _compute_base_amortissable_trigger(self):
         """Trigger recalcul base si type_entree change (cout_entree dépend de type_entree)."""
         self._compute_base_amortissable()
 
-    @api.depends('cout_entree', 'valeur_residuelle')
+    @api.depends('cout_entree', 'valeur_residuelle', 'depreciation_ids.montant', 'depreciation_ids.state')
     def _compute_base_amortissable(self):
+        """
+        CDC — La dépréciation impacte la base amortissable.
+        base_amortissable = cout_entree - valeur_residuelle - dépréciations_validées
+        Cela réduit les dotations futures sans modifier les dotations déjà comptabilisées.
+        """
         for rec in self:
+            deprec = sum(
+                d.montant for d in rec.depreciation_ids if d.state == 'valide'
+            )
             rec.base_amortissable = max(
-                rec.cout_entree - rec.valeur_residuelle, 0.0
+                rec.cout_entree - rec.valeur_residuelle - deprec, 0.0
             )
 
     @api.depends('duree_amortissement', 'methode_amortissement', 'coefficient_degressif')
@@ -499,8 +514,19 @@ class PatrimoineImmobilisation(models.Model):
         for rec in self:
             if rec.statut not in ('en_cours',):
                 raise UserError("Seules les immobilisations 'En cours' peuvent être mises en service.")
+            # A1 FIX — date auto-remplie : informer l'utilisateur via le chatter
             if not rec.date_mise_en_service:
                 rec.date_mise_en_service = fields.Date.today()
+                rec.message_post(
+                    body=(
+                        "<strong>Date de mise en service</strong> fixée automatiquement "
+                        "au <em>%s</em> (date du jour). "
+                        "Modifiez ce champ si la mise en service réelle est différente, "
+                        "puis régénérez le tableau d'amortissement."
+                    ) % rec.date_mise_en_service.strftime('%d/%m/%Y'),
+                    message_type='comment',
+                    subtype_xmlid='mail.mt_note',
+                )
             rec.statut = 'en_service'
             # Générer l'écriture comptable d'entrée
             rec._generer_ecriture_entree()
@@ -560,6 +586,64 @@ class PatrimoineImmobilisation(models.Model):
             'domain': [('immobilisation_id', '=', self.id)],
         }
 
+    def action_recalculer_apres_modification(self):
+        """
+        CDC — Permettre la modification du taux ou de la méthode d'amortissement
+        pour des immobilisations dont l'amortissement a déjà commencé.
+
+        Cette action supprime les lignes brouillon et régénère le tableau prévisionnel
+        en tenant compte des lignes déjà validées (cumul conservé) et des nouveaux
+        paramètres (méthode, durée, taux, base après dépréciation).
+        L'utilisateur peut ainsi changer librement méthode/durée/coefficient et
+        recalculer les dotations futures sans toucher aux écritures passées.
+        """
+        self.ensure_one()
+        if self.statut not in ('en_service', 'hors_service'):
+            from odoo.exceptions import UserError
+            raise UserError(
+                "Le recalcul n'est possible que pour les immobilisations en service ou hors service."
+            )
+        if not self.date_mise_en_service:
+            from odoo.exceptions import UserError
+            raise UserError("La date de mise en service est requise pour recalculer le tableau.")
+
+        # Supprimer uniquement les lignes prévisionnelles (brouillon)
+        # Les lignes validées (écritures passées) sont conservées intactes
+        lignes_brouillon = self.ligne_amortissement_ids.filtered(lambda l: l.state == 'brouillon')
+        nb_supprimees = len(lignes_brouillon)
+        lignes_brouillon.unlink()
+
+        # Régénérer avec les nouveaux paramètres — le calcul reprend
+        # à partir du cumul des lignes validées existantes
+        self._generer_lignes_amortissement()
+
+        self.message_post(
+            body=(
+                "<strong>Tableau d'amortissement recalculé</strong><br/>"
+                "%d ligne(s) prévisionnelle(s) supprimée(s) et régénérée(s) "
+                "avec les paramètres actuels :<br/>"
+                "Méthode : <em>%s</em> — Durée : <em>%d ans</em> — "
+                "Taux : <em>%.4f %%</em><br/>"
+                "Les dotations déjà comptabilisées sont conservées."
+            ) % (
+                nb_supprimees,
+                dict(self._fields['methode_amortissement'].selection).get(
+                    self.methode_amortissement, self.methode_amortissement
+                ),
+                self.duree_amortissement,
+                self.taux_amortissement,
+            ),
+            message_type='comment',
+            subtype_xmlid='mail.mt_note',
+        )
+        return {
+            'type': 'ir.actions.act_window',
+            'name': 'Tableau d\'amortissement — %s' % self.name,
+            'res_model': 'patrimoine.amortissement.ligne',
+            'view_mode': 'list',
+            'domain': [('immobilisation_id', '=', self.id)],
+        }
+
     # ═══════════════════════════════════════════════════════════
     # CALCUL DES LIGNES D'AMORTISSEMENT
     # ═══════════════════════════════════════════════════════════
@@ -597,9 +681,9 @@ class PatrimoineImmobilisation(models.Model):
         # Sécurité : ne pas dépasser la durée totale
         annee_en_cours = min(annee_en_cours, duree)
 
-        # Base restante réelle à amortir sur les années restantes
-        # On soustrait aussi la valeur résiduelle pour ne pas l'amortir
-        base_restante = base - deja_amorti - self.valeur_residuelle
+        # B2 FIX — base est déjà = cout_entree - valeur_residuelle (via _compute_base_amortissable).
+        # On ne soustrait PAS une seconde fois valeur_residuelle ici.
+        base_restante = base - deja_amorti
         annees_restantes = duree - annee_en_cours
 
         if base_restante <= 0.001 or annees_restantes <= 0:
@@ -628,7 +712,8 @@ class PatrimoineImmobilisation(models.Model):
         Ligne = self.env['patrimoine.amortissement.ligne']
 
         if base_restante is None:
-            base_restante = base - self.valeur_residuelle
+            # B2 FIX — base est déjà net de valeur_residuelle, pas de seconde soustraction
+            base_restante = base
         if annees_restantes is None:
             annees_restantes = duree - annee_start
 
@@ -654,9 +739,9 @@ class PatrimoineImmobilisation(models.Model):
 
             # Dernière ligne : solder exactement pour éviter les écarts d'arrondi
             if ligne_num == nb_lignes_restantes:
-                montant = base - self.valeur_residuelle - cumul
+                montant = base - cumul
             else:
-                montant = min(montant, base - self.valeur_residuelle - cumul)
+                montant = min(montant, base - cumul)
 
             if montant <= 0.001:
                 break
@@ -684,8 +769,8 @@ class PatrimoineImmobilisation(models.Model):
         Ligne = self.env['patrimoine.amortissement.ligne']
         taux_degressif = (100.0 / duree) * self.coefficient_degressif / 100.0
 
-        # base_restante = VNC restante après lignes validées (sans valeur résiduelle)
-        vnc_restant = base_restante if base_restante is not None else (base - self.valeur_residuelle - cumul_start)
+        # B2 FIX — base est déjà net de valeur_residuelle, pas de seconde soustraction
+        vnc_restant = base_restante if base_restante is not None else (base - cumul_start)
         cumul = cumul_start
         nb_annees_restantes = annees_restantes if annees_restantes is not None else (duree - annee_start)
 
@@ -761,6 +846,43 @@ class PatrimoineImmobilisation(models.Model):
         if not journal:
             return
 
+        # B1 FIX — Déterminer le compte de contrepartie dans l'ordre de priorité :
+        # 1. Ligne de facture rattachée (compte de charge/fournisseur de la facture)
+        # 2. Compte contrepartie configuré sur la catégorie (404, 101, 131…)
+        # 3. Bloquer si aucun n'est disponible (éviter débit = crédit sur le même compte)
+        if self.facture_achat_ids:
+            compte_contrepartie = (
+                self.facture_achat_ids[:1].invoice_line_ids[:1].account_id
+            )
+        elif cat.compte_contrepartie_id:
+            compte_contrepartie = cat.compte_contrepartie_id
+        else:
+            _logger.warning(
+                'Pas de compte contrepartie pour la catégorie %s '
+                '— configurez le champ "Compte contrepartie entrée" sur la catégorie '
+                'ou rattachez une facture d\'achat à l\'immobilisation %s.',
+                cat.name, self.numero_inventaire,
+            )
+            self.message_post(
+                body=(
+                    "<strong>Écriture d'entrée non générée</strong><br/>"
+                    "Aucun compte de contrepartie n'est disponible pour la catégorie "
+                    "<em>%s</em>.<br/>"
+                    "Configurez le champ <em>Compte contrepartie entrée</em> sur la catégorie "
+                    "ou rattachez une facture d'achat, puis relancez la mise en service."
+                ) % cat.name,
+                message_type='comment',
+                subtype_xmlid='mail.mt_note',
+            )
+            return
+
+        if not compte_contrepartie:
+            _logger.warning(
+                'Compte contrepartie vide pour immo %s — écriture non générée.',
+                self.numero_inventaire,
+            )
+            return
+
         move_vals = {
             'journal_id': journal.id,
             'date': self.date_mise_en_service or fields.Date.today(),
@@ -774,10 +896,7 @@ class PatrimoineImmobilisation(models.Model):
                 }),
                 (0, 0, {
                     'name': 'Contrepartie entrée immo %s' % self.numero_inventaire,
-                    'account_id': (
-                        self.facture_achat_ids[:1].invoice_line_ids[:1].account_id.id
-                        if self.facture_achat_ids else cat.compte_immobilisation_id.id
-                    ),
+                    'account_id': compte_contrepartie.id,
                     'debit': 0.0,
                     'credit': self.cout_entree,
                 }),

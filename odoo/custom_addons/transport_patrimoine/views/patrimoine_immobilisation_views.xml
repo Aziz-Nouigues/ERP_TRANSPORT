@@ -16,6 +16,12 @@
                     <button name="action_generer_tableau_amortissement" string="Générer tableau amort."
                             type="object" class="btn-secondary"
                             invisible="statut not in ('en_service','hors_service')"/>
+                    <!-- CDC — Recalcul après modification méthode/taux/durée en cours d'amortissement -->
+                    <button name="action_recalculer_apres_modification"
+                            string="Recalculer amortissement"
+                            type="object" class="btn-secondary"
+                            confirm="Les lignes prévisionnelles seront supprimées et régénérées avec les paramètres actuels. Les dotations déjà comptabilisées sont conservées. Continuer ?"
+                            invisible="statut not in ('en_service','hors_service') or not amortissement_en_cours"/>
                     <button name="action_mettre_hors_service" string="Mettre hors service"
                             type="object"
                             invisible="statut != 'en_service'"/>
@@ -150,6 +156,7 @@
                                 <field name="facture_ref"/>
                                 <field name="facture_achat_ids" widget="many2many_tags"/>
                             </group>
+                            
                         </page>
 
                         <!-- Onglet Amortissement -->

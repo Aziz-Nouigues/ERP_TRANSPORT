@@ -65,6 +65,15 @@ class FleetVehicleTransport(models.Model):
         digits=(12, 1)
     )
 
+    # ── LIEN PATRIMOINE (actif si transport_patrimoine installé) ─────
+    immobilisation_id = fields.Many2one(
+        'patrimoine.immobilisation',
+        string='Fiche immobilisation',
+        ondelete='set null',
+        copy=False,
+        help='Fiche patrimoine de ce vehicule : VNC, amortissement, statut comptable.',
+    )
+
     def estimate_distance_from_fuel(self, fuel_quantity):
         """Distance estimee quand compteur en panne.
         Distance (km) = quantite (L) * 100 / conso_theorique (L/100km)
