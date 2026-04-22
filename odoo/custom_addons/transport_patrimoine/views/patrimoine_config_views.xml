@@ -35,7 +35,12 @@
                         <group>
                             <field name="compte_cession_id"/>
                             <field name="compte_perte_id"/>
-                            <field name="compte_depreciation_id"/>
+                            <field name="compte_depreciation_id"
+                                   string="Compte charge dépréciation (68xx)"/>
+                            <!-- Bug 9 FIX — compte provision dépréciation distinct de l'amortissement -->
+                            <field name="compte_provision_depreciation_id"
+                                   string="Compte provision dépréciation (29xx)"
+                                   help="Compte crédité lors d'une dépréciation exceptionnelle. Distinct du compte amortissements cumulés (28xx)."/>
                         </group>
                     </group>
                     <separator string="Sous-catégories"/>

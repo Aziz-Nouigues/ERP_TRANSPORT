@@ -95,6 +95,25 @@ class WizardRapportPatrimoine(models.TransientModel):
     ], string='Grouper par', default='categorie')
 
     # ═══════════════════════════════════════════════════════════
+    # CONTRAINTES
+    # ═══════════════════════════════════════════════════════════
+
+    @api.constrains('date_debut', 'date_fin')
+    def _check_dates(self):
+        """Bug 10 FIX — vérifier que date_debut <= date_fin.
+        Sans cette contrainte, une inversion de dates retourne silencieusement
+        0 résultats sur tous les rapports de période sans avertir l'utilisateur.
+        """
+        for rec in self:
+            if rec.date_debut and rec.date_fin and rec.date_debut > rec.date_fin:
+                raise ValidationError(
+                    "La date de début (%s) ne peut pas être postérieure "
+                    "à la date de fin (%s)."
+                    % (rec.date_debut.strftime('%d/%m/%Y'),
+                       rec.date_fin.strftime('%d/%m/%Y'))
+                )
+
+    # ═══════════════════════════════════════════════════════════
     # ACTION PRINCIPALE
     # ═══════════════════════════════════════════════════════════
 
@@ -326,8 +345,10 @@ class WizardRapportPatrimoine(models.TransientModel):
                 ('categorie_id', '=', cat.id),
             ])
             # Valeur début de période
+            # Bug 8 FIX — guard de nullité sur date_acquisition (peut être False)
             acq_periode = immos.filtered(
-                lambda i: i.date_acquisition >= self.date_debut
+                lambda i: i.date_acquisition and i.date_acquisition >= self.date_debut
+                          and i.date_acquisition <= self.date_fin
             )
             sorties_periode = self.env['patrimoine.cession'].search([
                 ('immobilisation_id.categorie_id', '=', cat.id),
@@ -338,9 +359,10 @@ class WizardRapportPatrimoine(models.TransientModel):
             result.append({
                 'categorie': cat.name,
                 'code': cat.code,
+                # Bug 8 FIX — guard de nullité sur date_acquisition
                 'valeur_debut': sum(
                     i.cout_entree for i in immos
-                    if i.date_acquisition < self.date_debut
+                    if i.date_acquisition and i.date_acquisition < self.date_debut
                 ),
                 'acquisitions': sum(i.cout_entree for i in acq_periode),
                 'cessions': sum(s.cout_entree for s in sorties_periode),

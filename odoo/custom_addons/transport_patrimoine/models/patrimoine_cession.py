@@ -129,7 +129,6 @@ class PatrimoineCession(models.Model):
             # Calculer la dotation complémentaire (pro-rata jours)
             dotation_comp = 0.0
             if immo.date_mise_en_service and rec.date:
-                # Dernière ligne validée
                 dernier_amorti = immo.ligne_amortissement_ids.filtered(
                     lambda l: l.state == 'valide'
                 )
@@ -137,9 +136,25 @@ class PatrimoineCession(models.Model):
                     derniere_date = max(dernier_amorti.mapped('date_fin'))
                     if rec.date > derniere_date and immo.duree_amortissement:
                         jours_periode = (rec.date - derniere_date).days
-                        dotation_annuelle = immo.base_amortissable / immo.duree_amortissement
+                        base_restante = immo.base_amortissable - amort_cumule
+
+                        # Bug 5 FIX — dotation complémentaire selon la méthode réelle
+                        if immo.methode_amortissement == 'degressif':
+                            # Méthode dégressive : taux sur VNC restante, pro-ratisé en jours
+                            taux_deg = (100.0 / immo.duree_amortissement) * immo.coefficient_degressif / 100.0
+                            dotation_annuelle_deg = base_restante * taux_deg
+                            # Bascule linéaire si plus avantageux
+                            annees_restantes = max(
+                                immo.duree_amortissement - len(dernier_amorti), 1
+                            )
+                            dotation_lineaire = base_restante / annees_restantes
+                            dotation_annuelle = max(dotation_annuelle_deg, dotation_lineaire)
+                        else:
+                            # Linéaire (et manuel traité comme linéaire pour le pro-rata)
+                            dotation_annuelle = immo.base_amortissable / immo.duree_amortissement
+
                         dotation_comp = dotation_annuelle * jours_periode / 365.0
-                        dotation_comp = min(dotation_comp, immo.base_amortissable - amort_cumule)
+                        dotation_comp = min(dotation_comp, base_restante)
                         dotation_comp = max(dotation_comp, 0.0)
 
             rec.amortissements_cumules = amort_cumule
@@ -204,9 +219,19 @@ class PatrimoineCession(models.Model):
         for rec in self:
             if rec.state == 'comptabilise':
                 raise UserError("Une cession comptabilisée ne peut pas être annulée directement. Créez une extourne.")
-            # Remettre l'immobilisation en service
-            if rec.immobilisation_id.statut in ('cede', 'rebut'):
-                rec.immobilisation_id.statut = 'en_service'
+            # Bug 7 FIX — une immo rebutée annulée revient à hors_service (pas en_service)
+            # car elle était hors_service avant d'être rebutée.
+            # Une immo cédée annulée revient à en_service (elle était opérationnelle).
+            if rec.immobilisation_id.statut == 'rebut':
+                rec.immobilisation_id.write({
+                    'statut': 'hors_service',
+                    'date_rebut': False,
+                })
+            elif rec.immobilisation_id.statut == 'cede':
+                rec.immobilisation_id.write({
+                    'statut': 'en_service',
+                    'date_cession': False,
+                })
             rec.state = 'annule'
 
     def _comptabiliser_sortie(self):
@@ -296,13 +321,21 @@ class PatrimoineCession(models.Model):
                 'credit': self.plus_moins_value,
             }))
 
-        # Produit de cession (prix encaissé ou à encaisser)
+        # Bug 4 FIX — Produit de cession : le prix encaissé doit être au DÉBIT d'un compte
+        # de trésorerie/créance (411 ou 532), pas au crédit du compte produit de cession.
+        # L'architecture correcte d'une cession avec plus-value est :
+        #   Débit  28xx  amort. cumulés
+        #   Débit  411   créance sur cession (= prix_cession)
+        #   Crédit 2xx   actif brut (= cout_entree)
+        #   Crédit 75x   plus-value (= prix_cession - VNC)
+        # Sans compte tiers configuré on utilise compte_cession_id en débit (compte transitoire).
         if self.prix_cession > 0:
+            compte_tiers = cat.compte_contrepartie_id or cat.compte_cession_id
             lines.append((0, 0, {
-                'name': 'Produit cession %s' % immo.numero_inventaire,
-                'account_id': cat.compte_cession_id.id,
-                'debit': 0.0,
-                'credit': self.prix_cession,
+                'name': 'Créance / produit cession %s' % immo.numero_inventaire,
+                'account_id': compte_tiers.id,
+                'debit': self.prix_cession,
+                'credit': 0.0,
             }))
 
         # Sortie de l'actif brut au coût d'entrée (crédit compte immobilisation 2xx)

@@ -73,13 +73,20 @@ class PatrimoineAmortissementLigne(models.Model):
             rec.state = 'valide'
 
     def action_annuler(self):
-        """Annuler une dotation comptabilisée (extourne)."""
+        """Annuler une dotation comptabilisée par extourne comptable."""
         for rec in self:
             if rec.state != 'valide':
                 raise UserError("Seules les lignes comptabilisées peuvent être annulées.")
+            # Bug 6 FIX — générer une extourne propre plutôt que button_cancel/button_draft
+            # qui laisse l'écriture originale orpheline en brouillon sans contrepartie.
             if rec.move_id and rec.move_id.state == 'posted':
-                rec.move_id.button_cancel()
-                rec.move_id.button_draft()
+                extourne = rec.move_id._reverse_moves(
+                    default_values_list=[{
+                        'ref': 'Extourne — %s' % (rec.move_id.ref or rec.move_id.name),
+                        'date': rec.move_id.date,
+                    }]
+                )
+                extourne.action_post()
             rec.state = 'annule'
 
     def _generer_ecriture_dotation(self):
@@ -177,6 +184,13 @@ class PatrimoineDepreciation(models.Model):
                     libelle = 'Dépréciation — %s [%s]' % (
                         rec.immobilisation_id.name, rec.immobilisation_id.numero_inventaire
                     )
+                    # Bug 9 FIX — la contrepartie d'une dépréciation est le compte de provision
+                    # pour dépréciation (compte_provision_depreciation_id, ex: 29xx), et NON le compte
+                    # d'amortissement cumulé (28xx). Ce sont deux mécanismes comptables distincts :
+                    # amortissement = dépréciation irréversible planifiée (28xx)
+                    # dépréciation = perte de valeur exceptionnelle réversible (29xx)
+                    # Écriture : Débit 68xx (charge dépréciation) / Crédit 29xx (provision)
+                    compte_provision = cat.compte_provision_depreciation_id or cat.compte_amortissement_id
                     move = self.env['account.move'].create({
                         'journal_id': journal.id,
                         'date': rec.date,
@@ -184,7 +198,8 @@ class PatrimoineDepreciation(models.Model):
                         'line_ids': [
                             (0, 0, {'name': libelle, 'account_id': cat.compte_depreciation_id.id,
                                     'debit': rec.montant, 'credit': 0.0}),
-                            (0, 0, {'name': libelle, 'account_id': cat.compte_amortissement_id.id,
+                            (0, 0, {'name': libelle,
+                                    'account_id': compte_provision.id,
                                     'debit': 0.0, 'credit': rec.montant}),
                         ],
                     })

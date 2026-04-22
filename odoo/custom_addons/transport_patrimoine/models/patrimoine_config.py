@@ -42,8 +42,17 @@ class PatrimoineCategorie(models.Model):
     )
     compte_depreciation_id = fields.Many2one(
         'account.account',
-        string='Compte dépréciation',
-        help='Compte perte de valeur exceptionnelle',
+        string='Compte charge dépréciation (68xx)',
+        help='Compte de charge débité lors d\'une dépréciation exceptionnelle (ex: 6816).',
+    )
+    compte_provision_depreciation_id = fields.Many2one(
+        'account.account',
+        string='Compte provision pour dépréciation (29xx)',
+        help=(
+            'Compte crédité lors d\'une dépréciation exceptionnelle (ex: 2905). '
+            'Distinct du compte amortissements cumulés (28xx) : '
+            'la dépréciation est réversible, l\'amortissement ne l\'est pas.'
+        ),
     )
     compte_contrepartie_id = fields.Many2one(
         'account.account',

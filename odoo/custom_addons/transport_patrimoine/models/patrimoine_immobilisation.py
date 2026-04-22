@@ -364,11 +364,6 @@ class PatrimoineImmobilisation(models.Model):
         )
         return libelle
 
-    @api.depends('type_entree', 'cout_acquisition', 'frais_accessoires', 'depenses_posterieures')
-    def _compute_base_amortissable_trigger(self):
-        """Trigger recalcul base si type_entree change (cout_entree dépend de type_entree)."""
-        self._compute_base_amortissable()
-
     @api.depends('cout_entree', 'valeur_residuelle', 'depreciation_ids.montant', 'depreciation_ids.state')
     def _compute_base_amortissable(self):
         """
@@ -729,8 +724,13 @@ class PatrimoineImmobilisation(models.Model):
             annee = date_debut.year + i
             ligne_num += 1
 
-            # Pro-rata première année si début n'est pas le 01/01
-            if i == 0 and date_debut.month > 1:
+            # Bug 2 FIX — Pro-rata première VRAIE année (i == annee_start, pas i == 0)
+            # Quand annee_start > 0 (reprise après lignes validées), i ne vaut jamais 0,
+            # donc le test "i == 0" ratait le pro-rata pour la première ligne régénérée.
+            # On applique le pro-rata seulement si c'est la première ligne ET que la
+            # mise en service n'est pas au 01/01.
+            is_first_line = (ligne_num == 1)
+            if is_first_line and annee_start == 0 and date_debut.month > 1:
                 jours_restants = (datetime.date(annee + 1, 1, 1) - date_debut).days
                 jours_annee = (datetime.date(annee + 1, 1, 1) - datetime.date(annee, 1, 1)).days
                 montant = dotation_annuelle * (jours_restants / jours_annee)
@@ -747,7 +747,9 @@ class PatrimoineImmobilisation(models.Model):
                 break
 
             cumul += montant
-            vnc = self.cout_entree - cumul
+            # Bug 1 FIX — VNC = cout_entree - valeur_residuelle - cumul_amortissements
+            # (et non cout_entree - cumul, qui ignore la valeur résiduelle)
+            vnc = self.cout_entree - self.valeur_residuelle - cumul
             Ligne.create({
                 'immobilisation_id': self.id,
                 'annee': annee,

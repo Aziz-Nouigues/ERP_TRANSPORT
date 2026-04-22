@@ -281,21 +281,51 @@ class TransportFuelVoucherLine(models.Model):
         for line in self:
             line.subtotal = round(line.quantity * line.unit_price, 3)
 
-    @api.depends('quantity', 'vehicle_id', 'odometer_status')
+    @api.depends('quantity', 'vehicle_id', 'odometer_status', 'odometer_value')
     def _compute_distance(self):
-        """Calcule la distance estimée uniquement si le compteur est en panne.
-        Si le compteur est fonctionnel, la distance réelle est calculée
-        via delta odometer_value dans les rapports (_get_donnees_excessif etc.)
+        """Calcule la distance parcourue par ligne de ravitaillement.
+        - Compteur en panne (broken)      : estimation via carburant consommé.
+        - Compteur fonctionnel (ok/replaced) : delta avec la dernière lecture
+          odométrique du même véhicule ; si aucune lecture précédente,
+          fallback sur l'estimation carburant.
         """
         for line in self:
-            if (line.odometer_status == 'broken'
-                    and line.vehicle_id
-                    and line.vehicle_id.theoretical_fuel_consumption > 0):
-                line.distance_estimated = line.vehicle_id.estimate_distance_from_fuel(
-                    line.quantity
-                )
-            else:
+            if not line.vehicle_id:
                 line.distance_estimated = 0.0
+                continue
+
+            if line.odometer_status == 'broken':
+                if line.vehicle_id.theoretical_fuel_consumption > 0:
+                    line.distance_estimated = line.vehicle_id.estimate_distance_from_fuel(
+                        line.quantity
+                    )
+                else:
+                    line.distance_estimated = 0.0
+            else:
+                # Compteur fonctionnel : delta avec la lecture précédente
+                if line.odometer_value > 0:
+                    prev = self.search([
+                        ('vehicle_id', '=', line.vehicle_id.id),
+                        ('odometer_value', '>', 0),
+                        ('odometer_value', '<', line.odometer_value),
+                        ('id', '!=', line._origin.id if line._origin else line.id),
+                    ], order='odometer_value desc', limit=1)
+                    if prev:
+                        line.distance_estimated = round(
+                            line.odometer_value - prev.odometer_value, 1
+                        )
+                    elif line.vehicle_id.theoretical_fuel_consumption > 0:
+                        line.distance_estimated = line.vehicle_id.estimate_distance_from_fuel(
+                            line.quantity
+                        )
+                    else:
+                        line.distance_estimated = 0.0
+                elif line.vehicle_id.theoretical_fuel_consumption > 0:
+                    line.distance_estimated = line.vehicle_id.estimate_distance_from_fuel(
+                        line.quantity
+                    )
+                else:
+                    line.distance_estimated = 0.0
 
     @api.constrains('quantity')
     def _check_quantity(self):
