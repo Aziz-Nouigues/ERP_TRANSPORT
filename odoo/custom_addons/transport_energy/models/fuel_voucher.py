@@ -290,7 +290,7 @@ class TransportFuelVoucherLine(models.Model):
           fallback sur l'estimation carburant.
         """
         for line in self:
-            if not line.vehicle_id:
+            if not line.vehiclee_id:
                 line.distance_estimated = 0.0
                 continue
 

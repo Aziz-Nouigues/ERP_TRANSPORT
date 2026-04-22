@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data noupdate="1">
+
+        <!-- États fleet transport -->
+        <record id="fleet_state_en_service" model="fleet.vehicle.state">
+            <field name="name">En service</field>
+            <field name="sequence">10</field>
+        </record>
+        <record id="fleet_state_en_panne" model="fleet.vehicle.state">
+            <field name="name">En panne</field>
+            <field name="sequence">20</field>
+        </record>
+        <record id="fleet_state_en_maintenance" model="fleet.vehicle.state">
+            <field name="name">En maintenance</field>
+            <field name="sequence">30</field>
+        </record>
+        <record id="fleet_state_hors_service" model="fleet.vehicle.state">
+            <field name="name">Hors service</field>
+            <field name="sequence">40</field>
+        </record>
+        <record id="fleet_state_reforme" model="fleet.vehicle.state">
+            <field name="name">Réformé</field>
+            <field name="sequence">50</field>
+        </record>
+
+    </data>
+</odoo>

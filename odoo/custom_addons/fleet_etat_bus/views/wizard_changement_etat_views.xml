@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <record id="view_wizard_changement_etat_form" model="ir.ui.view">
+        <field name="name">fleet.wizard.changement.etat.form</field>
+        <field name="model">fleet.wizard.changement.etat</field>
+        <field name="arch" type="xml">
+            <form string="Changer l'état du véhicule">
+                <sheet>
+                    <div class="oe_title">
+                        <h2>
+                            <field name="vehicle_id" readonly="1"/>
+                        </h2>
+                    </div>
+
+                    <!-- État actuel (lecture seule) -->
+                    <group string="État actuel" col="2">
+                        <field name="state_actuel_id" readonly="1"
+                               widget="badge"
+                               decoration-danger="state_actuel_id.name in ['En panne', 'Hors service', 'Réformé']"
+                               decoration-warning="state_actuel_id.name == 'En maintenance'"
+                               decoration-success="state_actuel_id.name == 'En service'"/>
+                        <field name="state_date_debut_actuelle" readonly="1"
+                               string="Depuis le"
+                               invisible="not state_actuel_id"/>
+                        <field name="state_cause_actuelle" readonly="1"
+                               string="Cause actuelle"
+                               invisible="not state_cause_actuelle"
+                               colspan="2"/>
+                    </group>
+
+                    <div class="o_horizontal_separator mt-3 mb-3"/>
+
+                    <!-- Nouvel état -->
+                    <group string="Nouveau statut" col="2">
+                        <field name="new_state_id" required="1"/>
+                        <field name="date_debut" required="1"/>
+                        <field name="cause" required="1"
+                               placeholder="Ex: Panne moteur sur ligne L12, retour atelier prévu le..."
+                               colspan="2"/>
+                        <field name="notes"
+                               placeholder="Observations complémentaires (optionnel)"
+                               colspan="2"/>
+                    </group>
+                </sheet>
+                <footer>
+                    <button name="action_confirmer"
+                            type="object"
+                            string="Confirmer le changement"
+                            class="oe_highlight btn-primary"/>
+                    <button string="Annuler"
+                            class="btn-secondary"
+                            special="cancel"/>
+                </footer>
+            </form>
+        </field>
+    </record>
+
+</odoo>

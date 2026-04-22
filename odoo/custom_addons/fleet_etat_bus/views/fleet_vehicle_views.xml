@@ -1,0 +1,114 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <!-- ══════════════════════════════════════════════════════════
+         VUE LISTE HISTORIQUE ÉTATS
+    ══════════════════════════════════════════════════════════════ -->
+    <record id="view_fleet_historique_etat_list" model="ir.ui.view">
+        <field name="name">fleet.vehicle.historique.etat.list</field>
+        <field name="model">fleet.vehicle.historique.etat</field>
+        <field name="arch" type="xml">
+            <list string="Historique états" create="false"
+                  decoration-danger="state_id.name in ['En panne', 'Hors service', 'Réformé']"
+                  decoration-warning="state_id.name == 'En maintenance'"
+                  decoration-success="state_id.name == 'En service'">
+                <field name="date_debut"/>
+                <field name="date_fin"/>
+                <field name="duree_jours" string="Durée (j)"/>
+                <field name="state_id" widget="badge"
+                       decoration-danger="state_id.name in ['En panne', 'Hors service']"
+                       decoration-warning="state_id.name == 'En maintenance'"
+                       decoration-success="state_id.name == 'En service'"/>
+                <field name="cause"/>
+                <field name="responsable_id"/>
+            </list>
+        </field>
+    </record>
+
+    <!-- ══════════════════════════════════════════════════════════
+         EXTENSION FORMULAIRE fleet.vehicle
+    ══════════════════════════════════════════════════════════════ -->
+    <record id="view_fleet_vehicle_form_etat_inherit" model="ir.ui.view">
+        <field name="name">fleet.vehicle.form.etat.inherit</field>
+        <field name="model">fleet.vehicle</field>
+        <field name="inherit_id" ref="fleet.fleet_vehicle_view_form"/>
+        <field name="arch" type="xml">
+
+            <!-- 1. Bouton "Changer l'état" dans le header -->
+            <xpath expr="//header" position="inside">
+                <button name="action_changer_etat"
+                        type="object"
+                        string="Changer l'état"
+                        class="oe_highlight"
+                        icon="fa-exchange"/>
+            </xpath>
+
+            <!-- 2. Bloc état actuel + cause sous le champ state_id -->
+            <xpath expr="//field[@name='state_id']" position="after">
+                <field name="state_date_debut" readonly="1"
+                       string="En cet état depuis"
+                       invisible="not state_id"/>
+                <field name="state_duree_jours" readonly="1"
+                       string="Durée (jours)"
+                       invisible="not state_id"/>
+                <field name="state_cause"
+                       string="Cause / Motif"
+                       placeholder="Aucune cause renseignée"
+                       readonly="1"
+                       invisible="not state_id"/>
+
+                <!-- Bandeau visuel selon l'état -->
+                <div class="alert alert-danger mt-2 mb-0 p-2"
+                     invisible="state_id.name not in ['En panne', 'Hors service', 'Réformé']">
+                    <i class="fa fa-ban me-1"/>
+                    Ce véhicule est <strong>indisponible</strong> — il ne peut pas être affecté à une tournée.
+                </div>
+                <div class="alert alert-warning mt-2 mb-0 p-2"
+                     invisible="state_id.name != 'En maintenance'">
+                    <i class="fa fa-wrench me-1"/>
+                    Ce véhicule est <strong>en maintenance</strong>.
+                </div>
+                <div class="alert alert-success mt-2 mb-0 p-2"
+                     invisible="state_id.name != 'En service'">
+                    <i class="fa fa-check-circle me-1"/>
+                    Ce véhicule est <strong>en service</strong>.
+                </div>
+            </xpath>
+
+            <!-- 3. Onglet Historique des états -->
+            <xpath expr="//notebook" position="inside">
+                <page string="Historique des états" name="historique_etat">
+                    <div class="o_field_one2many">
+                        <field name="historique_etat_ids"
+                               mode="list"
+                               readonly="1">
+                            <list string="Historique"
+                                  decoration-danger="state_id.name in ['En panne', 'Hors service', 'Réformé']"
+                                  decoration-warning="state_id.name == 'En maintenance'"
+                                  decoration-success="state_id.name == 'En service'">
+                                <field name="date_debut" string="Depuis"/>
+                                <field name="date_fin"   string="Jusqu'au"/>
+                                <field name="duree_jours" string="Durée (j)"/>
+                                <field name="state_id" widget="badge"
+                                       decoration-danger="state_id.name in ['En panne', 'Hors service']"
+                                       decoration-warning="state_id.name == 'En maintenance'"
+                                       decoration-success="state_id.name == 'En service'"/>
+                                <field name="cause"/>
+                                <field name="responsable_id" string="Par"/>
+                                <field name="notes" optional="hide"/>
+                            </list>
+                        </field>
+                    </div>
+                    <div class="text-muted fst-italic p-2"
+                         invisible="nb_historique != 0">
+                        Aucun changement d'état enregistré.
+                        Utilisez le bouton <strong>"Changer l'état"</strong> pour commencer.
+                    </div>
+                    <field name="nb_historique" invisible="1"/>
+                </page>
+            </xpath>
+
+        </field>
+    </record>
+
+</odoo>
