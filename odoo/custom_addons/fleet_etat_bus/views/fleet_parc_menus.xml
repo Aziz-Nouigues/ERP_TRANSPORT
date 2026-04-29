@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!--
+        parent="fleet.menu_root" = menu "Parc automobile" (ID 114)
+    -->
+
+    <!-- SOUS-MENU RACINE : Parc Bus -->
+    <menuitem
+        id="menu_parc_bus_root"
+        name="Parc Bus"
+        parent="fleet.menu_root"
+        sequence="5"/>
+
+    <!-- Tous les véhicules -->
+    <menuitem
+        id="menu_parc_tous"
+        name="Tous les véhicules"
+        parent="menu_parc_bus_root"
+        action="action_fleet_parc_complet"
+        sequence="10"/>
+
+    <!-- Bus indisponibles -->
+    <menuitem
+        id="menu_parc_en_panne"
+        name="Bus indisponibles"
+        parent="menu_parc_bus_root"
+        action="action_fleet_en_panne"
+        sequence="20"/>
+
+    <!-- Compteur défaillant -->
+    <menuitem
+        id="menu_parc_compteur_panne"
+        name="Compteur défaillant"
+        parent="menu_parc_bus_root"
+        action="action_fleet_compteur_panne"
+        sequence="30"/>
+
+    <!-- Historique des états -->
+    <menuitem
+        id="menu_parc_historique_etats"
+        name="Historique des états"
+        parent="menu_parc_bus_root"
+        action="action_fleet_historique_global"
+        sequence="40"/>
+
+</odoo>

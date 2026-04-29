@@ -8,8 +8,20 @@ class FleetVehicleEtat(models.Model):
     - Date de début de l'état actuel
     - Historique complet des changements d'état
     - Bouton d'action rapide pour changer l'état
+    - Type de véhicule : urbain / interurbain
     """
     _inherit = 'fleet.vehicle'
+
+    # ── TYPE DE VÉHICULE ─────────────────────────────────────────
+    type_vehicule = fields.Selection([
+        ('urbain',       'Urbain'),
+        ('interurbain',  'Interurbain'),
+        ('mixte',        'Mixte (Urbain + Interurbain)'),
+    ], string='Type de véhicule',
+       help='Définit si ce bus est affecté aux lignes urbaines, interurbaines ou les deux.',
+       default='urbain',
+       tracking=True,
+    )
 
     # ── ÉTAT ACTUEL ──────────────────────────────────────────────
     state_cause = fields.Text(

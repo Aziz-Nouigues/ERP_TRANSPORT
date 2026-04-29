@@ -1,8 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <odoo>
+    <!--
+        noupdate="1" : ces enregistrements ne sont créés qu'une seule fois.
+        Si l'erreur "clé dupliquée" apparaît au premier install, exécuter :
+            DELETE FROM ir_model_data
+            WHERE model = 'fleet.vehicle.state' AND module = 'fleet_etat_bus';
+        puis relancer : odoo -u fleet_etat_bus
+    -->
     <data noupdate="1">
 
-        <!-- États fleet transport -->
         <record id="fleet_state_en_service" model="fleet.vehicle.state">
             <field name="name">En service</field>
             <field name="sequence">10</field>

@@ -2,7 +2,7 @@
 <odoo>
 
     <!-- ══════════════════════════════════════════════════════════
-         VUE LISTE HISTORIQUE ÉTATS
+         1. VUE LISTE HISTORIQUE ÉTATS
     ══════════════════════════════════════════════════════════════ -->
     <record id="view_fleet_historique_etat_list" model="ir.ui.view">
         <field name="name">fleet.vehicle.historique.etat.list</field>
@@ -21,12 +21,168 @@
                        decoration-success="state_id.name == 'En service'"/>
                 <field name="cause"/>
                 <field name="responsable_id"/>
+                <field name="notes" optional="hide"/>
             </list>
         </field>
     </record>
 
     <!-- ══════════════════════════════════════════════════════════
-         EXTENSION FORMULAIRE fleet.vehicle
+         2. VUE LISTE BUS — tableau de bord parc complet
+    ══════════════════════════════════════════════════════════════ -->
+    <record id="view_fleet_vehicle_parc_list" model="ir.ui.view">
+        <field name="name">fleet.vehicle.parc.list</field>
+        <field name="model">fleet.vehicle</field>
+        <field name="arch" type="xml">
+            <list string="Parc Véhicules"
+                  decoration-danger="state_id.name in ['En panne', 'Hors service', 'Réformé']"
+                  decoration-warning="state_id.name == 'En maintenance'"
+                  decoration-success="state_id.name == 'En service'">
+                <!-- Identification -->
+                <field name="name" string="Immatriculation"/>
+                <field name="internal_code" string="Code interne" optional="show"/>
+                <field name="bus_type" string="Type" optional="show"/>
+                <field name="activity_type" string="Activité" optional="show"/>
+                <field name="type_vehicule" string="Urbain/Interurbain" widget="badge"
+                       decoration-info="type_vehicule == 'urbain'"
+                       decoration-warning="type_vehicule == 'interurbain'"
+                       decoration-secondary="type_vehicule == 'mixte'"
+                       optional="show"/>
+                <!-- Agence -->
+                <field name="transport_agency" string="Agence" optional="show"/>
+                <!-- État -->
+                <field name="state_id" widget="badge"
+                       decoration-danger="state_id.name in ['En panne', 'Hors service', 'Réformé']"
+                       decoration-warning="state_id.name == 'En maintenance'"
+                       decoration-success="state_id.name == 'En service'"
+                       string="État"/>
+                <field name="state_date_debut" string="En cet état depuis" optional="show"/>
+                <field name="state_duree_jours" string="Jours" optional="show"/>
+                <!-- Compteur -->
+                <field name="odometer_status" widget="badge"
+                       decoration-danger="odometer_status == 'broken'"
+                       decoration-warning="odometer_status == 'replaced'"
+                       decoration-success="odometer_status == 'ok'"
+                       string="Compteur"/>
+                <!-- Cause -->
+                <field name="state_cause" string="Cause" optional="show"/>
+            </list>
+        </field>
+    </record>
+
+    <!-- ══════════════════════════════════════════════════════════
+         3. VUE RECHERCHE — filtres et regroupements
+    ══════════════════════════════════════════════════════════════ -->
+    <record id="view_fleet_vehicle_parc_search" model="ir.ui.view">
+        <field name="name">fleet.vehicle.parc.search</field>
+        <field name="model">fleet.vehicle</field>
+        <field name="arch" type="xml">
+            <search string="Rechercher un bus">
+                <field name="name" string="Immatriculation"/>
+                <field name="internal_code" string="Code interne"/>
+                <field name="transport_agency" string="Agence"/>
+                <field name="state_id" string="État"/>
+
+                <!-- Filtres rapides -->
+                <filter name="filter_en_service"
+                        string="En service"
+                        domain="[('state_id.name', '=', 'En service')]"/>
+                <filter name="filter_en_panne"
+                        string="En panne"
+                        domain="[('state_id.name', '=', 'En panne')]"/>
+                <filter name="filter_en_maintenance"
+                        string="En maintenance"
+                        domain="[('state_id.name', '=', 'En maintenance')]"/>
+                <filter name="filter_hors_service"
+                        string="Hors service / Réformé"
+                        domain="[('state_id.name', 'in', ['Hors service', 'Réformé'])]"/>
+                <separator/>
+                <filter name="filter_compteur_panne"
+                        string="Compteur en panne"
+                        domain="[('odometer_status', '=', 'broken')]"/>
+                <filter name="filter_compteur_remplace"
+                        string="Compteur remplacé"
+                        domain="[('odometer_status', '=', 'replaced')]"/>
+                <separator/>
+                <filter name="filter_urbain"
+                        string="Activité urbaine"
+                        domain="[('activity_type', '=', 'urban')]"/>
+                <filter name="filter_interurbain"
+                        string="Activité interurbaine"
+                        domain="[('activity_type', '=', 'interurban')]"/>
+
+                <!-- Regroupements -->
+                <separator/>
+                <filter name="group_state"   string="État"    context="{'group_by': 'state_id'}"/>
+                <filter name="group_agency"  string="Agence"  context="{'group_by': 'transport_agency'}"/>
+                <filter name="group_type"    string="Type de bus" context="{'group_by': 'bus_type'}"/>
+                <filter name="group_odometer" string="État compteur" context="{'group_by': 'odometer_status'}"/>
+            </search>
+        </field>
+    </record>
+
+    <!-- ══════════════════════════════════════════════════════════
+         4. ACTIONS FENÊTRES
+    ══════════════════════════════════════════════════════════════ -->
+
+    <!-- Action : liste complète du parc -->
+    <record id="action_fleet_parc_complet" model="ir.actions.act_window">
+        <field name="name">Parc Véhicules</field>
+        <field name="res_model">fleet.vehicle</field>
+        <field name="view_mode">list,form,kanban</field>
+        <field name="view_ids" eval="[(5, 0, 0),
+            (0, 0, {'view_mode': 'list',   'view_id': ref('view_fleet_vehicle_parc_list')}),
+            (0, 0, {'view_mode': 'form',   'view_id': ref('fleet.fleet_vehicle_view_form')}),
+            (0, 0, {'view_mode': 'kanban', 'view_id': ref('fleet.fleet_vehicle_view_kanban')}),
+        ]"/>
+        <field name="search_view_id" ref="view_fleet_vehicle_parc_search"/>
+        <field name="context">{}</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                Aucun véhicule dans le parc.
+            </p>
+        </field>
+    </record>
+
+    <!-- Action : bus en panne seulement -->
+    <record id="action_fleet_en_panne" model="ir.actions.act_window">
+        <field name="name">Bus en panne</field>
+        <field name="res_model">fleet.vehicle</field>
+        <field name="view_mode">list,form</field>
+        <field name="view_ids" eval="[(5, 0, 0),
+            (0, 0, {'view_mode': 'list', 'view_id': ref('view_fleet_vehicle_parc_list')}),
+            (0, 0, {'view_mode': 'form', 'view_id': ref('fleet.fleet_vehicle_view_form')}),
+        ]"/>
+        <field name="domain">[('state_id.name', 'in', ['En panne', 'Hors service', 'Réformé'])]</field>
+        <field name="search_view_id" ref="view_fleet_vehicle_parc_search"/>
+    </record>
+
+    <!-- Action : compteur défaillant -->
+    <record id="action_fleet_compteur_panne" model="ir.actions.act_window">
+        <field name="name">Compteur défaillant</field>
+        <field name="res_model">fleet.vehicle</field>
+        <field name="view_mode">list,form</field>
+        <field name="view_ids" eval="[(5, 0, 0),
+            (0, 0, {'view_mode': 'list', 'view_id': ref('view_fleet_vehicle_parc_list')}),
+            (0, 0, {'view_mode': 'form', 'view_id': ref('fleet.fleet_vehicle_view_form')}),
+        ]"/>
+        <field name="domain">[('odometer_status', '=', 'broken')]</field>
+        <field name="search_view_id" ref="view_fleet_vehicle_parc_search"/>
+    </record>
+
+    <!-- Action : historique global tous véhicules -->
+    <record id="action_fleet_historique_global" model="ir.actions.act_window">
+        <field name="name">Historique des états</field>
+        <field name="res_model">fleet.vehicle.historique.etat</field>
+        <field name="view_mode">list,form</field>
+        <field name="view_ids" eval="[(5, 0, 0),
+            (0, 0, {'view_mode': 'list', 'view_id': ref('view_fleet_historique_etat_list')}),
+        ]"/>
+        <field name="context">{'group_by': 'vehicle_id'}</field>
+    </record>
+
+    <!-- ══════════════════════════════════════════════════════════
+         5. EXTENSION FORMULAIRE fleet.vehicle
+         (état actuel + compteur kilométrique dans la fiche)
     ══════════════════════════════════════════════════════════════ -->
     <record id="view_fleet_vehicle_form_etat_inherit" model="ir.ui.view">
         <field name="name">fleet.vehicle.form.etat.inherit</field>
@@ -34,7 +190,7 @@
         <field name="inherit_id" ref="fleet.fleet_vehicle_view_form"/>
         <field name="arch" type="xml">
 
-            <!-- 1. Bouton "Changer l'état" dans le header -->
+            <!-- Bouton "Changer l'état" dans le header -->
             <xpath expr="//header" position="inside">
                 <button name="action_changer_etat"
                         type="object"
@@ -43,8 +199,9 @@
                         icon="fa-exchange"/>
             </xpath>
 
-            <!-- 2. Bloc état actuel + cause sous le champ state_id -->
+            <!-- Bloc état actuel + compteur sous state_id -->
             <xpath expr="//field[@name='state_id']" position="after">
+
                 <field name="state_date_debut" readonly="1"
                        string="En cet état depuis"
                        invisible="not state_id"/>
@@ -57,7 +214,7 @@
                        readonly="1"
                        invisible="not state_id"/>
 
-                <!-- Bandeau visuel selon l'état -->
+                <!-- Bandeau état -->
                 <div class="alert alert-danger mt-2 mb-0 p-2"
                      invisible="state_id.name not in ['En panne', 'Hors service', 'Réformé']">
                     <i class="fa fa-ban me-1"/>
@@ -73,22 +230,48 @@
                     <i class="fa fa-check-circle me-1"/>
                     Ce véhicule est <strong>en service</strong>.
                 </div>
+
+                <!-- Type de véhicule pour filtrage exploitation -->
+                <group string="Affectation aux lignes" col="2">
+                    <field name="type_vehicule" widget="radio"/>
+                </group>
+
+                <!-- Compteur kilométrique (champs définis dans transport_energy) -->
+                <group string="Compteur kilométrique" col="2">
+                    <field name="odometer_status"
+                           widget="badge"
+                           decoration-danger="odometer_status == 'broken'"
+                           decoration-warning="odometer_status == 'replaced'"
+                           decoration-success="odometer_status == 'ok'"
+                           string="État du compteur"/>
+                    <field name="odometer_replacement_date"
+                           string="Date remplacement"
+                           invisible="odometer_status == 'ok'"/>
+                    <field name="odometer_old_value"
+                           string="Ancienne valeur (km)"
+                           invisible="odometer_status == 'ok'"/>
+                    <div class="alert alert-warning mt-1 mb-0 p-2" colspan="2"
+                         invisible="odometer_status != 'broken'">
+                        <i class="fa fa-tachometer me-1"/>
+                        Compteur <strong>en panne</strong> — le kilométrage sera estimé
+                        automatiquement dans les tournées (Départ + Km prévus).
+                    </div>
+                </group>
+
             </xpath>
 
-            <!-- 3. Onglet Historique des états -->
+            <!-- Onglet Historique des états -->
             <xpath expr="//notebook" position="inside">
                 <page string="Historique des états" name="historique_etat">
                     <div class="o_field_one2many">
-                        <field name="historique_etat_ids"
-                               mode="list"
-                               readonly="1">
+                        <field name="historique_etat_ids" mode="list" readonly="1">
                             <list string="Historique"
                                   decoration-danger="state_id.name in ['En panne', 'Hors service', 'Réformé']"
                                   decoration-warning="state_id.name == 'En maintenance'"
                                   decoration-success="state_id.name == 'En service'">
-                                <field name="date_debut" string="Depuis"/>
-                                <field name="date_fin"   string="Jusqu'au"/>
-                                <field name="duree_jours" string="Durée (j)"/>
+                                <field name="date_debut"    string="Depuis"/>
+                                <field name="date_fin"      string="Jusqu'au"/>
+                                <field name="duree_jours"   string="Durée (j)"/>
                                 <field name="state_id" widget="badge"
                                        decoration-danger="state_id.name in ['En panne', 'Hors service']"
                                        decoration-warning="state_id.name == 'En maintenance'"

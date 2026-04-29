@@ -1,24 +1,18 @@
 # -*- coding: utf-8 -*-
 {
-    'name': 'Fleet — État et Cause Bus',
-    'version': '19.0.1.0.0',
+    'name': 'Fleet — Parc Véhicules Transport',
+    'version': '19.0.3.0.0',
     'category': 'Fleet',
-    'summary': 'Gestion des états de véhicules avec cause, date et historique',
-    'description': """
-        Extension du module Fleet :
-        - Ajout d'une cause obligatoire lors du changement d'état
-        - Date de début de l'état en cours
-        - Wizard de changement d'état rapide
-        - Historique complet des changements d'état par véhicule
-    """,
+    'summary': 'Menu centralisé dans Fleet : état, compteur, historique de chaque bus',
     'author': 'ERP Transport',
-    'depends': ['fleet'],
+    'depends': ['fleet', 'transport_energy'],
     'license': 'LGPL-3',
     'data': [
         'security/ir.model.access.csv',
         'data/fleet_etat_data.xml',
         'views/fleet_vehicle_views.xml',
         'views/wizard_changement_etat_views.xml',
+        'views/fleet_parc_menus.xml',
     ],
     'installable': True,
     'application': False,
