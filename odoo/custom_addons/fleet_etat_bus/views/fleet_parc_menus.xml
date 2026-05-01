@@ -1,8 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <odoo>
-    <!--
-        parent="fleet.menu_root" = menu "Parc automobile" (ID 114)
-    -->
 
     <!-- SOUS-MENU RACINE : Parc Bus -->
     <menuitem
@@ -42,5 +39,19 @@
         parent="menu_parc_bus_root"
         action="action_fleet_historique_global"
         sequence="40"/>
+
+    <!-- Séparateur Configuration -->
+    <menuitem
+        id="menu_parc_config_root"
+        name="Configuration"
+        parent="menu_parc_bus_root"
+        sequence="100"/>
+
+    <menuitem
+        id="menu_parc_config_parametres"
+        name="Paramètres"
+        parent="menu_parc_config_root"
+        action="action_fleet_etat_settings"
+        sequence="10"/>
 
 </odoo>

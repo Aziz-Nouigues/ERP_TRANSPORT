@@ -3,24 +3,17 @@ from odoo import models, fields, api
 
 
 class FleetVehicleEtat(models.Model):
-    """Extension de fleet.vehicle :
-    - Cause de l'état actuel
-    - Date de début de l'état actuel
-    - Historique complet des changements d'état
-    - Bouton d'action rapide pour changer l'état
-    - Type de véhicule : urbain / interurbain
-    """
+    """Extension de fleet.vehicle pour le parc bus transport terrestre."""
     _inherit = 'fleet.vehicle'
 
     # ── TYPE DE VÉHICULE ─────────────────────────────────────────
     type_vehicule = fields.Selection([
-        ('urbain',       'Urbain'),
-        ('interurbain',  'Interurbain'),
-        ('mixte',        'Mixte (Urbain + Interurbain)'),
+        ('urbain',      'Urbain'),
+        ('interurbain', 'Interurbain'),
+        ('mixte',       'Mixte (Urbain + Interurbain)'),
     ], string='Type de véhicule',
        help='Définit si ce bus est affecté aux lignes urbaines, interurbaines ou les deux.',
-       default='urbain',
-       tracking=True,
+       default='urbain', tracking=True,
     )
 
     # ── ÉTAT ACTUEL ──────────────────────────────────────────────
@@ -29,12 +22,17 @@ class FleetVehicleEtat(models.Model):
         help='Raison du passage à l\'état actuel (ex: panne moteur, révision périodique…)'
     )
     state_date_debut = fields.Datetime(
-        string='En cet état depuis',
-        readonly=True
+        string='En cet état depuis', readonly=True
+        # store=True implicite (champ regular) — triable en liste sans problème
     )
+
+    # store=False : calculé à la volée, jamais écrit en base.
+    # NE PAS afficher dans les vues liste/kanban (pas de colonne SQL).
+    # Visible uniquement dans la fiche form et l'onglet historique.
     state_duree_jours = fields.Integer(
         string='Jours dans cet état',
-        compute='_compute_state_duree', store=False
+        compute='_compute_state_duree',
+        store=False,
     )
 
     # ── HISTORIQUE ───────────────────────────────────────────────
@@ -42,28 +40,42 @@ class FleetVehicleEtat(models.Model):
         'fleet.vehicle.historique.etat', 'vehicle_id',
         string='Historique des états'
     )
+    # store=True OK : nb_historique est un Integer classique recalculé via read_group.
+    # La colonne existe dès l'installation initiale du module.
+    # Odoo 19 interdit @api.depends('field.id') → on utilise read_group.
     nb_historique = fields.Integer(
         string='Nb changements',
-        compute='_compute_nb_historique', store=True
+        compute='_compute_nb_historique',
+        store=True,
     )
 
-    # ── COMPUTED ────────────────────────────────────────────────
+    # ── COMPUTED ─────────────────────────────────────────────────
     @api.depends('historique_etat_ids')
     def _compute_nb_historique(self):
+        if not self.ids:
+            for rec in self:
+                rec.nb_historique = 0
+            return
+        groups = self.env['fleet.vehicle.historique.etat'].read_group(
+            domain=[('vehicle_id', 'in', self.ids)],
+            fields=['vehicle_id'],
+            groupby=['vehicle_id'],
+        )
+        counts = {g['vehicle_id'][0]: g['vehicle_id_count'] for g in groups}
         for rec in self:
-            rec.nb_historique = len(rec.historique_etat_ids)
+            rec.nb_historique = counts.get(rec.id, 0)
 
+    @api.depends('state_date_debut')
     def _compute_state_duree(self):
+        now = fields.Datetime.now()
         for rec in self:
             if rec.state_date_debut:
-                delta = fields.Datetime.now() - rec.state_date_debut
-                rec.state_duree_jours = delta.days
+                rec.state_duree_jours = (now - rec.state_date_debut).days
             else:
                 rec.state_duree_jours = 0
 
-    # ── ACTION : Wizard changement d'état ───────────────────────
+    # ── ACTIONS ──────────────────────────────────────────────────
     def action_changer_etat(self):
-        """Ouvre le wizard de changement d'état."""
         self.ensure_one()
         return {
             'name': 'Changer l\'état du véhicule',
@@ -78,7 +90,6 @@ class FleetVehicleEtat(models.Model):
         }
 
     def action_voir_historique(self):
-        """Ouvre l'historique complet des états."""
         self.ensure_one()
         return {
             'name': f'Historique états — {self.name}',
@@ -88,3 +99,9 @@ class FleetVehicleEtat(models.Model):
             'domain': [('vehicle_id', '=', self.id)],
             'context': {'default_vehicle_id': self.id},
         }
+
+    def action_imprimer_fiche(self):
+        self.ensure_one()
+        return self.env.ref(
+            'fleet_etat_bus.action_report_fleet_etat_vehicle'
+        ).report_action(self)

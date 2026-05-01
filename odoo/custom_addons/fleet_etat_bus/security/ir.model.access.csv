@@ -1,4 +1,4 @@
 id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
 access_fleet_historique_etat_user,fleet.vehicle.historique.etat user,model_fleet_vehicle_historique_etat,fleet.fleet_group_user,1,0,0,0
 access_fleet_historique_etat_manager,fleet.vehicle.historique.etat manager,model_fleet_vehicle_historique_etat,fleet.fleet_group_manager,1,1,1,1
-access_fleet_wizard_changement_etat,fleet.wizard.changement.etat,model_fleet_wizard_changement_etat,,1,1,1,1
+access_fleet_wizard_changement_etat,fleet.wizard.changement.etat,model_fleet_wizard_changement_etat,fleet.fleet_group_user,1,1,1,1

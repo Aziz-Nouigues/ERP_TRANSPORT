@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
-from odoo import models, fields
+from odoo import models, fields, api
+from odoo.exceptions import ValidationError
 
 
 class FleetHistoriqueEtat(models.Model):
@@ -23,11 +24,18 @@ class FleetHistoriqueEtat(models.Model):
         string='Depuis le', required=True,
         default=fields.Datetime.now
     )
-    date_fin = fields.Datetime(string='Jusqu\'au')
+    date_fin = fields.Datetime(string="Jusqu'au")
     duree_jours = fields.Integer(
         string='Durée (jours)',
-        compute='_compute_duree', store=True
+        compute='_compute_duree',
+        store=False,   # calculé à la volée — pas de valeur figée en base
     )
+    priorite = fields.Selection([
+        ('0', 'Normal'),
+        ('1', 'Urgent'),
+        ('2', 'Critique'),
+    ], string='Priorité', default='0',
+       help='Niveau de priorité de cet événement (panne critique, entretien planifié…)')
     responsable_id = fields.Many2one(
         'res.users', string='Enregistré par',
         default=lambda self: self.env.user,
@@ -35,12 +43,23 @@ class FleetHistoriqueEtat(models.Model):
     )
     notes = fields.Text(string='Observations')
 
+    # ── COMPUTED ──────────────────────────────────────────────────
+    @api.depends('date_debut', 'date_fin')
     def _compute_duree(self):
-        from datetime import datetime
+        now = fields.Datetime.now()
         for rec in self:
             if rec.date_debut:
-                fin = rec.date_fin or fields.Datetime.now()
-                delta = fin - rec.date_debut
-                rec.duree_jours = delta.days
+                fin = rec.date_fin or now
+                rec.duree_jours = (fin - rec.date_debut).days
             else:
                 rec.duree_jours = 0
+
+    # ── CONTRAINTES ───────────────────────────────────────────────
+    @api.constrains('date_debut', 'date_fin')
+    def _check_dates(self):
+        for rec in self:
+            if rec.date_fin and rec.date_fin < rec.date_debut:
+                raise ValidationError(
+                    "La date de fin ne peut pas être antérieure à la date de début.\n"
+                    f"Début : {rec.date_debut}  —  Fin : {rec.date_fin}"
+                )

@@ -1,0 +1,105 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <!--
+        Vue Kanban — Parc bus
+        Colonnes regroupées par état (state_id).
+        Chaque carte affiche : immatriculation, agence, type, durée dans l'état, cause.
+        Couleurs de carte pilotées par l'état (oe_kanban_color_N).
+    -->
+    <record id="view_fleet_vehicle_parc_kanban" model="ir.ui.view">
+        <field name="name">fleet.vehicle.parc.kanban</field>
+        <field name="model">fleet.vehicle</field>
+        <field name="arch" type="xml">
+            <kanban default_group_by="state_id"
+                    group_create="false"
+                    quick_create="false"
+                    class="o_kanban_small_column">
+
+                <field name="name"/>
+                <field name="state_id"/>
+                <field name="state_cause"/>
+                <field name="state_date_debut"/>
+                <!-- state_duree_jours retiré : store=False, pas de colonne SQL -->
+                <field name="type_vehicule"/>
+                <field name="transport_agency"/>
+                <field name="tag_ids"/>
+                <field name="odometer_status"/>
+                <field name="activity_ids"/>
+                <field name="activity_state"/>
+
+                <templates>
+                    <t t-name="kanban-card">
+                        <!-- Couleur de carte selon l'état -->
+                        <div t-attf-class="oe_kanban_card oe_kanban_global_click
+                            #{record.state_id.raw_value and record.state_id.value.indexOf('panne') >= 0 ? 'oe_kanban_color_2' :
+                              record.state_id.value.indexOf('maintenance') >= 0 ? 'oe_kanban_color_3' :
+                              record.state_id.value.indexOf('service') >= 0 and record.state_id.value.indexOf('Hors') < 0 ? 'oe_kanban_color_10' :
+                              'oe_kanban_color_1'}">
+
+                            <!-- En-tête : immatriculation + badge état -->
+                            <div class="o_kanban_record_top">
+                                <div class="o_kanban_record_headings">
+                                    <strong class="o_kanban_record_title">
+                                        <field name="name"/>
+                                    </strong>
+                                </div>
+                                <div>
+                                    <field name="state_id" widget="badge"
+                                           decoration-danger="state_id == 'En panne' or state_id == 'Hors service'"
+                                           decoration-warning="state_id == 'En maintenance'"
+                                           decoration-success="state_id == 'En service'"/>
+                                </div>
+                            </div>
+
+                            <!-- Corps : infos clés -->
+                            <div class="o_kanban_record_body">
+                                <div class="d-flex justify-content-between mb-1">
+                                    <span class="text-muted small">
+                                        <field name="type_vehicule"/>
+                                    </span>
+                                    <span class="text-muted small">
+                                        <field name="transport_agency"/>
+                                    </span>
+                                </div>
+
+                                <!-- Durée : affichée via state_date_debut (champ stocké) -->
+                                <div t-if="record.state_date_debut.raw_value"
+                                     class="small mb-1 text-muted">
+                                    <i class="fa fa-clock-o me-1"/>
+                                    Depuis : <field name="state_date_debut" widget="date"/>
+                                </div>
+
+                                <!-- Cause (tronquée à 60 car.) -->
+                                <div t-if="record.state_cause.raw_value"
+                                     class="small text-muted fst-italic mb-1"
+                                     style="overflow:hidden;text-overflow:ellipsis;white-space:nowrap;max-width:200px">
+                                    <field name="state_cause"/>
+                                </div>
+
+                                <!-- Alerte compteur -->
+                                <div t-if="record.odometer_status.raw_value == 'broken'"
+                                     class="badge text-bg-warning small">
+                                    <i class="fa fa-tachometer me-1"/>Compteur HS
+                                </div>
+                            </div>
+
+                            <!-- Pied : tags + activités -->
+                            <div class="o_kanban_record_bottom">
+                                <div class="oe_kanban_bottom_left">
+                                    <field name="tag_ids" widget="many2many_tags"
+                                           options="{'color_field': 'color'}"/>
+                                </div>
+                                <div class="oe_kanban_bottom_right">
+                                    <field name="activity_ids" widget="kanban_activity"/>
+                                </div>
+                            </div>
+
+                        </div>
+                    </t>
+                </templates>
+            </kanban>
+        </field>
+    </record>
+
+</odoo>

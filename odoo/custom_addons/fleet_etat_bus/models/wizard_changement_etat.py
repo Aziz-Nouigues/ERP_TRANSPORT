@@ -6,9 +6,10 @@ from odoo.exceptions import ValidationError
 class WizardChangementEtat(models.TransientModel):
     """Wizard de changement d'état d'un véhicule.
     - Sélection du nouvel état
-    - Saisie obligatoire de la cause
+    - Saisie obligatoire de la cause + priorité
     - Enregistrement automatique dans l'historique
     - Clôture automatique de l'entrée historique précédente
+    - Alerte sur les tournées planifiées impactées (si module transport présent)
     """
     _name = 'fleet.wizard.changement.etat'
     _description = 'Wizard — Changement état véhicule'
@@ -42,12 +43,32 @@ class WizardChangementEtat(models.TransientModel):
         help='Décrivez la raison du changement d\'état.\n'
              'Ex: Panne moteur sur la ligne L12, Révision 50 000 km, Retour en service après réparation…'
     )
+    priorite = fields.Selection([
+        ('0', 'Normal'),
+        ('1', 'Urgent'),
+        ('2', 'Critique'),
+    ], string='Priorité', default='0', required=True)
     date_debut = fields.Datetime(
         string='Depuis le',
         required=True,
         default=fields.Datetime.now
     )
     notes = fields.Text(string='Observations complémentaires')
+
+    # ── ÉTATS INDISPONIBLES — identifiés par xml_id (robuste aux renommages) ──
+    def _get_etats_indisponibles(self):
+        xmlids = [
+            'fleet_etat_bus.fleet_state_en_panne',
+            'fleet_etat_bus.fleet_state_hors_service',
+            'fleet_etat_bus.fleet_state_reforme',
+        ]
+        etats = self.env['fleet.vehicle.state']
+        for xmlid in xmlids:
+            try:
+                etats |= self.env.ref(xmlid)
+            except ValueError:
+                pass  # l'état n'existe pas encore (première install partielle)
+        return etats
 
     @api.constrains('new_state_id', 'state_actuel_id')
     def _check_etat_different(self):
@@ -74,11 +95,12 @@ class WizardChangementEtat(models.TransientModel):
 
         # 2. Créer la nouvelle entrée historique
         Historique.create({
-            'vehicle_id':  vehicle.id,
-            'state_id':    self.new_state_id.id,
-            'cause':       self.cause,
-            'date_debut':  self.date_debut,
-            'notes':       self.notes or '',
+            'vehicle_id': vehicle.id,
+            'state_id':   self.new_state_id.id,
+            'cause':      self.cause,
+            'priorite':   self.priorite,
+            'date_debut': self.date_debut,
+            'notes':      self.notes or '',
         })
 
         # 3. Mettre à jour le véhicule
@@ -88,24 +110,27 @@ class WizardChangementEtat(models.TransientModel):
             'state_date_debut': self.date_debut,
         })
 
-        # 4. Notification
+        # 4. Notification dans le chatter
+        priorite_label = dict(self._fields['priorite'].selection).get(self.priorite, '')
         vehicle.message_post(
             body=(
                 f"<b>Changement d'état</b><br/>"
                 f"<b>Ancien état :</b> {self.state_actuel_id.name or '—'}<br/>"
                 f"<b>Nouvel état :</b> {self.new_state_id.name}<br/>"
+                f"<b>Priorité :</b> {priorite_label}<br/>"
                 f"<b>Cause :</b> {self.cause}"
             )
         )
 
-        # 5. Si état indisponible → alerter les tournées planifiées impactées
-        ETATS_INDISPONIBLES = {
-            'En panne', 'En maintenance', 'Hors service',
-            'Out of service', 'Written-off', 'Réformé',
-        }
-        if self.new_state_id.name in ETATS_INDISPONIBLES:
-            from odoo import fields as odoo_fields
-            today = odoo_fields.Date.today()
+        # 5. FIX #3 : Guard — n'accéder à transport.exploitation.tournee
+        #    que si le module est installé. Sans ce guard, Odoo lève une KeyError
+        #    dès que fleet_etat_bus est installé seul.
+        etats_indisponibles = self._get_etats_indisponibles()
+        if (
+            self.new_state_id in etats_indisponibles
+            and 'transport.exploitation.tournee' in self.env
+        ):
+            today = fields.Date.today()
             tournees_impactees = self.env['transport.exploitation.tournee'].search([
                 ('vehicle_id', '=', vehicle.id),
                 ('state', 'in', ['planifie', 'brouillon']),
@@ -116,13 +141,13 @@ class WizardChangementEtat(models.TransientModel):
                     f"<b>⚠ Alerte bus indisponible</b><br/>"
                     f"Le véhicule <b>{vehicle.name}</b> est passé à l'état "
                     f"<b>{self.new_state_id.name}</b>.<br/>"
+                    f"<b>Priorité :</b> {priorite_label}<br/>"
                     f"<b>Cause :</b> {self.cause}<br/>"
                     f"Cette tournée doit être réaffectée à un autre bus."
                 )
                 for tournee in tournees_impactees:
                     tournee.message_post(body=msg)
 
-                # Retourner une action listant les tournées impactées
                 return {
                     'name': f'Tournées impactées — {vehicle.name}',
                     'type': 'ir.actions.act_window',
@@ -130,9 +155,7 @@ class WizardChangementEtat(models.TransientModel):
                     'view_mode': 'list,form',
                     'domain': [('id', 'in', tournees_impactees.ids)],
                     'target': 'current',
-                    'context': {
-                        'search_default_planifie': 1,
-                    },
+                    'context': {'search_default_planifie': 1},
                 }
 
         return {'type': 'ir.actions.act_window_close'}

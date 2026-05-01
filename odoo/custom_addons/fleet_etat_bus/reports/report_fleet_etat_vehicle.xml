@@ -1,0 +1,182 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <!-- Action rapport -->
+    <record id="action_report_fleet_etat_vehicle" model="ir.actions.report">
+        <field name="name">Fiche état véhicule</field>
+        <field name="model">fleet.vehicle</field>
+        <field name="report_type">qweb-pdf</field>
+        <field name="report_name">fleet_etat_bus.report_fleet_etat_vehicle_doc</field>
+        <field name="report_file">fleet_etat_bus.report_fleet_etat_vehicle_doc</field>
+        <field name="binding_model_id" ref="fleet.model_fleet_vehicle"/>
+        <field name="binding_type">report</field>
+        <field name="paperformat_id" ref="base.paperformat_euro"/>
+    </record>
+
+    <!-- Template QWeb -->
+    <template id="report_fleet_etat_vehicle_doc">
+        <t t-call="web.html_container">
+            <t t-foreach="docs" t-as="vehicle">
+                <t t-call="web.external_layout">
+                    <div class="page">
+
+                        <!-- En-tête fiche -->
+                        <div class="row mb-4">
+                            <div class="col-8">
+                                <h2>Fiche état véhicule</h2>
+                                <h3 class="text-muted">
+                                    <t t-esc="vehicle.name"/>
+                                    <t t-if="vehicle.license_plate">
+                                        — <t t-esc="vehicle.license_plate"/>
+                                    </t>
+                                </h3>
+                            </div>
+                            <div class="col-4 text-end">
+                                <p class="mb-0 text-muted" style="font-size:12px">
+                                    Édité le
+                                    <t t-esc="context_timestamp(datetime.datetime.now()).strftime('%d/%m/%Y à %H:%M')"/>
+                                </p>
+                            </div>
+                        </div>
+
+                        <!-- Informations générales -->
+                        <div class="row mb-4">
+                            <div class="col-6">
+                                <table class="table table-sm table-bordered">
+                                    <thead>
+                                        <tr class="table-dark">
+                                            <th colspan="2">Identification</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                            <td class="text-muted" style="width:45%">Immatriculation</td>
+                                            <td><strong><t t-esc="vehicle.name"/></strong></td>
+                                        </tr>
+                                        <tr t-if="vehicle.internal_code">
+                                            <td class="text-muted">Code interne</td>
+                                            <td><t t-esc="vehicle.internal_code"/></td>
+                                        </tr>
+                                        <tr t-if="vehicle.type_vehicule">
+                                            <td class="text-muted">Type</td>
+                                            <td>
+                                                <t t-esc="dict(vehicle._fields['type_vehicule'].selection).get(vehicle.type_vehicule, '')"/>
+                                            </td>
+                                        </tr>
+                                        <tr t-if="vehicle.transport_agency">
+                                            <td class="text-muted">Agence</td>
+                                            <td><t t-esc="vehicle.transport_agency.name"/></td>
+                                        </tr>
+                                        <tr t-if="vehicle.model_id">
+                                            <td class="text-muted">Modèle</td>
+                                            <td><t t-esc="vehicle.model_id.brand_id.name"/> <t t-esc="vehicle.model_id.name"/></td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                            <div class="col-6">
+                                <table class="table table-sm table-bordered">
+                                    <thead>
+                                        <tr class="table-dark">
+                                            <th colspan="2">État actuel</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                            <td class="text-muted" style="width:45%">État</td>
+                                            <td>
+                                                <strong><t t-esc="vehicle.state_id.name or '—'"/></strong>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td class="text-muted">En cet état depuis</td>
+                                            <td>
+                                                <t t-if="vehicle.state_date_debut">
+                                                    <t t-esc="vehicle.state_date_debut.strftime('%d/%m/%Y %H:%M')"/>
+                                                    (<t t-esc="vehicle.state_duree_jours"/> j)
+                                                </t>
+                                                <t t-else="">—</t>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td class="text-muted">Cause</td>
+                                            <td><t t-esc="vehicle.state_cause or '—'"/></td>
+                                        </tr>
+                                        <tr>
+                                            <td class="text-muted">Compteur</td>
+                                            <td>
+                                                <t t-esc="dict(vehicle._fields['odometer_status'].selection).get(vehicle.odometer_status, '—')"/>
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+
+                        <!-- Historique des 15 derniers changements d'état -->
+                        <div class="mb-4">
+                            <table class="table table-sm table-striped table-bordered">
+                                <thead>
+                                    <tr class="table-dark">
+                                        <th>Depuis</th>
+                                        <th>Jusqu'au</th>
+                                        <th>Durée (j)</th>
+                                        <th>État</th>
+                                        <th>Priorité</th>
+                                        <th>Cause / Motif</th>
+                                        <th>Enregistré par</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <t t-foreach="vehicle.historique_etat_ids[:15]" t-as="h">
+                                        <tr>
+                                            <td style="white-space:nowrap">
+                                                <t t-esc="h.date_debut.strftime('%d/%m/%Y')"/>
+                                            </td>
+                                            <td style="white-space:nowrap">
+                                                <t t-if="h.date_fin">
+                                                    <t t-esc="h.date_fin.strftime('%d/%m/%Y')"/>
+                                                </t>
+                                                <t t-else="">en cours</t>
+                                            </td>
+                                            <td class="text-center">
+                                                <t t-esc="h.duree_jours"/>
+                                            </td>
+                                            <td><strong><t t-esc="h.state_id.name"/></strong></td>
+                                            <td>
+                                                <t t-esc="dict(h._fields['priorite'].selection).get(h.priorite, '')"/>
+                                            </td>
+                                            <td><t t-esc="h.cause"/></td>
+                                            <td><t t-esc="h.responsable_id.name or '—'"/></td>
+                                        </tr>
+                                    </t>
+                                    <tr t-if="not vehicle.historique_etat_ids">
+                                        <td colspan="7" class="text-center text-muted fst-italic">
+                                            Aucun historique enregistré.
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                            <p t-if="len(vehicle.historique_etat_ids) > 15"
+                               class="text-muted small fst-italic">
+                                Affichage limité aux 15 dernières entrées
+                                (<t t-esc="len(vehicle.historique_etat_ids)"/> au total).
+                            </p>
+                        </div>
+
+                        <!-- Signature -->
+                        <div class="row mt-5">
+                            <div class="col-6">
+                                <p class="text-muted small">Chef de parc / Responsable</p>
+                                <div style="border-top:1px solid #ccc; margin-top:40px; width:200px;"/>
+                                <p class="text-muted small mt-1">Signature et cachet</p>
+                            </div>
+                        </div>
+
+                    </div>
+                </t>
+            </t>
+        </t>
+    </template>
+
+</odoo>
