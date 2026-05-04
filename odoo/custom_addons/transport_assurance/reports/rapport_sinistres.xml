@@ -1,0 +1,194 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <!-- ══ RAPPORT : BUS NON ASSURÉS ════════════════════════════ -->
+    <record id="report_bus_non_assures_action" model="ir.actions.report">
+        <field name="name">Bus non assurés — Alerte légale</field>
+        <field name="model">transport.assurance.wizard.rapport</field>
+        <field name="report_type">qweb-pdf</field>
+        <field name="report_name">transport_assurance.report_bus_non_assures</field>
+        <field name="report_file">transport_assurance.report_bus_non_assures</field>
+        <field name="binding_model_id" ref="model_transport_assurance_wizard_rapport"/>
+    </record>
+
+    <template id="report_bus_non_assures">
+        <t t-call="web.html_container">
+            <t t-call="web.external_layout">
+                <div class="page">
+                    <div class="alert alert-danger">
+                        <strong>⚠ ALERTE LÉGALE CRITIQUE — Bus sans couverture obligatoire</strong>
+                    </div>
+                    <h2>Bus actifs sans police obligatoire valide</h2>
+                    <p>Édité le : <t t-esc="context_timestamp(datetime.datetime.now()).strftime('%d/%m/%Y')"/></p>
+                    <p>
+                        Tout bus en service doit disposer d'une police <strong>RC</strong> et
+                        <strong>Voyage/passagers</strong> valides. Les bus listés ci-dessous
+                        <strong>ne peuvent légalement pas effectuer de tournées</strong>.
+                    </p>
+
+                    <t t-set="today" t-value="datetime.date.today()"/>
+                    <t t-set="tous_bus" t-value="env['fleet.vehicle'].search([('active', '=', True)])"/>
+                    <t t-set="types_oblig" t-value="env['transport.assurance.type'].search([
+                        ('is_obligatoire', '=', True), ('categorie', 'in', ['bus', 'both'])
+                    ])"/>
+
+                    <table class="table table-sm o_main_table">
+                        <thead>
+                            <tr>
+                                <th>Bus / Immatriculation</th>
+                                <th>Type de police manquante</th>
+                                <th>Dernière police connue</th>
+                                <th>Expirée le</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <t t-foreach="tous_bus" t-as="bus">
+                                <t t-foreach="types_oblig" t-as="type_pol">
+                                    <t t-set="polices" t-value="env['transport.assurance.bus'].search([
+                                        ('vehicle_id', '=', bus.id),
+                                        ('type_police_id', '=', type_pol.id),
+                                        ('state', '=', 'active'),
+                                        ('date_fin', '>=', today),
+                                    ])"/>
+                                    <t t-if="not polices">
+                                        <t t-set="derniere" t-value="env['transport.assurance.bus'].search([
+                                            ('vehicle_id', '=', bus.id),
+                                            ('type_police_id', '=', type_pol.id),
+                                        ], order='date desc', limit=1)"/>
+                                        <tr class="table-danger">
+                                            <td><t t-esc="bus.name"/> (<t t-esc="bus.license_plate or 'N/A'"/>)</td>
+                                            <td><t t-esc="type_pol.name"/></td>
+                                            <td><t t-if="derniere"><t t-esc="derniere.numero_police"/></t><t t-else="">Jamais assurée</t></td>
+                                            <td><t t-if="derniere"><t t-esc="derniere.date" t-options="{'widget': 'date'}"/></t><t t-else="">—</t></td>
+                                        </tr>
+                                    </t>
+                                </t>
+                            </t>
+                        </tbody>
+                    </table>
+                </div>
+            </t>
+        </t>
+    </template>
+
+    <!-- ══ RAPPORT : SINISTRES ════════════════════════════════════ -->
+    <record id="report_sinistres_action" model="ir.actions.report">
+        <field name="name">Rapport sinistres</field>
+        <field name="model">transport.assurance.sinistre</field>
+        <field name="report_type">qweb-pdf</field>
+        <field name="report_name">transport_assurance.report_sinistres</field>
+        <field name="report_file">transport_assurance.report_sinistres</field>
+        <field name="binding_model_id" ref="model_transport_assurance_sinistre"/>
+    </record>
+
+    <template id="report_sinistres">
+        <t t-call="web.html_container">
+            <t t-foreach="docs" t-as="sinistre">
+                <t t-call="web.external_layout">
+                    <div class="page">
+                        <h2>Fiche sinistre — <t t-esc="sinistre.name"/></h2>
+                        <table class="table table-sm" style="width:100%">
+                            <tr><th style="width:30%">Date sinistre</th><td><t t-esc="sinistre.date_sinistre" t-options="{'widget': 'date'}"/></td></tr>
+                            <tr><th>Nature</th><td><t t-esc="sinistre.nature_sinistre"/></td></tr>
+                            <tr><th>Lieu</th><td><t t-esc="sinistre.lieu"/></td></tr>
+                            <tr><th>Objet</th><td><t t-esc="sinistre.objet_sinistre"/></td></tr>
+                            <tr t-if="sinistre.vehicle_id"><th>Bus</th><td><t t-esc="sinistre.vehicle_id.name"/></td></tr>
+                            <tr t-if="sinistre.employe_id"><th>Employé</th><td><t t-esc="sinistre.employe_id.name"/></td></tr>
+                            <tr><th>Compagnie</th><td><t t-esc="sinistre.compagnie_id.name"/></td></tr>
+                            <tr><th>N° PV Police</th><td><t t-esc="sinistre.numero_pv_police or '—'"/></td></tr>
+                            <tr><th>Montant réclamé</th><td><t t-esc="sinistre.montant_reclame"/> TND</td></tr>
+                            <tr><th>Montant accordé</th><td><t t-esc="sinistre.montant_accorde"/> TND</td></tr>
+                            <tr><th>Franchise déduite</th><td><t t-esc="sinistre.franchise_appliquee"/> TND</td></tr>
+                            <tr><th>Montant net versé</th><td><strong><t t-esc="sinistre.montant_net_verse"/> TND</strong></td></tr>
+                            <tr><th>État</th><td><t t-esc="sinistre.state"/></td></tr>
+                        </table>
+                        <h4 style="margin-top:16px">Description des faits</h4>
+                        <p><t t-esc="sinistre.description"/></p>
+                        <t t-if="sinistre.motif_rejet">
+                            <h4>Motif rejet / réduction</h4>
+                            <p><t t-esc="sinistre.motif_rejet"/></p>
+                        </t>
+                    </div>
+                </t>
+            </t>
+        </t>
+    </template>
+
+    <!-- ══ RAPPORT : ÉCHÉANCIER ══════════════════════════════════ -->
+    <record id="report_echeancier_action" model="ir.actions.report">
+        <field name="name">Échéancier assurances</field>
+        <field name="model">transport.assurance.wizard.rapport</field>
+        <field name="report_type">qweb-pdf</field>
+        <field name="report_name">transport_assurance.report_echeancier</field>
+        <field name="report_file">transport_assurance.report_echeancier</field>
+        <field name="binding_model_id" ref="model_transport_assurance_wizard_rapport"/>
+    </record>
+
+    <template id="report_echeancier">
+        <t t-call="web.html_container">
+            <t t-call="web.external_layout">
+                <div class="page">
+                    <h2>Échéancier des renouvellements</h2>
+                    <p>Édité le : <t t-esc="context_timestamp(datetime.datetime.now()).strftime('%d/%m/%Y')"/></p>
+
+                    <t t-set="today" t-value="datetime.date.today()"/>
+                    <t t-set="horizon_days" t-value="90"/><!-- 3 mois par défaut -->
+
+                    <t t-set="limit_date" t-value="today + datetime.timedelta(days=horizon_days)"/>
+
+                    <h3>Polices bus à renouveler</h3>
+                    <t t-set="polices_bus" t-value="env['transport.assurance.bus'].search([
+                        ('state', 'in', ['active', 'alerte']),
+                        ('date_fin', '&lt;=', limit_date),
+                    ], order='date_fin')"/>
+                    <table class="table table-sm o_main_table">
+                        <thead><tr>
+                            <th>N° Police</th><th>Bus</th><th>Type</th>
+                            <th>Compagnie</th><th>Expiration</th><th>Prime/an</th>
+                            <th>Oblig.</th>
+                        </tr></thead>
+                        <tbody>
+                            <t t-foreach="polices_bus" t-as="p">
+                                <tr t-attf-class="#{(p.date_fin - today).days &lt;= 15 and 'table-danger' or 'table-warning'}">
+                                    <td><t t-esc="p.numero_police"/></td>
+                                    <td><t t-esc="p.vehicle_id.name"/></td>
+                                    <td><t t-esc="p.type_police_id.name"/></td>
+                                    <td><t t-esc="p.compagnie_id.name"/></td>
+                                    <td><t t-esc="p.date" t-options="{'widget': 'date'}"/></td>
+                                    <td><t t-esc="p.prime_annuelle"/> TND</td>
+                                    <td><t t-if="p.is_obligatoire">★</t></td>
+                                </tr>
+                            </t>
+                        </tbody>
+                    </table>
+
+                    <h3>Polices chauffeurs à renouveler</h3>
+                    <t t-set="polices_chf" t-value="env['transport.assurance.chauffeur'].search([
+                        ('state', 'in', ['active', 'alerte']),
+                        ('date_fin', '&lt;=', limit_date),
+                    ], order='date_fin')"/>
+                    <table class="table table-sm o_main_table">
+                        <thead><tr>
+                            <th>N° Police</th><th>Employé</th><th>Type</th>
+                            <th>Compagnie</th><th>Expiration</th><th>Prime/an</th>
+                        </tr></thead>
+                        <tbody>
+                            <t t-foreach="polices_chf" t-as="p">
+                                <tr t-attf-class="#{p.jours_restants &lt;= 15 and 'table-danger' or 'table-warning'}">
+                                    <td><t t-esc="p.numero_police"/></td>
+                                    <td><t t-esc="p.employe_id.name"/></td>
+                                    <td><t t-esc="p.type_police_id.name"/></td>
+                                    <td><t t-esc="p.compagnie_id.name"/></td>
+                                    <td><t t-esc="p.date_fin" t-options="{'widget': 'date'}"/></td>
+                                    <td><t t-esc="p.prime_annuelle"/> TND</td>
+                                </tr>
+                            </t>
+                        </tbody>
+                    </table>
+                    <p class="text-muted" style="font-size:10px;">Rouge = expire dans ≤ 15 jours | Orange = expire dans ≤ 90 jours</p>
+                </div>
+            </t>
+        </t>
+    </template>
+
+</odoo>

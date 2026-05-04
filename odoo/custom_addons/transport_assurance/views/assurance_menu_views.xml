@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <!-- MENU RACINE -->
+    <menuitem id="menu_assurance_root"
+              name="Assurance"
+              sequence="25"
+              groups="transport_assurance.group_assurance_user"
+              web_icon="transport_assurance,static/description/icon.png"/>
+
+    <!-- 1. POLICES BUS -->
+    <menuitem id="menu_assurance_bus_root"
+              name="Polices bus"
+              parent="menu_assurance_root"
+              sequence="10"
+              groups="transport_assurance.group_assurance_user"/>
+    <menuitem id="menu_assurance_bus_list"
+              name="Toutes les polices bus"
+              parent="menu_assurance_bus_root"
+              action="action_assurance_bus"
+              sequence="10"
+              groups="transport_assurance.group_assurance_user"/>
+
+    <!-- 2. POLICES CHAUFFEURS -->
+    <menuitem id="menu_assurance_chauffeur_root"
+              name="Polices chauffeurs"
+              parent="menu_assurance_root"
+              sequence="20"
+              groups="transport_assurance.group_assurance_user"/>
+    <menuitem id="menu_assurance_chauffeur_list"
+              name="Toutes les polices chauffeurs"
+              parent="menu_assurance_chauffeur_root"
+              action="action_assurance_chauffeur"
+              sequence="10"
+              groups="transport_assurance.group_assurance_user"/>
+
+    <!-- 3. SINISTRES -->
+    <menuitem id="menu_assurance_sinistres_root"
+              name="Sinistres"
+              parent="menu_assurance_root"
+              sequence="30"
+              groups="transport_assurance.group_assurance_gestionnaire"/>
+    <menuitem id="menu_assurance_sinistres_list"
+              name="Tous les sinistres"
+              parent="menu_assurance_sinistres_root"
+              action="action_assurance_sinistre"
+              sequence="10"
+              groups="transport_assurance.group_assurance_gestionnaire"/>
+
+    <!-- 4. RAPPORTS -->
+    <menuitem id="menu_assurance_rapports"
+              name="Rapports"
+              parent="menu_assurance_root"
+              sequence="40"
+              groups="transport_assurance.group_assurance_gestionnaire"/>
+    <menuitem id="menu_assurance_wizard_rapport"
+              name="Générer un rapport"
+              parent="menu_assurance_rapports"
+              action="action_wizard_rapport_assurance"
+              sequence="10"
+              groups="transport_assurance.group_assurance_gestionnaire"/>
+
+    <!-- 5. CONFIGURATION -->
+    <menuitem id="menu_assurance_config"
+              name="Configuration"
+              parent="menu_assurance_root"
+              sequence="99"
+              groups="transport_assurance.group_assurance_manager"/>
+    <menuitem id="menu_assurance_compagnies"
+              name="Compagnies d'assurance"
+              parent="menu_assurance_config"
+              action="action_assurance_compagnie"
+              sequence="10"
+              groups="transport_assurance.group_assurance_manager"/>
+    <menuitem id="menu_assurance_types"
+              name="Types de polices"
+              parent="menu_assurance_config"
+              action="action_assurance_type"
+              sequence="20"
+              groups="transport_assurance.group_assurance_manager"/>
+
+</odoo>

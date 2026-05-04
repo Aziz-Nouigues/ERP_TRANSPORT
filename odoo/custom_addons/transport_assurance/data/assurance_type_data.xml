@@ -1,0 +1,110 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data noupdate="1">
+
+        <!-- ══ TYPES POLICES BUS ══════════════════════════════════ -->
+
+        <record id="type_rc" model="transport.assurance.type">
+            <field name="name">Responsabilité civile (RC)</field>
+            <field name="code">RC</field>
+            <field name="categorie">bus</field>
+            <field name="sequence">10</field>
+            <field name="is_obligatoire">True</field>
+            <field name="base_legale">Code de la route tunisien — Loi n° 99-71</field>
+            <field name="description">
+                Couverture obligatoire des dommages causés aux tiers
+                (personnes et biens) lors d'un accident de circulation.
+                Exige une visite technique annuelle valide (règle Tunisie).
+            </field>
+        </record>
+
+        <record id="type_voyage" model="transport.assurance.type">
+            <field name="name">Voyage / Passagers</field>
+            <field name="code">VOYAGE</field>
+            <field name="categorie">bus</field>
+            <field name="sequence">20</field>
+            <field name="is_obligatoire">True</field>
+            <field name="base_legale">Réglementation transport public en commun Tunisie</field>
+            <field name="description">
+                Couverture obligatoire des passagers transportés en cas d'accident.
+                Couvre les préjudices corporels des voyageurs à bord.
+            </field>
+        </record>
+
+        <record id="type_tous_risques" model="transport.assurance.type">
+            <field name="name">Tous risques</field>
+            <field name="code">TOUS_RISQUES</field>
+            <field name="categorie">bus</field>
+            <field name="sequence">30</field>
+            <field name="is_obligatoire">False</field>
+            <field name="description">
+                Couverture étendue des dommages au véhicule lui-même
+                (collision, accident matériel) quelle qu'en soit la cause.
+            </field>
+        </record>
+
+        <record id="type_incendie_vol" model="transport.assurance.type">
+            <field name="name">Incendie / Vol</field>
+            <field name="code">INCENDIE_VOL</field>
+            <field name="categorie">bus</field>
+            <field name="sequence">40</field>
+            <field name="is_obligatoire">False</field>
+            <field name="description">
+                Protection spécifique contre l'incendie et le vol du véhicule
+                (y compris tentative de vol et vandalisme).
+            </field>
+        </record>
+
+        <!-- ══ TYPES POLICES CHAUFFEUR / PERSONNEL ════════════════ -->
+
+        <record id="type_at_cnam" model="transport.assurance.type">
+            <field name="name">Accident de travail (CNAM)</field>
+            <field name="code">AT_CNAM</field>
+            <field name="categorie">chauffeur</field>
+            <field name="sequence">10</field>
+            <field name="is_obligatoire">True</field>
+            <field name="base_legale">Loi n° 94-28 du 21/02/1994 — Régime AT/MP CNAM</field>
+            <field name="description">
+                Couverture obligatoire CNAM des accidents de travail et maladies
+                professionnelles. Blessure survenue en service.
+            </field>
+        </record>
+
+        <record id="type_rc_pro" model="transport.assurance.type">
+            <field name="name">Responsabilité civile professionnelle</field>
+            <field name="code">RC_PRO</field>
+            <field name="categorie">chauffeur</field>
+            <field name="sequence">20</field>
+            <field name="is_obligatoire">True</field>
+            <field name="description">
+                RC du chauffeur en tant que professionnel de transport.
+                Couvre les dommages causés dans l'exercice de ses fonctions.
+            </field>
+        </record>
+
+        <record id="type_vie_groupe" model="transport.assurance.type">
+            <field name="name">Assurance vie groupe</field>
+            <field name="code">VIE_GROUPE</field>
+            <field name="categorie">chauffeur</field>
+            <field name="sequence">30</field>
+            <field name="is_obligatoire">False</field>
+            <field name="description">
+                Couverture décès / invalidité permanente totale (IPT)
+                pour l'ensemble du personnel. Versement du capital au bénéficiaire désigné.
+            </field>
+        </record>
+
+        <record id="type_complementaire_sante" model="transport.assurance.type">
+            <field name="name">Complémentaire santé</field>
+            <field name="code">COMP_SANTE</field>
+            <field name="categorie">chauffeur</field>
+            <field name="sequence">40</field>
+            <field name="is_obligatoire">False</field>
+            <field name="description">
+                Remboursement des frais médicaux au-delà de la prise en charge
+                de la CNAM. Couverture hospitalisation, soins ambulatoires, optique.
+            </field>
+        </record>
+
+    </data>
+</odoo>

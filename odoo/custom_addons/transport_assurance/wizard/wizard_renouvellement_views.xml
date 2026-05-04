@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <record id="view_wizard_renouvellement_form" model="ir.ui.view">
+        <field name="name">transport.assurance.wizard.renouvellement.form</field>
+        <field name="model">transport.assurance.wizard.renouvellement</field>
+        <field name="arch" type="xml">
+            <form string="Renouveler la police">
+                <group>
+                    <group string="Police à renouveler">
+                        <field name="police_bus_id" readonly="1"
+                               invisible="type_renouvellement != 'bus'"/>
+                        <field name="police_chauffeur_id" readonly="1"
+                               invisible="type_renouvellement != 'chauffeur'"/>
+                        <field name="vehicle_id" readonly="1"
+                               invisible="type_renouvellement != 'bus'"/>
+                        <field name="employe_id" readonly="1"
+                               invisible="type_renouvellement != 'chauffeur'"/>
+                        <field name="type_police_id" readonly="1"/>
+                    </group>
+                    <group string="Nouvelle compagnie">
+                        <field name="compagnie_id" required="1"/>
+                    </group>
+                </group>
+                <group>
+                    <group string="Nouvelle période">
+                        <field name="date_debut" required="1"/>
+                        <field name="date_fin" required="1"/>
+                    </group>
+                    <group string="Nouvelles conditions">
+                        <field name="prime_annuelle"/>
+                        <field name="franchise"/>
+                        <field name="plafond_garantie" invisible="type_renouvellement != 'bus'"/>
+                        <field name="currency_id" groups="base.group_multi_currency"/>
+                    </group>
+                </group>
+                <group string="Visite technique (obligatoire pour RC)"
+                       invisible="type_renouvellement != 'bus'">
+                    <field name="date_visite_technique"/>
+                </group>
+                <field name="notes" placeholder="Conditions particulières du nouveau contrat…"/>
+                <footer>
+                    <button name="action_confirmer" string="Confirmer le renouvellement"
+                            type="object" class="oe_highlight"/>
+                    <button string="Annuler" class="btn-secondary" special="cancel"/>
+                </footer>
+            </form>
+        </field>
+    </record>
+
+</odoo>

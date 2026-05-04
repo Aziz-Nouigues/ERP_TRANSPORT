@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+
+        <!-- Privilege Odoo 19 -->
+        <record model="res.groups.privilege" id="privilege_transport_assurance">
+            <field name="name">Assurance Transport</field>
+            <field name="sequence">65</field>
+        </record>
+
+        <!-- Utilisateur : lecture seule polices et sinistres -->
+        <record id="group_assurance_user" model="res.groups">
+            <field name="name">Utilisateur</field>
+            <field name="sequence">10</field>
+            <field name="privilege_id" ref="privilege_transport_assurance"/>
+            <field name="comment">Lecture seule sur les polices et les sinistres.</field>
+        </record>
+
+        <!-- Gestionnaire : saisie polices, déclaration sinistres -->
+        <record id="group_assurance_gestionnaire" model="res.groups">
+            <field name="name">Gestionnaire</field>
+            <field name="sequence">20</field>
+            <field name="privilege_id" ref="privilege_transport_assurance"/>
+            <field name="implied_ids" eval="[(4, ref('group_assurance_user'))]"/>
+            <field name="comment">
+                Peut créer et gérer les polices d'assurance bus et chauffeurs,
+                déclarer et instruire les sinistres.
+            </field>
+        </record>
+
+        <!-- Responsable : accès complet + configuration + validation indemnités -->
+        <record id="group_assurance_manager" model="res.groups">
+            <field name="name">Responsable</field>
+            <field name="sequence">30</field>
+            <field name="privilege_id" ref="privilege_transport_assurance"/>
+            <field name="implied_ids" eval="[(4, ref('group_assurance_gestionnaire'))]"/>
+            <field name="comment">
+                Accès complet au module Assurance, y compris configuration,
+                clôture de sinistres, validation des indemnités et rapports complets.
+            </field>
+        </record>
+
+    </data>
+</odoo>

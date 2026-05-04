@@ -1,0 +1,198 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <record id="view_assurance_sinistre_form" model="ir.ui.view">
+        <field name="name">transport.assurance.sinistre.form</field>
+        <field name="model">transport.assurance.sinistre</field>
+        <field name="arch" type="xml">
+            <form string="Sinistre assurance">
+                <header>
+                    <button name="action_declarer" string="Déclarer" type="object"
+                            class="oe_highlight" invisible="state != 'brouillon'"/>
+                    <button name="action_instruire" string="Instruire" type="object"
+                            class="oe_highlight" invisible="state != 'declare'"/>
+                    <button name="action_cloturer" string="Clôturer" type="object"
+                            class="oe_highlight" invisible="state not in ('declare','instruction')"/>
+                    <button name="action_rejeter" string="Rejeter" type="object"
+                            invisible="state not in ('declare','instruction')"/>
+                    <button name="action_remettre_brouillon" string="Remettre en brouillon"
+                            type="object" invisible="state not in ('declare','instruction')"/>
+                    <field name="state" widget="statusbar"
+                           statusbar_visible="brouillon,declare,instruction,cloture"/>
+                </header>
+
+                <sheet>
+                    <div class="oe_title">
+                        <label for="name" class="oe_edit_only"/>
+                        <h1><field name="name" readonly="1"/></h1>
+                    </div>
+
+                    <group>
+                        <group string="Objet du sinistre">
+                            <field name="objet_sinistre" required="1" widget="radio"/>
+                            <field name="police_bus_id"
+                                   invisible="objet_sinistre != 'bus'"
+                                   required="objet_sinistre == 'bus'"/>
+                            <field name="police_chauffeur_id"
+                                   invisible="objet_sinistre != 'chauffeur'"
+                                   required="objet_sinistre == 'chauffeur'"/>
+                            <field name="compagnie_id" readonly="1"/>
+                            <field name="type_police_id" readonly="1"/>
+                            <field name="vehicle_id" readonly="1" invisible="objet_sinistre != 'bus'"/>
+                            <field name="employe_id" readonly="1" invisible="objet_sinistre != 'chauffeur'"/>
+                        </group>
+                        <group string="Fait générateur">
+                            <field name="date_sinistre" required="1"/>
+                            <field name="heure_sinistre" widget="float_time"/>
+                            <field name="lieu" required="1"/>
+                            <field name="gouvernorat"/>
+                            <field name="nature_sinistre" required="1"/>
+                            <field name="tournee_id" invisible="objet_sinistre != 'bus'"/>
+                        </group>
+                    </group>
+
+                    <group string="Description des faits">
+                        <field name="description" nolabel="1"
+                               placeholder="Décrivez les circonstances du sinistre…"/>
+                    </group>
+
+                    <notebook>
+                        <page string="Tiers &amp; Victimes" name="tiers">
+                            <group>
+                                <group string="Tiers impliqué">
+                                    <field name="tiers_implique"/>
+                                    <field name="tiers_nom" invisible="not tiers_implique"/>
+                                    <field name="tiers_vehicule" invisible="not tiers_implique"/>
+                                    <field name="tiers_assurance" invisible="not tiers_implique"/>
+                                </group>
+                                <group string="Victimes">
+                                    <field name="nb_passagers"/>
+                                    <field name="nb_blesses"/>
+                                    <field name="nb_deces"/>
+                                </group>
+                            </group>
+                        </page>
+
+                        <page string="Documents &amp; Expertise" name="documents">
+                            <group>
+                                <group string="PV Police / Gendarmerie">
+                                    <field name="numero_pv_police"/>
+                                    <field name="date_pv"/>
+                                </group>
+                                <group string="Expertise">
+                                    <field name="expertise_demandee"/>
+                                    <field name="date_expertise" invisible="not expertise_demandee"/>
+                                    <field name="expert_nom" invisible="not expertise_demandee"/>
+                                </group>
+                            </group>
+                        </page>
+
+                        <page string="Indemnisation" name="indemnisation">
+                            <group>
+                                <group string="Montants">
+                                    <field name="montant_reclame"/>
+                                    <field name="montant_accorde"/>
+                                    <field name="franchise_appliquee" readonly="1"/>
+                                    <field name="montant_net_verse" readonly="1"/>
+                                    <field name="currency_id" groups="base.group_multi_currency"/>
+                                </group>
+                                <group string="Suivi">
+                                    <field name="date_declaration" readonly="1"/>
+                                    <field name="date_cloture" readonly="1"/>
+                                    <field name="responsable_id"/>
+                                </group>
+                            </group>
+                            <field name="motif_rejet"
+                                   placeholder="Motif de rejet ou de réduction du montant…"
+                                   invisible="state not in ('rejete','cloture')"/>
+                        </page>
+                    </notebook>
+                </sheet>
+
+                <div class="oe_chatter">
+                    <field name="message_follower_ids"/>
+                    <field name="activity_ids"/>
+                    <field name="message_ids"/>
+                </div>
+            </form>
+        </field>
+    </record>
+
+    <record id="view_assurance_sinistre_list" model="ir.ui.view">
+        <field name="name">transport.assurance.sinistre.list</field>
+        <field name="model">transport.assurance.sinistre</field>
+        <field name="arch" type="xml">
+            <list string="Sinistres"
+                  decoration-danger="state == 'rejete'"
+                  decoration-success="state == 'cloture'"
+                  decoration-warning="state == 'instruction'">
+                <field name="name"/>
+                <field name="date_sinistre"/>
+                <field name="objet_sinistre"/>
+                <field name="vehicle_id"/>
+                <field name="employe_id"/>
+                <field name="nature_sinistre"/>
+                <field name="lieu"/>
+                <field name="compagnie_id"/>
+                <field name="montant_reclame"/>
+                <field name="montant_accorde"/>
+                <field name="montant_net_verse"/>
+                <field name="state" widget="badge"
+                       decoration-success="state == 'cloture'"
+                       decoration-danger="state == 'rejete'"
+                       decoration-warning="state in ('declare','instruction')"
+                       decoration-muted="state == 'brouillon'"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="view_assurance_sinistre_pivot" model="ir.ui.view">
+        <field name="name">transport.assurance.sinistre.pivot</field>
+        <field name="model">transport.assurance.sinistre</field>
+        <field name="arch" type="xml">
+            <pivot string="Analyse sinistres">
+                <field name="compagnie_id" type="row"/>
+                <field name="nature_sinistre" type="col"/>
+                <field name="montant_reclame" type="measure"/>
+                <field name="montant_accorde" type="measure"/>
+                <field name="montant_net_verse" type="measure"/>
+            </pivot>
+        </field>
+    </record>
+
+    <record id="view_assurance_sinistre_search" model="ir.ui.view">
+        <field name="name">transport.assurance.sinistre.search</field>
+        <field name="model">transport.assurance.sinistre</field>
+        <field name="arch" type="xml">
+            <search string="Recherche sinistres">
+                <field name="name"/>
+                <field name="vehicle_id"/>
+                <field name="employe_id"/>
+                <field name="compagnie_id"/>
+                <field name="nature_sinistre"/>
+                <filter string="En cours" name="en_cours"
+                        domain="[('state','in',['declare','instruction'])]"/>
+                <filter string="Clôturés" name="clotures" domain="[('state','=','cloture')]"/>
+                <filter string="Rejetés" name="rejetes" domain="[('state','=','rejete')]"/>
+                <separator/>
+                <filter string="Bus" name="bus" domain="[('objet_sinistre','=','bus')]"/>
+                <filter string="Chauffeurs" name="chauffeurs" domain="[('objet_sinistre','=','chauffeur')]"/>
+                <group>
+                    <filter string="État" name="group_state" context="{'group_by': 'state'}"/>
+                    <filter string="Compagnie" name="group_compagnie" context="{'group_by': 'compagnie_id'}"/>
+                    <filter string="Nature" name="group_nature" context="{'group_by': 'nature_sinistre'}"/>
+                    <filter string="Véhicule" name="group_vehicle" context="{'group_by': 'vehicle_id'}"/>
+                    <filter string="Mois" name="group_month" context="{'group_by': 'date_sinistre:month'}"/>
+                </group>
+            </search>
+        </field>
+    </record>
+
+    <record id="action_assurance_sinistre" model="ir.actions.act_window">
+        <field name="name">Sinistres</field>
+        <field name="res_model">transport.assurance.sinistre</field>
+        <field name="view_mode">list,pivot,form</field>
+        <field name="search_view_id" ref="view_assurance_sinistre_search"/>
+    </record>
+
+</odoo>

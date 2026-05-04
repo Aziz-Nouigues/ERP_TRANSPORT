@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <record id="report_polices_actives_action" model="ir.actions.report">
+        <field name="name">Polices actives</field>
+        <field name="model">transport.assurance.wizard.rapport</field>
+        <field name="report_type">qweb-pdf</field>
+        <field name="report_name">transport_assurance.report_polices_actives</field>
+        <field name="report_file">transport_assurance.report_polices_actives</field>
+        <field name="binding_model_id" ref="model_transport_assurance_wizard_rapport"/>
+    </record>
+
+    <template id="report_polices_actives">
+        <t t-call="web.html_container">
+            <t t-call="web.external_layout">
+                <div class="page">
+                    <h2>Polices d'assurance actives</h2>
+                    <p>Édité le : <t t-esc="context_timestamp(datetime.datetime.now()).strftime('%d/%m/%Y')"/></p>
+
+                    <!-- Polices bus -->
+                    <h3>Polices bus</h3>
+                    <t t-set="polices_bus" t-value="env['transport.assurance.bus'].search([
+                        ('state', 'in', ['active', 'alerte'])
+                    ], order='date_fin')"/>
+                    <table class="table table-sm o_main_table">
+                        <thead>
+                            <tr>
+                                <th>N° Police</th>
+                                <th>Bus</th>
+                                <th>Type</th>
+                                <th>Compagnie</th>
+                                <th>Début</th>
+                                <th>Fin</th>
+                                <th>Prime/an</th>
+                                <th>État</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <t t-foreach="polices_bus" t-as="p">
+                                <tr t-attf-class="#{p.state == 'alerte' and 'table-warning' or ''}">
+                                    <td><t t-esc="p.numero_police"/></td>
+                                    <td><t t-esc="p.vehicle_id.name"/></td>
+                                    <td>
+                                        <t t-esc="p.type_police_id.name"/>
+                                        <t t-if="p.is_obligatoire"> ★</t>
+                                    </td>
+                                    <td><t t-esc="p.compagnie_id.name"/></td>
+                                    <td><t t-esc="p.date_start" t-options="{'widget': 'date'}"/></td>
+                                    <td><t t-esc="p.date" t-options="{'widget': 'date'}"/></td>
+                                    <td><t t-esc="p.prime_annuelle"/> TND</td>
+                                    <td><t t-esc="p.state"/></td>
+                                </tr>
+                            </t>
+                        </tbody>
+                    </table>
+
+                    <!-- Polices chauffeurs -->
+                    <h3>Polices chauffeurs</h3>
+                    <t t-set="polices_chf" t-value="env['transport.assurance.chauffeur'].search([
+                        ('state', 'in', ['active', 'alerte'])
+                    ], order='date_fin')"/>
+                    <table class="table table-sm o_main_table">
+                        <thead>
+                            <tr>
+                                <th>N° Police</th>
+                                <th>Employé</th>
+                                <th>Type</th>
+                                <th>Compagnie</th>
+                                <th>Début</th>
+                                <th>Fin</th>
+                                <th>Prime/an</th>
+                                <th>État</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <t t-foreach="polices_chf" t-as="p">
+                                <tr t-attf-class="#{p.state == 'alerte' and 'table-warning' or ''}">
+                                    <td><t t-esc="p.numero_police"/></td>
+                                    <td><t t-esc="p.employe_id.name"/></td>
+                                    <td>
+                                        <t t-esc="p.type_police_id.name"/>
+                                        <t t-if="p.is_obligatoire"> ★</t>
+                                    </td>
+                                    <td><t t-esc="p.compagnie_id.name"/></td>
+                                    <td><t t-esc="p.date_debut" t-options="{'widget': 'date'}"/></td>
+                                    <td><t t-esc="p.date_fin" t-options="{'widget': 'date'}"/></td>
+                                    <td><t t-esc="p.prime_annuelle"/> TND</td>
+                                    <td><t t-esc="p.state"/></td>
+                                </tr>
+                            </t>
+                        </tbody>
+                    </table>
+                    <p class="text-muted" style="font-size:10px;">★ Police obligatoire légalement (Tunisie)</p>
+                </div>
+            </t>
+        </t>
+    </template>
+
+</odoo>

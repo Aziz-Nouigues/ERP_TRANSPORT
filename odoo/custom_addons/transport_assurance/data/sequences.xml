@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <record id="seq_assurance_bus" model="ir.sequence">
+        <field name="name">Police Assurance Bus</field>
+        <field name="code">transport.assurance.bus</field>
+        <field name="prefix">POL-BUS/%(year)s/</field>
+        <field name="padding">4</field>
+        <field name="number_increment">1</field>
+    </record>
+
+    <record id="seq_assurance_chauffeur" model="ir.sequence">
+        <field name="name">Police Assurance Chauffeur</field>
+        <field name="code">transport.assurance.chauffeur</field>
+        <field name="prefix">POL-CHF/%(year)s/</field>
+        <field name="padding">4</field>
+        <field name="number_increment">1</field>
+    </record>
+
+    <record id="seq_assurance_sinistre" model="ir.sequence">
+        <field name="name">Sinistre Assurance</field>
+        <field name="code">transport.assurance.sinistre</field>
+        <field name="prefix">SIN/%(year)s/</field>
+        <field name="padding">5</field>
+        <field name="number_increment">1</field>
+    </record>
+
+</odoo>

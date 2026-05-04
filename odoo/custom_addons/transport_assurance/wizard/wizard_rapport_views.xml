@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <record id="view_wizard_rapport_assurance_form" model="ir.ui.view">
+        <field name="name">transport.assurance.wizard.rapport.form</field>
+        <field name="model">transport.assurance.wizard.rapport</field>
+        <field name="arch" type="xml">
+            <form string="Rapports assurance">
+                <group>
+                    <group string="Rapport souhaité">
+                        <field name="type_rapport" required="1" widget="radio"/>
+                    </group>
+                    <group string="Filtres">
+                        <field name="compagnie_id"/>
+                        <field name="type_police_id"/>
+                    </group>
+                </group>
+                <group>
+                    <group string="Période">
+                        <field name="date_debut"/>
+                        <field name="date_fin"/>
+                    </group>
+                    <group string="Options">
+                        <field name="inclure_bus"/>
+                        <field name="inclure_chauffeurs"/>
+                        <field name="echeance_horizon"
+                               invisible="type_rapport != 'echeancier'"/>
+                    </group>
+                </group>
+                <footer>
+                    <button name="action_imprimer" string="Générer le rapport"
+                            type="object" class="oe_highlight"/>
+                    <button string="Annuler" class="btn-secondary" special="cancel"/>
+                </footer>
+            </form>
+        </field>
+    </record>
+
+    <record id="action_wizard_rapport_assurance" model="ir.actions.act_window">
+        <field name="name">Rapports assurance</field>
+        <field name="res_model">transport.assurance.wizard.rapport</field>
+        <field name="view_mode">form</field>
+        <field name="target">new</field>
+    </record>
+
+</odoo>

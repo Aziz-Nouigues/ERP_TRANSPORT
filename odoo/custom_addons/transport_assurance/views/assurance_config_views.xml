@@ -1,0 +1,124 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <!-- ══ COMPAGNIE D'ASSURANCE ════════════════════════════════ -->
+    <record id="view_assurance_compagnie_form" model="ir.ui.view">
+        <field name="name">transport.assurance.compagnie.form</field>
+        <field name="model">transport.assurance.compagnie</field>
+        <field name="arch" type="xml">
+            <form string="Compagnie d'assurance">
+                <sheet>
+                    <div class="oe_title">
+                        <h1><field name="name" placeholder="Raison sociale de la compagnie"/></h1>
+                        <h2><field name="code" placeholder="Code court"/></h2>
+                    </div>
+                    <group>
+                        <group string="Identification">
+                            <field name="numero_agrement"/>
+                            <field name="active"/>
+                        </group>
+                        <group string="Statistiques">
+                            <field name="nb_polices_bus" readonly="1"/>
+                            <field name="nb_polices_chauffeur" readonly="1"/>
+                            <field name="nb_sinistres_ouverts" readonly="1"/>
+                        </group>
+                    </group>
+                    <group>
+                        <group string="Coordonnées">
+                            <field name="adresse"/>
+                            <field name="ville"/>
+                            <field name="telephone"/>
+                            <field name="fax"/>
+                            <field name="email"/>
+                            <field name="site_web"/>
+                        </group>
+                        <group string="Contact dédié">
+                            <field name="contact_nom"/>
+                            <field name="contact_poste"/>
+                            <field name="contact_telephone"/>
+                            <field name="contact_email"/>
+                        </group>
+                    </group>
+                    <field name="notes" placeholder="Notes internes…"/>
+                </sheet>
+                <div class="oe_chatter">
+                    <field name="message_follower_ids"/>
+                    <field name="activity_ids"/>
+                    <field name="message_ids"/>
+                </div>
+            </form>
+        </field>
+    </record>
+
+    <record id="view_assurance_compagnie_list" model="ir.ui.view">
+        <field name="name">transport.assurance.compagnie.list</field>
+        <field name="model">transport.assurance.compagnie</field>
+        <field name="arch" type="xml">
+            <list string="Compagnies d'assurance">
+                <field name="code"/>
+                <field name="name"/>
+                <field name="contact_nom"/>
+                <field name="telephone"/>
+                <field name="email"/>
+                <field name="nb_polices_bus"/>
+                <field name="nb_polices_chauffeur"/>
+                <field name="nb_sinistres_ouverts"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="action_assurance_compagnie" model="ir.actions.act_window">
+        <field name="name">Compagnies d'assurance</field>
+        <field name="res_model">transport.assurance.compagnie</field>
+        <field name="view_mode">list,form</field>
+    </record>
+
+    <!-- ══ TYPES DE POLICES ══════════════════════════════════════ -->
+    <record id="view_assurance_type_form" model="ir.ui.view">
+        <field name="name">transport.assurance.type.form</field>
+        <field name="model">transport.assurance.type</field>
+        <field name="arch" type="xml">
+            <form string="Type de police">
+                <sheet>
+                    <group>
+                        <group>
+                            <field name="name"/>
+                            <field name="code"/>
+                            <field name="sequence"/>
+                            <field name="categorie"/>
+                            <field name="active"/>
+                        </group>
+                        <group>
+                            <field name="is_obligatoire"/>
+                            <field name="base_legale" invisible="not is_obligatoire"/>
+                        </group>
+                    </group>
+                    <field name="description" placeholder="Description du type de police…"/>
+                    <field name="notes" placeholder="Notes internes…"/>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="view_assurance_type_list" model="ir.ui.view">
+        <field name="name">transport.assurance.type.list</field>
+        <field name="model">transport.assurance.type</field>
+        <field name="arch" type="xml">
+            <list string="Types de polices" editable="bottom">
+                <field name="sequence" widget="handle"/>
+                <field name="code"/>
+                <field name="name"/>
+                <field name="categorie"/>
+                <field name="is_obligatoire"/>
+                <field name="active"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="action_assurance_type" model="ir.actions.act_window">
+        <field name="name">Types de polices</field>
+        <field name="res_model">transport.assurance.type</field>
+        <field name="view_mode">list,form</field>
+    </record>
+
+</odoo>

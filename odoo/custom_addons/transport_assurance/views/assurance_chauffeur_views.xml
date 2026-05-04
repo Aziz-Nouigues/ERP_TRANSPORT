@@ -1,0 +1,162 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <record id="view_assurance_chauffeur_form" model="ir.ui.view">
+        <field name="name">transport.assurance.chauffeur.form</field>
+        <field name="model">transport.assurance.chauffeur</field>
+        <field name="arch" type="xml">
+            <form string="Police assurance chauffeur">
+                <header>
+                    <button name="action_activer" string="Activer" type="object"
+                            class="oe_highlight"
+                            invisible="state != 'brouillon'"/>
+                    <button name="action_renouveler" string="Renouveler" type="object"
+                            class="oe_highlight"
+                            invisible="state not in ('active','alerte','expirée')"/>
+                    <button name="action_resilier" string="Résilier" type="object"
+                            invisible="state not in ('active','alerte')"/>
+                    <field name="state" widget="statusbar"
+                           statusbar_visible="brouillon,active,alerte,expirée"/>
+                </header>
+
+                <div class="alert alert-warning" role="alert"
+                     invisible="state != 'alerte'">
+                    <strong>⚠ Échéance proche</strong> — Cette police expire dans
+                    <field name="jours_restants" readonly="1"/> jours. Procédez au renouvellement.
+                </div>
+
+                <sheet>
+                    <div class="oe_title">
+                        <h1><field name="numero_police" readonly="1"/></h1>
+                        <h2><field name="name" readonly="1"/></h2>
+                    </div>
+
+                    <group>
+                        <group string="Employé / Bénéficiaire">
+                            <field name="employe_id" required="1"/>
+                            <field name="department_id" readonly="1"/>
+                            <field name="job_id" readonly="1"/>
+                            <field name="numero_cnam"/>
+                        </group>
+                        <group string="Police">
+                            <field name="type_police_id" required="1"/>
+                            <field name="compagnie_id" required="1"/>
+                            <field name="is_obligatoire" readonly="1"/>
+                        </group>
+                    </group>
+
+                    <group>
+                        <group string="Validité">
+                            <field name="date_debut" required="1"/>
+                            <field name="date_fin" required="1"/>
+                            <field name="date_alerte" readonly="1"/>
+                            <field name="jours_restants" readonly="1" widget="integer"/>
+                        </group>
+                        <group string="Conditions financières">
+                            <field name="prime_annuelle"/>
+                            <field name="prime_mensuelle" readonly="1"/>
+                            <field name="capital_assure"/>
+                            <field name="franchise"/>
+                            <field name="currency_id" groups="base.group_multi_currency"/>
+                        </group>
+                    </group>
+
+                    <group string="Bénéficiaire désigné"
+                           invisible="type_police_id != False and type_police_id.code != 'VIE_GROUPE'">
+                        <group>
+                            <field name="beneficiaire"/>
+                            <field name="lien_beneficiaire"/>
+                        </group>
+                    </group>
+
+                    <notebook>
+                        <page string="Sinistres" name="sinistres" invisible="nb_sinistres == 0">
+                            <field name="sinistre_ids" readonly="1">
+                                <list>
+                                    <field name="name"/>
+                                    <field name="date_sinistre"/>
+                                    <field name="nature_sinistre"/>
+                                    <field name="montant_reclame"/>
+                                    <field name="montant_accorde"/>
+                                    <field name="state" widget="badge"
+                                           decoration-success="state == 'cloture'"
+                                           decoration-danger="state == 'rejete'"/>
+                                </list>
+                            </field>
+                        </page>
+                        <page string="Notes" name="notes">
+                            <field name="notes" placeholder="Conditions particulières…"/>
+                        </page>
+                    </notebook>
+                </sheet>
+
+                <div class="oe_chatter">
+                    <field name="message_follower_ids"/>
+                    <field name="activity_ids"/>
+                    <field name="message_ids"/>
+                </div>
+            </form>
+        </field>
+    </record>
+
+    <record id="view_assurance_chauffeur_list" model="ir.ui.view">
+        <field name="name">transport.assurance.chauffeur.list</field>
+        <field name="model">transport.assurance.chauffeur</field>
+        <field name="arch" type="xml">
+            <list string="Polices assurance chauffeurs"
+                  decoration-danger="state in ('expirée','résiliée')"
+                  decoration-warning="state == 'alerte'"
+                  decoration-success="state == 'active'">
+                <field name="numero_police"/>
+                <field name="employe_id"/>
+                <field name="department_id"/>
+                <field name="type_police_id"/>
+                <field name="compagnie_id"/>
+                <field name="date_debut"/>
+                <field name="date_fin"/>
+                <field name="prime_annuelle"/>
+                <field name="jours_restants" optional="show"/>
+                <field name="is_obligatoire" widget="boolean"/>
+                <field name="nb_sinistres"/>
+                <field name="state" widget="badge"
+                       decoration-success="state == 'active'"
+                       decoration-warning="state == 'alerte'"
+                       decoration-danger="state in ('expirée','résiliée')"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="view_assurance_chauffeur_search" model="ir.ui.view">
+        <field name="name">transport.assurance.chauffeur.search</field>
+        <field name="model">transport.assurance.chauffeur</field>
+        <field name="arch" type="xml">
+            <search string="Recherche polices chauffeurs">
+                <field name="employe_id"/>
+                <field name="compagnie_id"/>
+                <field name="type_police_id"/>
+                <field name="numero_police"/>
+                <filter string="Actives" name="actives" domain="[('state','=','active')]"/>
+                <filter string="En alerte" name="alerte" domain="[('state','=','alerte')]"/>
+                <filter string="Expirées" name="expirees" domain="[('state','=','expirée')]"/>
+                <filter string="Obligatoires" name="obligatoires" domain="[('is_obligatoire','=',True)]"/>
+                <separator/>
+                <filter string="AT / CNAM" name="at" domain="[('type_police_id.code','=','AT_CNAM')]"/>
+                <filter string="Vie groupe" name="vie" domain="[('type_police_id.code','=','VIE_GROUPE')]"/>
+                <group>
+                    <filter string="État" name="group_state" context="{'group_by': 'state'}"/>
+                    <filter string="Compagnie" name="group_compagnie" context="{'group_by': 'compagnie_id'}"/>
+                    <filter string="Type" name="group_type" context="{'group_by': 'type_police_id'}"/>
+                    <filter string="Département" name="group_dept" context="{'group_by': 'department_id'}"/>
+                </group>
+            </search>
+        </field>
+    </record>
+
+    <record id="action_assurance_chauffeur" model="ir.actions.act_window">
+        <field name="name">Polices assurance chauffeurs</field>
+        <field name="res_model">transport.assurance.chauffeur</field>
+        <field name="view_mode">list,form</field>
+        <field name="search_view_id" ref="view_assurance_chauffeur_search"/>
+    </record>
+
+</odoo>
