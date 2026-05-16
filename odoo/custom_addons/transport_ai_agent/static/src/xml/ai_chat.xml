@@ -20,19 +20,22 @@
 
       <div class="ai_sidebar_section">Conversations récentes</div>
 
-<t t-foreach="state.history" t-as="conv" t-key="conv.id">
-    <div t-attf-class="ai_history_item {{ conv.id === state.currentId ? 'active' : '' }}"
-         t-on-click="() => this.loadConversation(conv.id)">
-        <div class="ai_history_item_content">
-            <span class="ai_history_name">
+      <!-- Liste scrollable uniquement pour les conversations -->
+      <div class="ai_history_list">
+        <t t-foreach="state.history" t-as="conv" t-key="conv.id">
+          <div t-attf-class="ai_history_item {{ conv.id === state.currentId ? 'active' : '' }}"
+               t-on-click="() => this.loadConversation(conv.id)">
+            <div class="ai_history_item_content">
+              <span class="ai_history_name">
                 <t t-esc="conv.name"/>
-            </span>
-            <span class="ai_history_date">
+              </span>
+              <span class="ai_history_date">
                 <t t-esc="conv.date"/>
-            </span>
-        </div>
-    </div>
-</t>
+              </span>
+            </div>
+          </div>
+        </t>
+      </div>
 
       <div class="ai_sidebar_user">
     <div class="ai_user_avatar">

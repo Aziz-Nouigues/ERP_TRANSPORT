@@ -1,7 +1,12 @@
 import os
 import re
+import ast
+import json
 import logging
+import sqlite3
+import threading
 from pathlib import Path
+from datetime import datetime
 from dotenv import load_dotenv
 from langchain_ollama import OllamaLLM
 
@@ -14,7 +19,72 @@ load_dotenv(Path(__file__).parent.parent / ".env")
 
 _logger = logging.getLogger(__name__)
 
-HISTORIQUE = {}
+# ---------------------------------------------------------------------------
+# FIX 3 — Historique persistant dans SQLite (remplace dict en RAM)
+# ---------------------------------------------------------------------------
+
+_DB_PATH = Path(__file__).parent.parent / "historique.db"
+_db_lock = threading.Lock()
+
+
+def _init_db():
+    """Crée la table historique si elle n'existe pas."""
+    with sqlite3.connect(_DB_PATH) as conn:
+        conn.execute("""
+            CREATE TABLE IF NOT EXISTS historique (
+                id        INTEGER PRIMARY KEY AUTOINCREMENT,
+                session   TEXT    NOT NULL,
+                role      TEXT    NOT NULL,
+                contenu   TEXT    NOT NULL,
+                ts        TEXT    DEFAULT (datetime('now'))
+            )
+        """)
+        conn.execute("CREATE INDEX IF NOT EXISTS idx_session ON historique(session)")
+        conn.commit()
+
+
+_init_db()
+
+
+def charger_historique(session_id: str, limite: int = 10) -> list:
+    """Retourne les N derniers échanges pour la session."""
+    with _db_lock, sqlite3.connect(_DB_PATH) as conn:
+        rows = conn.execute("""
+            SELECT role, contenu FROM historique
+            WHERE session = ?
+            ORDER BY id DESC LIMIT ?
+        """, (session_id, limite * 2)).fetchall()
+    rows.reverse()
+    return [{"role": r, "contenu": c} for r, c in rows]
+
+
+def sauvegarder_historique(session_id: str, question: str, reponse: str):
+    """Persiste une paire question/réponse."""
+    with _db_lock, sqlite3.connect(_DB_PATH) as conn:
+        conn.execute(
+            "INSERT INTO historique (session, role, contenu) VALUES (?,?,?)",
+            (session_id, "user", question)
+        )
+        conn.execute(
+            "INSERT INTO historique (session, role, contenu) VALUES (?,?,?)",
+            (session_id, "assistant", reponse)
+        )
+        # Garde max 20 tours par session pour éviter la croissance infinie
+        conn.execute("""
+            DELETE FROM historique WHERE session = ? AND id NOT IN (
+                SELECT id FROM historique WHERE session = ?
+                ORDER BY id DESC LIMIT 40
+            )
+        """, (session_id, session_id))
+        conn.commit()
+
+
+def effacer_historique(session_id: str):
+    """Efface l'historique d'une session (ex : logout utilisateur)."""
+    with _db_lock, sqlite3.connect(_DB_PATH) as conn:
+        conn.execute("DELETE FROM historique WHERE session = ?", (session_id,))
+        conn.commit()
+
 
 # ---------------------------------------------------------------------------
 # MAPPING METIER — mots-clés -> tables réelles PostgreSQL
@@ -78,7 +148,6 @@ TABLES_METIER = {
     "départ":          ["boc_courrier_depart"],
     "centre":          ["transport_exploitation_centre"],
     "agence":          ["transport_exploitation_agence"],
-    # ── Factures énergie : TOUJOURS transport_facture_energie ──
     "facture":         ["transport_facture_energie"],
     "factures":        ["transport_facture_energie"],
     "facturation":     ["transport_facture_energie"],
@@ -91,7 +160,6 @@ TABLES_METIER = {
     "kwh":             ["transport_facture_energie"],
     "compteur":        ["transport_facture_energie"],
     "energie":         ["transport_facture_energie"],
-    # ── Comptabilité générale uniquement ──
     "paiement":        ["account_move", "res_partner"],
     "fournisseur":     ["account_move", "res_partner"],
     "client":          ["account_move", "res_partner"],
@@ -115,7 +183,6 @@ TABLES_PRINCIPALES = [
 # DÉTECTION DES TABLES PERTINENTES
 # ---------------------------------------------------------------------------
 
-# Catalogue complet des tables avec description métier
 CATALOGUE_TABLES = """
 fleet_vehicle: parc de bus, véhicules, immatriculations, liste des bus, plaques
 fleet_vehicle_state: états des bus (en service, hors service, réformé)
@@ -147,12 +214,12 @@ account_move: factures comptables générales (PAS énergie)
 res_partner: fournisseurs, clients, partenaires
 """
 
+
 def detecter_tables_pertinentes(question: str, llm=None) -> list:
     """
     Détecte les tables pertinentes via le LLM d'abord,
     puis fallback sur le mapping statique si LLM indisponible.
     """
-    # Essayer le LLM en premier si disponible
     if llm is not None:
         try:
             prompt = (
@@ -196,40 +263,62 @@ def detecter_tables_pertinentes(question: str, llm=None) -> list:
 # SCHÉMA DYNAMIQUE — colonnes chargées depuis PostgreSQL
 # ---------------------------------------------------------------------------
 
+
 def charger_schema_tables(tables: list) -> str:
+    """
+    Charge le schéma PostgreSQL. Filtre les colonnes inutiles mais
+    conserve les types complets (jsonb visible) et un exemple de valeur
+    pour que le LLM génère un SQL correct.
+    """
     try:
         conn = get_pg_connection()
         cur = conn.cursor()
         schema = ""
         tables_chargees = 0
+        cols_exclues = _COLS_SCHEMA_EXCLUES | {
+            "create_uid", "write_uid", "create_date", "write_date",
+            "message_follower_ids", "message_ids", "activity_ids",
+        }
         for table in sorted(set(tables)):
             try:
                 cur.execute("""
                     SELECT column_name, data_type
                     FROM information_schema.columns
                     WHERE table_name = %s AND table_schema = 'public'
-                    AND column_name NOT IN (
-                        'create_uid', 'write_uid', 'create_date', 'write_date'
-                    )
                     ORDER BY ordinal_position
                 """, (table,))
                 cols = cur.fetchall()
                 if not cols:
                     _logger.warning(f"Table '{table}' absente de PostgreSQL")
                     continue
-                col_desc = [f"{c[0]}({c[1][:8]})" for c in cols]
+                # Filtrer colonnes inutiles, garder type complet (jsonb important !)
+                col_desc = [
+                    f"{c[0]}({c[1][:8]})"
+                    for c in cols
+                    if c[0] not in cols_exclues
+                ]
+                # Limiter à 20 colonnes max pour ne pas saturer la RAM Ollama
+                if len(col_desc) > 20:
+                    col_desc = col_desc[:20]
+                # Exemple sur colonnes clés seulement (pas toutes)
+                COLS_SAMPLE = {
+                    "state", "statut", "type_facture", "voucher_type",
+                    "direction", "name", "license_plate", "active",
+                }
                 cur.execute(f"SELECT * FROM {table} LIMIT 1")
                 sample = cur.fetchone()
                 sample_str = ""
                 if sample and cur.description:
                     for i, desc in enumerate(cur.description):
+                        if desc[0] not in COLS_SAMPLE:
+                            continue
                         val = sample[i]
                         if val is not None and str(val).strip():
-                            sample_str += f"{desc[0]}={repr(str(val)[:20])} "
+                            sample_str += f"{desc[0]}={repr(str(val)[:15])} "
                 schema += f"\nTABLE: {table}\n"
                 schema += f"COLUMNS: {', '.join(col_desc)}\n"
                 if sample_str:
-                    schema += f"SAMPLE: {sample_str[:250]}\n"
+                    schema += f"SAMPLE: {sample_str[:150]}\n"
                 tables_chargees += 1
             except Exception as e:
                 _logger.warning(f"Erreur lecture table {table}: {e}")
@@ -247,6 +336,7 @@ def charger_schema_detaille() -> str:
 # ---------------------------------------------------------------------------
 # VÉRIFICATION ET DIAGNOSTIC
 # ---------------------------------------------------------------------------
+
 
 def verifier_colonnes_sql(sql: str) -> tuple:
     try:
@@ -379,114 +469,196 @@ def verifier_acces_question(question: str, allowed_tables: list, is_admin: bool)
     return None
 
 # ---------------------------------------------------------------------------
-# DÉTECTION D'OUTIL
+# DÉTECTION RAPIDE D'OUTIL — 100% Python, 0 appel LLM
 # ---------------------------------------------------------------------------
 
-def detecter_outil(question: str, llm: OllamaLLM) -> str:
-    prompt = (
-        "Classify this question with ONE word only: sql, rag, or rpc\n"
-        "sql = data query (list, count, details, statistics)\n"
-        "rag = definition, procedure, rule, how-to\n"
-        "rpc = action (create, modify, validate)\n"
-        f"Question: {question}\n"
-        "Answer (one word):"
-    )
-    try:
-        reponse = llm.invoke(prompt).strip().lower()
-        first_word = reponse.split()[0] if reponse.split() else "sql"
-        if "rpc" in first_word:
-            return "rpc"
-        elif "rag" in first_word:
+# Mots-clés qui indiquent une procédure/définition (rag)
+_MOTS_RAG = {
+    "comment", "procédure", "procedure", "définition", "definition",
+    "qu'est-ce", "qu est ce", "c'est quoi", "expliquer", "expliquez",
+    "comment faire", "règle", "regle", "workflow", "étapes", "etapes",
+    "feuille de route", "manuel", "guide",
+}
+
+# Mots-clés qui indiquent une action Odoo (rpc)
+_MOTS_RPC = {
+    "créer", "creer", "créé", "ajouter", "ajoute", "nouveau", "nouvelle",
+    "valider", "valide", "confirmer", "confirme", "modifier", "modifie",
+    "annuler", "annule", "supprimer", "supprime", "enregistrer", "enregistre",
+    "mettre à jour", "mettre a jour",
+}
+
+
+def detecter_outil(question: str, llm=None) -> str:
+    """
+    Détection de l'outil en Python pur — zéro appel LLM.
+    RAG  : questions de définition/procédure
+    RPC  : actions Odoo (créer, valider, modifier…)
+    SQL  : tout le reste (liste, stats, détails)
+    """
+    q = question.lower()
+    for mot in _MOTS_RAG:
+        if mot in q:
             return "rag"
-        return "sql"
-    except Exception:
-        return "sql"
+    for mot in _MOTS_RPC:
+        if mot in q:
+            return "rpc"
+    return "sql"
+
 
 # ---------------------------------------------------------------------------
-# GÉNÉRATION SQL
+# PIPELINE UNIFIÉ : 1 seul appel LLM (outil + tables + SQL en une fois)
 # ---------------------------------------------------------------------------
+
+def _tables_par_mots_cles(question: str) -> list:
+    """Détection des tables 100% Python via TABLES_METIER."""
+    q = question.lower()
+    tables = set()
+    for mot, tables_liees in TABLES_METIER.items():
+        if mot in q:
+            tables.update(tables_liees)
+
+    # Cas spéciaux : référence de tournée → toujours charger bus + chauffeur
+    if re.search(r"tourn/\d{4}/\d+", q) or (
+        ("détail" in q or "detail" in q or "information" in q or "info" in q)
+        and ("tournee" in q or "tournée" in q)
+    ):
+        tables.update(["transport_exploitation_tournee", "fleet_vehicle", "hr_employee"])
+
+    if not tables:
+        tables = {"fleet_vehicle", "transport_exploitation_tournee",
+                  "transport_assurance_bus", "hr_employee"}
+
+    # Max 3 tables pour rester dans la RAM Ollama
+    tables_list = sorted(tables)
+    return tables_list[:3]
+
+
+# ---------------------------------------------------------------------------
+# CACHE SQL — Requêtes pré-construites pour questions fréquentes (0 LLM)
+# ---------------------------------------------------------------------------
+
+_CACHE_SQL = [
+    # COUNT bus
+    (r"combien.*(bus|véhicul|vehicul|parc)",
+     "SELECT COUNT(*) AS nombre_de_bus FROM fleet_vehicle"),
+    # COUNT tournées toutes
+    (r"combien.*(tournee|tournée)(?!.*mois|.*semaine|.*jour|.*réalisée|.*planif)",
+     "SELECT COUNT(*) AS nombre_tournees FROM transport_exploitation_tournee"),
+    # COUNT tournées réalisées ce mois
+    (r"combien.*(tournee|tournée).*(mois|mensuel|réalisée|realise|effectuée)",
+     "SELECT COUNT(*) AS nombre_tournees FROM transport_exploitation_tournee "
+     "WHERE state='realise' AND EXTRACT(MONTH FROM date)=EXTRACT(MONTH FROM CURRENT_DATE) "
+     "AND EXTRACT(YEAR FROM date)=EXTRACT(YEAR FROM CURRENT_DATE)"),
+    # COUNT chauffeurs
+    (r"combien.*(chauffeur|conducteur|employ|personnel)",
+     "SELECT COUNT(*) AS nombre_employes FROM hr_employee WHERE active=true"),
+    # COUNT stations
+    (r"combien.*(station)",
+     "SELECT COUNT(*) AS nombre_stations FROM transport_exploitation_station"),
+    # COUNT sinistres
+    (r"combien.*(sinistre|accident)",
+     "SELECT COUNT(*) AS nombre_sinistres FROM transport_assurance_sinistre"),
+    # Liste tous les bus — license_plate en premier, name brut évité
+    (r"(liste|tous|toutes|quels|quelles).*(bus|véhicul|vehicul|parc)",
+     "SELECT v.license_plate AS immatriculation, "
+     "COALESCE(s.name->>'fr_FR',s.name->>'en_US','Inconnu') AS etat "
+     "FROM fleet_vehicle v LEFT JOIN fleet_vehicle_state s ON v.state_id=s.id "
+     "ORDER BY v.license_plate LIMIT 50"),
+]
+
+
+def _chercher_cache_sql(question: str) -> str | None:
+    """
+    Retourne une requête SQL pré-construite si la question correspond,
+    sinon None. Zéro appel LLM.
+    """
+    q = question.lower()
+    for pattern, sql in _CACHE_SQL:
+        if re.search(pattern, q):
+            _logger.info(f"Cache SQL hit: {pattern[:40]}")
+            print(f"  -> Cache SQL: {sql[:60]}...")
+            return sql
+    return None
+
+
+
+def _regles_metier_pour(question: str) -> str:
+    """Retourne uniquement les règles SQL pertinentes pour cette question."""
+    q = question.lower()
+    regles = []
+    if any(w in q for w in ["bus", "véhicul", "vehicul", "parc", "immatricul"]):
+        regles.append("BUS: state jsonb COALESCE(s.name->>'fr_FR',s.name->>'en_US'). No type_vehicule col.")
+    if any(w in q for w in ["assurance", "police", "sinistre"]):
+        regles.append("ASSURANCE state: active,expire,resilie,brouillon. Never filter is_obligatoire.")
+    if any(w in q for w in ["tournee", "tournée", "tourn/"]):
+        regles.append("TOURNEE state: brouillon,planifie,en_cours,realise,annule. km_realise=actual,km_prevu=planned.")
+    if any(w in q for w in ["chauffeur", "conducteur", "employe", "employé"]):
+        regles.append("EMPLOYES: table=hr_employee. JOIN ON t.chauffeur_id=e.id")
+    if any(w in q for w in ["carburant", "bgi", "bge", "litre"]):
+        regles.append("CARBURANT: voucher_type='internal'=BGI,'external'=BGE. qty=total_quantity.")
+    if any(w in q for w in ["steg", "sonede", "facture", "energie", "électricité", "electricite", "eau"]):
+        regles.append("ENERGIE: ONLY transport_facture_energie. type_facture='steg'|'sonede'. statut='saisie'|'payee'|'validee'. No statut filter unless asked.")
+    if any(w in q for w in ["patrimoine", "immobilisation", "amortissement"]):
+        regles.append("PATRIMOINE: name jsonb COALESCE(name->>'fr_FR',name->>'en_US') AS nom.")
+    if any(w in q for w in ["station", "gare", "terminus"]):
+        regles.append("STATION: name jsonb, ville jsonb. type_station='intermediaire'|'terminus'.")
+    if any(w in q for w in ["courrier", "boc"]):
+        regles.append("BOC depart.state: enregistre,classe.")
+    return ("METIER:\n" + "\n".join(f"  {r}" for r in regles) + "\n") if regles else ""
 
 def generer_sql(question: str, llm: OllamaLLM,
                 allowed_tables: list = None,
                 is_admin: bool = False,
                 diagnostic_extra: str = "") -> str:
-
-    tables_pertinentes = detecter_tables_pertinentes(question, llm)
+    """
+    OPTIMISÉ — 1 seul appel LLM qui détecte les tables ET génère le SQL.
+    Le schéma est chargé par mots-clés Python (sans appel LLM préalable).
+    """
+    # ── Étape 1 : tables par mots-clés Python (instantané) ──
+    tables_pertinentes = _tables_par_mots_cles(question)
     schema = charger_schema_tables(tables_pertinentes)
     _logger.info(f"Tables injectées dans le prompt: {tables_pertinentes}")
     print(f"  -> Tables pertinentes: {tables_pertinentes}")
 
+    # ── Étape 2 : 1 seul appel LLM — génère directement le SQL ──
     prompt = (
-        "You are a PostgreSQL expert for an Odoo 19 transport ERP in Tunisia.\n"
-        "Generate ONLY the SQL SELECT query. No explanation. No markdown. No comments.\n\n"
-        "AVAILABLE TABLES (use ONLY these — loaded live from PostgreSQL):\n"
+        "PostgreSQL expert for Odoo 19 transport ERP Tunisia.\n"
+        "Output ONLY the SQL SELECT. No explanation. No markdown. No comments.\n\n"
+        "SCHEMA (live from PostgreSQL):\n"
         f"{schema}\n"
         f"{diagnostic_extra}\n"
-        "BUSINESS RULES:\n"
-        "  [BUSES] fleet_vehicle has 3 buses. COUNT(*) needs NO WHERE filter.\n"
-        "    To list all buses with plate: SELECT name, license_plate FROM fleet_vehicle\n"
-        "    NEVER add WHERE clause when listing all buses.\n"
-        "    state_id values: 47='En service', 48='Hors service', 49='Réformé'\n"
-        "    CORRECT state query: SELECT v.name, v.license_plate, s.name AS etat\n"
-        "      FROM fleet_vehicle v LEFT JOIN fleet_vehicle_state s ON v.state_id = s.id\n"
-        "      WHERE v.license_plate ILIKE '%123 TU 456%'\n"
-        "    fleet_vehicle_state.name is jsonb: use COALESCE(s.name->>'fr_FR', s.name->>'en_US')\n"
-        "    No columns: date_arrivee, type_vehicule, activity_type, vehicle_type.\n"
-        "  [ASSURANCE] transport_assurance_bus.state: active, expire, resilie, brouillon.\n"
-        "    is_obligatoire is false for ALL records — never filter by it.\n"
-        "    Insured buses: JOIN fleet_vehicle v ON a.vehicle_id = v.id WHERE a.state = 'active'\n"
-        "  [TOURNEES] state: brouillon, planifie, en_cours, realise, annule.\n"
-        "  [EMPLOYES] table name is hr_employee (NOT employe, NOT employees).\n"
-        "    JOIN: hr_employee e ON a.employe_id = e.id\n"
-        "    km columns: km_realise(actual km), km_prevu(planned), ecart_km(diff).\n"
-        "    For km bus query: SUM(km_realise) grouped by vehicle. NEVER use compteur_depart/arrivee.\n"
-        "    Filter by state='realise' for completed trips only.\n"
-        "  [CARBURANT] transport_fuel_voucher: voucher_type='internal'=BGI, 'external'=BGE.\n"
-        "    Quantity column: total_quantity. Never use placeholder names.\n"
-        "  [ENERGIE/STEG/SONEDE] transport_facture_energie is THE ONLY table for energy invoices.\n"
-        "    NEVER use account_move for STEG/SONEDE — it contains ONLY general accounting.\n"
-        "    type_facture: 'steg' or 'sonede' (NOT type_energie).\n"
-        "    statut: 'saisie', 'payee', 'validee' (NOT state).\n"
-        "    REAL column names: name, type_facture, statut, site, numero_compteur,\n"
-        "      unite_mesure, date_debut_periode, date_fin_periode, date_reception,\n"
-        "      quantite_consommee, montant.\n"
-        "    NEVER filter by statut unless user explicitly asks — show ALL by default.\n"
-        "    CORRECT STEG query: SELECT name, site, numero_compteur,\n"
-        "      quantite_consommee, unite_mesure, montant, statut, date_reception\n"
-        "      FROM transport_facture_energie WHERE type_facture = 'steg'\n"
-        "      ORDER BY date_reception DESC -- NO statut filter unless asked\n"
-        "  [PATRIMOINE] patrimoine_immobilisation.statut: 'en_service', 'cede'.\n"
-        "    name is jsonb: COALESCE(name->>'fr_FR', name->>'en_US') AS nom.\n"
-        "  [STATIONS EXPLOITATION] transport_exploitation_station: 54 stations.\n"
-        "    type_station values: 'intermediaire', 'terminus'\n"
-        "    'gares' = all stations (no type filter). 'terminus' = type_station='terminus'\n"
-        "    name is jsonb: COALESCE(name->>'fr_FR', name->>'en_US') AS nom\n"
-        "    ville is jsonb: COALESCE(ville->>'fr_FR', ville->>'en_US') AS ville\n"
-        "    For ALL stations: SELECT id, COALESCE(name->>'fr_FR',name->>'en_US') AS nom,\n"
-        "      type_station, COALESCE(ville->>'fr_FR',ville->>'en_US') AS ville\n"
-        "      FROM transport_exploitation_station ORDER BY nom\n"
-        "    NEVER filter by active unless user asks for active/inactive.\n"
-        "    Columns: code, name(jsonb), type_station, ville(jsonb), agence_id.\n"
-        "    Count: SELECT COUNT(*) FROM transport_exploitation_station\n"
-        "  [STATIONS CARBURANT] transport_fuel_station: fuel stations only.\n"
-        "  [BOC] boc_courrier_arrivee.date_arrivee is timestamp.\n"
-        "    boc_courrier_depart.state: 'enregistre', 'classe'.\n"
-        "  [FUEL STATION] transport_fuel_station.name is jsonb.\n"
-        "    JOIN: transport_fuel_station s ON fv.station_id = s.id\n"
-        "CRITICAL RULES:\n"
-        "1. Use ONLY columns listed in COLUMNS above. Never invent columns.\n"
-        "2. ->> works ONLY on jsonb typed columns. NEVER on integer/date/numeric/boolean.\n"
-        "3. Never filter by state unless user explicitly asks for a specific state.\n"
-        "4. ILIKE for text searches. LIMIT 50 for lists, no LIMIT for COUNT.\n"
-        "5. Always use table aliases. No accents in table names.\n"
-        "   Always use LEFT JOIN for optional relations (chauffeur_id, vehicle_id may be NULL).\n"
-        "   Use INNER JOIN only when the relation is guaranteed to exist.\n"
-        "6. DATE: EXTRACT(MONTH FROM col)=EXTRACT(MONTH FROM CURRENT_DATE) for this month.\n"
-        "7. Never use bracket placeholders like [total_litres] in SQL.\n\n"
-        f"Question (French): {question}\n\nSQL:"
+        "RULES:\n"
+        "  [BUS] COUNT(*) FROM fleet_vehicle needs no WHERE. "
+        "state jsonb: COALESCE(s.name->>'fr_FR',s.name->>'en_US'). "
+        "No cols: type_vehicule,activity_type,vehicle_type.\n"
+        "  [ASSURANCE] state: active,expire,resilie,brouillon. Never filter is_obligatoire.\n"
+        "  [TOURNEES] state: brouillon,planifie,en_cours,realise,annule. "
+        "km_realise=actual, km_prevu=planned, ecart_km=diff.\n"
+        "  [EMPLOYES] table=hr_employee. JOIN: hr_employee e ON t.chauffeur_id=e.id\n"
+        "  [CARBURANT] voucher_type='internal'=BGI,'external'=BGE. qty=total_quantity.\n"
+        "  [ENERGIE] ONLY transport_facture_energie for STEG/SONEDE. "
+        "type_facture='steg'|'sonede'. statut='saisie'|'payee'|'validee'. "
+        "Cols: name,type_facture,statut,site,numero_compteur,unite_mesure,"
+        "date_debut_periode,date_fin_periode,date_reception,quantite_consommee,montant. "
+        "No statut filter unless asked.\n"
+        "  [PATRIMOINE] name jsonb: COALESCE(name->>'fr_FR',name->>'en_US') AS nom.\n"
+        "  [STATION] name jsonb. ville jsonb.\n"
+        "  [BOC] boc_courrier_depart.state: enregistre,classe.\n"
+        "CRITICAL: only real columns. ->> only on jsonb. LEFT JOIN for nullable FK. "
+        "ILIKE for text. LIMIT 50 for lists. No accents in table names. "
+        "No bracket placeholders.\n\n"
+        f"Question: {question}\n\nSQL:"
     )
 
-    sql = llm.invoke(prompt).strip()
+    try:
+        sql = llm.invoke(prompt).strip()
+    except Exception as e_llm:
+        msg = str(e_llm)
+        if "system memory" in msg or "memory" in msg.lower():
+            _logger.error(f"Mémoire insuffisante Ollama: {msg}")
+            raise MemoryError("Mémoire insuffisante pour Ollama. Relancez : ollama stop && ollama serve")
+        raise
     sql = re.sub(r"```sql|```", "", sql).strip()
     sql = sql.split(";")[0].strip()
     lignes = [l for l in sql.split("\n") if not l.strip().startswith("--")]
@@ -502,7 +674,6 @@ def generer_sql(question: str, llm: OllamaLLM,
         sql = sql.replace(wrong, correct)
 
     FILTRES_INVENTES = [
-        # Avec alias (v.type_vehicule)
         r"AND\s+(?:\w+\.)?type_vehicule\s*=\s*'[^']*'",
         r"WHERE\s+(?:\w+\.)?type_vehicule\s*=\s*'[^']*'\s*AND",
         r"WHERE\s+(?:\w+\.)?type_vehicule\s*=\s*'[^']*'",
@@ -532,8 +703,159 @@ def generer_sql(question: str, llm: OllamaLLM,
     return sql
 
 # ---------------------------------------------------------------------------
-# FORMULATION DE LA RÉPONSE
+# FIX 1 — Génération dynamique de l'action RPC
 # ---------------------------------------------------------------------------
+
+# Mapping question → modèle Odoo + champs pertinents
+MODELES_RPC = {
+    "tournee":         ("transport.exploitation.tournee",
+                        ["name", "date", "state", "vehicle_id", "chauffeur_id",
+                         "km_prevu", "km_realise", "ecart_km"]),
+    "tournée":         ("transport.exploitation.tournee",
+                        ["name", "date", "state", "vehicle_id", "chauffeur_id",
+                         "km_prevu", "km_realise", "ecart_km"]),
+    "bus":             ("fleet.vehicle",
+                        ["name", "license_plate", "state_id"]),
+    "vehicule":        ("fleet.vehicle",
+                        ["name", "license_plate", "state_id"]),
+    "véhicule":        ("fleet.vehicle",
+                        ["name", "license_plate", "state_id"]),
+    "assurance":       ("transport.assurance.bus",
+                        ["name", "vehicle_id", "state", "date_debut", "date_fin"]),
+    "police":          ("transport.assurance.bus",
+                        ["name", "vehicle_id", "state", "date_debut", "date_fin"]),
+    "sinistre":        ("transport.assurance.sinistre",
+                        ["name", "vehicle_id", "date_sinistre", "state"]),
+    "chauffeur":       ("hr.employee",
+                        ["name", "job_title", "active"]),
+    "conducteur":      ("hr.employee",
+                        ["name", "job_title", "active"]),
+    "carburant":       ("transport.fuel.voucher",
+                        ["name", "voucher_type", "total_quantity", "date", "state"]),
+    "bgi":             ("transport.fuel.voucher",
+                        ["name", "voucher_type", "total_quantity", "date", "state"]),
+    "bge":             ("transport.fuel.voucher",
+                        ["name", "voucher_type", "total_quantity", "date", "state"]),
+    "courrier":        ("boc.courrier.arrivee",
+                        ["name", "sujet", "expediteur", "date_arrivee", "state"]),
+    "facture":         ("transport.facture.energie",
+                        ["name", "type_facture", "statut", "site", "montant",
+                         "date_reception"]),
+}
+
+ETATS_RPC = {
+    "réalisée": "realise", "realisee": "realise", "effectuée": "realise",
+    "terminée": "realise", "complétée": "realise",
+    "planifiée": "planifie", "planifie": "planifie",
+    "prévue": "planifie", "programmée": "planifie",
+    "en cours": "en_cours", "en_cours": "en_cours",
+    "annulée": "annule", "annule": "annule",
+    "brouillon": "brouillon",
+    "active": "active", "expirée": "expire", "résiliée": "resilie",
+}
+
+
+def generer_action_rpc(question: str, llm: OllamaLLM) -> str:
+    """
+    Génère dynamiquement une action RPC à partir de la question.
+    Retourne une chaîne au format: modele|methode|domaine|champs
+    """
+    q = question.lower()
+
+    # 1. Détecter le modèle Odoo cible
+    modele = "transport.exploitation.tournee"
+    champs = ["name", "date", "state", "vehicle_id"]
+    for mot, (m, c) in MODELES_RPC.items():
+        if mot in q:
+            modele = m
+            champs = c
+            break
+
+    # 2. Construire le domaine de filtrage
+    domaine = []
+
+    # Filtre par état
+    for mot_etat, val_etat in ETATS_RPC.items():
+        if mot_etat in q:
+            domaine.append(["state", "=", val_etat])
+            break
+
+    # Filtre par immatriculation / nom
+    match_plaque = re.search(
+        r'\b(\d{1,4}\s*tu\s*\d{1,4}|\d{1,4}\s*tn\s*\d{1,4})\b', q
+    )
+    if match_plaque:
+        plaque = match_plaque.group(0).upper().replace(" ", "")
+        domaine.append(["license_plate", "ilike", plaque])
+
+    # Filtre par référence de tournée (ex: TOURN/2026/00020)
+    match_ref = re.search(r'[A-Z]+/\d{4}/\d+', question, re.IGNORECASE)
+    if match_ref:
+        domaine.append(["name", "=", match_ref.group(0).upper()])
+
+    # 3. Demander au LLM si le domaine est vide et la question est précise
+    if not domaine:
+        try:
+            prompt_rpc = (
+                "You are an Odoo 19 expert. Build a search domain for this question.\n"
+                f"Model: {modele}\n"
+                f"Available fields: {champs}\n"
+                "Return ONLY a valid Python list like: [[\"field\",\"op\",\"value\"]]\n"
+                "Return [] if no filter is needed.\n"
+                f"Question: {question}\n"
+                "Domain:"
+            )
+            rep = llm.invoke(prompt_rpc).strip()
+            rep = re.sub(r"```.*?```", "", rep, flags=re.DOTALL).strip()
+            parsed = ast.literal_eval(rep)
+            if isinstance(parsed, list):
+                domaine = parsed
+        except Exception as e:
+            _logger.warning(f"LLM domain generation failed: {e}")
+            domaine = []
+
+    domaine_str = json.dumps(domaine)
+    champs_str = json.dumps(champs)
+    action = f"{modele}|search_read|{domaine_str}|{champs_str}"
+    _logger.info(f"Action RPC générée: {action}")
+    print(f"  -> RPC action: {action}")
+    return action
+
+# ---------------------------------------------------------------------------
+# FORMULATION DE LA RÉPONSE — Python pur, 0 appel LLM sauf détail unique
+# ---------------------------------------------------------------------------
+
+
+_COLS_SCHEMA_EXCLUES = {
+    "color", "color_float", "seats", "doors", "trailer_hook",
+    "horsepower", "horsepower_tax", "co2", "co2_standard",
+    "transmission", "power", "fuel_volume", "odometer_unit",
+    "last_service_km", "next_assignation_km", "last_odometer",
+    "default_fuel_type", "model_id", "driver_id", "company_id",
+    "message_follower_ids", "message_ids", "activity_ids",
+    "currency_id", "tag_ids", "image_128",
+}
+
+_GABARITS_COUNT = [
+    (r"combien.*(bus|véhicul|vehicul)",        "Il y a **{v}** bus dans le parc."),
+    (r"combien.*(tournee|tournée)",             "Il y a **{v}** tournée(s) enregistrée(s)."),
+    (r"combien.*(facture|steg|sonede)",         "Il y a **{v}** facture(s) trouvée(s)."),
+    (r"combien.*(chauffeur|conducteur|employ)", "Il y a **{v}** chauffeur(s) enregistré(s)."),
+    (r"combien.*(sinistre|accident)",           "Il y a **{v}** sinistre(s) enregistré(s)."),
+    (r"combien.*(station)",                     "Il y a **{v}** station(s) enregistrée(s)."),
+    (r"total.*(km|kilomet)",                    "Le kilométrage total est de **{v}** km."),
+    (r"total.*(litre|carburant|bgi|bge)",       "La quantité totale est de **{v}** litres."),
+    (r"total.*(montant|facture)",               "Le montant total est de **{v}** TND."),
+]
+
+
+def _formuler_count(question: str, valeur: str) -> str:
+    q = question.lower()
+    for pattern, gabarit in _GABARITS_COUNT:
+        if re.search(pattern, q):
+            return gabarit.format(v=valeur)
+    return f"Résultat : **{valeur}**"
+
 
 def formuler_reponse(question: str, donnees: str, llm: OllamaLLM) -> str:
     if re.search(r'\[[A-Za-zÀ-ÿ ]+\]', donnees):
@@ -556,106 +878,220 @@ def formuler_reponse(question: str, donnees: str, llm: OllamaLLM) -> str:
 
     nb = len(lignes_data)
 
-    # Cas COUNT/SUM — une seule valeur
+    # ── COUNT/SUM (1 colonne) → Python pur, 0 LLM ──
     if len(colonnes) == 1:
         valeur = lignes_data[0].strip() if lignes_data else "?"
-        # Demander au LLM de formuler une phrase naturelle
-        try:
-            prompt = (
-                f"Question posée : {question}\n"
-                f"Résultat : {valeur}\n"
-                "Formule une réponse courte et naturelle en français (1 phrase). "
-                "Utilise le chiffre exact. Pas de markdown. Réponse :"
-            )
-            rep = llm.invoke(prompt).strip()
-            if rep and len(rep) > 5 and len(rep) < 200:
-                return rep
-        except Exception:
-            pass
-        return f"Le résultat est : **{valeur}**"
+        return _formuler_count(question, valeur)
 
-    # Cas liste courte (≤5 résultats) — LLM pour mise en forme naturelle
-    if nb <= 5:
-        try:
-            prompt = (
-                f"Tu es un assistant ERP transport tunisien. Réponds en français.\n"
-                "IMPORTANT: tournee=tournée de bus (jamais tournoi sportif). chauffeur=conducteur de bus.\n"
-                f"Question : {question}\n"
-                f"Données (colonnes: {', '.join(colonnes)}):\n{donnees}\n"
-                f"Présente ces {nb} résultat(s) de façon claire et professionnelle. "
-                "Utilise des labels français lisibles. Sans noms de tables SQL. Réponse :"
-            )
-            rep = llm.invoke(prompt).strip()
-            if rep and len(rep) > 10:
-                return rep
-        except Exception:
-            pass
-
-    # Cas liste longue (>5) — formatage Python rapide
-    # Mapping noms techniques -> noms lisibles en français
+    # ── Listes (≥2 lignes) et détail unique → voir après définition de _formater_valeur ──
     LABELS = {
-        "name": "Nom", "nom": "Nom", "id": "ID",
-        "site": "Site / Agence", "site_agence": "Site / Agence",
-        "numero_compteur": "N° Compteur",
-        "quantite_consommee": "Quantité", "unite_mesure": "Unité",
-        "montant": "Montant (TND)", "montant_ttc": "Montant TTC",
-        "statut": "Statut", "state": "État",
-        "date_reception": "Date", "date_facture": "Date",
-        "date_debut_periode": "Début période", "date_fin_periode": "Fin période",
-        "type_facture": "Type", "type_energie": "Type énergie",
+        # Identité
+        "id": "ID", "name": "Référence", "nom": "Nom",
+        "code": "Code", "reference": "Référence", "ref": "Référence",
+        # Véhicules / Bus
         "license_plate": "Immatriculation", "license_pla": "Immatriculation",
-        "nom_bus": "Bus", "nom_vehicule": "Véhicule",
+        "nom_bus": "Bus", "nom_vehicule": "Véhicule", "vehicle_name": "Bus",
+        "etat": "État", "state": "État", "statut": "Statut",
+        # Tournées
+        "tournee_name": "Tournée", "date": "Date",
+        "direction": "Direction",
+        "heure_depart_prevu": "Départ prévu (h)",
+        "heure_arrivee_prevu": "Arrivée prévue (h)",
+        "heure_depart_reel": "Départ réel (h)",
+        "heure_arrivee_reel": "Arrivée réelle (h)",
+        "km_realise": "KM réalisés", "km_prevu": "KM prévus",
+        "ecart_km": "Écart KM", "total_km": "Total KM",
+        "driver_name": "Chauffeur", "nom_chauffeur": "Chauffeur",
+        "chauffeur": "Chauffeur", "ligne": "Ligne", "bus": "Bus",
+        "compteur_depart": "Compteur départ", "compteur_arrivee": "Compteur arrivée",
+        # Assurance / Police
         "numero_police": "N° Police",
         "date_debut": "Date début", "date_fin": "Date fin",
-        "nom_chauffeur": "Chauffeur", "nom_station": "Station",
-        "total_quantity": "Quantité (L)", "total_km": "Total KM",
-        "km_realise": "KM réalisés", "km_prevu": "KM prévus",
-        "ecart_km": "Écart KM",
-        "sujet": "Sujet", "expediteur": "Expéditeur",
-        "reference": "Référence", "ref": "Référence",
-        "legal_name": "Nom légal", "login": "Login",
-        "code": "Code", "active": "Actif",
-        "type_station": "Type de station", "ville": "Ville",
-        "agence_id": "Agence",
-
+        # Énergie / Factures
+        "site": "Site / Agence",
+        "type_facture": "Type", "type_energie": "Type énergie",
+        "numero_compteur": "N° Compteur",
+        "unite_mesure": "Unité",
+        "date_debut_periode": "Début période",
+        "date_fin_periode": "Fin période",
+        "date_reception": "Date réception",
+        "date_facture": "Date",
+        "quantite_consommee": "Quantité consommée",
+        "montant": "Montant (TND)", "montant_ttc": "Montant TTC",
+        # Carburant
+        "total_quantity": "Quantité (L)", "voucher_type": "Type bon",
+        # Stations / Lignes
+        "nom_station": "Station", "type_station": "Type station",
+        "ville": "Ville", "agence_id": "Agence",
+        # Patrimoine
         "cout_acquisition": "Coût acquisition",
         "valeur_nette_comptable": "Valeur nette",
         "amortissements_cumules": "Amort. cumulés",
+        # Courrier
+        "sujet": "Sujet", "expediteur": "Expéditeur",
+        # Employés
+        "job_title": "Poste", "active": "Actif",
     }
 
     STATUTS = {
+        # Factures / Paiements
         "payee": "✅ Payée", "saisie": "📝 Saisie", "validee": "✔️ Validée",
-        "active": "✅ Active", "expire": "❌ Expirée", "resilie": "🚫 Résiliée",
-        "brouillon": "📝 Brouillon", "planifie": "📅 Planifiée",
-        "realise": "✅ Réalisée", "annule": "❌ Annulée", "en_cours": "🔄 En cours",
+        # Assurance
+        "active": "✅ Active", "expire": "❌ Expirée",
+        "resilie": "🚫 Résiliée", "brouillon": "📝 Brouillon",
+        # Tournées
+        "planifie": "📅 Planifiée", "en_cours": "🔄 En cours",
+        "realise": "✅ Réalisée", "annule": "❌ Annulée",
+        # Courrier
         "enregistre": "📝 Enregistré", "classe": "✔️ Classé",
+        # Patrimoine
         "en_service": "✅ En service", "cede": "🔄 Cédé",
+        # Odoo général
         "draft": "📝 Brouillon", "posted": "✅ Validée", "cancel": "❌ Annulée",
+        # Booléen
+        "true": "✅ Oui", "false": "❌ Non",
+        # Direction tournée
+        "aller": "➡️ Aller", "retour": "⬅️ Retour",
+        # Type bon carburant
+        "internal": "🏠 BGI (Interne)", "external": "🏢 BGE (Externe)",
     }
 
-    nb = len(lignes_data)
-    reponse = f"**{nb} résultat(s) trouvé(s)** :\n\n"
-    for i, ligne in enumerate(lignes_data, 1):
-        valeurs = [v.strip() for v in ligne.split("|")]
-        reponse += f"**{i}.** "
+    # Colonnes à masquer si valeur = 0 ou vide
+    COLS_MASQUER_SI_ZERO = {
+        "heure_depart_reel", "heure_arrivee_reel",
+        "km_realise", "ecart_km", "compteur_arrivee",
+    }
+    # Colonnes qui contiennent des heures décimales (8.0 → 08:00)
+    COLS_HEURE = {
+        "heure_depart_prevu", "heure_arrivee_prevu",
+        "heure_depart_reel", "heure_arrivee_reel",
+    }
+    # Colonnes compteur — afficher en km entiers
+    COLS_COMPTEUR = {"compteur_depart", "compteur_arrivee"}
+
+    def _decimal_vers_heure(val: str) -> str:
+        """8.5 → 08:30 / 9.0 → 09:00"""
+        try:
+            h_total = float(val)
+            if h_total == 0:
+                return None  # heure 0 = non renseignée
+            h = int(h_total)
+            m = int(round((h_total - h) * 60))
+            return f"{h:02d}:{m:02d}"
+        except Exception:
+            return val
+
+    def _extraire_jsonb(val: str) -> str:
+        """'{"fr_TN":"Bab Saadoun","en_US":"..."}' → 'Bab Saadoun'"""
+        import json, re as _re
+        v = val.strip()
+        if v.startswith("{") and "}" in v:
+            try:
+                d = json.loads(v)
+                return d.get("fr_TN") or d.get("fr_FR") or d.get("en_US") or v
+            except Exception:
+                # Tentative regex si json invalide
+                m = _re.search(r'"fr_TN"\s*:\s*"([^"]+)"', v)
+                if m: return m.group(1)
+                m = _re.search(r'"en_US"\s*:\s*"([^"]+)"', v)
+                if m: return m.group(1)
+        return v
+
+    def _formater_valeur(col: str, val: str) -> str:
+        """Formate une valeur brute en valeur lisible."""
+        if not val or val.strip() in ("—", "None", "False", ""):
+            return None
+        v = val.strip()
+
+        # Extraire jsonb avant tout traitement
+        if v.startswith("{"):
+            v = _extraire_jsonb(v)
+            if not v:
+                return None
+
+        col_lower = col.lower()
+
+        # Masquer colonnes à 0 si non pertinent
+        if col_lower in COLS_MASQUER_SI_ZERO:
+            try:
+                if float(v) == 0:
+                    return None
+            except Exception:
+                pass
+
+        # Colonnes compteur → entier + " km"
+        if col_lower in COLS_COMPTEUR:
+            try:
+                return f"{LABELS.get(col_lower, col)} : {int(float(v))} km"
+            except Exception:
+                pass
+
+        # Colonnes heure décimale → HH:MM
+        if col_lower in COLS_HEURE:
+            h = _decimal_vers_heure(v)
+            if h is None:
+                return None
+            label = LABELS.get(col_lower, col.replace("_", " ").title())
+            return f"{label} : {h}"
+
+        # Masquer ID si c'est juste un entier seul
+        if col_lower == "id":
+            return None
+
+        label = LABELS.get(col_lower, col.replace("_", " ").title())
+        affiche = STATUTS.get(v.lower(), v)
+        return f"{label} : {affiche}"
+
+    if nb == 1:
+        # ── Détail unique : données pré-formatées → LLM pour mise en phrases ──
+        valeurs = [v.strip() for v in lignes_data[0].split("|")]
         parties = []
         for j, col in enumerate(colonnes):
             if j >= len(valeurs):
                 break
-            val = valeurs[j].strip()
-            if not val or val == "—":
-                continue
-            label = LABELS.get(col.lower(), col.replace("_", " ").title())
-            # Traduire les statuts
-            val_affiche = STATUTS.get(val.lower(), val)
-            parties.append(f"{label} : {val_affiche}")
-        reponse += "  |  ".join(parties) + "\n"
+            ligne_fmt = _formater_valeur(col, valeurs[j])
+            if ligne_fmt:
+                parties.append(ligne_fmt)
+        donnees_propres = "\n".join(parties)
+        try:
+            prompt = (
+                f"Tu es un assistant ERP transport tunisien. "
+                f"Réponds en français, style professionnel, 3-5 phrases.\n"
+                f"Question : {question}\n"
+                f"Données :\n{donnees_propres}\n"
+                f"Présente ces informations naturellement. "
+                f"N'invente rien. Commence par 'Voici les détails'."
+            )
+            rep = llm.invoke(prompt).strip()
+            if rep and len(rep) > 20:
+                return rep
+        except Exception:
+            pass
+        # Fallback : affichage bullet si LLM échoue
+        if parties:
+            return "\n".join(f"• {p}" for p in parties)
+        return donnees
+
+    # ── Listes (≥2 lignes) : tableau numéroté ──
+    reponse = f"**{nb} résultat(s) trouvé(s)** :\n\n"
+    for i, ligne in enumerate(lignes_data, 1):
+        valeurs = [v.strip() for v in ligne.split("|")]
+        parties = []
+        for j, col in enumerate(colonnes):
+            if j >= len(valeurs):
+                break
+            ligne_fmt = _formater_valeur(col, valeurs[j])
+            if ligne_fmt:
+                parties.append(ligne_fmt)
+        if parties:
+            reponse += f"**{i}.** " + "  |  ".join(parties) + "\n"
 
     return reponse.strip()
 
 # ---------------------------------------------------------------------------
 # AGENT PRINCIPAL
 # ---------------------------------------------------------------------------
+
 
 def create_agent():
     llm = OllamaLLM(
@@ -674,11 +1110,98 @@ def create_agent():
     return llm
 
 
+
+# ---------------------------------------------------------------------------
+# RÉPONSES RAG STATIQUES — quand ChromaDB est vide (0 appel LLM)
+# ---------------------------------------------------------------------------
+
+_RAG_STATIQUE = [
+    # Carburant
+    (r"\bbgi\b",
+     "Un **BGI** (Bon de ravitaillement Interne) est un bon de carburant émis "
+     "pour ravitailler les bus depuis les cuves internes du dépôt. "
+     "Il est saisi par le responsable dépôt, signé par le chauffeur, "
+     "et enregistré dans le module Carburant (type : 'internal')."),
+    (r"\bbge\b",
+     "Un **BGE** (Bon de ravitaillement Externe) est un bon de carburant "
+     "utilisé pour les ravitaillements dans les stations-service externes. "
+     "Il est soumis à validation avant utilisation (type : 'external')."),
+    (r"cuve",
+     "Une **cuve** est un réservoir de carburant interne au dépôt. "
+     "Son stock est mis à jour à chaque émission d'un BGI. "
+     "Le suivi du niveau est disponible dans le module Carburant."),
+    # Tournées
+    (r"tournee|tournée",
+     "Une **tournée** est un trajet planifié effectué par un bus sur une ligne. "
+     "États possibles : 📝 Brouillon → 📅 Planifiée → 🔄 En cours → ✅ Réalisée / ❌ Annulée. "
+     "Elle enregistre les KM prévus et réalisés, le chauffeur, et les heures de départ/arrivée."),
+    (r"ligne de transport|ligne de bus",
+     "Une **ligne** est un itinéraire régulier entre deux terminus, composé de stations d'arrêt. "
+     "Chaque tournée est rattachée à une ligne. Les lignes ont une direction aller et retour."),
+    (r"station",
+     "Une **station** est un point d'arrêt sur une ligne de transport. "
+     "L'ERP gère 54 stations réparties en Tunisie avec leur ville et type (intermédiaire/terminus)."),
+    # Véhicules
+    (r"bus|véhicule|parc",
+     "Le **parc de bus** regroupe tous les véhicules de l'entreprise. "
+     "Chaque bus a une immatriculation, un état (En service / Hors service / Réformé), "
+     "et est suivi en assurance, tournées, et kilométrage."),
+    (r"sinistre|accident",
+     "Un **sinistre** est un incident impliquant un bus (accident, dommage). "
+     "Il est enregistré avec la date, le véhicule concerné, et les détails du dommage."),
+    # Assurance
+    (r"assurance|police d'assurance",
+     "L'**assurance bus** couvre les véhicules du parc. "
+     "États : ✅ Active / ❌ Expirée / 🚫 Résiliée. "
+     "Chaque police a une date de début, date de fin, et est liée à un bus spécifique."),
+    # Patrimoine
+    (r"patrimoine|immobilisation|amortissement",
+     "Le module **Patrimoine** gère les immobilisations de l'entreprise (équipements, bâtiments, véhicules). "
+     "Chaque immobilisation a un coût d'acquisition, une durée d'amortissement, "
+     "une valeur nette comptable, et peut être cédée ou inventoriée."),
+    # Énergie
+    (r"steg|sonede|facture.*(énergie|energie|eau|électricité)",
+     "Les **factures énergie** (STEG pour l'électricité, SONEDE pour l'eau) "
+     "sont saisies dans le module Énergie. "
+     "États : 📝 Saisie → ✔️ Validée → ✅ Payée. "
+     "Chaque facture indique le site, le compteur, la quantité et le montant."),
+    # BOC
+    (r"boc|courrier|bureau d'ordre",
+     "Le **BOC** (Bureau d'Ordre Central) gère les courriers entrants (arrivée) "
+     "et sortants (départ). Chaque courrier a un numéro de référence, un sujet, "
+     "un expéditeur/destinataire, et un état (Enregistré → Classé)."),
+    # États
+    (r"état|etat|statut|workflow",
+     "**États principaux dans l'ERP :\n**"
+     "• Tournée : Brouillon → Planifiée → En cours → Réalisée / Annulée\n"
+     "• Assurance : Active / Expirée / Résiliée\n"
+     "• Facture énergie : Saisie → Validée → Payée\n"
+     "• Bus : En service / Hors service / Réformé\n"
+     "• Courrier : Enregistré → Classé"),
+    # Lubrifiant
+    (r"lubrifiant|huile",
+     "Le module **Lubrifiant** gère les bons de lubrifiant et le stock en dépôt. "
+     "Les bons sont émis pour l'entretien des bus et déduisent du stock disponible."),
+]
+
+_RAG_DEFAUT = (
+    "Je n'ai pas trouvé d'information sur ce sujet dans la base de connaissances. "
+    "Vous pouvez alimenter la base via l'interface d'administration ou reformuler votre question."
+)
+
+
+def _reponse_rag_statique(question: str) -> str:
+    """Retourne une réponse statique pour les questions de définition fréquentes."""
+    q = question.lower()
+    for pattern, reponse in _RAG_STATIQUE:
+        if re.search(pattern, q):
+            return reponse
+    return _RAG_DEFAUT
+
 def ask_agent(question: str, llm: OllamaLLM,
               allowed_tables: list = None,
               is_admin: bool = False,
               session_id: str = "default") -> str:
-    global HISTORIQUE
     try:
         acces_erreur = verifier_acces_question(question, allowed_tables, is_admin)
         if acces_erreur:
@@ -689,7 +1212,10 @@ def ask_agent(question: str, llm: OllamaLLM,
         print(f"  -> Outil : {outil} | Admin : {is_admin}")
 
         if outil == "sql":
-            requete = generer_sql(question, llm, allowed_tables, is_admin)
+            # Tenter le cache SQL d'abord (0 LLM, instantané)
+            requete = _chercher_cache_sql(question)
+            if requete is None:
+                requete = generer_sql(question, llm, allowed_tables, is_admin)
             print(f"  -> SQL : {requete}")
 
             valide, erreur_col = verifier_colonnes_sql(requete)
@@ -731,26 +1257,72 @@ def ask_agent(question: str, llm: OllamaLLM,
 
             reponse = formuler_reponse(question, donnees, llm)
 
+        # -----------------------------------------------------------------
+        # FIX 1 + FIX 4 — RPC dynamique avec timeout et fallback SQL
+        # -----------------------------------------------------------------
         elif outil == "rpc":
-            donnees = rpc_tool.invoke(
-                'transport.exploitation.tournee|search_read|[]|["name","date","state"]'
-            )
-            reponse = formuler_reponse(question, donnees, llm)
+            try:
+                action = generer_action_rpc(question, llm)
+                donnees = rpc_tool.invoke(action)
+
+                if "Erreur RPC" in donnees or not donnees.strip():
+                    _logger.warning("RPC échoué — fallback SQL")
+                    requete = generer_sql(question, llm, allowed_tables, is_admin)
+                    donnees = sql_tool.invoke(requete)
+
+                reponse = formuler_reponse(question, donnees, llm)
+
+            except Exception as e_rpc:
+                _logger.warning(f"RPC exception: {e_rpc} — fallback SQL")
+                try:
+                    requete = generer_sql(question, llm, allowed_tables, is_admin)
+                    donnees = sql_tool.invoke(requete)
+                    reponse = formuler_reponse(question, donnees, llm)
+                except Exception as e_sql:
+                    _logger.error(f"Fallback SQL aussi échoué: {e_sql}")
+                    reponse = "Impossible de récupérer ces informations. Veuillez réessayer."
+
+        # -----------------------------------------------------------------
+        # FIX 4 — RAG avec timeout et fallback LLM direct
+        # -----------------------------------------------------------------
         else:
-            donnees = rag_tool.invoke(question)
-            reponse = llm.invoke(
-                f"Réponds en français à partir de ces informations:\n{donnees}\n"
-                f"Question: {question}"
-            ).strip()
+            # 1. Tenter la réponse statique en premier (instantané, 0 appel)
+            reponse_statique = _reponse_rag_statique(question)
+            if reponse_statique != _RAG_DEFAUT:
+                _logger.info("RAG statique utilisé — 0 appel LLM/ChromaDB")
+                reponse = reponse_statique
+            else:
+                # 2. ChromaDB seulement si pas de réponse statique
+                try:
+                    donnees = rag_tool.invoke(question)
+                    chroma_ok = (
+                        donnees.strip()
+                        and "vide" not in donnees.lower()
+                        and "Erreur RAG" not in donnees
+                        and "base de connaissances est vide" not in donnees
+                        and "Aucune information" not in donnees
+                    )
+                    if chroma_ok:
+                        reponse = llm.invoke(
+                            f"ERP transport tunisien. Réponds en français, max 3 phrases.\n"
+                            f"Info: {donnees[:500]}\nQ: {question}"
+                        ).strip()
+                    else:
+                        reponse = _RAG_DEFAUT
+                except Exception as e_rag:
+                    _logger.warning(f"RAG exception: {e_rag}")
+                    reponse = _RAG_DEFAUT
 
-        if session_id not in HISTORIQUE:
-            HISTORIQUE[session_id] = []
-        HISTORIQUE[session_id].append({"question": question, "reponse": reponse})
-        if len(HISTORIQUE[session_id]) > 10:
-            HISTORIQUE[session_id].pop(0)
-
+        # FIX 3 — Persistance SQLite
+        sauvegarder_historique(session_id, question, reponse)
         return reponse
 
     except Exception as e:
-        _logger.error(f"Erreur ask_agent: {e}")
-        return f"Erreur : {str(e)}"
+        msg = str(e)
+        _logger.error(f"Erreur ask_agent: {msg}")
+        if "system memory" in msg or "memory" in msg.lower():
+            return (
+                "⚠️ Mémoire insuffisante pour traiter cette requête. "
+                "Essayez une question plus simple ou redémarrez Ollama : `ollama stop` puis relancez."
+            )
+        return f"Erreur : {msg}"

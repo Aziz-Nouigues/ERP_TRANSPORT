@@ -19,6 +19,7 @@ class AiChatInterface extends Component {
             loading: false,
             userInitials: "??",
             userName: "Chargement...",
+            userId: null,
             history: [],
             currentId: this.props.record.resId || null,
         });
@@ -56,6 +57,7 @@ class AiChatInterface extends Component {
                     : userName.substring(0, 2).toUpperCase();
                 this.state.userName = userName;
                 this.state.userInitials = initials;
+                this.state.userId = data.result.uid || null;
             }
         } catch (e) {
             this.state.userName = "Utilisateur";
@@ -65,9 +67,12 @@ class AiChatInterface extends Component {
 
     async loadHistory() {
         try {
+            const domain = this.state.userId
+                ? [["create_uid", "=", this.state.userId]]
+                : [];
             const convs = await this.orm.searchRead(
                 "transport.ai.conversation",
-                [],
+                domain,
                 ["id", "name", "create_date", "message_ids"],
                 { order: "create_date desc", limit: 30 }
             );

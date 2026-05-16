@@ -9,7 +9,10 @@ from pydantic import BaseModel
 from fastapi.responses import JSONResponse
 import json
 
-from agent.agent_core import create_agent, ask_agent
+from agent.agent_core import (
+    create_agent, ask_agent,
+    charger_historique, effacer_historique,   # FIX 3
+)
 from langchain_ollama import OllamaLLM
 
 
@@ -37,7 +40,7 @@ logging.basicConfig(
 logger = logging.getLogger(__name__)
 
 agent_executor = None
-CHAT_TIMEOUT = int(os.getenv("CHAT_TIMEOUT", "120"))  # secondes
+CHAT_TIMEOUT = int(os.getenv("CHAT_TIMEOUT", "120"))
 
 
 @asynccontextmanager
@@ -53,7 +56,7 @@ async def lifespan(app: FastAPI):
 app = FastAPI(
     title="Agent IA — ERP Transport Terrestre",
     description="API REST pour l'agent IA intégré dans Odoo 19",
-    version="1.0.0",
+    version="1.1.0",
     lifespan=lifespan
 )
 
@@ -86,7 +89,7 @@ def root():
     return {
         "service": "Agent IA Transport",
         "statut": "opérationnel",
-        "version": "1.0.0"
+        "version": "1.1.0"
     }
 
 
@@ -115,12 +118,13 @@ async def chat(request: QuestionRequest):
     )
 
     try:
-        # Exécuter ask_agent dans un thread (car c'est synchrone)
-        # avec un timeout configurable
         loop = asyncio.get_event_loop()
+        # Executor dédié pour ne pas bloquer la boucle async principale
+        import concurrent.futures
+        executor = concurrent.futures.ThreadPoolExecutor(max_workers=4)
         reponse = await asyncio.wait_for(
             loop.run_in_executor(
-                None,
+                executor,
                 lambda: ask_agent(
                     question=request.question,
                     llm=agent_executor,
@@ -146,6 +150,14 @@ async def chat(request: QuestionRequest):
             "statut": "timeout"
         })
 
+    except (ConnectionResetError, ConnectionError, BrokenPipeError) as e:
+        logger.warning(f"[{request.user_name}] Connexion interrompue: {e}")
+        return UTF8JSONResponse(content={
+            "reponse": "La connexion a été interrompue. Veuillez réessayer.",
+            "session_id": request.session_id,
+            "statut": "error"
+        })
+
     except Exception as e:
         logger.error(f"[{request.user_name}] Erreur inattendue: {e}")
         raise HTTPException(status_code=500, detail=str(e))
@@ -158,6 +170,41 @@ async def chat(request: QuestionRequest):
         "statut": "ok"
     })
 
+
+# ---------------------------------------------------------------------------
+# FIX 3 — Endpoints historique persistant
+# ---------------------------------------------------------------------------
+
+@app.get("/historique/{session_id}")
+def get_historique(session_id: str, limite: int = 10):
+    """Retourne les N derniers échanges d'une session."""
+    try:
+        messages = charger_historique(session_id, limite)
+        return UTF8JSONResponse(content={
+            "session_id": session_id,
+            "messages": messages,
+            "total": len(messages)
+        })
+    except Exception as e:
+        logger.error(f"Erreur lecture historique {session_id}: {e}")
+        raise HTTPException(status_code=500, detail=str(e))
+
+
+@app.delete("/historique/{session_id}")
+def delete_historique(session_id: str):
+    """Efface l'historique d'une session (ex : déconnexion utilisateur)."""
+    try:
+        effacer_historique(session_id)
+        logger.info(f"Historique effacé pour session: {session_id}")
+        return {"statut": "ok", "message": f"Historique de '{session_id}' effacé."}
+    except Exception as e:
+        logger.error(f"Erreur effacement historique {session_id}: {e}")
+        raise HTTPException(status_code=500, detail=str(e))
+
+
+# ---------------------------------------------------------------------------
+# Endpoints de test et synchronisation ChromaDB
+# ---------------------------------------------------------------------------
 
 @app.get("/test-sql")
 def test_sql():
@@ -186,12 +233,17 @@ class SyncRequest(BaseModel):
 def sync_chroma(request: SyncRequest):
     try:
         import chromadb as chroma
-        client = chroma.PersistentClient(
-            path=os.getenv("CHROMA_PATH")
+        from pathlib import Path
+
+        # FIX 2 — résolution du chemin ChromaDB
+        raw = os.getenv("CHROMA_PATH", "./chroma_db")
+        p = Path(raw)
+        chroma_path = str(p) if p.is_absolute() else str(
+            (Path(__file__).parent.parent / p).resolve()
         )
-        collection = client.get_or_create_collection(
-            name="transport_procedures"
-        )
+
+        client = chroma.PersistentClient(path=chroma_path)
+        collection = client.get_or_create_collection(name="transport_procedures")
 
         doc_id = f"{request.model.replace('.', '_')}_{request.record_id}"
 
