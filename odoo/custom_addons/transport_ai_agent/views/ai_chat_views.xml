@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <record id="view_ai_conversation_form" model="ir.ui.view">
+        <field name="name">transport.ai.conversation.form</field>
+        <field name="model">transport.ai.conversation</field>
+        <field name="arch" type="xml">
+            <form string="Agent IA">
+                <sheet>
+                    <div class="o_field_widget">
+                        <field name="message_ids"
+                               widget="ai_chat_messages"
+                               readonly="1"
+                               nolabel="1"/>
+                    </div>
+                    <field name="name" invisible="1"/>
+                    <field name="user_id" invisible="1"/>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="view_ai_conversation_list" model="ir.ui.view">
+        <field name="name">transport.ai.conversation.list</field>
+        <field name="model">transport.ai.conversation</field>
+        <field name="arch" type="xml">
+            <list string="Conversations IA" create="0">
+                <field name="name"/>
+                <field name="user_id"/>
+                <field name="create_date"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="action_ai_conversation" model="ir.actions.act_window">
+        <field name="name">Agent IA Transport</field>
+        <field name="res_model">transport.ai.conversation</field>
+        <field name="view_mode">list,form</field>
+        <field name="domain">[('user_id', '=', uid)]</field>
+        <field name="context">{'default_name': 'Nouvelle conversation'}</field>
+    </record>
+
+    <record id="action_ai_new_conversation" model="ir.actions.act_window">
+        <field name="name">Nouvelle conversation IA</field>
+        <field name="res_model">transport.ai.conversation</field>
+        <field name="view_mode">form</field>
+        <field name="target">current</field>
+        <field name="domain">[('user_id', '=', uid)]</field>
+        <field name="context">{'default_name': 'Nouvelle conversation'}</field>
+    </record>
+
+</odoo>

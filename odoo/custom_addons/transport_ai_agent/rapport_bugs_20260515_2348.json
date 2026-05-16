@@ -1,0 +1,90 @@
+[
+  {
+    "module": "fleet_etat_bus",
+    "question": "Combien de bus sont dans le parc ?",
+    "attendu": "3",
+    "statut": "❌ EXCEPTION",
+    "reponse": "('Connection aborted.', ConnectionResetError(10054, 'An existing connection was forcibly closed by the remote host', None, 10054, None))",
+    "duree": 0
+  },
+  {
+    "module": "exploitation",
+    "question": "Liste toutes les lignes disponibles",
+    "attendu": "liste",
+    "statut": "✅ OK",
+    "reponse": "Voici la liste complète des lignes disponibles :\n\n1. L01 - Tunis – Sfax (Interurbaine)\n2. L02 - Tunis – Sousse (Interurbaine)\n3. L03 - Tunis – Gabès (Interurbaine)\n4. L04 - Tunis – Bizerte (Interurbaine)\n5. L05 - Tunis – Jendouba (Interurbaine)\n6. L06 - Tunis – Nabeul (Interurbaine)\n7. L07 - Sfax – Gabès (Regionale)\n8. L08 - Sfax – Médenine (Regionale)\n9. L09 - Gabès – Djerba (Regionale)\n10. L10 - Sousse – Kairouan (Regionale)\n11. 460 - Ariana → Cité El Khadra → Bab Saadoun → Bardo → Den Den → Manouba (Urbaine)\n12. 35 - Bab Saadoun → Cité El Khadra → Cité Sportive → L'Aouina → Cité Olympique (Urbaine)\n13. 56 - Bab Saadoun → Le Bardo → Cité Jardin → Cité Bir Hassan → Khaznadar (Urbaine)\n14. 72 - Ariana → Charguia → Cité El Khadra → Bab Saadoun → El Mourouj → Ben Arous (Urbaine)\n15. 12 - Lac 1 → Bab Saadoun → Bardo → Ettadhamen → Douar Hicher → Manouba (Urbaine)\n16. 40 - Ariana → Cité El Khadra → Bab Saadoun → Hammam Lif → Mégrine (Urbaine)\n17. 25 - Le Bardo → Cité Jardin → Cité Bir Hassan → El Mourouj → Radès (Urbaine)\n18. 83 - Ariana → Mnihla → Charguia → Raoued (Urbaine)\n19. TB-001 - Départs : 06h00, 08h00, 10h00, 12h00, 14h00, 16h00, 18h00 — Durée :",
+    "duree": 110.3
+  },
+  {
+    "module": "exploitation",
+    "question": "Quel bus a fait le plus de kilomètres ce mois ?",
+    "attendu": "nom bus + km",
+    "statut": "❌ ERREUR",
+    "reponse": "Je n'ai pas pu récupérer ces données malgré deux tentatives. Veuillez reformuler votre question.",
+    "duree": 70.1
+  },
+  {
+    "module": "assurance",
+    "question": "Quelles sont les bus assurés ?",
+    "attendu": "2 bus",
+    "statut": "✅ OK",
+    "reponse": "Voici les bus assurés avec leurs détails :\n\n1. Audi/Bus 15001/123 TU 456\n   - Numéro de plaque : 123 TU 456\n   - Numéro d'assurance : POL-BUS/2026/0001\n   - Date de début de l'assurance : 2026-05-04\n   - Date de fin de l'assurance : 2027-05-05\n\n2. Volkswagen/Bus/158 tu 2026\n   - Numéro de plaque : 158 tu 2026\n   - Numéro d'assurance : POL-BUS/2026/0005\n   - Date de début de l'assurance : 2030-05-09\n   - Date de fin de l'assurance : 2031-05-09",
+    "duree": 45.2
+  },
+  {
+    "module": "assurance",
+    "question": "Quelles polices d'assurance expirent dans les 30 prochains jours ?",
+    "attendu": "vide ou données",
+    "statut": "⚠️  VIDE",
+    "reponse": "Aucune donnée trouvée pour cette question.",
+    "duree": 18.1
+  },
+  {
+    "module": "assurance",
+    "question": "Liste les assurances obligatoires des bus",
+    "attendu": "liste",
+    "statut": "✅ OK",
+    "reponse": "Voici la liste des assurances obligatoires pour les bus :\n\n1. Audi/Bus 15001/123 TU 456 - Numéro de police : POL-BUS/2026/0001 - Date de début : 2026-05-04 - Date de fin : 2027-05-05\n\n2. Volkswagen/Bus/158 tu 2026 - Numéro de police : POL-BUS/2026/0005 - Date de début : 2030-05-09 - Date de fin : 2031-05-09",
+    "duree": 36.9
+  },
+  {
+    "module": "energy",
+    "question": "Combien de litres de BGI ont été consommés ce mois ?",
+    "attendu": "nombre réel pas placeholder",
+    "statut": "✅ OK",
+    "reponse": "Il n'y a pas d'informations disponibles concernant la consommation de BGI ce mois-ci.",
+    "duree": 35.9
+  },
+  {
+    "module": "energy",
+    "question": "Liste tous les bons de carburant de cette semaine",
+    "attendu": "liste ou vide",
+    "statut": "⚠️  VIDE",
+    "reponse": "Aucune donnée trouvée pour cette question.",
+    "duree": 36.6
+  },
+  {
+    "module": "energy",
+    "question": "Quelle station a distribué le plus de carburant ?",
+    "attendu": "nom station + litres",
+    "statut": "⚠️  VIDE",
+    "reponse": "Aucune donnée trouvée pour cette question.",
+    "duree": 53.3
+  },
+  {
+    "module": "patrimoine",
+    "question": "Quelles immobilisations sont amorties cette année ?",
+    "attendu": "liste ou vide",
+    "statut": "⚠️  VIDE",
+    "reponse": "Aucune donnée trouvée pour cette question.",
+    "duree": 49.9
+  },
+  {
+    "module": "boc",
+    "question": "Combien de courriers sont arrivés ce mois ?",
+    "attendu": "nombre réel",
+    "statut": "✅ OK",
+    "reponse": "Il y a arrivé **0** courriers ce mois-ci.",
+    "duree": 18.5
+  }
+]

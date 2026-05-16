@@ -300,21 +300,16 @@ class AssuranceBus(models.Model):
 
     @api.model
     def vehicle_has_valid_rc(self, vehicle_id):
-        """Retourne (True, None) si le véhicule a toutes ses polices obligatoires valides.
-        Appelé par le module Exploitation pour bloquer l'affectation.
+        """Vérifie qu'un bus a au moins une police active (quelle que soit son type).
+        Retourne (True, None) si au moins une police valide existe,
+        (False, None) sinon.
         """
         today = fields.Date.today()
-        types_obligatoires = self.env['transport.assurance.type'].search([
-            ('is_obligatoire', '=', True),
-            ('categorie', 'in', ['bus', 'both']),
+        valide = self.search_count([
+            ('vehicle_id', '=', vehicle_id),
+            ('state', '=', 'active'),
+            ('date_fin', '>=', today),
         ])
-        for t in types_obligatoires:
-            valide = self.search_count([
-                ('vehicle_id', '=', vehicle_id),
-                ('type_police_id', '=', t.id),
-                ('state', '=', 'active'),
-                ('date_fin', '>=', today),
-            ])
-            if not valide:
-                return False, t.name
+        if not valide:
+            return False, None
         return True, None

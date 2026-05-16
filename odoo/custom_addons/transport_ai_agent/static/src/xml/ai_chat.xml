@@ -1,0 +1,152 @@
+<?xml version="1.0" encoding="utf-8"?>
+<templates xml:space="preserve">
+
+<t t-name="transport_ai_agent.ChatInterface" owl="1">
+  <div class="ai_chat_wrapper">
+
+    <!-- Sidebar -->
+    <div class="ai_sidebar">
+      <div class="ai_sidebar_logo">
+        <div class="ai_sidebar_logo_icon">⚡</div>
+        <div>
+          <div class="ai_sidebar_logo_text">Agent IA</div>
+          <div class="ai_sidebar_logo_sub">ERP Transport</div>
+        </div>
+      </div>
+
+      <button class="ai_new_chat_btn" t-on-click="newConversation">
+        ✏️ Nouvelle conversation
+      </button>
+
+      <div class="ai_sidebar_section">Conversations récentes</div>
+
+<t t-foreach="state.history" t-as="conv" t-key="conv.id">
+    <div t-attf-class="ai_history_item {{ conv.id === state.currentId ? 'active' : '' }}"
+         t-on-click="() => this.loadConversation(conv.id)">
+        <div class="ai_history_item_content">
+            <span class="ai_history_name">
+                <t t-esc="conv.name"/>
+            </span>
+            <span class="ai_history_date">
+                <t t-esc="conv.date"/>
+            </span>
+        </div>
+    </div>
+</t>
+
+      <div class="ai_sidebar_user">
+    <div class="ai_user_avatar">
+        <t t-esc="state.userInitials"/>
+    </div>
+    <div class="ai_user_info">
+        <span class="ai_user_name"><t t-esc="state.userName"/></span>
+        <span class="ai_user_role">Utilisateur ERP</span>
+    </div>
+</div>
+    </div>
+
+    <!-- Zone principale -->
+    <div class="ai_main">
+
+      <div class="ai_messages_area" id="ai_messages_list">
+        <div class="ai_messages_inner">
+
+          <t t-if="state.messages.length === 0">
+            <div class="ai_welcome">
+              <div class="ai_welcome_icon">⚡</div>
+              <p class="ai_welcome_title">Comment puis-je vous aider ?</p>
+              <p class="ai_welcome_sub">
+                Posez vos questions sur les tournées, le carburant,
+                les assurances, le patrimoine ou le courrier BOC.
+              </p>
+              <div class="ai_suggestions">
+                <button class="ai_suggestion_btn"
+                  t-on-click="() => this.askSuggestion('Combien de tournées sont planifiées aujourd\'hui ?')">
+                  <span class="ai_suggestion_icon">🚌</span>
+                  Tournées planifiées aujourd'hui
+                </button>
+                <button class="ai_suggestion_btn"
+                  t-on-click="() => this.askSuggestion('Quel est le stock actuel des cuves carburant ?')">
+                  <span class="ai_suggestion_icon">⛽</span>
+                  Stock des cuves carburant
+                </button>
+                <button class="ai_suggestion_btn"
+                  t-on-click="() => this.askSuggestion('Quelles assurances expirent dans les 30 prochains jours ?')">
+                  <span class="ai_suggestion_icon">🛡️</span>
+                  Assurances expirant bientôt
+                </button>
+                <button class="ai_suggestion_btn"
+                  t-on-click="() => this.askSuggestion('Donne-moi un résumé de l\'état du parc bus')">
+                  <span class="ai_suggestion_icon">📊</span>
+                  État du parc bus
+                </button>
+              </div>
+            </div>
+          </t>
+
+          <t t-foreach="state.messages" t-as="msg" t-key="msg.id">
+            <div t-attf-class="ai_message_row ai_message_row_{{ msg.type }}">
+              <div t-attf-class="ai_message_avatar ai_avatar_{{ msg.type }}">
+                <t t-if="msg.type === 'agent'">⚡</t>
+                <t t-else=""><t t-esc="state.userInitials"/></t>
+              </div>
+              <div class="ai_message_content">
+               <div t-attf-class="ai_bubble ai_bubble_{{ msg.type }}">
+  <t t-if="msg.content">
+    <t t-esc="msg.content"/>
+  </t>
+  <t t-else="">
+    <span style="color:#9ca3af;font-style:italic;">...</span>
+  </t>
+</div>
+                <span class="ai_message_time">
+                  <t t-esc="msg.time"/>
+                </span>
+              </div>
+            </div>
+          </t>
+
+          <t t-if="state.loading">
+            <div class="ai_typing_row">
+              <div class="ai_message_avatar ai_avatar_agent">⚡</div>
+              <div class="ai_typing_bubble">
+                <span/><span/><span/>
+              </div>
+            </div>
+          </t>
+
+        </div>
+      </div>
+
+      <!-- Zone saisie -->
+      <div class="ai_input_area">
+        <div class="ai_input_inner">
+          <div class="ai_input_box">
+            <textarea
+              class="ai_textarea"
+              placeholder="Posez votre question en français..."
+              t-att-value="state.question"
+              t-on-input="onInput"
+              t-on-keydown="onKeyDown"
+              t-att-disabled="state.loading"
+              rows="1"
+            />
+            <button
+              class="ai_send_button"
+              t-on-click="sendQuestion"
+              t-att-disabled="state.loading or !state.question.trim()">
+              <t t-if="state.loading">…</t>
+              <t t-else="">➤</t>
+            </button>
+          </div>
+          <p class="ai_input_hint">
+            Entrée pour envoyer · Shift+Entrée pour nouvelle ligne
+          </p>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</t>
+
+</templates>

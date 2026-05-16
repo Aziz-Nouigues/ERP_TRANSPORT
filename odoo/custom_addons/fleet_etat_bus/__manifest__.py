@@ -44,6 +44,7 @@
         'views/wizard_changement_etat_views.xml',
         'views/res_config_settings_views.xml',
         'views/fleet_parc_menus.xml',
+        'views/fleet_vehicle_assurance_views.xml',
         'reports/report_fleet_etat_vehicle.xml',
     ],
     'assets': {},

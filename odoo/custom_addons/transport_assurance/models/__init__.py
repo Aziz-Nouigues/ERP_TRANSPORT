@@ -5,3 +5,4 @@ from . import assurance_bus
 from . import assurance_chauffeur
 from . import assurance_sinistre
 from . import assurance_cron
+from . import exploitation_tournee_assurance

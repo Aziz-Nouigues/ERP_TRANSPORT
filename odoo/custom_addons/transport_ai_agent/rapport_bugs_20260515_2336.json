@@ -1,0 +1,98 @@
+[
+  {
+    "module": "fleet_etat_bus",
+    "question": "Combien de bus sont dans le parc ?",
+    "attendu": "3",
+    "statut": "✅ OK",
+    "reponse": "Il y a 0 bus dans le parc.",
+    "duree": 14.8
+  },
+  {
+    "module": "exploitation",
+    "question": "Liste toutes les lignes disponibles",
+    "attendu": "liste",
+    "statut": "✅ OK",
+    "reponse": "Voici la liste complète des lignes disponibles :\n\n1. L01 - Tunis – Sfax (Interurbaine)\n2. L02 - Tunis – Sousse (Interurbaine)\n3. L03 - Tunis – Gabès (Interurbaine)\n4. L04 - Tunis – Bizerte (Interurbaine)\n5. L05 - Tunis – Jendouba (Interurbaine)\n6. L06 - Tunis – Nabeul (Interurbaine)\n7. L07 - Sfax – Gabès (Regionale)\n8. L08 - Sfax – Médenine (Regionale)\n9. L09 - Gabès – Djerba (Regionale)\n10. L10 - Sousse – Kairouan (Regionale)\n11. 460 - Ariana → Cité El Khadra → Bab Saadoun → Bardo → Den Den → Manouba (Urbaine)\n12. 35 - Bab Saadoun → Cité El Khadra → Cité Sportive → L'Aouina → Cité Olympique (Urbaine)\n13. 56 - Bab Saadoun → Le Bardo → Cité Jardin → Cité Bir Hassan → Khaznadar (Urbaine)\n14. 72 - Ariana → Charguia → Cité El Khadra → Bab Saadoun → El Mourouj → Ben Arous (Urbaine)\n15. 12 - Lac 1 → Bab Saadoun → Bardo → Ettadhamen → Douar Hicher → Manouba (Urbaine)\n16. 40 - Ariana → Cité El Khadra → Bab Saadoun → Hammam Lif → Mégrine (Urbaine)\n17. 25 - Le Bardo → Cité Jardin → Cité Bir Hassan → El Mourouj → Radès (Urbaine)\n18. 83 - Ariana → Mnihla → Charguia → Raoued (Urbaine)\n19. TB-001 - Départs : 06h00, 08h00, 10h00, 12h00, 14h00, 16h00, 18h00 — Durée :",
+    "duree": 88.6
+  },
+  {
+    "module": "exploitation",
+    "question": "Quelles tournées sont planifiées pour aujourd'hui ?",
+    "attendu": "vide ou données",
+    "statut": "⚠️  VIDE",
+    "reponse": "Aucune donnée trouvée pour cette question.",
+    "duree": 12.0
+  },
+  {
+    "module": "exploitation",
+    "question": "Quel bus a fait le plus de kilomètres ce mois ?",
+    "attendu": "nom bus + km",
+    "statut": "✅ OK",
+    "reponse": "Le bus qui a fait le plus de kilomètres ce mois est l'Audi/Bus 15001/123 TU 456 avec un total de 540.0 kilomètres.",
+    "duree": 28.2
+  },
+  {
+    "module": "assurance",
+    "question": "Quelles sont les bus assurés ?",
+    "attendu": "2 bus",
+    "statut": "❌ ERREUR",
+    "reponse": "Je suis désolé, mais il semble qu'il y ait une erreur dans la requête SQL que vous avez exécutée. L'erreur indique qu'une clause FROM est manquante pour la table \"v\". Pourriez-vous vérifier votre requête et vous assurer que toutes les tables nécessaires sont correctement référencées? Une fois que cette erreur sera résolue, je serai en mesure de fournir les résultats exacts.",
+    "duree": 36.9
+  },
+  {
+    "module": "assurance",
+    "question": "Quelles polices d'assurance expirent dans les 30 prochains jours ?",
+    "attendu": "vide ou données",
+    "statut": "✅ OK",
+    "reponse": "Voici les polices d'assurance qui expirent dans les 30 prochains jours :\n\n1. Nom : [Nom du véhicule]\n   Immatriculation : [Numéro d'immatriculation]\n   Numéro de police : [Numéro de police]\n   Date de début : [Date de début]\n   Date d'échéance : [Date d'échéance]\n\n2. Nom : [Nom du véhicule]\n   Immatriculation : [Numéro d'immatriculation]\n   Numéro de police : [Numéro de police]\n   Date de début : [Date de début]\n   Date d'échéance : [Date d'échéance]",
+    "duree": 46.9
+  },
+  {
+    "module": "assurance",
+    "question": "Liste les assurances obligatoires des bus",
+    "attendu": "liste",
+    "statut": "❌ ERREUR",
+    "reponse": "Je suis désolé, mais il semble qu'il y ait une erreur dans la requête SQL que vous avez exécutée. L'erreur indique qu'une clause FROM est manquante pour la table \"v\". Pourriez-vous vérifier votre requête et vous assurer que toutes les tables nécessaires sont correctement référencées? Une fois que cette erreur sera résolue, je serai en mesure de fournir les résultats exacts que vous recherchez.",
+    "duree": 35.6
+  },
+  {
+    "module": "energy",
+    "question": "Combien de litres de BGI ont été consommés ce mois ?",
+    "attendu": "nombre réel pas placeholder",
+    "statut": "✅ OK",
+    "reponse": "Il n'y a pas d'informations disponibles concernant la consommation de BGI ce mois-ci.",
+    "duree": 32.9
+  },
+  {
+    "module": "energy",
+    "question": "Liste tous les bons de carburant de cette semaine",
+    "attendu": "liste ou vide",
+    "statut": "⚠️  VIDE",
+    "reponse": "Aucune donnée trouvée pour cette question.",
+    "duree": 35.3
+  },
+  {
+    "module": "energy",
+    "question": "Quelle station a distribué le plus de carburant ?",
+    "attendu": "nom station + litres",
+    "statut": "⚠️  VIDE",
+    "reponse": "Aucune donnée trouvée pour cette question.",
+    "duree": 44.2
+  },
+  {
+    "module": "patrimoine",
+    "question": "Quelles immobilisations sont amorties cette année ?",
+    "attendu": "liste ou vide",
+    "statut": "✅ OK",
+    "reponse": "Vous n'avez pas les droits d'accès pour consulter ces données.",
+    "duree": 93.2
+  },
+  {
+    "module": "boc",
+    "question": "Combien de courriers sont arrivés ce mois ?",
+    "attendu": "nombre réel",
+    "statut": "✅ OK",
+    "reponse": "Il y a arrivé **0** courriers ce mois-ci.",
+    "duree": 18.3
+  }
+]

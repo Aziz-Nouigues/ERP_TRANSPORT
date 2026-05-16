@@ -1,0 +1,178 @@
+[
+  {
+    "module": "fleet_etat_bus",
+    "question": "Combien de bus sont dans le parc ?",
+    "statut": "✅ OK",
+    "reponse": "Il y a 0 bus dans le parc.",
+    "duree": 30.7,
+    "http": 200
+  },
+  {
+    "module": "fleet_etat_bus",
+    "question": "Liste tous les bus avec leur immatriculation",
+    "statut": "✅ OK",
+    "reponse": "Voici la liste des bus avec leur immatriculation :\n\n1. Volkswagen/Bus/158 tu 2026 - Immatriculation : 158 tu 2026\n2. Tesla Motors/tesla/255 TU 1550 - Immatriculation : 255 TU 1550\n3. Audi/Bus 15001/123 TU 456 - Immatriculation : 123 TU 456",
+    "duree": 48.1,
+    "http": 200
+  },
+  {
+    "module": "fleet_etat_bus",
+    "question": "Quel est l'état actuel du bus 123 TU 456 ?",
+    "statut": "✅ OK",
+    "reponse": "Le bus 123 TU 456 est en service.",
+    "duree": 25.8,
+    "http": 200
+  },
+  {
+    "module": "exploitation",
+    "question": "Quelles sont les tournées réalisées ce mois ?",
+    "statut": "❌ TIMEOUT",
+    "reponse": "Timeout après 60s",
+    "duree": 60,
+    "http": 0
+  },
+  {
+    "module": "exploitation",
+    "question": "Combien de tournées ont été annulées cette année ?",
+    "statut": "✅ OK",
+    "reponse": "Il n'y a eu aucune tournée annulée cette année.",
+    "duree": 26.0,
+    "http": 200
+  },
+  {
+    "module": "exploitation",
+    "question": "Liste toutes les lignes disponibles",
+    "statut": "❌ TIMEOUT",
+    "reponse": "Timeout après 60s",
+    "duree": 60,
+    "http": 0
+  },
+  {
+    "module": "exploitation",
+    "question": "Quelles tournées sont planifiées pour aujourd'hui ?",
+    "statut": "⚠️  VIDE",
+    "reponse": "Aucune donnée trouvée pour cette question.",
+    "duree": 42.2,
+    "http": 200
+  },
+  {
+    "module": "exploitation",
+    "question": "Quel bus a fait le plus de kilomètres ce mois ?",
+    "statut": "✅ OK",
+    "reponse": "Le bus qui a fait le plus de kilomètres ce mois est :\n\nAudi/Bus 15001/123 TU 456 avec un total de 150,680 km.",
+    "duree": 51.5,
+    "http": 200
+  },
+  {
+    "module": "exploitation",
+    "question": "Quel est l'écart kilométrique total des tournées réalisées ?",
+    "statut": "✅ OK",
+    "reponse": "L'écart kilométrique total des tournées réalisées est de **560.0** kilomètres.",
+    "duree": 16.8,
+    "http": 200
+  },
+  {
+    "module": "assurance",
+    "question": "Quelles sont les bus assurés ?",
+    "statut": "✅ OK",
+    "reponse": "Voici les bus assurés :\n\n1. Audi/Bus 15001/123 TU 456 - Numéro de police : POL-BUS/2026/0001 - Dates d'assurance : du 04 mai 2026 au 05 mai 2027\n2. Volkswagen/Bus/158 tu 2026 - Numéro de police : POL-BUS/2026/0005 - Dates d'assurance : du 09 mai 2030 au 09 mai 2031",
+    "duree": 36.3,
+    "http": 200
+  },
+  {
+    "module": "assurance",
+    "question": "Quelles polices d'assurance expirent dans les 30 prochains jours ?",
+    "statut": "⚠️  VIDE",
+    "reponse": "Aucune donnée trouvée pour cette question.",
+    "duree": 13.3,
+    "http": 200
+  },
+  {
+    "module": "assurance",
+    "question": "Combien de sinistres ont été déclarés cette année ?",
+    "statut": "✅ OK",
+    "reponse": "Il y a eu **0** sinistres déclarés cette année.",
+    "duree": 15.5,
+    "http": 200
+  },
+  {
+    "module": "assurance",
+    "question": "Liste les assurances obligatoires des bus",
+    "statut": "⚠️  VIDE",
+    "reponse": "Aucune donnée trouvée pour cette question.",
+    "duree": 12.2,
+    "http": 200
+  },
+  {
+    "module": "assurance",
+    "question": "Quels chauffeurs ont une assurance active ?",
+    "statut": "✅ OK",
+    "reponse": "Les chauffeurs ayant une assurance active sont :\n\n- Louay",
+    "duree": 16.2,
+    "http": 200
+  },
+  {
+    "module": "energy",
+    "question": "Quel est le stock actuel de carburant dans les cuves ?",
+    "statut": "✅ OK",
+    "reponse": "Le stock actuel de carburant dans les cuves est de **70.00** unités.",
+    "duree": 13.3,
+    "http": 200
+  },
+  {
+    "module": "energy",
+    "question": "Combien de litres de BGI ont été consommés ce mois ?",
+    "statut": "✅ OK",
+    "reponse": "Le total de litres de BGI consommés ce mois est de **[total_consumed_litres]** litres.",
+    "duree": 19.5,
+    "http": 200
+  },
+  {
+    "module": "energy",
+    "question": "Liste tous les bons de carburant de cette semaine",
+    "statut": "✅ OK",
+    "reponse": "Voici la liste des bons de carburant pour cette semaine :\n\n1. Bon de carburant #001 - Date : 2023-04-10\n   Quantité : 50 litres\n\n2. Bon de carburant #002 - Date : 2023-04-17\n   Quantité : 60 litres\n\n3. Bon de carburant #003 - Date : 2023-04-24\n   Quantité : 45 litres\n\n4. Bon de carburant #004 - Date : 2023-04-30\n   Quantité : 70 litres",
+    "duree": 54.5,
+    "http": 200
+  },
+  {
+    "module": "energy",
+    "question": "Quelle station a distribué le plus de carburant ?",
+    "statut": "✅ OK",
+    "reponse": "La station qui a distribué le plus de carburant est Tunis Depot Station avec un total de 707.92 litres distribués.",
+    "duree": 27.4,
+    "http": 200
+  },
+  {
+    "module": "patrimoine",
+    "question": "Liste toutes les immobilisations actives",
+    "statut": "⚠️  VIDE",
+    "reponse": "Aucune donnée trouvée pour cette question.",
+    "duree": 14.7,
+    "http": 200
+  },
+  {
+    "module": "patrimoine",
+    "question": "Quelles immobilisations sont amorties cette année ?",
+    "statut": "❌ TIMEOUT",
+    "reponse": "Timeout après 60s",
+    "duree": 60,
+    "http": 0
+  },
+  {
+    "module": "boc",
+    "question": "Combien de courriers sont arrivés ce mois ?",
+    "statut": "✅ OK",
+    "reponse": "Il y a arrivé **0** courriers ce mois-ci.",
+    "duree": 52.3,
+    "http": 200
+  },
+  {
+    "module": "boc",
+    "question": "Liste les courriers départ non traités",
+    "statut": "❌ ERREUR",
+    "reponse": "Je suis désolé, mais il semble qu'il y ait une erreur dans la requête SQL que vous avez exécutée. La colonne `f.vehicle_id` n'existe pas dans la table `transport_fuel_voucher`. Pourriez-vous vérifier la structure de votre base de données et corriger la requête en conséquence ?",
+    "duree": 50.0,
+    "http": 200
+  }
+]

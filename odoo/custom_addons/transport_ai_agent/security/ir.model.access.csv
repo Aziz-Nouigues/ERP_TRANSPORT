@@ -1,0 +1,4 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_ai_conversation,access_ai_conversation,model_transport_ai_conversation,,1,1,1,1
+access_ai_message,access_ai_message,model_transport_ai_message,,1,1,1,1
+access_ai_chroma_cron,access_ai_chroma_cron,model_transport_ai_chroma_cron,,1,1,1,1

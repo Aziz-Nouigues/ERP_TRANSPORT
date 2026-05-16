@@ -1,0 +1,229 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <!--
+    Fiche bus restructurée — définie dans transport_assurance
+    car les champs assurance_statut / assurance_bus_ids sont
+    déclarés dans ce module (fleet_vehicle_assurance.py).
+    priority=20 pour surcharger le inherit de fleet_etat_bus (priority=16).
+    -->
+    <record id="view_fleet_vehicle_form_assurance_full" model="ir.ui.view">
+        <field name="name">fleet.vehicle.form.assurance.full</field>
+        <field name="model">fleet.vehicle</field>
+        <field name="inherit_id" ref="fleet.fleet_vehicle_view_form"/>
+        <field name="priority">20</field>
+        <field name="arch" type="xml">
+
+            <xpath expr="//header" position="inside">
+                <button name="action_changer_etat" type="object"
+                        string="Changer l'état" class="oe_highlight" icon="fa-exchange"/>
+                <button name="action_imprimer_fiche" type="object"
+                        string="Imprimer fiche" icon="fa-print"/>
+            </xpath>
+
+            <xpath expr="//div[@name='button_box']" position="inside">
+                <button name="action_voir_historique" type="object"
+                        class="oe_stat_button" icon="fa-history">
+                    <field name="nb_historique" widget="statinfo" string="Changements d'état"/>
+                </button>
+            </xpath>
+
+            <xpath expr="//field[@name='next_assignation_date']" position="replace"/>
+
+            <xpath expr="//notebook" position="before">
+
+                <div class="alert alert-danger mb-2"
+                     invisible="state_id.name not in ['En panne','Hors service','Réformé']">
+                    <i class="fa fa-ban me-1"/> Ce bus est <strong>indisponible</strong> — ne peut pas être affecté à une tournée.
+                </div>
+                <div class="alert alert-warning mb-2" invisible="state_id.name != 'En maintenance'">
+                    <i class="fa fa-wrench me-1"/> Ce bus est <strong>en maintenance</strong>.
+                </div>
+                <div class="alert alert-success mb-2" invisible="state_id.name != 'En service'">
+                    <i class="fa fa-check-circle me-1"/> Ce bus est <strong>en service</strong> et disponible.
+                </div>
+
+                <div class="o_horizontal_separator mt-4 mb-2">
+                    <span class="fw-bold text-muted">IDENTIFICATION &amp; ÉTAT</span>
+                </div>
+                <group>
+                    <group string="Identification">
+                        <field name="license_plate" string="Immatriculation"/>
+                        <field name="internal_code" string="Code interne"/>
+                        <field name="vin_sn" string="N° châssis (VIN)"/>
+                        <field name="transport_agency" string="Agence / Dépôt"/>
+                        <field name="agency_code" string="Code agence"/>
+                        <field name="tag_ids" widget="many2many_tags" string="Étiquettes"/>
+                    </group>
+                    <group string="État actuel">
+                        <field name="state_id" widget="badge"
+                               decoration-danger="state_id.name in ['En panne','Hors service','Réformé']"
+                               decoration-warning="state_id.name == 'En maintenance'"
+                               decoration-success="state_id.name == 'En service'"
+                               string="État" readonly="1"/>
+                        <field name="state_date_debut" string="En cet état depuis" readonly="1"/>
+                        <field name="state_duree_jours" string="Durée (jours)" readonly="1"/>
+                        <field name="state_cause" string="Cause" readonly="1"/>
+                    </group>
+                </group>
+
+                <div class="o_horizontal_separator mt-4 mb-2">
+                    <span class="fw-bold text-muted">CARACTÉRISTIQUES TECHNIQUES</span>
+                </div>
+                <group>
+                    <group string="Type &amp; Service">
+                        <field name="bus_type" string="Type de bus"/>
+                        <field name="type_vehicule" string="Type de service" widget="badge"
+                               decoration-info="type_vehicule == 'urbain'"
+                               decoration-warning="type_vehicule == 'interurbain'"
+                               decoration-secondary="type_vehicule == 'mixte'"/>
+                        <field name="activity_type" string="Activité"/>
+                        <field name="fuel_type" string="Carburant"/>
+                        <field name="seats" string="Nombre de places"/>
+                    </group>
+                    <group string="Véhicule &amp; Dates">
+                        <field name="model_id" string="Modèle"/>
+                        <field name="color" string="Couleur"/>
+                        <field name="acquisition_date" string="Date d'acquisition"/>
+                        <field name="write_off_date" string="Date de réforme"/>
+                        <field name="driver_id" string="Chauffeur attitré"/>
+                    </group>
+                </group>
+
+                <div class="o_horizontal_separator mt-4 mb-2">
+                    <span class="fw-bold text-muted">COMPTEUR &amp; CONSOMMATIONS</span>
+                </div>
+                <group>
+                    <group string="Compteur kilométrique">
+                        <field name="odometer_status" widget="badge"
+                               decoration-danger="odometer_status == 'broken'"
+                               decoration-warning="odometer_status == 'replaced'"
+                               decoration-success="odometer_status == 'ok'"
+                               string="État du compteur"/>
+                        <field name="odometer_replacement_date" string="Date remplacement"
+                               invisible="odometer_status == 'ok'"/>
+                        <field name="odometer_old_value" string="Ancienne valeur (km)"
+                               invisible="odometer_status == 'ok'"/>
+                    </group>
+                    <group string="Consommations théoriques">
+                        <field name="theoretical_fuel_consumption" string="Carburant (L/100km)"/>
+                        <field name="theoretical_oil_consumption" string="Lubrifiant (L/1000km)"/>
+                        <field name="fuel_tank_capacity" string="Capacité réservoir (L)"/>
+                        <field name="fuel_station_id" string="Station de rattachement"/>
+                    </group>
+                </group>
+
+                <div class="o_horizontal_separator mt-4 mb-2">
+                    <span class="fw-bold text-muted">ASSURANCE</span>
+                </div>
+                <group>
+                    <group string="Statut assurance">
+                        <field name="assurance_statut" widget="badge"
+                               decoration-success="assurance_statut == 'assure'"
+                               decoration-warning="assurance_statut == 'alerte'"
+                               decoration-danger="assurance_statut == 'non_assure'"
+                               string="Statut" readonly="1"/>
+                        <field name="assurance_nb_polices" string="Polices actives" readonly="1"/>
+                        <field name="assurance_prochaine_echeance" string="Prochaine échéance" readonly="1"/>
+                    </group>
+                    <group>
+                        <div class="alert alert-danger p-2" invisible="assurance_statut != 'non_assure'">
+                            <i class="fa fa-exclamation-triangle me-1"/>
+                            <strong>Bus non assuré</strong> — Planification bloquée.
+                        </div>
+                        <div class="alert alert-warning p-2" invisible="assurance_statut != 'alerte'">
+                            <i class="fa fa-clock-o me-1"/>
+                            <strong>Échéance proche</strong> — Pensez à renouveler.
+                        </div>
+                        <div class="alert alert-success p-2" invisible="assurance_statut != 'assure'">
+                            <i class="fa fa-shield me-1"/> Bus correctement assuré.
+                        </div>
+                    </group>
+                </group>
+
+                <div class="o_horizontal_separator mt-4 mb-2">
+                    <span class="fw-bold text-muted">PATRIMOINE</span>
+                </div>
+                <group>
+                    <group>
+                        <field name="immobilisation_id" string="Fiche immobilisation"/>
+                    </group>
+                </group>
+
+            </xpath>
+
+            <xpath expr="//notebook" position="inside">
+
+                <page string="Historique des états" name="historique_etat">
+                    <field name="historique_etat_ids" mode="list" readonly="1">
+                        <list decoration-danger="state_id.name in ['En panne','Hors service','Réformé']"
+                              decoration-warning="state_id.name == 'En maintenance'"
+                              decoration-success="state_id.name == 'En service'">
+                            <field name="date_debut" string="Depuis"/>
+                            <field name="date_fin" string="Jusqu'au"/>
+                            <field name="duree_jours" string="Durée (j)"/>
+                            <field name="state_id" widget="badge"
+                                   decoration-danger="state_id.name in ['En panne','Hors service']"
+                                   decoration-warning="state_id.name == 'En maintenance'"
+                                   decoration-success="state_id.name == 'En service'"/>
+                            <field name="priorite" widget="priority"/>
+                            <field name="cause"/>
+                            <field name="responsable_id" string="Par"/>
+                            <field name="notes" optional="hide"/>
+                        </list>
+                    </field>
+                    <div class="text-muted fst-italic p-2" invisible="nb_historique != 0">
+                        Aucun changement d'état. Utilisez <strong>"Changer l'état"</strong> pour commencer.
+                    </div>
+                    <field name="nb_historique" invisible="1"/>
+                </page>
+
+                <page string="Polices d'assurance" name="assurance_detail">
+                    <field name="assurance_bus_ids" readonly="1">
+                        <list decoration-success="state == 'active'"
+                              decoration-warning="state == 'alerte'"
+                              decoration-danger="state in ('expirée','résiliée')"
+                              decoration-muted="state == 'brouillon'">
+                            <field name="numero_police"/>
+                            <field name="type_police_id"/>
+                            <field name="compagnie_id"/>
+                            <field name="date_debut"/>
+                            <field name="date_fin" string="Expiration"/>
+                            <field name="prime_annuelle"/>
+                            <field name="franchise"/>
+                            <field name="is_obligatoire" widget="boolean" string="Oblig."/>
+                            <field name="nb_sinistres" string="Sinistres"/>
+                            <field name="state" widget="badge"
+                                   decoration-success="state == 'active'"
+                                   decoration-warning="state == 'alerte'"
+                                   decoration-danger="state in ('expirée','résiliée')"
+                                   decoration-muted="state == 'brouillon'"/>
+                        </list>
+                    </field>
+                    <div class="text-muted fst-italic p-2" invisible="assurance_nb_polices != 0">
+                        Aucune police. Allez dans <strong>Assurance → Polices bus</strong>.
+                    </div>
+                </page>
+
+            </xpath>
+
+        </field>
+    </record>
+
+    <!-- Badge assurance dans la liste des bus -->
+    <record id="view_fleet_vehicle_list_assurance_inherit" model="ir.ui.view">
+        <field name="name">fleet.vehicle.list.assurance.inherit</field>
+        <field name="model">fleet.vehicle</field>
+        <field name="inherit_id" ref="fleet_etat_bus.view_fleet_vehicle_parc_list"/>
+        <field name="arch" type="xml">
+            <field name="state_id" position="after">
+                <field name="assurance_statut" widget="badge"
+                       decoration-success="assurance_statut == 'assure'"
+                       decoration-warning="assurance_statut == 'alerte'"
+                       decoration-danger="assurance_statut == 'non_assure'"
+                       string="Assurance" optional="show"/>
+            </field>
+        </field>
+    </record>
+
+</odoo>

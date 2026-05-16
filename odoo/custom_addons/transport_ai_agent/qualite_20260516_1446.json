@@ -1,0 +1,164 @@
+[
+  {
+    "cat": "📊 Comptage",
+    "q": "Combien de bus sont dans le parc ?",
+    "check": "3",
+    "statut": "✅ OK",
+    "rep": "Il y a 3 bus dans le parc.",
+    "duree": 12.8,
+    "ok": true
+  },
+  {
+    "cat": "📊 Comptage",
+    "q": "Combien de stations dans l'exploitation ?",
+    "check": "54",
+    "statut": "✅ OK",
+    "rep": "Il y a 54 stations en exploitation.",
+    "duree": 11.5,
+    "ok": true
+  },
+  {
+    "cat": "📊 Comptage",
+    "q": "Combien de tournées réalisées ce mois ?",
+    "check": null,
+    "statut": "✅ OK",
+    "rep": "Ce mois, nous avons réalisé 1 tournée.",
+    "duree": 21.4,
+    "ok": true
+  },
+  {
+    "cat": "📊 Comptage",
+    "q": "Combien de sinistres déclarés cette année ?",
+    "check": "1",
+    "statut": "✅ OK",
+    "rep": "Cette année, il y a eu 1 sinistre déclaré.",
+    "duree": 14.4,
+    "ok": true
+  },
+  {
+    "cat": "📋 Liste courte",
+    "q": "Quels sont les bus assurés ?",
+    "check": "bus",
+    "statut": "✅ OK",
+    "rep": "Voici les bus assurés avec leurs détails :\n\n1. **Bus Audi/Bus 15001/123 TU 456**\n   - Numéro d'immatriculation : POL-BUS/2026/0001\n   - Date de début de l'assurance : 04 mai 2026\n   - Date de fin de l'assurance : 05 mai 2027\n\n2. **Bus Volkswagen/Bus/158 tu 2026**\n   - Numéro d'immatriculation : POL-BUS/2026/0005\n   - Date de début de l'assurance : 09 mai 2030\n   - Date de fin de l'assurance : 09 mai 2031",
+    "duree": 37.5,
+    "ok": true
+  },
+  {
+    "cat": "📋 Liste courte",
+    "q": "Quel est l'état actuel du bus 123 TU 456 ?",
+    "check": "service",
+    "statut": "✅ OK",
+    "rep": "Le bus 123 TU 456 est actuellement en service.",
+    "duree": 30.9,
+    "ok": true
+  },
+  {
+    "cat": "📋 Liste courte",
+    "q": "Quels chauffeurs ont une assurance active ?",
+    "check": "Louay",
+    "statut": "✅ OK",
+    "rep": "Voici les résultats demandés :\n\n**Chauffeurs avec une assurance active :**\n\n- **ID :** POL-CHF/2026/0001  \n  **Nom :** Louay  \n  **Type d'assurance :** Accident de travail (CNAM)",
+    "duree": 19.0,
+    "ok": true
+  },
+  {
+    "cat": "📋 Liste courte",
+    "q": "Donne moi toutes les factures STEG",
+    "check": "STEG",
+    "statut": "✅ OK",
+    "rep": "Voici les factures STEG demandées :\n\n1. Facture N°: STEG | Site: Tunis | Numéro Compteur: 150 | Quantité Consommée: 100 kWh | Montant: 1,850 | Statut: Payée | Date de Réception: 2026-04-01\n\n2. Facture N°: STEG-2026-001 | Site: Dépôt Tunis | Numéro Compteur: CPT-12345 | Quantité Consommée: 1500 kWh | Montant: 450,000 | Statut: Payée | Date de Réception: 2026-03-09\n\nLes deux autres factures ont un statut \"saisie\" et ne sont donc pas incluses dans cette liste.",
+    "duree": 39.8,
+    "ok": true
+  },
+  {
+    "cat": "📋 Liste longue",
+    "q": "Liste toutes les lignes disponibles",
+    "check": "L0",
+    "statut": "⚠️  PARTIEL",
+    "rep": "**25 résultat(s) trouvé(s)** :\n\n**1.** ID : 14  |  Nom : Ariana → Ben Arous\n**2.** ID : 11  |  Nom : Ariana → Manouba\n**3.** ID : 16  |  Nom : Ariana → Megrine\n**4.** ID : 18  |  Nom : Ariana → Raoued\n**5.** ID : 12  |  Nom : Bab Saadoun → Cité Olympique\n**6.** ID : 13  |  Nom : Bab Saadoun → Khaznadar\n**7.** ID : 9  |  Nom : Gabès – Djerba\n**8.** ID : 17  |  Nom : Le Bardo → Rades\n**9.** ID : 15  |  Nom : Les Berges du Lac 1 → Manouba\n**10.** ID : 7  |  Nom : Sfax – Gabès\n**11.** ID : 8  |  Nom : Sfax – Médenine\n**12.** ID : 10  |  Nom : Sousse – Kairouan\n**13.** ID : 25  |  Nom : Sousse → Sfax\n**14.** ID : 4  |  Nom : Tunis – Bizerte\n**15.** ID : 3  |  Nom : Tunis – Gabès\n**16.** ID : 5  |  Nom : Tunis – Jendouba\n**17.** ID : 6  |  Nom : Tunis – Nabeul\n**18.** ID : 1  |  Nom : Tunis – Sfax\n**19.** ID : 2  |  Nom : Tunis – Sousse\n**20.** ID : 19  |  Nom : Tunis → Bizerte\n**21.** ID : 23  |  Nom : Tunis → Kairouan\n**22.** ID : 24  |  Nom : Tunis → Nabeul (Express)\n**23.** ID : 22  |  Nom : Tunis → Sfax\n**24.** ID : 20  |  Nom : Tunis → Sousse (Express)\n**25.** ID : 21  |  Nom : Tunis → Sousse (via Nabeul)",
+    "duree": 14.6,
+    "ok": true
+  },
+  {
+    "cat": "📋 Liste longue",
+    "q": "Liste les stations terminus",
+    "check": "Terminus",
+    "statut": "✅ OK",
+    "rep": "**33 résultat(s) trouvé(s)** :\n\n**1.** ID : 17  |  Nom : Ariana — Terminus  |  Type de station : terminus  |  Ville : Ariana\n**2.** ID : 19  |  Nom : Bab Saadoun — Terminus  |  Type de station : terminus  |  Ville : Tunis\n**3.** ID : 24  |  Nom : Ben Arous — Terminus  |  Type de station : terminus  |  Ville : Ben Arous\n**4.** ID : 3  |  Nom : Bizerte – Gare Routière  |  Type de station : terminus  |  Ville : Bizerte\n**5.** ID : 28  |  Nom : Bizerte — Bus Station  |  Type de station : terminus  |  Ville : Bizerte\n**6.** ID : 22  |  Nom : Cité Olympique — Terminus  |  Type de station : terminus  |  Ville : Tunis\n**7.** ID : 15  |  Nom : Djerba – Houmt Souk  |  Type de station : terminus  |  Ville : Djerba\n**8.** ID : 11  |  Nom : Gabès – Gare Routière  |  Type de station : terminus  |  Ville : Gabès\n**9.** ID : 12  |  Nom : Gafsa – Gare Routière  |  Type de station : terminus  |  Ville : Gafsa\n**10.** ID : 33  |  Nom : Hammamet — Bus Station  |  Type de station : terminus  |  Ville : Hammamet\n**11.** ID : 5  |  Nom : Jendouba – Gare Routière  |  Type de station : terminus  |  Ville : Jendouba\n**12.** ID : 9  |  Nom : Kairouan – Gare Routière  |  Type de station : terminus  |  Ville : Kairouan\n**13.** ID : 31  |  Nom : Kairouan — Bus Station  |  Type de station : terminus  |  Ville : Kairouan\n**14.** ID : 23  |  Nom : Khaznadar — Terminus  |  Type de station : terminus  |  Ville : Tunis\n**15.** ID : 20  |  Nom : Le Bardo — Terminus  |  Type de station : terminus  |  Ville : Le Bardo\n**16.** ID : 6  |  Nom : Le Kef – Gare Routière  |  Type de station : terminus  |  Ville : Le Kef\n**17.** ID : 21  |  Nom : Les Berges du Lac 1 — Terminus  |  Type de station : terminus  |  Ville : Tunis\n**18.** ID : 18  |  Nom : Manouba — Terminus  |  Type de station : terminus  |  Ville : Manouba\n**19.** ID : 13  |  Nom : Médenine – Gare Routière  |  Type de station : terminus  |  Ville : Médenine\n**20.** ID : 25  |  Nom : Megrine — Terminus  |  Type de station : terminus  |  Ville : Mégrine\n**21.** ID : 8  |  Nom : Monastir – Gare Routière  |  Type de station : terminus  |  Ville : Monastir\n**22.** ID : 4  |  Nom : Nabeul – Gare Routière  |  Type de station : terminus  |  Ville : Nabeul\n**23.** ID : 32  |  Nom : Nabeul — Bus Station  |  Type de station : terminus  |  Ville : Nabeul\n**24.** ID : 26  |  Nom : Rades — Terminus  |  Type de station : terminus  |  Ville : Radès\n**25.** ID : 10  |  Nom : Sfax – Gare Routière  |  Type de station : terminus  |  Ville : Sfax\n**26.** ID : 30  |  Nom : Sfax — Bus Station  |  Type de station : terminus  |  Ville : Sfax\n**27.** ID : 7  |  Nom : Sousse – Bab Jedid  |  Type de station : terminus  |  Ville : Sousse\n**28.** ID : 29  |  Nom : Sousse — Bus Station  |  Type de station : terminus  |  Ville : Sousse\n**29.** ID : 14  |  Nom : Tataouine – Gare Routière  |  Type de station : terminus  |  Ville : Tataouine\n**30.** ID : 16  |  Nom : Tozeur – Gare Routière  |  Type de station : terminus  |  Ville : Tozeur\n**31.** ID : 1  |  Nom : Tunis – Bab Alioua  |  Type de station : terminus  |  Ville : Tunis\n**32.** ID : 2  |  Nom : Tunis – Bab Saadoun  |  Type de station : terminus  |  Ville : Tunis\n**33.** ID : 27  |  Nom : Tunis — Bus Station Bab Alioua  |  Type de station : terminus  |  Ville : Tunis",
+    "duree": 17.0,
+    "ok": true
+  },
+  {
+    "cat": "📋 Liste longue",
+    "q": "Liste tous les bus avec leur immatriculation",
+    "check": "TU",
+    "statut": "⚠️  VIDE",
+    "rep": "Aucune donnée trouvée pour cette question.",
+    "duree": 13.2,
+    "ok": true
+  },
+  {
+    "cat": "📈 Stats",
+    "q": "Quel bus a fait le plus de km ce mois ?",
+    "check": "km",
+    "statut": "✅ OK",
+    "rep": "Voici le résultat demandé :\n\nLe bus qui a fait le plus de kilomètres ce mois est :\n- Nom du véhicule : Audi/Bus 15001/123 TU 456\n- Kilométrage total : 150,680 km",
+    "duree": 46.0,
+    "ok": true
+  },
+  {
+    "cat": "📈 Stats",
+    "q": "Quel est l'écart kilométrique total ?",
+    "check": "560",
+    "statut": "⚠️  PARTIEL",
+    "rep": "L'écart kilométrique total est de -997.0 kilomètres.",
+    "duree": 16.9,
+    "ok": true
+  },
+  {
+    "cat": "📈 Stats",
+    "q": "Quelle station a distribué le plus de carburant ?",
+    "check": null,
+    "statut": "✅ OK",
+    "rep": "Voici le résultat demandé :\n\nStation ayant distribué le plus de carburant :\n- Nom : Tunis Depot Station\n- Total de carburant distribué : 797,92 litres",
+    "duree": 25.4,
+    "ok": true
+  },
+  {
+    "cat": "🧠 Synonymes",
+    "q": "Liste les gares disponibles",
+    "check": null,
+    "statut": "✅ OK",
+    "rep": "**33 résultat(s) trouvé(s)** :\n\n**1.** ID : 17  |  Nom : Ariana — Terminus  |  Type de station : terminus  |  Ville : Ariana\n**2.** ID : 19  |  Nom : Bab Saadoun — Terminus  |  Type de station : terminus  |  Ville : Tunis\n**3.** ID : 24  |  Nom : Ben Arous — Terminus  |  Type de station : terminus  |  Ville : Ben Arous\n**4.** ID : 3  |  Nom : Bizerte – Gare Routière  |  Type de station : terminus  |  Ville : Bizerte\n**5.** ID : 28  |  Nom : Bizerte — Bus Station  |  Type de station : terminus  |  Ville : Bizerte\n**6.** ID : 22  |  Nom : Cité Olympique — Terminus  |  Type de station : terminus  |  Ville : Tunis\n**7.** ID : 15  |  Nom : Djerba – Houmt Souk  |  Type de station : terminus  |  Ville : Djerba\n**8.** ID : 11  |  Nom : Gabès – Gare Routière  |  Type de station : terminus  |  Ville : Gabès\n**9.** ID : 12  |  Nom : Gafsa – Gare Routière  |  Type de station : terminus  |  Ville : Gafsa\n**10.** ID : 33  |  Nom : Hammamet — Bus Station  |  Type de station : terminus  |  Ville : Hammamet\n**11.** ID : 5  |  Nom : Jendouba – Gare Routière  |  Type de station : terminus  |  Ville : Jendouba\n**12.** ID : 9  |  Nom : Kairouan – Gare Routière  |  Type de station : terminus  |  Ville : Kairouan\n**13.** ID : 31  |  Nom : Kairouan — Bus Station  |  Type de station : terminus  |  Ville : Kairouan\n**14.** ID : 23  |  Nom : Khaznadar — Terminus  |  Type de station : terminus  |  Ville : Tunis\n**15.** ID : 20  |  Nom : Le Bardo — Terminus  |  Type de station : terminus  |  Ville : Le Bardo\n**16.** ID : 6  |  Nom : Le Kef – Gare Routière  |  Type de station : terminus  |  Ville : Le Kef\n**17.** ID : 21  |  Nom : Les Berges du Lac 1 — Terminus  |  Type de station : terminus  |  Ville : Tunis\n**18.** ID : 18  |  Nom : Manouba — Terminus  |  Type de station : terminus  |  Ville : Manouba\n**19.** ID : 13  |  Nom : Médenine – Gare Routière  |  Type de station : terminus  |  Ville : Médenine\n**20.** ID : 25  |  Nom : Megrine — Terminus  |  Type de station : terminus  |  Ville : Mégrine\n**21.** ID : 8  |  Nom : Monastir – Gare Routière  |  Type de station : terminus  |  Ville : Monastir\n**22.** ID : 4  |  Nom : Nabeul – Gare Routière  |  Type de station : terminus  |  Ville : Nabeul\n**23.** ID : 32  |  Nom : Nabeul — Bus Station  |  Type de station : terminus  |  Ville : Nabeul\n**24.** ID : 26  |  Nom : Rades — Terminus  |  Type de station : terminus  |  Ville : Radès\n**25.** ID : 10  |  Nom : Sfax – Gare Routière  |  Type de station : terminus  |  Ville : Sfax\n**26.** ID : 30  |  Nom : Sfax — Bus Station  |  Type de station : terminus  |  Ville : Sfax\n**27.** ID : 7  |  Nom : Sousse – Bab Jedid  |  Type de station : terminus  |  Ville : Sousse\n**28.** ID : 29  |  Nom : Sousse — Bus Station  |  Type de station : terminus  |  Ville : Sousse\n**29.** ID : 14  |  Nom : Tataouine – Gare Routière  |  Type de station : terminus  |  Ville : Tataouine\n**30.** ID : 16  |  Nom : Tozeur – Gare Routière  |  Type de station : terminus  |  Ville : Tozeur\n**31.** ID : 1  |  Nom : Tunis – Bab Alioua  |  Type de station : terminus  |  Ville : Tunis\n**32.** ID : 2  |  Nom : Tunis – Bab Saadoun  |  Type de station : terminus  |  Ville : Tunis\n**33.** ID : 27  |  Nom : Tunis — Bus Station Bab Alioua  |  Type de station : terminus  |  Ville : Tunis",
+    "duree": 17.0,
+    "ok": true
+  },
+  {
+    "cat": "🧠 Synonymes",
+    "q": "Personnel de l'entreprise",
+    "check": null,
+    "statut": "✅ OK",
+    "rep": "Voici les informations sur le personnel de l'entreprise :\n\n1. **Administrateur**\n   - Nom légal : Administrateur\n   - Email professionnel : —\n   - Téléphone mobile : —\n\n2. **Louay**\n   - Nom légal : Louay\n   - Email professionnel : louay@gmail.com\n   - Téléphone mobile : —\n\n3. **Omar**\n   - Nom légal : Omar\n   - Email professionnel : —\n   - Téléphone mobile : —",
+    "duree": 22.5,
+    "ok": true
+  },
+  {
+    "cat": "🧠 Synonymes",
+    "q": "Accidents déclarés cette année",
+    "check": null,
+    "statut": "✅ OK",
+    "rep": "Il y a eu 1 accident déclaré cette année.",
+    "duree": 14.0,
+    "ok": true
+  },
+  {
+    "cat": "🧠 Synonymes",
+    "q": "Stock huile moteur",
+    "check": null,
+    "statut": "✅ OK",
+    "rep": "Voici les résultats présentés de manière claire et professionnelle :\n\n| Stock Actuel | Stock Minimum |\n|--------------|---------------|\n| 0.00         | 20.00         |\n| 0.00         | 20.00         |\n| 10.00        | 20.00         |\n| 0.00         | 20.00         |\n| 10.00        | 20.00         |\n\nCette table présente le stock actuel et le stock minimum pour l'huile moteur dans votre entreprise.",
+    "duree": 29.5,
+    "ok": true
+  }
+]
