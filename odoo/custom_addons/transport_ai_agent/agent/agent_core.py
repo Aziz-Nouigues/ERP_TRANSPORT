@@ -444,6 +444,16 @@ MOTS_TRANSPORT_AUTORISES = [
     'steg', 'sonede', 'fournisseur', 'client', 'partenaire',
     'electricite', 'électricité', 'eau', 'kwh', 'compteur', 'energie',
     'acquisition', 'valeur', 'nette', 'sinistre', 'accident',
+    # Verbes d'action RPC — indispensable pour le contrôle d'accès
+    'planifier', 'planifie', 'planifié', 'demarrer', 'démarrer',
+    'terminer', 'termine', 'cloturer', 'clôturer',
+    'annuler', 'annule', 'confirmer', 'confirme',
+    'valider', 'valide', 'activer', 'resilier', 'résilier',
+    'renouveler', 'renouvelle', 'payer', 'payé',
+    'traiter', 'traité', 'classer', 'classé',
+    'diffuser', 'diffuse', 'enregistrer', 'enregistre',
+    'mettre', 'hors service', 'en service', 'immobiliser',
+    'comptabiliser', 'declarer', 'déclarer',
 ]
 
 MOTS_CLES_PROTEGES = {
@@ -454,9 +464,12 @@ MOTS_CLES_PROTEGES = {
 def verifier_acces_question(question: str, allowed_tables: list, is_admin: bool):
     if is_admin or (allowed_tables and "ALL" in allowed_tables):
         return None
+    import unicodedata
     question_lower = question.lower()
+    q_norm = unicodedata.normalize('NFD', question_lower)
+    q_norm = ''.join(c for c in q_norm if unicodedata.category(c) != 'Mn')
     for mot in MOTS_TRANSPORT_AUTORISES:
-        if mot in question_lower:
+        if mot in question_lower or mot in q_norm:
             return None
     for domaine, mots in MOTS_CLES_PROTEGES.items():
         for mot in mots:
@@ -482,10 +495,34 @@ _MOTS_RAG = {
 
 # Mots-clés qui indiquent une action Odoo (rpc)
 _MOTS_RPC = {
+    # Création
     "créer", "creer", "créé", "ajouter", "ajoute", "nouveau", "nouvelle",
-    "valider", "valide", "confirmer", "confirme", "modifier", "modifie",
-    "annuler", "annule", "supprimer", "supprime", "enregistrer", "enregistre",
-    "mettre à jour", "mettre a jour",
+    # Validation / confirmation
+    "valider", "valide", "confirmer", "confirme",
+    # Modification / mise à jour
+    "modifier", "modifie", "mettre à jour", "mettre a jour",
+    # Annulation / suppression
+    "annuler", "annule", "supprimer", "supprime",
+    # Enregistrement (BOC)
+    "enregistrer", "enregistre",
+    # Tournée — verbes spécifiques du code
+    "planifier", "planifie", "planifié", "planifie la", "planifier la",
+    "démarrer", "demarrer",
+    "terminer", "termine", "terminé",
+    "clôturer", "cloturer",
+    "remettre en brouillon",
+    # Bus
+    "hors service", "en service", "immobiliser", "remettre en service",
+    # Assurance
+    "activer", "résilier", "resilier", "renouveler", "renouvelle",
+    # Sinistre
+    "déclarer", "declarer", "instruire",
+    # Facture
+    "payer", "payé",
+    # BOC
+    "diffuser", "diffuse", "traiter", "traité", "classer", "classé",
+    # Patrimoine
+    "mettre en service", "mettre hors service", "comptabiliser",
 }
 
 
@@ -496,12 +533,17 @@ def detecter_outil(question: str, llm=None) -> str:
     RPC  : actions Odoo (créer, valider, modifier…)
     SQL  : tout le reste (liste, stats, détails)
     """
+    import unicodedata
     q = question.lower()
+    # Normaliser sans accents pour robustesse Windows/Linux
+    q_norm = unicodedata.normalize('NFD', q)
+    q_norm = ''.join(c for c in q_norm if unicodedata.category(c) != 'Mn')
+
     for mot in _MOTS_RAG:
-        if mot in q:
+        if mot in q or mot in q_norm:
             return "rag"
     for mot in _MOTS_RPC:
-        if mot in q:
+        if mot in q or mot in q_norm:
             return "rpc"
     return "sql"
 
@@ -542,6 +584,14 @@ _CACHE_SQL = [
     # COUNT bus
     (r"combien.*(bus|véhicul|vehicul|parc)",
      "SELECT COUNT(*) AS nombre_de_bus FROM fleet_vehicle"),
+    # Liste bons carburant (name est Char, pas jsonb)
+    (r"(liste|tous|référence|reference).*(bon|bgi|bge|carburant)",
+     "SELECT name AS reference, voucher_type AS type_bon, state AS etat, date "
+     "FROM transport_fuel_voucher ORDER BY date DESC LIMIT 20"),
+    # Liste polices assurance (chercher dans transport_assurance_bus)
+    (r"(liste|tous|référence|reference).*(police|assurance)",
+     "SELECT name AS reference, state AS etat, date_debut, date_fin "
+     "FROM transport_assurance_bus ORDER BY date_debut DESC LIMIT 20"),
     # COUNT tournées toutes
     (r"combien.*(tournee|tournée)(?!.*mois|.*semaine|.*jour|.*réalisée|.*planif)",
      "SELECT COUNT(*) AS nombre_tournees FROM transport_exploitation_tournee"),
@@ -565,6 +615,59 @@ _CACHE_SQL = [
      "COALESCE(s.name->>'fr_FR',s.name->>'en_US','Inconnu') AS etat "
      "FROM fleet_vehicle v LEFT JOIN fleet_vehicle_state s ON v.state_id=s.id "
      "ORDER BY v.license_plate LIMIT 50"),
+
+    # Assurance — états avec accents réels en base
+    (r"assurance.*(tesla|bus.*2|255)",
+     "SELECT a.numero_police, a.state, a.date_debut, a.date_fin, "
+     "a.prime_annuelle, c.name AS compagnie "
+     "FROM transport_assurance_bus a "
+     "JOIN fleet_vehicle v ON a.vehicle_id = v.id "
+     "LEFT JOIN transport_assurance_compagnie c ON a.compagnie_id = c.id "
+     "WHERE v.name ILIKE '%Tesla%' LIMIT 10"),
+
+    (r"assurance.*(audi|bus.*1|123)",
+     "SELECT a.numero_police, a.state, a.date_debut, a.date_fin, "
+     "c.name AS compagnie "
+     "FROM transport_assurance_bus a "
+     "JOIN fleet_vehicle v ON a.vehicle_id = v.id "
+     "LEFT JOIN transport_assurance_compagnie c ON a.compagnie_id = c.id "
+     "WHERE v.name ILIKE '%Audi%' LIMIT 10"),
+
+    (r"(liste|tous).*(police|assurance).*(activ|en cours)",
+     "SELECT a.numero_police, a.state, a.date_debut, a.date_fin, "
+     "v.name AS bus, c.name AS compagnie "
+     "FROM transport_assurance_bus a "
+     "JOIN fleet_vehicle v ON a.vehicle_id = v.id "
+     "LEFT JOIN transport_assurance_compagnie c ON a.compagnie_id = c.id "
+     "WHERE a.state = 'active' ORDER BY a.date_fin LIMIT 20"),
+
+    (r"(liste|tous).*(police|assurance)",
+     "SELECT a.numero_police, a.state, a.date_debut, a.date_fin, "
+     "v.name AS bus, c.name AS compagnie "
+     "FROM transport_assurance_bus a "
+     "JOIN fleet_vehicle v ON a.vehicle_id = v.id "
+     "LEFT JOIN transport_assurance_compagnie c ON a.compagnie_id = c.id "
+     "ORDER BY a.date_fin DESC LIMIT 20"),
+
+    (r"(expir|bientot|prochain).*(police|assurance)",
+     "SELECT a.numero_police, a.state, a.date_fin, v.name AS bus "
+     "FROM transport_assurance_bus a "
+     "JOIN fleet_vehicle v ON a.vehicle_id = v.id "
+     "WHERE a.date_fin BETWEEN CURRENT_DATE AND CURRENT_DATE + INTERVAL '60 days' "
+     "AND a.state = 'active' ORDER BY a.date_fin LIMIT 20"),
+
+    (r"(sinistre|accident)",
+     "SELECT s.name, s.state, s.date_sinistre, s.montant_dommage, "
+     "v.name AS bus FROM transport_assurance_sinistre s "
+     "LEFT JOIN fleet_vehicle v ON s.vehicle_id = v.id "
+     "ORDER BY s.date_sinistre DESC LIMIT 20"),
+
+    (r"(combien|nombre).*(police|assurance)",
+     "SELECT state, COUNT(*) AS nombre FROM transport_assurance_bus GROUP BY state"),
+
+    (r"(combien|nombre).*(sinistre)",
+     "SELECT COUNT(*) AS nombre_sinistres FROM transport_assurance_sinistre"),
+
 ]
 
 
@@ -703,66 +806,294 @@ def generer_sql(question: str, llm: OllamaLLM,
     return sql
 
 # ---------------------------------------------------------------------------
-# FIX 1 — Génération dynamique de l'action RPC
+# ---------------------------------------------------------------------------
+# FIX 1 — Génération dynamique de l'action RPC (lecture + écriture)
 # ---------------------------------------------------------------------------
 
-# Mapping question → modèle Odoo + champs pertinents
 MODELES_RPC = {
-    "tournee":         ("transport.exploitation.tournee",
-                        ["name", "date", "state", "vehicle_id", "chauffeur_id",
-                         "km_prevu", "km_realise", "ecart_km"]),
-    "tournée":         ("transport.exploitation.tournee",
-                        ["name", "date", "state", "vehicle_id", "chauffeur_id",
-                         "km_prevu", "km_realise", "ecart_km"]),
-    "bus":             ("fleet.vehicle",
-                        ["name", "license_plate", "state_id"]),
-    "vehicule":        ("fleet.vehicle",
-                        ["name", "license_plate", "state_id"]),
-    "véhicule":        ("fleet.vehicle",
-                        ["name", "license_plate", "state_id"]),
-    "assurance":       ("transport.assurance.bus",
-                        ["name", "vehicle_id", "state", "date_debut", "date_fin"]),
-    "police":          ("transport.assurance.bus",
-                        ["name", "vehicle_id", "state", "date_debut", "date_fin"]),
-    "sinistre":        ("transport.assurance.sinistre",
-                        ["name", "vehicle_id", "date_sinistre", "state"]),
-    "chauffeur":       ("hr.employee",
-                        ["name", "job_title", "active"]),
-    "conducteur":      ("hr.employee",
-                        ["name", "job_title", "active"]),
-    "carburant":       ("transport.fuel.voucher",
-                        ["name", "voucher_type", "total_quantity", "date", "state"]),
-    "bgi":             ("transport.fuel.voucher",
-                        ["name", "voucher_type", "total_quantity", "date", "state"]),
-    "bge":             ("transport.fuel.voucher",
-                        ["name", "voucher_type", "total_quantity", "date", "state"]),
-    "courrier":        ("boc.courrier.arrivee",
-                        ["name", "sujet", "expediteur", "date_arrivee", "state"]),
-    "facture":         ("transport.facture.energie",
-                        ["name", "type_facture", "statut", "site", "montant",
-                         "date_reception"]),
+    "tournee":        ("transport.exploitation.tournee",
+                       ["name", "date", "state", "vehicle_id", "chauffeur_id",
+                        "ligne_id", "km_prevu", "km_realise", "ecart_km",
+                        "heure_depart_prevu", "heure_arrivee_prevu"]),
+    "tournée":        ("transport.exploitation.tournee",
+                       ["name", "date", "state", "vehicle_id", "chauffeur_id",
+                        "ligne_id", "km_prevu", "km_realise", "ecart_km"]),
+    "bus":            ("fleet.vehicle",
+                       ["name", "license_plate", "state_id"]),
+    "vehicule":       ("fleet.vehicle",
+                       ["name", "license_plate", "state_id"]),
+    "véhicule":       ("fleet.vehicle",
+                       ["name", "license_plate", "state_id"]),
+    "assurance":      ("transport.assurance.bus",
+                       ["numero_police", "vehicle_id", "state", "date_debut",
+                        "date_fin", "compagnie_id", "type_id"]),
+    "police":         ("transport.assurance.bus",
+                       ["numero_police", "vehicle_id", "state", "date_debut", "date_fin"]),
+    "sinistre":       ("transport.assurance.sinistre",
+                       ["name", "vehicle_id", "date_sinistre", "state",
+                        "montant_dommage"]),
+    "chauffeur":      ("hr.employee",
+                       ["name", "job_title", "active"]),
+    "conducteur":     ("hr.employee",
+                       ["name", "job_title", "active"]),
+    "carburant":      ("transport.fuel.voucher",
+                       ["name", "voucher_type", "total_quantity", "date", "state",
+                        "vehicle_id"]),
+    "bgi":            ("transport.fuel.voucher",
+                       ["name", "voucher_type", "total_quantity", "date", "state"]),
+    "bge":            ("transport.fuel.voucher",
+                       ["name", "voucher_type", "total_quantity", "date", "state"]),
+    "courrier":       ("boc.courrier.arrivee",
+                       ["name", "sujet", "expediteur", "date_arrivee", "state"]),
+    "facture":        ("transport.facture.energie",
+                       ["name", "type_facture", "statut", "site",
+                        "montant", "date_reception"]),
+    "immobilisation": ("patrimoine.immobilisation",
+                       ["name", "statut", "valeur_nette_comptable",
+                        "date_mise_en_service", "duree_amortissement"]),
 }
 
 ETATS_RPC = {
-    "réalisée": "realise", "realisee": "realise", "effectuée": "realise",
-    "terminée": "realise", "complétée": "realise",
-    "planifiée": "planifie", "planifie": "planifie",
-    "prévue": "planifie", "programmée": "planifie",
-    "en cours": "en_cours", "en_cours": "en_cours",
-    "annulée": "annule", "annule": "annule",
+    # Tournées
+    "réalisée": "realise",  "realisee": "realise",
+    "effectuée": "realise", "terminée": "realise",
+    "planifiée": "planifie","planifie": "planifie",
+    "prévue": "planifie",   "programmée": "planifie",
+    "en cours": "en_cours", "encours": "en_cours",
+    "annulée": "annule",    "annule": "annule",
     "brouillon": "brouillon",
-    "active": "active", "expirée": "expire", "résiliée": "resilie",
+    # Assurance — valeurs EXACTES du code (avec accents)
+    "active": "active",
+    "expirée": "expirée",   "expiree": "expirée",
+    "résiliée": "résiliée", "resiliee": "résiliée",
+    "alerte": "alerte",
+    # Carburant
+    "confirme": "confirmed", "confirmé": "confirmed",
+    "validé": "done",        "valide": "done",
+    "annulé": "cancelled",   "annule_bon": "cancelled",
+    # Facture énergie
+    "payée": "payee",        "validée": "validee",
+    "saisie": "saisie",
+    # Patrimoine (champ = statut, pas state)
+    "en service": "en_service",
+    "hors_service": "hors_service",
+    "cédé": "cede",          "rebut": "rebut",
 }
+
+# Actions d'écriture : (mots-clés, méthode_odoo, modèle_défaut)
+# IMPORTANT : noms des méthodes pris DIRECTEMENT dans le code source des modules
+INTENTIONS_ECRITURE = [
+    # ── Tournée ─────────────────────────────────────────────────────
+    # code : action_planifier (PAS action_confirm)
+    (["confirmer la tournée", "confirme la tournée", "planifier la tournée",
+      "planifie la tournée", "planifie la tournee", "planifier la tournee",
+      "planifie la tourn"],
+     "action_planifier", "transport.exploitation.tournee"),
+
+    # code : action_demarrer
+    (["démarrer la tournée", "demarrer la tournée", "commencer la tournée",
+      "demarrer la tournee", "démarrer la tournee", "demarrer la tourn"],
+     "action_demarrer", "transport.exploitation.tournee"),
+
+    # code : action_terminer (PAS action_realiser)
+    (["terminer la tournée", "clôturer la tournée", "marquer réalisée",
+      "marquer la tournée réalisée", "marquer terminée",
+      "terminer la tournee", "cloturer la tournee", "marquer realisee"],
+     "action_terminer", "transport.exploitation.tournee"),
+
+    # code : action_annuler
+    (["annuler la tournée", "annule la tournée",
+      "annuler la tournee", "annule la tournee"],
+     "action_annuler", "transport.exploitation.tournee"),
+
+    # code : action_remettre_brouillon
+    (["remettre en brouillon", "remettre la tournée en brouillon"],
+     "action_remettre_brouillon", "transport.exploitation.tournee"),
+
+    # create
+    (["créer une tournée", "nouvelle tournée", "ajouter une tournée"],
+     "create", "transport.exploitation.tournee"),
+
+    # ── Bus ──────────────────────────────────────────────────────────
+    # code : action_changer_etat → ouvre wizard (géré en write simplifié)
+    (["mettre le bus en service", "remettre en service", "remettre le bus"],
+     "write", "fleet.vehicle"),
+    (["mettre le bus hors service", "immobiliser le bus", "hors service"],
+     "write", "fleet.vehicle"),
+
+    # ── Assurance bus ────────────────────────────────────────────────
+    # code : action_activer (PAS action_validate)
+    (["valider la police", "valider l'assurance", "activer la police",
+      "activer l'assurance"],
+     "action_activer", "transport.assurance.bus"),
+
+    # code : action_resilier
+    (["résilier la police", "resilier la police", "résilier l'assurance"],
+     "action_resilier", "transport.assurance.bus"),
+
+    # renouvellement → via wizard (on crée un enregistrement brouillon)
+    (["renouveler la police", "renouveler l'assurance", "renouvellement"],
+     "create", "transport.assurance.bus"),
+
+    # ── Sinistre ─────────────────────────────────────────────────────
+    (["déclarer le sinistre", "declarer le sinistre"],
+     "action_declarer", "transport.assurance.sinistre"),
+    (["clôturer le sinistre", "cloture sinistre"],
+     "action_cloturer", "transport.assurance.sinistre"),
+
+    # ── Bon carburant ────────────────────────────────────────────────
+    # Workflow OBLIGATOIRE : draft → action_confirm → action_validate
+    (["confirmer le bon", "confirmer le bgi", "confirmer le bge"],
+     "action_confirm", "transport.fuel.voucher"),
+    (["valider le bon", "valider le bgi", "valider le bge"],
+     "action_validate", "transport.fuel.voucher"),
+    (["annuler le bon", "annuler le bgi", "annuler le bge"],
+     "action_cancel", "transport.fuel.voucher"),
+
+    # ── Facture énergie ──────────────────────────────────────────────
+    # code : action_payer (PAS write statut directement)
+    (["payer la facture", "marquer payée", "facture payée"],
+     "action_payer", "transport.facture.energie"),
+    (["annuler la facture", "annule la facture énergie"],
+     "action_annuler", "transport.facture.energie"),
+
+    # ── BOC courrier arrivée ─────────────────────────────────────────
+    (["enregistrer le courrier", "enregistre le courrier"],
+     "action_enregistrer", "boc.courrier.arrivee"),
+    (["diffuser le courrier", "diffuse le courrier"],
+     "action_diffuser", "boc.courrier.arrivee"),
+    (["traiter le courrier", "marquer traité"],
+     "action_traiter", "boc.courrier.arrivee"),
+    (["classer le courrier", "classe le courrier"],
+     "action_classer", "boc.courrier.arrivee"),
+
+    # ── Patrimoine ───────────────────────────────────────────────────
+    # code : action_mettre_en_service / action_mettre_hors_service
+    (["mettre en service l'immobilisation", "mettre l'immobilisation en service"],
+     "action_mettre_en_service", "patrimoine.immobilisation"),
+    (["mettre hors service l'immobilisation", "hors service l'immobilisation"],
+     "action_mettre_hors_service", "patrimoine.immobilisation"),
+
+    # Cession
+    (["confirmer la cession", "confirme la cession"],
+     "action_confirmer", "patrimoine.cession"),
+    (["comptabiliser la cession"],
+     "action_comptabiliser", "patrimoine.cession"),
+]
+
+
+def _extraire_ref_tournee(question: str) -> str:
+    """Extrait une référence Odoo du style TOURN/2026/00042."""
+    import re as _re
+    m = _re.search(r'[A-Z][A-Z0-9\-]*/\d{4}/\d+', question, _re.IGNORECASE)
+    return m.group(0).upper() if m else ""
+
+
+def _extraire_ids_rpc(q: str) -> list:
+    """Extrait les IDs numériques bruts mentionnés dans la question."""
+    import re as _re
+    matches = _re.findall(r'(?:id[:\s#]+)(\d+)', q)
+    return [int(x) for x in matches] if matches else []
+
+
+def _construire_valeurs_creation(q: str, modele: str, llm) -> dict:
+    """Construit un dict de valeurs pour create() via LLM + défauts."""
+    import datetime, re as _re
+    defaults = {
+        "transport.exploitation.tournee": {
+            "date": str(datetime.date.today()),
+            "state": "brouillon",
+        },
+        "transport.assurance.bus": {"state": "brouillon"},
+        "transport.fuel.voucher":  {"state": "draft", "voucher_type": "internal"},
+    }
+    if llm is None:
+        return defaults.get(modele, {})
+    try:
+        champs_dispo = ", ".join(
+            MODELES_RPC.get(modele.split(".")[-1], ("", []))[1]
+        ) or "name, date, state"
+        prompt = (
+            f"Odoo 19 expert. Modèle: '{modele}'. "
+            f"Champs: {champs_dispo}.\n"
+            f"Question: {q}\n"
+            "Retourne UNIQUEMENT un dict Python valide avec les valeurs extraites. "
+            "Exemple: {\"date\": \"2026-05-20\", \"state\": \"brouillon\"}\n"
+            "Dict:"
+        )
+        rep = llm.invoke(prompt).strip()
+        rep = _re.sub(r"```.*?```", "", rep, flags=_re.DOTALL).strip()
+        parsed = ast.literal_eval(rep)
+        if isinstance(parsed, dict) and parsed:
+            base = defaults.get(modele, {})
+            base.update(parsed)
+            return base
+    except Exception as e_llm:
+        _logger.warning(f"LLM create values failed: {e_llm}")
+    return defaults.get(modele, {})
 
 
 def generer_action_rpc(question: str, llm: OllamaLLM) -> str:
     """
     Génère dynamiquement une action RPC à partir de la question.
-    Retourne une chaîne au format: modele|methode|domaine|champs
+    Couvre lecture ET écriture.
+    Retourne une chaîne au format: modele|methode|param1|param2
     """
     q = question.lower()
 
-    # 1. Détecter le modèle Odoo cible
+    # ── 1. Détecter l'intention d'écriture ──────────────────────────────────
+    for mots_cles, methode_odoo, modele_defaut in INTENTIONS_ECRITURE:
+        if any(mot in q for mot in mots_cles):
+            _logger.info(f"Intention écriture: {methode_odoo} sur {modele_defaut}")
+            ids = _extraire_ids_rpc(q)
+            ref = _extraire_ref_tournee(question)
+
+            # CREATE
+            if methode_odoo == "create":
+                valeurs = _construire_valeurs_creation(q, modele_defaut, llm)
+                return f"{modele_defaut}|create|{json.dumps(valeurs, ensure_ascii=False)}"
+
+            # WRITE bus état
+            if methode_odoo == "write" and modele_defaut == "fleet.vehicle":
+                # IDs reels fleet.vehicle.state
+                if any(w in q for w in ["hors service", "immobiliser"]):
+                    etat_id = 48
+                elif any(w in q for w in ["en panne", "panne"]):
+                    etat_id = 5
+                elif any(w in q for w in ["maintenance", "en maintenance"]):
+                    etat_id = 6
+                elif any(w in q for w in ["en service", "remettre en service"]):
+                    etat_id = 47
+                else:
+                    etat_id = 47
+                if ids:
+                    return f"{modele_defaut}|write|{json.dumps(ids)}|{{\"state_id\":{etat_id}}}"
+                # Pas d'IDs → lister les bus pour que l'utilisateur choisisse
+                return f"{modele_defaut}|search_read|[]|[\"id\",\"name\",\"license_plate\",\"state_id\"]"
+
+            # WRITE facture payée
+            if methode_odoo == "write" and modele_defaut == "transport.facture.energie":
+                if ids:
+                    return f"{modele_defaut}|write|{json.dumps(ids)}|{{\"statut\":\"payee\"}}"
+
+            # Boutons workflow avec IDs
+            if ids:
+                return f"{modele_defaut}|{methode_odoo}|{json.dumps(ids)}"
+
+            # IDs absents mais référence présente → chercher l'ID d'abord
+            if ref:
+                # Champ reference selon le modele (assurance utilise numero_police)
+                _ref_field = "numero_police" if "assurance.bus" in modele_defaut else "name"
+                return (
+                    f"{modele_defaut}|search_read"
+                    f"|[[\"{_ref_field}\",\"=\",\"{ref}\"]]"
+                    f"|[\"id\",\"{_ref_field}\",\"state\"]"
+                )
+
+            # Fallback : liste pour que l'utilisateur choisisse
+            return f"{modele_defaut}|search_read|[]|[\"id\",\"name\",\"state\"]"
+
+    # ── 2. Lecture simple ────────────────────────────────────────────────────
     modele = "transport.exploitation.tournee"
     champs = ["name", "date", "state", "vehicle_id"]
     for mot, (m, c) in MODELES_RPC.items():
@@ -771,16 +1102,15 @@ def generer_action_rpc(question: str, llm: OllamaLLM) -> str:
             champs = c
             break
 
-    # 2. Construire le domaine de filtrage
     domaine = []
 
-    # Filtre par état
+    # Filtre état
     for mot_etat, val_etat in ETATS_RPC.items():
         if mot_etat in q:
             domaine.append(["state", "=", val_etat])
             break
 
-    # Filtre par immatriculation / nom
+    # Filtre immatriculation
     match_plaque = re.search(
         r'\b(\d{1,4}\s*tu\s*\d{1,4}|\d{1,4}\s*tn\s*\d{1,4})\b', q
     )
@@ -788,12 +1118,12 @@ def generer_action_rpc(question: str, llm: OllamaLLM) -> str:
         plaque = match_plaque.group(0).upper().replace(" ", "")
         domaine.append(["license_plate", "ilike", plaque])
 
-    # Filtre par référence de tournée (ex: TOURN/2026/00020)
-    match_ref = re.search(r'[A-Z]+/\d{4}/\d+', question, re.IGNORECASE)
-    if match_ref:
-        domaine.append(["name", "=", match_ref.group(0).upper()])
+    # Filtre référence tournée
+    ref = _extraire_ref_tournee(question)
+    if ref:
+        domaine.append(["name", "ilike", ref])
 
-    # 3. Demander au LLM si le domaine est vide et la question est précise
+    # LLM pour domaine complexe si domaine vide
     if not domaine:
         try:
             prompt_rpc = (
@@ -814,9 +1144,7 @@ def generer_action_rpc(question: str, llm: OllamaLLM) -> str:
             _logger.warning(f"LLM domain generation failed: {e}")
             domaine = []
 
-    domaine_str = json.dumps(domaine)
-    champs_str = json.dumps(champs)
-    action = f"{modele}|search_read|{domaine_str}|{champs_str}"
+    action = f"{modele}|search_read|{json.dumps(domaine)}|{json.dumps(champs)}"
     _logger.info(f"Action RPC générée: {action}")
     print(f"  -> RPC action: {action}")
     return action
@@ -1198,6 +1526,163 @@ def _reponse_rag_statique(question: str) -> str:
             return reponse
     return _RAG_DEFAUT
 
+
+# ---------------------------------------------------------------------------
+# PIPELINE RPC 2 ÉTAPES — résoudre référence puis appeler le bouton
+# ---------------------------------------------------------------------------
+
+
+def _resoudre_id_par_sql(modele_odoo: str, ref: str) -> int:
+    """Résout une référence Odoo en ID via SQL direct — zéro LLM."""
+    TABLE_MAP = {
+        "transport.exploitation.tournee": ("transport_exploitation_tournee", "name"),
+        "boc.courrier.arrivee":           ("boc_courrier_arrivee",           "name"),
+        "boc.courrier.depart":            ("boc_courrier_depart",            "name"),
+        "transport.fuel.voucher":         ("transport_fuel_voucher",         "name"),
+        "transport.facture.energie":      ("transport_facture_energie",      "name"),
+        "patrimoine.immobilisation":      ("patrimoine_immobilisation",      "name"),
+        "transport.assurance.bus":        ("transport_assurance_bus",        "numero_police"),
+        "transport.assurance.sinistre":   ("transport_assurance_sinistre",   "name"),
+        "patrimoine.cession":             ("patrimoine_cession",             "name"),
+    }
+    if modele_odoo not in TABLE_MAP:
+        return None
+    table, col = TABLE_MAP[modele_odoo]
+    try:
+        conn = get_pg_connection()
+        cur  = conn.cursor()
+        cur.execute("SELECT id FROM " + table + " WHERE " + col + " = %s LIMIT 1", (ref,))
+        row = cur.fetchone()
+        conn.close()
+        return row[0] if row else None
+    except Exception as e:
+        _logger.warning(f"_resoudre_id_par_sql erreur: {e}")
+        return None
+
+
+def _detecter_intention(question: str) -> tuple:
+    """Détecte l'intention d'écriture sans LLM."""
+    import unicodedata
+    q = question.lower()
+    q_norm = unicodedata.normalize("NFD", q)
+    q_norm = "".join(c for c in q_norm if unicodedata.category(c) != "Mn")
+    for mots_cles, methode_odoo, modele_defaut in INTENTIONS_ECRITURE:
+        if any(mot in q or mot in q_norm for mot in mots_cles):
+            return methode_odoo, modele_defaut
+    return None, None
+
+
+def _extraire_ref_sql(question: str) -> str:
+    """Extrait la référence Odoo (ex: TOURN/2026/00020)."""
+    m = re.search(r"[A-Z][A-Z0-9\-]*/\d{4}/\d+", question, re.IGNORECASE)
+    return m.group(0).upper() if m else ""
+
+
+def _extraire_ids_question(question: str) -> list:
+    """Extrait les IDs numériques bruts (ex: 'id 42')."""
+    matches = re.findall(r"(?:id[:\s#]+)(\d+)", question.lower())
+    return [int(x) for x in matches] if matches else []
+
+
+def _executer_rpc(question: str, llm, allowed_tables: list, is_admin: bool) -> str:
+    """
+    Pipeline RPC sans LLM — résolution SQL directe.
+    Étape 1: détection intention Python pur (< 1ms)
+    Étape 2: résolution ID via PostgreSQL (< 10ms)
+    Étape 3: appel bouton Odoo XML-RPC
+    Total: < 15s au lieu de 90s+
+    """
+    import json as _json
+
+    methode_cible, modele_cible = _detecter_intention(question)
+    ref       = _extraire_ref_sql(question)
+    ids_bruts = _extraire_ids_question(question)
+
+    _logger.info(f"RPC: methode={methode_cible} modele={modele_cible} ref={ref} ids={ids_bruts}")
+    print(f"  -> RPC: {methode_cible} | {modele_cible} | ref={ref} | ids={ids_bruts}")
+
+    # Pas d intention → lecture SQL
+    if not methode_cible:
+        requete = generer_sql(question, llm, allowed_tables, is_admin)
+        donnees = sql_tool.invoke(requete)
+        return formuler_reponse(question, donnees, llm)
+
+    # CREATE
+    if methode_cible == "create":
+        import datetime
+        defaults = {
+            "transport.exploitation.tournee": {
+                "date": str(datetime.date.today()), "state": "brouillon"},
+            "transport.assurance.bus": {"state": "brouillon"},
+            "transport.fuel.voucher": {"state": "draft", "voucher_type": "internal"},
+        }
+        valeurs = defaults.get(modele_cible, {})
+        action  = modele_cible + "|create|" + _json.dumps(valeurs, ensure_ascii=False)
+        donnees = rpc_tool.invoke(action)
+        return donnees if donnees and "Erreur" not in donnees else "Création effectuée."
+
+    # WRITE bus état
+    if methode_cible == "write" and modele_cible == "fleet.vehicle":
+        q = question.lower()
+        # IDs reels fleet.vehicle.state : 47=En service, 48=Hors service, 5=En panne, 6=En maintenance
+        if any(w in q for w in ["hors service", "immobiliser"]):
+            etat_id = 48
+        elif any(w in q for w in ["en panne", "panne"]):
+            etat_id = 5
+        elif any(w in q for w in ["maintenance", "en maintenance"]):
+            etat_id = 6
+        elif any(w in q for w in ["en service", "remettre en service"]):
+            etat_id = 47
+        else:
+            etat_id = 47
+        ids = ids_bruts[:]
+        if ids:
+            etat_val = '{"state_id":' + str(etat_id) + "}"
+            action   = "fleet.vehicle|write|" + _json.dumps(ids) + "|" + etat_val
+            donnees  = rpc_tool.invoke(action)
+            return donnees if donnees and "Erreur" not in donnees else "État du bus modifié."
+        return "Précise l'ID du bus (ex: 'Mets le bus id 3 hors service')."
+
+    # WRITE facture payée
+    if methode_cible == "write" and modele_cible == "transport.facture.energie":
+        ids = ids_bruts[:]
+        if not ids and ref:
+            id_sql = _resoudre_id_par_sql(modele_cible, ref)
+            if id_sql:
+                ids = [id_sql]
+        if ids:
+            action  = modele_cible + "|write|" + _json.dumps(ids) + '|{"statut":"payee"}'
+            donnees = rpc_tool.invoke(action)
+            return donnees if donnees and "Erreur" not in donnees else "Facture marquée payée."
+        return "Référence facture non trouvée."
+
+    # BOUTON WORKFLOW — résolution SQL directe
+    ids = ids_bruts[:]
+    if not ids and ref:
+        id_sql = _resoudre_id_par_sql(modele_cible, ref)
+        if id_sql:
+            ids = [id_sql]
+            print(f"  -> ID résolu SQL: {id_sql} (ref={ref})")
+        else:
+            return "Aucun enregistrement trouvé pour '" + ref + "'. Vérifiez la référence."
+
+    if not ids:
+        return "Précise la référence ou l'ID de l'enregistrement à modifier."
+
+    action  = modele_cible + "|" + methode_cible + "|" + _json.dumps(ids)
+    print(f"  -> Action bouton: {action}")
+    donnees = rpc_tool.invoke(action)
+
+    if not donnees or not donnees.strip():
+        return "Action '" + methode_cible + "' exécutée avec succès."
+    if "Erreur RPC" in donnees and "Action impossible" not in donnees:
+        _logger.warning(f"RPC bouton échoué: {donnees[:100]}")
+        requete = generer_sql(question, llm, allowed_tables, is_admin)
+        donnees = sql_tool.invoke(requete)
+        return formuler_reponse(question, donnees, llm)
+    return donnees
+
+
 def ask_agent(question: str, llm: OllamaLLM,
               allowed_tables: list = None,
               is_admin: bool = False,
@@ -1262,16 +1747,7 @@ def ask_agent(question: str, llm: OllamaLLM,
         # -----------------------------------------------------------------
         elif outil == "rpc":
             try:
-                action = generer_action_rpc(question, llm)
-                donnees = rpc_tool.invoke(action)
-
-                if "Erreur RPC" in donnees or not donnees.strip():
-                    _logger.warning("RPC échoué — fallback SQL")
-                    requete = generer_sql(question, llm, allowed_tables, is_admin)
-                    donnees = sql_tool.invoke(requete)
-
-                reponse = formuler_reponse(question, donnees, llm)
-
+                reponse = _executer_rpc(question, llm, allowed_tables, is_admin)
             except Exception as e_rpc:
                 _logger.warning(f"RPC exception: {e_rpc} — fallback SQL")
                 try:

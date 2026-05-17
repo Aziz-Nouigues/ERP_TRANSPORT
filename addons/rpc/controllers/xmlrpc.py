@@ -111,7 +111,7 @@ class OdooMarshaller(xmlrpc.client.Marshaller):
 
 
 def dumps(params: list | tuple | xmlrpc.client.Fault) -> str:
-    response = OdooMarshaller(allow_none=False).dumps(params)
+    response = OdooMarshaller(allow_none=True).dumps(params)
     return f"""\
 <?xml version="1.0"?>
 <methodResponse>
