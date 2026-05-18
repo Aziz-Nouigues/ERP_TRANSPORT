@@ -20,7 +20,6 @@
 
       <div class="ai_sidebar_section">Conversations récentes</div>
 
-      <!-- Liste scrollable uniquement pour les conversations -->
       <div class="ai_history_list">
         <t t-foreach="state.history" t-as="conv" t-key="conv.id">
           <div t-attf-class="ai_history_item {{ conv.id === state.currentId ? 'active' : '' }}"
@@ -38,14 +37,14 @@
       </div>
 
       <div class="ai_sidebar_user">
-    <div class="ai_user_avatar">
-        <t t-esc="state.userInitials"/>
-    </div>
-    <div class="ai_user_info">
-        <span class="ai_user_name"><t t-esc="state.userName"/></span>
-        <span class="ai_user_role">Utilisateur ERP</span>
-    </div>
-</div>
+        <div class="ai_user_avatar">
+          <t t-esc="state.userInitials"/>
+        </div>
+        <div class="ai_user_info">
+          <span class="ai_user_name"><t t-esc="state.userName"/></span>
+          <span class="ai_user_role">Utilisateur ERP</span>
+        </div>
+      </div>
     </div>
 
     <!-- Zone principale -->
@@ -83,6 +82,17 @@
                   <span class="ai_suggestion_icon">📊</span>
                   État du parc bus
                 </button>
+                <!-- Suggestion rapports PDF -->
+                <button class="ai_suggestion_btn"
+                  t-on-click="() => this.askSuggestion('Bilan assurance et sinistres')">
+                  <span class="ai_suggestion_icon">📄</span>
+                  Bilan assurance (PDF)
+                </button>
+                <button class="ai_suggestion_btn"
+                  t-on-click="() => this.askSuggestion('Rapport journalier d\'exploitation')">
+                  <span class="ai_suggestion_icon">📄</span>
+                  Rapport journalier (PDF)
+                </button>
               </div>
             </div>
           </t>
@@ -94,14 +104,32 @@
                 <t t-else=""><t t-esc="state.userInitials"/></t>
               </div>
               <div class="ai_message_content">
-               <div t-attf-class="ai_bubble ai_bubble_{{ msg.type }}">
-  <t t-if="msg.content">
-    <t t-esc="msg.content"/>
-  </t>
-  <t t-else="">
-    <span style="color:#9ca3af;font-style:italic;">...</span>
-  </t>
-</div>
+
+                <!-- Bulle message -->
+                <div t-attf-class="ai_bubble ai_bubble_{{ msg.type }}">
+                  <t t-if="msg.content">
+                    <t t-esc="msg.content"/>
+                  </t>
+                  <t t-else="">
+                    <span style="color:#9ca3af;font-style:italic;">...</span>
+                  </t>
+                </div>
+
+                <!-- ── BOUTONS PDF — apparaissent si la réponse contient un rapport ── -->
+                <t t-if="msg.type === 'agent' and msg.pdf_url">
+                  <div class="ai_pdf_actions">
+                    <button class="ai_pdf_btn_open"
+                            t-on-click="() => this.ouvrirPDF(msg.pdf_url)">
+                      🔍 Ouvrir le PDF
+                    </button>
+                    <button class="ai_pdf_btn_dl"
+                            t-on-click="() => this.telechargerPDF(msg.pdf_url, this._getNomFichier(msg.pdf_url))">
+                      ⬇ Télécharger
+                    </button>
+                  </div>
+                </t>
+                <!-- ──────────────────────────────────────────────────────────────── -->
+
                 <span class="ai_message_time">
                   <t t-esc="msg.time"/>
                 </span>

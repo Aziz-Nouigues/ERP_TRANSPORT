@@ -1,0 +1,207 @@
+# schema_erp_transport.txt
+# Schéma de la base erp_db2 — ERP Transport Terrestre Tunisie
+# À mettre à jour si le schéma change
+# Utilisé par agent_core.py pour injecter dans le prompt generer_sql
+
+=== RÈGLES GÉNÉRALES ===
+- Base PostgreSQL, encodage UTF-8
+- Les états (state) sont des VARCHAR avec accents en base
+- Ne jamais utiliser "name" pour transport_assurance_bus → utiliser "numero_police"
+- Les champs Many2one stockent un INTEGER (foreign key)
+- Toujours utiliser ILIKE pour les recherches texte (insensible à la casse)
+- LIMIT 20 par défaut sauf COUNT
+
+=== MODULE EXPLOITATION ===
+
+TABLE transport_exploitation_tournee :
+  id              INTEGER
+  name            VARCHAR      -- référence ex: TOURN/2026/00005
+  state           VARCHAR      -- VALEURS EXACTES: 'brouillon','planifie','en_cours','realise','annule'
+  date            DATE
+  vehicle_id      INTEGER      -- FK fleet_vehicle.id
+  chauffeur_id    INTEGER      -- FK hr_employee.id
+  ligne_id        INTEGER      -- FK transport_exploitation_ligne.id
+  agence_id       INTEGER      -- FK transport_exploitation_agence.id
+  direction       VARCHAR      -- 'aller' ou 'retour'
+  km_prevu        NUMERIC
+  km_realise      NUMERIC
+  ecart_km        NUMERIC      -- calculé : km_realise - km_prevu
+  heure_depart_prevu   VARCHAR
+  heure_arrivee_prevu  VARCHAR
+  heure_depart_reel    VARCHAR
+  heure_arrivee_reel   VARCHAR
+  compteur_depart      NUMERIC
+  compteur_arrivee     NUMERIC
+  motif_annulation_id  INTEGER  -- FK transport_exploitation_motif.id
+  note_annulation      TEXT
+
+TABLE transport_exploitation_ligne :
+  id    INTEGER
+  name  VARCHAR   -- nom de la ligne ex: "Tunis – Sfax"
+
+TABLE transport_exploitation_agence :
+  id    INTEGER
+  name  VARCHAR
+
+TABLE transport_exploitation_motif :
+  id    INTEGER
+  name  VARCHAR   -- ex: 'Panne mécanique', 'Absence chauffeur', 'Autre'
+
+=== MODULE FLEET (BUS) ===
+
+TABLE fleet_vehicle :
+  id             INTEGER
+  name           VARCHAR      -- ex: 'Audi/Bus 15001', 'Tesla Motors/tesla'
+  license_plate  VARCHAR      -- ex: '123 TU 456', '255 TU 1550'
+  state_id       INTEGER      -- FK fleet_vehicle_state.id
+
+TABLE fleet_vehicle_state :
+  id        INTEGER
+  name      VARCHAR
+  sequence  INTEGER
+  -- VALEURS CONNUES: id=1 New Request, id=2 To Order, id=3 Registered
+  --                  id=4 Downgraded, id=47 En service, id=5 En panne
+  --                  id=6 En maintenance, id=48 Hors service, id=49 Réformé
+
+=== MODULE ASSURANCE ===
+
+TABLE transport_assurance_bus :
+  id                  INTEGER
+  numero_police       VARCHAR      -- référence ex: POL-BUS/2026/0001  (PAS "name")
+  state               VARCHAR      -- VALEURS EXACTES: 'active','résiliée','expirée','brouillon','alerte'
+  vehicle_id          INTEGER      -- FK fleet_vehicle.id
+  compagnie_id        INTEGER      -- FK transport_assurance_compagnie.id
+  type_police_id      INTEGER      -- FK transport_assurance_type.id
+  date_debut          DATE
+  date_fin            DATE
+  date_alerte         DATE
+  date_visite_technique DATE
+  prime_annuelle      NUMERIC
+  franchise           NUMERIC
+  plafond_garantie    NUMERIC
+  montant_total_indemnise NUMERIC
+  is_obligatoire      BOOLEAN
+  nb_sinistres        INTEGER
+  notes               TEXT
+
+TABLE transport_assurance_compagnie :
+  id    INTEGER
+  name  VARCHAR   -- ex: 'GAT Assurance', 'STAR Assurances'
+
+TABLE transport_assurance_type :
+  id    INTEGER
+  name  VARCHAR   -- ex: 'Responsabilité civile (RC)', 'Tous risques'
+
+TABLE transport_assurance_chauffeur :
+  id            INTEGER
+  chauffeur_id  INTEGER   -- FK hr_employee.id
+  numero_police VARCHAR
+  state         VARCHAR   -- mêmes valeurs que transport_assurance_bus
+  date_debut    DATE
+  date_fin      DATE
+  compagnie_id  INTEGER
+
+TABLE transport_assurance_sinistre :
+  id              INTEGER
+  name            VARCHAR   -- référence sinistre
+  state           VARCHAR   -- 'brouillon','declare','instruction','cloture','rejete'
+  vehicle_id      INTEGER   -- FK fleet_vehicle.id
+  chauffeur_id    INTEGER   -- FK hr_employee.id
+  date_sinistre   DATE
+  montant_dommage NUMERIC
+  montant_indemnise NUMERIC
+  description     TEXT
+
+=== MODULE CARBURANT (ENERGY) ===
+
+TABLE transport_fuel_voucher :
+  id            INTEGER
+  name          VARCHAR   -- référence ex: BGI/2026/00031
+  voucher_type  VARCHAR   -- 'internal' (BGI) ou 'external' (BGE)
+  state         VARCHAR   -- 'draft','confirmed','done','cancelled'
+  vehicle_id    INTEGER   -- FK fleet_vehicle.id
+  date          DATE
+  total_quantity NUMERIC  -- en litres
+
+TABLE transport_fuel_line :
+  id          INTEGER
+  voucher_id  INTEGER   -- FK transport_fuel_voucher.id
+  product_id  INTEGER
+  quantity    NUMERIC
+  price_unit  NUMERIC
+
+TABLE transport_facture_energie :
+  id              INTEGER
+  name            VARCHAR   -- référence ex: STEG-2026-002
+  type_facture    VARCHAR   -- 'steg','sonede','autre'
+  statut          VARCHAR   -- 'saisie','payee','annulee'  (PAS "state")
+  site            VARCHAR
+  montant         NUMERIC
+  date_reception  DATE
+  date_paiement   DATE
+
+=== MODULE BOC (COURRIER) ===
+
+TABLE boc_courrier_arrivee :
+  id           INTEGER
+  name         VARCHAR   -- référence ex: ARR/2026/0007
+  state        VARCHAR   -- VALEURS: 'brouillon','enregistre','diffuse','traite','classe'
+  sujet        VARCHAR
+  expediteur   VARCHAR
+  date_arrivee TIMESTAMP
+  type_arrivee VARCHAR   -- 'interne','externe'
+
+TABLE boc_courrier_depart :
+  id      INTEGER
+  name    VARCHAR
+  state   VARCHAR   -- 'brouillon','enregistre','envoye','classe'
+  sujet   VARCHAR
+  date_envoi DATE
+
+=== MODULE PATRIMOINE ===
+
+TABLE patrimoine_immobilisation :
+  id                    INTEGER
+  name                  VARCHAR
+  statut                VARCHAR   -- 'en_service','hors_service','cede','rebut'  (PAS "state")
+  valeur_nette_comptable NUMERIC
+  valeur_acquisition    NUMERIC
+  duree_amortissement   INTEGER   -- en mois
+  date_mise_en_service  DATE
+  taux_amortissement    NUMERIC
+
+TABLE patrimoine_cession :
+  id          INTEGER
+  name        VARCHAR
+  state       VARCHAR   -- 'brouillon','confirme','comptabilise'
+  date_cession DATE
+  valeur_cession NUMERIC
+
+=== MODULE RH (CHAUFFEURS) ===
+
+TABLE hr_employee :
+  id        INTEGER
+  name      VARCHAR   -- ex: 'louay', 'omar'
+  job_title VARCHAR
+  active    BOOLEAN
+
+=== JOINTURES FRÉQUENTES ===
+
+-- Tournée avec bus et chauffeur
+SELECT t.name, t.state, v.name AS bus, v.license_plate, e.name AS chauffeur
+FROM transport_exploitation_tournee t
+LEFT JOIN fleet_vehicle v ON t.vehicle_id = v.id
+LEFT JOIN hr_employee e ON t.chauffeur_id = e.id
+
+-- Police assurance avec compagnie et bus
+SELECT a.numero_police, a.state, a.date_debut, a.date_fin,
+       v.name AS bus, c.name AS compagnie
+FROM transport_assurance_bus a
+LEFT JOIN fleet_vehicle v ON a.vehicle_id = v.id
+LEFT JOIN transport_assurance_compagnie c ON a.compagnie_id = c.id
+
+-- Bon carburant avec bus
+SELECT f.name, f.voucher_type, f.total_quantity, f.state, f.date,
+       v.name AS bus
+FROM transport_fuel_voucher f
+LEFT JOIN fleet_vehicle v ON f.vehicle_id = v.id

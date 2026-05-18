@@ -24,6 +24,9 @@ _logger = logging.getLogger(__name__)
 # ---------------------------------------------------------------------------
 
 _DB_PATH = Path(__file__).parent.parent / "historique.db"
+
+# Cache RAM des contextes par session — synchrone et immédiat
+_SESSION_CONTEXT: dict = {}  # session_id → {"ref": str, "modele": str, "erreur": str}
 _db_lock = threading.Lock()
 
 
@@ -507,6 +510,7 @@ _MOTS_RPC = {
     "enregistrer", "enregistre",
     # Tournée — verbes spécifiques du code
     "planifier", "planifie", "planifié", "planifie la", "planifier la",
+    "affecter", "assigner", "attribuer",
     "démarrer", "demarrer",
     "terminer", "termine", "terminé",
     "clôturer", "cloturer",
@@ -668,6 +672,76 @@ _CACHE_SQL = [
     (r"(combien|nombre).*(sinistre)",
      "SELECT COUNT(*) AS nombre_sinistres FROM transport_assurance_sinistre"),
 
+
+    # Chauffeurs
+    (r"(liste|tous|disponible).*(chauffeur|conducteur)",
+     "SELECT e.id, e.name AS chauffeur "
+     "FROM hr_employee e "
+     "WHERE e.active = true "
+     "ORDER BY e.name LIMIT 20"),
+
+    (r"(combien|nombre).*(chauffeur|conducteur)",
+     "SELECT COUNT(*) AS nombre_chauffeurs "
+     "FROM hr_employee "
+     "WHERE active = true AND job_title ILIKE '%chauffeur%'"),
+
+    (r"chauffeur.*(plus|tournee|effectue)",
+     "SELECT e.name AS chauffeur, COUNT(t.id) AS nb_tournees "
+     "FROM hr_employee e "
+     "LEFT JOIN transport_exploitation_tournee t ON t.chauffeur_id = e.id "
+     "WHERE t.state = 'realise' "
+     "GROUP BY e.id, e.name ORDER BY nb_tournees DESC LIMIT 10"),
+
+    (r"chauffeur.*(sinistre|accident)",
+     "SELECT e.name AS chauffeur, COUNT(s.id) AS nb_sinistres "
+     "FROM hr_employee e "
+     "LEFT JOIN transport_assurance_sinistre s ON s.chauffeur_id = e.id "
+     "GROUP BY e.id, e.name ORDER BY nb_sinistres DESC LIMIT 10"),
+
+    # Tournées avec chauffeur et bus
+    (r"(liste|tournee).*(chauffeur|conducteur|bus|vehicule)",
+     "SELECT t.name AS tournee, t.state, t.date, "
+     "e.name AS chauffeur, v.name AS bus, v.license_plate "
+     "FROM transport_exploitation_tournee t "
+     "LEFT JOIN hr_employee e ON t.chauffeur_id = e.id "
+     "LEFT JOIN fleet_vehicle v ON t.vehicle_id = v.id "
+     "ORDER BY t.date DESC LIMIT 20"),
+
+    # Bus assurés et en service
+    (r"(bus|vehicule).*(assure|assurance).*(service|disponible)",
+     "SELECT v.name AS bus, v.license_plate, "
+     "a.numero_police, a.date_fin AS expiration_assurance "
+     "FROM fleet_vehicle v "
+     "JOIN fleet_vehicle_state s ON v.state_id = s.id "
+     "JOIN transport_assurance_bus a ON a.vehicle_id = v.id "
+     "WHERE s.id = 47 AND a.state = 'active' "
+     "ORDER BY v.name LIMIT 20"),
+
+    # Ecart kilométrique
+    (r"(ecart|kilometrique|km).*(suspect|eleve|important|superieur)",
+     "SELECT t.name AS tournee, t.date, t.km_prevu, t.km_realise, "
+     "t.ecart_km, e.name AS chauffeur, v.name AS bus "
+     "FROM transport_exploitation_tournee t "
+     "LEFT JOIN hr_employee e ON t.chauffeur_id = e.id "
+     "LEFT JOIN fleet_vehicle v ON t.vehicle_id = v.id "
+     "WHERE ABS(t.ecart_km) > 50 AND t.state = 'realise' "
+     "ORDER BY ABS(t.ecart_km) DESC LIMIT 20"),
+
+
+    # Chauffeurs disponibles pour une tournée (sans conflit horaire)
+    (r"chauffeur.*(disponible|libre|tourné|tournee|tourn)",
+     "SELECT e.id, e.name AS chauffeur "
+     "FROM hr_employee e "
+     "WHERE e.active = true "
+     "ORDER BY e.name LIMIT 20"),
+
+    # Chauffeurs disponibles simple
+    (r"(disponible|libre).*(chauffeur|conducteur)",
+     "SELECT e.id, e.name AS chauffeur "
+     "FROM hr_employee e "
+     "WHERE e.active = true "
+     "ORDER BY e.name LIMIT 20"),
+
 ]
 
 
@@ -693,7 +767,7 @@ def _regles_metier_pour(question: str) -> str:
     if any(w in q for w in ["bus", "véhicul", "vehicul", "parc", "immatricul"]):
         regles.append("BUS: state jsonb COALESCE(s.name->>'fr_FR',s.name->>'en_US'). No type_vehicule col.")
     if any(w in q for w in ["assurance", "police", "sinistre"]):
-        regles.append("ASSURANCE state: active,expire,resilie,brouillon. Never filter is_obligatoire.")
+        regles.append("ASSURANCE: colonne=numero_police (PAS name). state VALEURS EXACTES: 'active','résiliée','expirée','brouillon','alerte'. JOIN compagnie: LEFT JOIN transport_assurance_compagnie c ON a.compagnie_id=c.id")
     if any(w in q for w in ["tournee", "tournée", "tourn/"]):
         regles.append("TOURNEE state: brouillon,planifie,en_cours,realise,annule. km_realise=actual,km_prevu=planned.")
     if any(w in q for w in ["chauffeur", "conducteur", "employe", "employé"]):
@@ -729,13 +803,19 @@ def generer_sql(question: str, llm: OllamaLLM,
         "PostgreSQL expert for Odoo 19 transport ERP Tunisia.\n"
         "Output ONLY the SQL SELECT. No explanation. No markdown. No comments.\n\n"
         "SCHEMA (live from PostgreSQL):\n"
+        "COLONNES IMPORTANTES:\n"
+        "transport_assurance_bus: numero_police,state,vehicle_id,compagnie_id,date_debut,date_fin,prime_annuelle\n"
+        "transport_assurance_compagnie: id,name\n"
+        "transport_facture_energie: name,type_facture,statut(PAS state),site,montant,date_reception\n"
+        "patrimoine_immobilisation: name,statut(PAS state),valeur_nette_comptable\n"
+        "fleet_vehicle_state IDs: 47=En service,48=Hors service,5=En panne,6=En maintenance\n"
         f"{schema}\n"
         f"{diagnostic_extra}\n"
         "RULES:\n"
         "  [BUS] COUNT(*) FROM fleet_vehicle needs no WHERE. "
         "state jsonb: COALESCE(s.name->>'fr_FR',s.name->>'en_US'). "
         "No cols: type_vehicule,activity_type,vehicle_type.\n"
-        "  [ASSURANCE] state: active,expire,resilie,brouillon. Never filter is_obligatoire.\n"
+        "  [ASSURANCE] colonne ref=numero_police (jamais name). state valeurs EXACTES: 'active','resiliee','expiree','brouillon','alerte'. JOIN compagnie: LEFT JOIN transport_assurance_compagnie c ON a.compagnie_id=c.id.\n"
         "  [TOURNEES] state: brouillon,planifie,en_cours,realise,annule. "
         "km_realise=actual, km_prevu=planned, ecart_km=diff.\n"
         "  [EMPLOYES] table=hr_employee. JOIN: hr_employee e ON t.chauffeur_id=e.id\n"
@@ -913,6 +993,11 @@ INTENTIONS_ECRITURE = [
     # create
     (["créer une tournée", "nouvelle tournée", "ajouter une tournée"],
      "create", "transport.exploitation.tournee"),
+
+    # Affecter chauffeur ou bus → write sur la tournée
+    (["affecter", "affecter le chauffeur", "assigner le chauffeur",
+      "affecter le bus", "assigner le bus"],
+     "write", "transport.exploitation.tournee"),
 
     # ── Bus ──────────────────────────────────────────────────────────
     # code : action_changer_etat → ouvre wizard (géré en write simplifié)
@@ -1584,7 +1669,7 @@ def _extraire_ids_question(question: str) -> list:
     return [int(x) for x in matches] if matches else []
 
 
-def _executer_rpc(question: str, llm, allowed_tables: list, is_admin: bool) -> str:
+def _executer_rpc(question: str, llm, allowed_tables: list, is_admin: bool, session_id: str = "default") -> str:
     """
     Pipeline RPC sans LLM — résolution SQL directe.
     Étape 1: détection intention Python pur (< 1ms)
@@ -1643,6 +1728,61 @@ def _executer_rpc(question: str, llm, allowed_tables: list, is_admin: bool) -> s
             return donnees if donnees and "Erreur" not in donnees else "État du bus modifié."
         return "Précise l'ID du bus (ex: 'Mets le bus id 3 hors service')."
 
+    # WRITE affecter chauffeur/bus sur une tournée
+    if methode_cible == "write" and modele_cible == "transport.exploitation.tournee":
+        import re as _re2
+        q = question.lower()  # définir q localement
+        import unicodedata as _ud
+        q_norm = _ud.normalize("NFD", q)
+        q_norm = "".join(c for c in q_norm if _ud.category(c) != "Mn")
+        # Chercher nom chauffeur dans la question
+        ids_tournee = ids_bruts[:]
+        # Résoudre ref depuis la question
+        if not ids_tournee and ref:
+            id_sql = _resoudre_id_par_sql(modele_cible, ref)
+            if id_sql:
+                ids_tournee = [id_sql]
+        # Fallback : chercher ref dans le contexte conversationnel
+        if not ids_tournee:
+            ctx = _extraire_contexte_session(session_id)
+            print(f"  -> Contexte session: ref={ctx['derniere_ref']} modele={ctx['dernier_modele']}")
+            if ctx["derniere_ref"] and (ctx["dernier_modele"] is None or ctx["dernier_modele"] == modele_cible):
+                id_sql = _resoudre_id_par_sql(modele_cible, ctx["derniere_ref"])
+                if id_sql:
+                    ids_tournee = [id_sql]
+                    print(f"  -> ID depuis contexte session: {id_sql} (ref={ctx['derniere_ref']})")
+        if ids_tournee:
+            vals = {}
+            # Chercher chauffeur par nom — recherche dynamique dans la base
+            try:
+                conn_tmp = get_pg_connection()
+                cur_tmp = conn_tmp.cursor()
+                # Récupérer tous les chauffeurs actifs
+                cur_tmp.execute(
+                    "SELECT id, name FROM hr_employee WHERE active=true ORDER BY name"
+                )
+                employes = cur_tmp.fetchall()
+                conn_tmp.close()
+                # Chercher lequel est mentionné dans la question
+                for emp_id, emp_name in employes:
+                    if emp_name.lower() in q or any(
+                        part.lower() in q
+                        for part in emp_name.split()
+                        if len(part) > 2
+                    ):
+                        vals["chauffeur_id"] = emp_id
+                        print(f"  -> Chauffeur trouvé: {emp_name} (ID={emp_id})")
+                        break
+            except Exception as e_emp:
+                _logger.warning(f"Recherche chauffeur échouée: {e_emp}")
+            if vals:
+                action = modele_cible + "|write|" + _json.dumps(ids_tournee) + "|" + _json.dumps(vals, ensure_ascii=False)
+                donnees = rpc_tool.invoke(action)
+                return donnees if donnees and "Erreur" not in donnees else "Affectation effectuée."
+            else:
+                return "Précise le nom du chauffeur à affecter."
+        return "Précise la référence de la tournée (ex: TOURN/2026/00018)."
+
     # WRITE facture payée
     if methode_cible == "write" and modele_cible == "transport.facture.energie":
         ids = ids_bruts[:]
@@ -1667,7 +1807,21 @@ def _executer_rpc(question: str, llm, allowed_tables: list, is_admin: bool) -> s
             return "Aucun enregistrement trouvé pour '" + ref + "'. Vérifiez la référence."
 
     if not ids:
-        return "Précise la référence ou l'ID de l'enregistrement à modifier."
+        # Fallback : chercher dans le contexte conversationnel
+        ctx = _extraire_contexte_session(session_id)
+        if ctx["derniere_ref"] and (
+            not ctx["dernier_modele"] or ctx["dernier_modele"] == modele_cible
+        ):
+            id_sql = _resoudre_id_par_sql(modele_cible, ctx["derniere_ref"])
+            if id_sql:
+                ids = [id_sql]
+                print(f"  -> ID depuis contexte session: {id_sql} (ref={ctx['derniere_ref']})")
+
+    if not ids:
+        ctx = _extraire_contexte_session(session_id)
+        ref_ctx = ctx.get("derniere_ref", "?")
+        hint = f" Dernière référence : {ref_ctx}" if ref_ctx and ref_ctx != "?" else ""
+        return "Précise la référence de l'enregistrement à modifier." + hint
 
     action  = modele_cible + "|" + methode_cible + "|" + _json.dumps(ids)
     print(f"  -> Action bouton: {action}")
@@ -1683,14 +1837,462 @@ def _executer_rpc(question: str, llm, allowed_tables: list, is_admin: bool) -> s
     return donnees
 
 
+
+# ---------------------------------------------------------------------------
+# CONTEXTE CONVERSATIONNEL — extraction de la tournée/référence précédente
+# ---------------------------------------------------------------------------
+
+def _extraire_contexte_session(session_id: str) -> dict:
+    """
+    Analyse le contexte actif — utilise d'abord le cache RAM (synchrone),
+    puis l'historique SQLite en fallback.
+    """
+    import re as _re
+    contexte = {
+        "derniere_ref": None,
+        "derniere_erreur": None,
+        "dernier_modele": None,
+        "derniere_action_echouee": None,
+    }
+
+    # Priorité 1 : cache RAM (immédiat, toujours à jour)
+    if session_id in _SESSION_CONTEXT:
+        ctx_ram = _SESSION_CONTEXT[session_id]
+        contexte["derniere_ref"]    = ctx_ram.get("ref")
+        contexte["dernier_modele"]  = ctx_ram.get("modele")
+        contexte["derniere_erreur"] = ctx_ram.get("erreur")
+        if contexte["derniere_ref"]:
+            print(f"  -> Contexte RAM trouvé: ref={contexte['derniere_ref']}")
+            return contexte  # Retour immédiat sans SQLite
+
+    # Mapping préfixe → modèle
+    PREFIXES = {
+        "TOURN": "transport.exploitation.tournee",
+        "POL-BUS": "transport.assurance.bus",
+        "POL-CHAUF": "transport.assurance.chauffeur",
+        "ARR": "boc.courrier.arrivee",
+        "DEP": "boc.courrier.depart",
+        "BGI": "transport.fuel.voucher",
+        "BGE": "transport.fuel.voucher",
+        "STEG": "transport.facture.energie",
+        "SONEDE": "transport.facture.energie",
+        "IMM": "patrimoine.immobilisation",
+        "CES": "patrimoine.cession",
+        "SIN": "transport.assurance.sinistre",
+    }
+
+    try:
+        historique = charger_historique(session_id, limite=5)
+        for role, contenu in historique:
+            # Chercher une référence Odoo
+            m = _re.search(r"[A-Z][A-Z0-9\-]*/\d{4}/\d+", contenu, _re.IGNORECASE)
+            if m and not contexte["derniere_ref"]:
+                ref = m.group(0).upper()
+                contexte["derniere_ref"] = ref
+                # Déduire le modèle depuis le préfixe
+                for prefix, modele in PREFIXES.items():
+                    if ref.startswith(prefix):
+                        contexte["dernier_modele"] = modele
+                        break
+
+            # Détecter les erreurs métier dans les réponses assistant
+            if role == "assistant":
+                erreurs_metier = [
+                    "Veuillez affecter un véhicule",
+                    "Veuillez affecter un chauffeur",
+                    "Veuillez saisir le compteur",
+                    "Veuillez sélectionner un motif",
+                    "Bus non assuré",
+                    "Conflit de disponibilité",
+                    "Statut patrimoine",
+                    "Stock insuffisant",
+                    "doit être confirmé avant",
+                    "Impossible de confirmer",
+                    "Action impossible",
+                ]
+                for err in erreurs_metier:
+                    if err in contenu and not contexte["derniere_erreur"]:
+                        contexte["derniere_erreur"] = err
+                        contexte["derniere_action_echouee"] = contenu[:200]
+                        break
+
+    except Exception as e:
+        _logger.warning(f"_extraire_contexte_session erreur: {e}")
+
+    return contexte
+
+
+
+def _enrichir_question(question: str, session_id: str) -> str:
+    """
+    Enrichit la question avec le contexte de la conversation précédente.
+    Couvre tous les modules : tournée, assurance, carburant, BOC, patrimoine.
+    """
+    import re as _re
+    q = question.lower()
+
+    # Si la question contient déjà une référence → pas besoin d'enrichir
+    if _re.search(r"[A-Z][A-Z0-9\-]*/\d{4}/\d+", question, _re.IGNORECASE):
+        return question
+
+    # Mots-clés qui suggèrent un contexte implicite
+    mots_contexte = [
+        # Chauffeur / bus
+        "chauffeur disponible", "chauffeurs disponibles", "qui peut conduire",
+        "affecter", "assigner", "attribuer",
+        # Actions sans référence
+        "planifie", "planifier", "demarrer", "démarrer", "terminer",
+        "annuler", "confirmer", "valider",
+        "activer", "résilier", "resilier",
+        "classer", "traiter", "diffuser",
+        "payer", "mettre en service", "mettre hors service",
+        # Contexte implicite
+        "et pour", "et la", "et le", "même", "ce bus", "cette tournée",
+        "cette police", "ce courrier", "ce bon", "cette facture",
+        "pour ça", "pour ca", "pour cette", "pour ce",
+    ]
+
+    if any(mot in q for mot in mots_contexte):
+        # Priorité 1 : cache RAM (synchrone, toujours à jour)
+        ref = None
+        if session_id in _SESSION_CONTEXT:
+            ref = _SESSION_CONTEXT[session_id].get("ref")
+            if ref:
+                print(f"  -> Enrichissement depuis RAM: ref={ref}")
+
+        # Priorité 2 : historique SQLite
+        if not ref:
+            contexte = _extraire_contexte_session(session_id)
+            ref = contexte.get("derniere_ref")
+
+        if ref:
+            _logger.info(f"Enrichissement question avec ref: {ref}")
+            question_enrichie = question.rstrip("?").rstrip() + f" la tournée {ref} ?" \
+                if any(w in q for w in ["planifie","demarrer","terminer","annuler","confirmer"]) \
+                else question.rstrip("?").rstrip() + f" pour {ref} ?"
+            return question_enrichie
+
+    return question
+
+
+
+
+# ---------------------------------------------------------------------------
+# GÉNÉRATION DE SYNTHÈSES ET RAPPORTS
+# ---------------------------------------------------------------------------
+
+TEMPLATES_RAPPORTS = {
+    # Exploitation
+    "rapport_journalier": {
+        "label": "Rapport journalier d'exploitation",
+        "requetes": {
+            "tournees_planifiees": "SELECT COUNT(*) FROM transport_exploitation_tournee WHERE date = CURRENT_DATE AND state = 'planifie'",
+            "tournees_en_cours":   "SELECT COUNT(*) FROM transport_exploitation_tournee WHERE date = CURRENT_DATE AND state = 'en_cours'",
+            "tournees_realisees":  "SELECT COUNT(*) FROM transport_exploitation_tournee WHERE date = CURRENT_DATE AND state = 'realise'",
+            "tournees_annulees":   "SELECT COUNT(*) FROM transport_exploitation_tournee WHERE date = CURRENT_DATE AND state = 'annule'",
+            "km_total":            "SELECT COALESCE(SUM(km_realise),0) FROM transport_exploitation_tournee WHERE date = CURRENT_DATE AND state = 'realise'",
+            "ecart_moyen":         "SELECT COALESCE(AVG(ecart_km),0) FROM transport_exploitation_tournee WHERE date = CURRENT_DATE AND state = 'realise'",
+            "detail_annulees":     "SELECT t.name, m.name AS motif FROM transport_exploitation_tournee t LEFT JOIN transport_exploitation_motif m ON t.motif_annulation_id = m.id WHERE t.date = CURRENT_DATE AND t.state = 'annule'",
+        }
+    },
+    "rapport_hebdomadaire": {
+        "label": "Rapport hebdomadaire d'exploitation",
+        "requetes": {
+            "tournees_realisees":  "SELECT COUNT(*) FROM transport_exploitation_tournee WHERE date >= CURRENT_DATE - INTERVAL '7 days' AND state = 'realise'",
+            "tournees_annulees":   "SELECT COUNT(*) FROM transport_exploitation_tournee WHERE date >= CURRENT_DATE - INTERVAL '7 days' AND state = 'annule'",
+            "tournees_total":      "SELECT COUNT(*) FROM transport_exploitation_tournee WHERE date >= CURRENT_DATE - INTERVAL '7 days'",
+            "km_total":            "SELECT COALESCE(SUM(km_realise),0) FROM transport_exploitation_tournee WHERE date >= CURRENT_DATE - INTERVAL '7 days' AND state = 'realise'",
+            "chauffeur_top":       "SELECT e.name, COUNT(*) AS nb FROM transport_exploitation_tournee t JOIN hr_employee e ON t.chauffeur_id = e.id WHERE t.date >= CURRENT_DATE - INTERVAL '7 days' AND t.state = 'realise' GROUP BY e.name ORDER BY nb DESC LIMIT 1",
+            "bus_top_km":          "SELECT v.name, COALESCE(SUM(t.km_realise),0) AS km FROM transport_exploitation_tournee t JOIN fleet_vehicle v ON t.vehicle_id = v.id WHERE t.date >= CURRENT_DATE - INTERVAL '7 days' AND t.state = 'realise' GROUP BY v.name ORDER BY km DESC LIMIT 1",
+        }
+    },
+    "rapport_mensuel": {
+        "label": "Rapport mensuel d'exploitation",
+        "requetes": {
+            "tournees_realisees":  "SELECT COUNT(*) FROM transport_exploitation_tournee WHERE EXTRACT(MONTH FROM date) = EXTRACT(MONTH FROM CURRENT_DATE) AND EXTRACT(YEAR FROM date) = EXTRACT(YEAR FROM CURRENT_DATE) AND state = 'realise'",
+            "tournees_annulees":   "SELECT COUNT(*) FROM transport_exploitation_tournee WHERE EXTRACT(MONTH FROM date) = EXTRACT(MONTH FROM CURRENT_DATE) AND EXTRACT(YEAR FROM date) = EXTRACT(YEAR FROM CURRENT_DATE) AND state = 'annule'",
+            "tournees_total":      "SELECT COUNT(*) FROM transport_exploitation_tournee WHERE EXTRACT(MONTH FROM date) = EXTRACT(MONTH FROM CURRENT_DATE) AND EXTRACT(YEAR FROM date) = EXTRACT(YEAR FROM CURRENT_DATE)",
+            "km_total":            "SELECT COALESCE(SUM(km_realise),0) FROM transport_exploitation_tournee WHERE EXTRACT(MONTH FROM date) = EXTRACT(MONTH FROM CURRENT_DATE) AND EXTRACT(YEAR FROM date) = EXTRACT(YEAR FROM CURRENT_DATE) AND state = 'realise'",
+            "top_chauffeurs":      "SELECT e.name, COUNT(*) AS nb FROM transport_exploitation_tournee t JOIN hr_employee e ON t.chauffeur_id = e.id WHERE EXTRACT(MONTH FROM t.date) = EXTRACT(MONTH FROM CURRENT_DATE) AND t.state = 'realise' GROUP BY e.name ORDER BY nb DESC LIMIT 3",
+            "km_par_bus":          "SELECT v.name, COALESCE(SUM(t.km_realise),0) AS km FROM transport_exploitation_tournee t JOIN fleet_vehicle v ON t.vehicle_id = v.id WHERE EXTRACT(MONTH FROM t.date) = EXTRACT(MONTH FROM CURRENT_DATE) AND t.state = 'realise' GROUP BY v.name ORDER BY km DESC",
+            "annulations_motif":   "SELECT m.name AS motif, COUNT(*) AS nb FROM transport_exploitation_tournee t LEFT JOIN transport_exploitation_motif m ON t.motif_annulation_id = m.id WHERE EXTRACT(MONTH FROM t.date) = EXTRACT(MONTH FROM CURRENT_DATE) AND t.state = 'annule' GROUP BY m.name ORDER BY nb DESC",
+        }
+    },
+    "bilan_parc": {
+        "label": "Synthèse état du parc bus",
+        "requetes": {
+            "total_bus":         "SELECT COUNT(*) FROM fleet_vehicle",
+            "en_service":        "SELECT COUNT(*) FROM fleet_vehicle WHERE state_id = 47",
+            "hors_service":      "SELECT COUNT(*) FROM fleet_vehicle WHERE state_id = 48",
+            "en_panne":          "SELECT COUNT(*) FROM fleet_vehicle WHERE state_id = 5",
+            "en_maintenance":    "SELECT COUNT(*) FROM fleet_vehicle WHERE state_id = 6",
+            "polices_actives":   "SELECT COUNT(*) FROM transport_assurance_bus WHERE state = 'active'",
+            "polices_alerte":    "SELECT COUNT(*) FROM transport_assurance_bus WHERE state = 'alerte'",
+            "polices_expirees":  "SELECT COUNT(*) FROM transport_assurance_bus WHERE state = 'expirée'",
+            "detail_bus":        "SELECT v.name, v.license_plate, "
+             "COALESCE(s.name->>'fr_FR', s.name->>'en_US', s.name::text) AS etat, "
+             "a.numero_police, a.date_fin "
+             "FROM fleet_vehicle v "
+             "LEFT JOIN fleet_vehicle_state s ON v.state_id = s.id "
+             "LEFT JOIN transport_assurance_bus a ON a.vehicle_id = v.id AND a.state = 'active'",
+        }
+    },
+    "bilan_assurance": {
+        "label": "Bilan mensuel assurance et sinistres",
+        "requetes": {
+            "polices_actives":   "SELECT COUNT(*) FROM transport_assurance_bus WHERE state = 'active'",
+            "polices_alerte":    "SELECT COUNT(*) FROM transport_assurance_bus WHERE state = 'alerte'",
+            "polices_expirees":  "SELECT COUNT(*) FROM transport_assurance_bus WHERE state = 'expirée'",
+            "polices_resiliees": "SELECT COUNT(*) FROM transport_assurance_bus WHERE state = 'résiliée'",
+            "sinistres_mois":    "SELECT COUNT(*) FROM transport_assurance_sinistre WHERE EXTRACT(MONTH FROM date_sinistre) = EXTRACT(MONTH FROM CURRENT_DATE) AND EXTRACT(YEAR FROM date_sinistre) = EXTRACT(YEAR FROM CURRENT_DATE)",
+            "montant_sinistres": "SELECT COALESCE(SUM(montant_dommage),0) FROM transport_assurance_sinistre WHERE EXTRACT(MONTH FROM date_sinistre) = EXTRACT(MONTH FROM CURRENT_DATE)",
+            "detail_sinistres":  "SELECT s.name, s.state, s.date_sinistre, s.montant_dommage, v.name AS bus FROM transport_assurance_sinistre s LEFT JOIN fleet_vehicle v ON s.vehicle_id = v.id WHERE EXTRACT(MONTH FROM s.date_sinistre) = EXTRACT(MONTH FROM CURRENT_DATE) ORDER BY s.date_sinistre DESC",
+            "expiration_30j":    "SELECT a.numero_police, a.date_fin, v.name AS bus FROM transport_assurance_bus a LEFT JOIN fleet_vehicle v ON a.vehicle_id = v.id WHERE a.state = 'active' AND a.date_fin <= CURRENT_DATE + INTERVAL '30 days' ORDER BY a.date_fin",
+        }
+    },
+    "bilan_carburant": {
+        "label": "Rapport mensuel consommation carburant",
+        "requetes": {
+            "bons_valides":      "SELECT COUNT(*) FROM transport_fuel_voucher WHERE state = 'done' AND EXTRACT(MONTH FROM date) = EXTRACT(MONTH FROM CURRENT_DATE)",
+            "litres_total":      "SELECT COALESCE(SUM(total_quantity),0) FROM transport_fuel_voucher WHERE state = 'done' AND EXTRACT(MONTH FROM date) = EXTRACT(MONTH FROM CURRENT_DATE)",
+            "bgi_count":         "SELECT COUNT(*) FROM transport_fuel_voucher WHERE state = 'done' AND voucher_type = 'internal' AND EXTRACT(MONTH FROM date) = EXTRACT(MONTH FROM CURRENT_DATE)",
+            "bge_count":         "SELECT COUNT(*) FROM transport_fuel_voucher WHERE state = 'done' AND voucher_type = 'external' AND EXTRACT(MONTH FROM date) = EXTRACT(MONTH FROM CURRENT_DATE)",
+            "litres_par_bus":    "SELECT v.name AS bus, COALESCE(SUM(f.total_quantity),0) AS litres FROM transport_fuel_voucher f LEFT JOIN fleet_vehicle v ON f.vehicle_id = v.id WHERE f.state = 'done' AND EXTRACT(MONTH FROM f.date) = EXTRACT(MONTH FROM CURRENT_DATE) GROUP BY v.name ORDER BY litres DESC",
+        }
+    },
+    "bilan_boc": {
+        "label": "Synthèse courrier BOC",
+        "requetes": {
+            "total_arrivee":     "SELECT COUNT(*) FROM boc_courrier_arrivee WHERE EXTRACT(MONTH FROM date_arrivee) = EXTRACT(MONTH FROM CURRENT_DATE)",
+            "en_attente":        "SELECT COUNT(*) FROM boc_courrier_arrivee WHERE state IN ('enregistre','diffuse') AND EXTRACT(MONTH FROM date_arrivee) = EXTRACT(MONTH FROM CURRENT_DATE)",
+            "traites":           "SELECT COUNT(*) FROM boc_courrier_arrivee WHERE state = 'traite' AND EXTRACT(MONTH FROM date_arrivee) = EXTRACT(MONTH FROM CURRENT_DATE)",
+            "classes":           "SELECT COUNT(*) FROM boc_courrier_arrivee WHERE state = 'classe' AND EXTRACT(MONTH FROM date_arrivee) = EXTRACT(MONTH FROM CURRENT_DATE)",
+            "en_retard":         "SELECT COUNT(*) FROM boc_courrier_arrivee WHERE state NOT IN ('classe','traite') AND date_arrivee < CURRENT_DATE - INTERVAL '7 days'",
+        }
+    },
+}
+
+
+def _executer_requetes_rapport(requetes: dict) -> dict:
+    """Exécute toutes les requêtes SQL d'un rapport et retourne les résultats."""
+    resultats = {}
+    try:
+        conn = get_pg_connection()
+        cur  = conn.cursor()
+        for cle, sql in requetes.items():
+            try:
+                cur.execute(sql)
+                rows = cur.fetchall()
+                if rows and len(rows) == 1 and len(rows[0]) == 1:
+                    resultats[cle] = rows[0][0]  # valeur scalaire
+                else:
+                    resultats[cle] = rows         # liste
+            except Exception as e:
+                _logger.warning(f"Rapport SQL erreur ({cle}): {e}")
+                resultats[cle] = None
+        conn.close()
+    except Exception as e:
+        _logger.error(f"Connexion rapport échouée: {e}")
+    return resultats
+
+
+def _detecter_rapport(question: str) -> str | None:
+    """Détecte quel type de rapport est demandé."""
+    import unicodedata
+    q = question.lower()
+    q_norm = unicodedata.normalize("NFD", q)
+    q_norm = "".join(c for c in q_norm if unicodedata.category(c) != "Mn")
+
+    patterns = {
+        "rapport_journalier": [
+            "rapport journalier", "resume journalier", "bilan journalier",
+            "rapport du jour", "journee exploitation", "aujourd'hui exploitation",
+            "resume du jour", "synthese du jour", "rapport exploitation journalier",
+        ],
+        "rapport_hebdomadaire": [
+            "rapport hebdomadaire", "bilan semaine", "resume semaine",
+            "cette semaine", "semaine exploitation", "rapport semaine",
+            "synthese semaine", "bilan hebdomadaire",
+        ],
+        "rapport_mensuel": [
+            "rapport mensuel", "bilan mensuel", "resume mensuel",
+            "ce mois", "mois exploitation", "synthese mensuelle",
+            "rapport du mois", "bilan du mois",
+        ],
+        "bilan_parc": [
+            "etat du parc", "bilan parc", "synthese parc",
+            "etat des bus", "parc bus", "flotte",
+            "disponibilite bus", "etat flotte",
+        ],
+        "bilan_assurance": [
+            "bilan assurance", "rapport assurance", "synthese assurance",
+            "sinistres mois", "bilan sinistres", "etat assurance",
+            "polices assurance", "rapport sinistres",
+        ],
+        "bilan_carburant": [
+            "bilan carburant", "rapport carburant", "consommation carburant",
+            "synthese carburant", "bons carburant mois",
+            "rapport fuel", "consommation mensuelle carburant",
+        ],
+        "bilan_boc": [
+            "bilan courrier", "rapport courrier", "synthese courrier",
+            "bilan boc", "etat courriers", "courriers mois",
+        ],
+    }
+
+    for type_rapport, mots_cles in patterns.items():
+        for mot in mots_cles:
+            if mot in q or mot in q_norm:
+                return type_rapport
+    return None
+
+
+def generer_rapport(type_rapport: str, llm) -> str:
+    """
+    Génère un rapport complet en français pour le type demandé.
+    Exécute les requêtes SQL puis demande au LLM de rédiger la synthèse.
+    """
+    from datetime import date
+
+    if type_rapport not in TEMPLATES_RAPPORTS:
+        return "Type de rapport non reconnu."
+
+    template = TEMPLATES_RAPPORTS[type_rapport]
+    label    = template["label"]
+
+    _logger.info(f"Génération rapport: {label}")
+    print(f"  -> Rapport: {label}")
+
+    # Exécuter toutes les requêtes SQL
+    resultats = _executer_requetes_rapport(template["requetes"])
+    print(f"  -> Résultats SQL: {len(resultats)} indicateurs")
+
+    # Construire le contexte pour le LLM
+    contexte_str = f"Date du rapport : {date.today().strftime('%d/%m/%Y')}\n\n"
+    contexte_str += "Données extraites de la base PostgreSQL :\n"
+    for cle, valeur in resultats.items():
+        if valeur is None:
+            continue
+        if isinstance(valeur, list):
+            if valeur:
+                contexte_str += f"  {cle} :\n"
+                for row in valeur[:5]:
+                    contexte_str += f"    - {' | '.join(str(v) for v in row)}\n"
+        else:
+            contexte_str += f"  {cle} : {valeur}\n"
+
+    # Prompt LLM pour rédiger la synthèse
+    prompt = (
+        f"Tu es l'assistant IA d'un ERP de transport terrestre tunisien.\n"
+        f"Rédige un {label} professionnel et concis en français.\n"
+        f"Utilise les données suivantes :\n\n"
+        f"{contexte_str}\n"
+        f"Format : paragraphes courts, chiffres en gras, "
+        f"points positifs et points d'attention. "
+        f"Maximum 250 mots. Commence directement par le rapport."
+    )
+
+    if llm is None:
+        _logger.warning("LLM non disponible pour rapport — retour brut")
+    else:
+        try:
+            rapport = llm.invoke(prompt)
+            return f"**{label} — {date.today().strftime('%d/%m/%Y')}**\n\n{rapport}"
+        except Exception as e:
+            _logger.error(f"LLM rapport échoué: {e}")
+        # Fallback : rapport brut sans LLM — formatage lisible
+        from datetime import date as _date
+        aujourd_hui = _date.today().strftime("%d/%m/%Y")
+        rapport_brut = f"**{label}**\n*Généré le {aujourd_hui}*\n\n"
+
+        # Labels lisibles pour chaque indicateur
+        labels_fr = {
+            "tournees_planifiees": "🗓 Tournées planifiées",
+            "tournees_en_cours":   "🚌 Tournées en cours",
+            "tournees_realisees":  "✅ Tournées réalisées",
+            "tournees_annulees":   "❌ Tournées annulées",
+            "tournees_total":      "📊 Total tournées",
+            "km_total":            "📏 Km total parcourus",
+            "ecart_moyen":         "⚠ Écart km moyen",
+            "chauffeur_top":       "🏆 Meilleur chauffeur",
+            "bus_top_km":          "🚗 Bus avec plus de km",
+            "top_chauffeurs":      "🏆 Top chauffeurs",
+            "km_par_bus":          "📏 Km par bus",
+            "annulations_motif":   "❌ Motifs d'annulation",
+            "detail_annulees":     "❌ Tournées annulées",
+            "total_bus":           "🚌 Total bus dans le parc",
+            "en_service":          "✅ Bus en service",
+            "hors_service":        "🔴 Bus hors service",
+            "en_panne":            "⚠ Bus en panne",
+            "en_maintenance":      "🔧 Bus en maintenance",
+            "polices_actives":     "✅ Polices actives",
+            "polices_alerte":      "⚠ Polices en alerte",
+            "polices_expirees":    "❌ Polices expirées",
+            "polices_resiliees":   "🚫 Polices résiliées",
+            "sinistres_mois":      "🚨 Sinistres ce mois",
+            "montant_sinistres":   "💰 Montant sinistres (TND)",
+            "detail_sinistres":    "🚨 Détail sinistres",
+            "expiration_30j":      "⏰ Polices expirant dans 30j",
+            "bons_valides":        "✅ Bons carburant validés",
+            "litres_total":        "⛽ Litres consommés",
+            "bgi_count":           "🏠 Bons BGI (internes)",
+            "bge_count":           "🔄 Bons BGE (externes)",
+            "litres_par_bus":      "⛽ Consommation par bus",
+            "total_arrivee":       "📬 Courriers reçus",
+            "en_attente":          "⏳ En attente de traitement",
+            "traites":             "✅ Traités",
+            "classes":             "📁 Classés",
+            "en_retard":           "⚠ En retard (> 7 jours)",
+            "detail_bus":          "🚌 Détail du parc",
+        }
+
+        for cle, valeur in resultats.items():
+            if valeur is None:
+                continue
+            label_fr = labels_fr.get(cle, cle.replace("_", " ").title())
+            if isinstance(valeur, list):
+                if valeur:
+                    rapport_brut += f"\n**{label_fr}** :\n"
+                    for row in valeur[:8]:
+                        row_str = " | ".join(str(v) for v in row if v is not None)
+                        rapport_brut += f"  • {row_str}\n"
+            elif valeur == 0 or valeur:
+                # Formater les nombres
+                if isinstance(valeur, float):
+                    valeur = round(valeur, 1)
+                rapport_brut += f"**{label_fr}** : {valeur}\n"
+
+        return rapport_brut
+
+
 def ask_agent(question: str, llm: OllamaLLM,
               allowed_tables: list = None,
               is_admin: bool = False,
               session_id: str = "default") -> str:
     try:
+        # Enrichir la question avec le contexte conversationnel si nécessaire
+        question = _enrichir_question(question, session_id)
+
         acces_erreur = verifier_acces_question(question, allowed_tables, is_admin)
         if acces_erreur:
             return acces_erreur
+
+        # Détecter si c'est une demande de rapport/synthèse
+        type_rapport = _detecter_rapport(question)
+        if type_rapport:
+            _logger.info(f"Rapport détecté: {type_rapport}")
+            print(f"  -> Rapport: {type_rapport}")
+            agent_url  = os.getenv("AGENT_URL", "http://localhost:8000")
+            lien_pdf   = f"{agent_url}/rapport/{type_rapport}/pdf"
+            label      = TEMPLATES_RAPPORTS[type_rapport]["label"]
+            from datetime import date as _date
+            # Retourner un message court avec le lien PDF
+            # Le frontend détectera PDF_URL: pour afficher le bouton
+            return (
+                f"✅ Rapport prêt : **{label}**\n"
+                f"Généré le {_date.today().strftime('%d/%m/%Y')}\n"
+                f"PDF_URL:{lien_pdf}"
+            )
 
         outil = detecter_outil(question, llm)
         _logger.info(f"Outil: {outil} | Admin: {is_admin}")
@@ -1747,7 +2349,29 @@ def ask_agent(question: str, llm: OllamaLLM,
         # -----------------------------------------------------------------
         elif outil == "rpc":
             try:
-                reponse = _executer_rpc(question, llm, allowed_tables, is_admin)
+                # Extraire et mémoriser la référence en RAM AVANT l'appel
+                import re as _re_ctx
+                _m_ctx = _re_ctx.search(r"[A-Z][A-Z0-9\-]*/\d{4}/\d+", question, _re_ctx.IGNORECASE)
+                if _m_ctx:
+                    _ref_ctx = _m_ctx.group(0).upper()
+                    _SESSION_CONTEXT[session_id] = {
+                        "ref": _ref_ctx,
+                        "modele": next(
+                            (m for p, m in {
+                                "TOURN": "transport.exploitation.tournee",
+                                "POL-BUS": "transport.assurance.bus",
+                                "ARR": "boc.courrier.arrivee",
+                                "BGI": "transport.fuel.voucher",
+                                "BGE": "transport.fuel.voucher",
+                            }.items() if _ref_ctx.startswith(p)), None
+                        ),
+                        "erreur": None,
+                    }
+                    print(f"  -> Contexte RAM: ref={_ref_ctx} sauvegardé pour session {session_id}")
+                reponse = _executer_rpc(question, llm, allowed_tables, is_admin, session_id)
+                # Mémoriser l'erreur si action impossible
+                if "Action impossible" in reponse and session_id in _SESSION_CONTEXT:
+                    _SESSION_CONTEXT[session_id]["erreur"] = reponse
             except Exception as e_rpc:
                 _logger.warning(f"RPC exception: {e_rpc} — fallback SQL")
                 try:

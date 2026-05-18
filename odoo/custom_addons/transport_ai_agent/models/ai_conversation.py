@@ -2,6 +2,7 @@
 from odoo import models, fields, api
 import requests
 import logging
+import re
 
 _logger = logging.getLogger(__name__)
 
@@ -83,18 +84,9 @@ PERMISSIONS = {
 }
 
 MOTS_CLES_PROTEGES = {
-    'hr': [
-        'employe', 'employee', 'salarie',
-        'staff', 'personnel', 'ressource humaine',
-    ],
-    'account': [
-        'facture', 'invoice',
-        'paiement', 'payment', 'avoir',
-        'journal', 'bilan',
-    ],
-    'res_partner': [
-        'fournisseur', 'supplier',
-    ],
+    'hr': ['employe', 'employee', 'salarie', 'staff', 'personnel'],
+    'account': ['facture', 'invoice', 'paiement', 'payment', 'avoir', 'journal', 'bilan'],
+    'res_partner': ['fournisseur', 'supplier'],
 }
 
 MOTS_TRANSPORT_AUTORISES = [
@@ -103,7 +95,7 @@ MOTS_TRANSPORT_AUTORISES = [
     'boc', 'courrier', 'lubrifiant', 'ravitaillement', 'agilis',
     'ligne', 'parc', 'vehicule', 'véhicule', 'stock carburant',
     'km', 'kilometrage', 'kilométrage', 'chauffeur', 'conducteur',
-    'litre', 'pompe', 'station', 'cuve',
+    'litre', 'pompe', 'station',
 ]
 
 
@@ -113,51 +105,27 @@ class AiConversation(models.Model):
     _order = 'create_date desc'
     _rec_name = 'name'
 
-    name = fields.Char(
-        string='Reference',
-        readonly=True,
-        default='Nouvelle conversation'
-    )
-    user_id = fields.Many2one(
-        'res.users',
-        string='Utilisateur',
-        default=lambda self: self.env.user.id,
-        readonly=True,
-        required=True,
-    )
-    message_ids = fields.One2many(
-        'transport.ai.message',
-        'conversation_id',
-        string='Messages'
-    )
+    name = fields.Char(string='Reference', readonly=True, default='Nouvelle conversation')
+    user_id = fields.Many2one('res.users', string='Utilisateur',
+                              default=lambda self: self.env.user.id,
+                              readonly=True, required=True)
+    message_ids = fields.One2many('transport.ai.message', 'conversation_id', string='Messages')
     active = fields.Boolean(default=True)
-    create_date = fields.Datetime(
-        string='Date creation',
-        readonly=True
-    )
+    create_date = fields.Datetime(string='Date creation', readonly=True)
 
     @api.model
     def get_current_user_info(self):
         user = self.env.user
         name = user.name or user.login or "Utilisateur"
         parts = name.strip().split(" ")
-        initials = (
-            (parts[0][0] + parts[1][0]).upper()
-            if len(parts) >= 2
-            else name[:2].upper()
-        )
-        return {
-            "id": user.id,
-            "name": name,
-            "initials": initials,
-            "login": user.login,
-        }
+        initials = ((parts[0][0] + parts[1][0]).upper()
+                    if len(parts) >= 2 else name[:2].upper())
+        return {"id": user.id, "name": name, "initials": initials, "login": user.login}
 
     def _get_user_allowed_tables(self):
         user = self.env.user
         allowed = set()
         allowed.update(PERMISSIONS['base']['tables'])
-
         for group_xml_id, perms in PERMISSIONS.items():
             if group_xml_id == 'base':
                 continue
@@ -169,9 +137,21 @@ class AiConversation(models.Model):
                     allowed.update(tables)
             except Exception:
                 continue
-
         _logger.info(f"Tables autorisees pour {user.name} : {sorted(list(allowed))}")
         return allowed
+
+    def _parse_pdf_url(self, reponse_text):
+        """
+        Extrait le pdf_url depuis la réponse de l'agent.
+        Format : "...texte...\nPDF_URL:http://localhost:8000/rapport/xxx/pdf"
+        Retourne (texte_propre, pdf_url)
+        """
+        m = re.search(r'PDF_URL:(http\S+)', reponse_text)
+        if m:
+            pdf_url = m.group(1).strip()
+            texte_propre = re.sub(r'\nPDF_URL:http\S+', '', reponse_text).strip()
+            return texte_propre, pdf_url
+        return reponse_text, None
 
     def ask_question(self, question=False, **kwargs):
         self.ensure_one()
@@ -181,7 +161,6 @@ class AiConversation(models.Model):
         if not question:
             return "Veuillez poser une question."
 
-        # Recupere l'ID via SQL pur pour eviter ARRAY[]
         self.env.cr.execute(
             "SELECT id, name, user_id FROM transport_ai_conversation "
             "WHERE id = ANY(%s) LIMIT 1",
@@ -191,10 +170,7 @@ class AiConversation(models.Model):
         if not row:
             return "Erreur : conversation non trouvee."
 
-        conv_id = row[0]
-        conv_name = row[1]
-        conv_user_id = row[2]
-
+        conv_id, conv_name, conv_user_id = row
         _logger.info(f"ask_question - id={conv_id} user={self.env.user.name} question={question}")
 
         if conv_user_id and conv_user_id != self.env.user.id:
@@ -204,7 +180,7 @@ class AiConversation(models.Model):
         allowed_tables = self._get_user_allowed_tables()
         session_id = f"odoo_user_{user.id}_conv_{conv_id}"
 
-        # Sauvegarde message utilisateur via SQL
+        # Sauvegarde message utilisateur
         self.env.cr.execute(
             """
             INSERT INTO transport_ai_message
@@ -219,36 +195,45 @@ class AiConversation(models.Model):
         )
 
         # Appel FastAPI
+        pdf_url = None
         try:
             payload = {
                 "question": question,
                 "session_id": session_id,
                 "user_id": user.id,
                 "user_name": user.name,
-                "allowed_tables": (
-                    list(allowed_tables) if allowed_tables else ["ALL"]
-                ),
+                "allowed_tables": list(allowed_tables) if allowed_tables else ["ALL"],
                 "is_admin": allowed_tables is None,
             }
-            response = requests.post(
-                FASTAPI_URL,
-                json=payload,
-                timeout=120
-            )
+            response = requests.post(FASTAPI_URL, json=payload, timeout=120)
             response.raise_for_status()
             data = response.json()
-            reponse_text = data.get("reponse", "Aucune reponse recue.")
-            _logger.info(f"Reponse FastAPI : {reponse_text[:100]}")
+
+            reponse_brute = data.get("reponse", "Aucune reponse recue.")
+
+            # ── Extraire pdf_url si présent ──────────────────────────────────
+            # 1. Depuis le champ pdf_url de la réponse FastAPI
+            if data.get("pdf_url"):
+                pdf_url = data["pdf_url"]
+                reponse_text = reponse_brute
+            else:
+                # 2. Depuis le texte (format PDF_URL:http://...)
+                reponse_text, pdf_url = self._parse_pdf_url(reponse_brute)
+
+            _logger.info(f"Reponse: {reponse_text[:100]} | pdf_url: {pdf_url}")
 
         except requests.exceptions.ConnectionError:
-            reponse_text = "Erreur : L'agent IA n'est pas accessible. Verifiez que FastAPI tourne sur le port 8000."
+            reponse_text = "Erreur : L'agent IA n'est pas accessible."
+            pdf_url = None
         except requests.exceptions.Timeout:
             reponse_text = "Erreur : Timeout - l'agent met trop de temps a repondre."
+            pdf_url = None
         except Exception as e:
             reponse_text = f"Erreur : {str(e)}"
+            pdf_url = None
             _logger.error(f"Erreur agent IA : {str(e)}", exc_info=True)
 
-        # Sauvegarde reponse agent via SQL
+        # Sauvegarde réponse agent (texte propre sans PDF_URL:)
         self.env.cr.execute(
             """
             INSERT INTO transport_ai_message
@@ -262,7 +247,7 @@ class AiConversation(models.Model):
             (conv_id, reponse_text, 'agent', user.id, user.id)
         )
 
-        # Mise a jour nom conversation
+        # Mise à jour nom conversation
         if conv_name == 'Nouvelle conversation':
             nouveau_nom = question[:50] + ('...' if len(question) > 50 else '')
             self.env.cr.execute(
@@ -270,6 +255,9 @@ class AiConversation(models.Model):
                 (nouveau_nom, conv_id)
             )
 
+        # ── Retourner un dict si pdf_url présent, sinon le texte seul ────────
+        if pdf_url:
+            return {"content": reponse_text, "pdf_url": pdf_url}
         return reponse_text
 
 
@@ -278,11 +266,8 @@ class AiMessage(models.Model):
     _description = 'Message conversation IA'
     _order = 'create_date asc'
 
-    conversation_id = fields.Many2one(
-        'transport.ai.conversation',
-        string='Conversation',
-        ondelete='cascade'
-    )
+    conversation_id = fields.Many2one('transport.ai.conversation',
+                                      string='Conversation', ondelete='cascade')
     content = fields.Text(string='Contenu', required=True)
     message_type = fields.Selection([
         ('user', 'Utilisateur'),
@@ -304,115 +289,37 @@ class AiChromaSyncCron(models.Model):
         depuis_str = depuis.strftime('%Y-%m-%d %H:%M:%S')
         synced = 0
 
-        # Tournees
-        try:
-            tournees = self.env[
-                'transport.exploitation.tournee'
-            ].search([('write_date', '>=', depuis_str)])
-            for t in tournees:
-                doc = (
-                    f"Tournee {t.name} du {t.date} "
-                    f"etat: {t.state} "
-                    f"ligne: {t.ligne_id.name if t.ligne_id else 'N/A'} "
-                    f"bus: {t.vehicle_id.name if t.vehicle_id else 'N/A'} "
-                    f"km prevu: {t.km_prevu} "
-                    f"km realise: {t.km_realise}"
-                )
-                req.post(FASTAPI_SYNC_URL, json={
-                    "model": "transport.exploitation.tournee",
-                    "record_id": t.id,
-                    "operation": "upsert",
-                    "document": doc
-                }, timeout=10)
-                synced += 1
-        except Exception as e:
-            _logger.warning(f"Sync tournees: {e}")
+        modeles = [
+            ('transport.exploitation.tournee', lambda t:
+             f"Tournee {t.name} du {t.date} etat: {t.state} "
+             f"ligne: {t.ligne_id.name if t.ligne_id else 'N/A'} "
+             f"bus: {t.vehicle_id.name if t.vehicle_id else 'N/A'} "
+             f"km prevu: {t.km_prevu} km realise: {t.km_realise}"),
+            ('transport.assurance.bus', lambda a:
+             f"Police {a.numero_police} bus: {a.vehicle_id.name if a.vehicle_id else 'N/A'} "
+             f"fin: {a.date_fin} etat: {a.state}"),
+            ('transport.fuel.voucher', lambda v:
+             f"Bon {v.name} type: {v.voucher_type} date: {v.date} "
+             f"quantite: {v.total_quantity} L etat: {v.state}"),
+            ('patrimoine.immobilisation', lambda i:
+             f"Immobilisation {i.name} statut: {i.statut}"),
+            ('boc.courrier.arrivee', lambda b:
+             f"Courrier BOC arrivee {b.name} etat: {b.state}"),
+        ]
 
-        # Assurances
-        try:
-            assurances = self.env[
-                'transport.assurance.bus'
-            ].search([('write_date', '>=', depuis_str)])
-            for a in assurances:
-                doc = (
-                    f"Police {a.numero_police} "
-                    f"bus: {a.vehicle_id.name if a.vehicle_id else 'N/A'} "
-                    f"fin: {a.date_fin} "
-                    f"obligatoire: {'oui' if a.is_obligatoire else 'non'} "
-                    f"etat: {a.state}"
-                )
-                req.post(FASTAPI_SYNC_URL, json={
-                    "model": "transport.assurance.bus",
-                    "record_id": a.id,
-                    "operation": "upsert",
-                    "document": doc
-                }, timeout=10)
-                synced += 1
-        except Exception as e:
-            _logger.warning(f"Sync assurances: {e}")
-
-        # Carburant
-        try:
-            vouchers = self.env[
-                'transport.fuel.voucher'
-            ].search([('write_date', '>=', depuis_str)])
-            for v in vouchers:
-                doc = (
-                    f"Bon {v.name} type: {v.voucher_type} "
-                    f"date: {v.date} "
-                    f"quantite: {v.total_quantity} L "
-                    f"etat: {v.state}"
-                )
-                req.post(FASTAPI_SYNC_URL, json={
-                    "model": "transport.fuel.voucher",
-                    "record_id": v.id,
-                    "operation": "upsert",
-                    "document": doc
-                }, timeout=10)
-                synced += 1
-        except Exception as e:
-            _logger.warning(f"Sync carburant: {e}")
-
-        # Patrimoine
-        try:
-            immobilisations = self.env[
-                'patrimoine.immobilisation'
-            ].search([('write_date', '>=', depuis_str)])
-            for i in immobilisations:
-                doc = (
-                    f"Immobilisation {i.name} "
-                    f"statut: {i.statut} "
-                    f"fin amortissement: {i.fin_amortissement}"
-                )
-                req.post(FASTAPI_SYNC_URL, json={
-                    "model": "patrimoine.immobilisation",
-                    "record_id": i.id,
-                    "operation": "upsert",
-                    "document": doc
-                }, timeout=10)
-                synced += 1
-        except Exception as e:
-            _logger.warning(f"Sync patrimoine: {e}")
-
-        # BOC
-        try:
-            arrivees = self.env[
-                'boc.courrier.arrivee'
-            ].search([('write_date', '>=', depuis_str)])
-            for b in arrivees:
-                doc = (
-                    f"Courrier BOC arrivee {b.name} "
-                    f"objet: {b.objet} etat: {b.state}"
-                )
-                req.post(FASTAPI_SYNC_URL, json={
-                    "model": "boc.courrier.arrivee",
-                    "record_id": b.id,
-                    "operation": "upsert",
-                    "document": doc
-                }, timeout=10)
-                synced += 1
-        except Exception as e:
-            _logger.warning(f"Sync BOC: {e}")
+        for modele, doc_fn in modeles:
+            try:
+                records = self.env[modele].search([('write_date', '>=', depuis_str)])
+                for r in records:
+                    req.post(FASTAPI_SYNC_URL, json={
+                        "model": modele,
+                        "record_id": r.id,
+                        "operation": "upsert",
+                        "document": doc_fn(r)
+                    }, timeout=10)
+                    synced += 1
+            except Exception as e:
+                _logger.warning(f"Sync {modele}: {e}")
 
         _logger.info(f"ChromaDB cron - {synced} documents synchronises")
         return True

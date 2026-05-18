@@ -555,3 +555,70 @@
     height: 100% !important;
     overflow: hidden !important;
 }
+.ai-pdf-actions {
+    display: flex;
+    gap: 8px;
+    margin-top: 10px;
+}
+.ai-pdf-btn-open {
+    background: #1a3a6b;
+    color: white;
+    border: none;
+    border-radius: 8px;
+    padding: 8px 16px;
+    cursor: pointer;
+    font-size: 13px;
+    font-weight: 500;
+}
+.ai-pdf-btn-open:hover { background: #2196F3; }
+.ai-pdf-btn-dl {
+    background: white;
+    color: #1a3a6b;
+    border: 1.5px solid #1a3a6b;
+    border-radius: 8px;
+    padding: 8px 16px;
+    cursor: pointer;
+    font-size: 13px;
+    font-weight: 500;
+}
+.ai-pdf-btn-dl:hover { background: #e8f0fe; }/* ── Boutons PDF dans le chat ──────────────────────────────────────────────── */
+.ai_pdf_actions {
+    display: flex;
+    gap: 8px;
+    margin-top: 10px;
+    flex-wrap: wrap;
+}
+
+.ai_pdf_btn_open {
+    background: linear-gradient(135deg, #1a3a6b, #2196F3);
+    color: white;
+    border: none;
+    border-radius: 8px;
+    padding: 8px 16px;
+    cursor: pointer;
+    font-size: 13px;
+    font-weight: 500;
+    transition: opacity 0.15s, transform 0.15s;
+    box-shadow: 0 2px 6px rgba(33, 150, 243, 0.3);
+}
+.ai_pdf_btn_open:hover {
+    opacity: 0.9;
+    transform: translateY(-1px);
+}
+
+.ai_pdf_btn_dl {
+    background: white;
+    color: #1a3a6b;
+    border: 1.5px solid #1a3a6b;
+    border-radius: 8px;
+    padding: 8px 16px;
+    cursor: pointer;
+    font-size: 13px;
+    font-weight: 500;
+    transition: all 0.15s;
+}
+.ai_pdf_btn_dl:hover {
+    background: #e8f0fe;
+    border-color: #2196F3;
+    color: #2196F3;
+}

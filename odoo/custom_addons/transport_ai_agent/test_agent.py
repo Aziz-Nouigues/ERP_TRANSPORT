@@ -1,53 +1,54 @@
-# test_sql_assurance.py v2
-import sys, os
-sys.path.insert(0, '.')
-os.chdir('.')
-from dotenv import load_dotenv
-load_dotenv()
+# test_rapport_pdf.py v2
+# Teste que le chat retourne pdf_url et ouvre le PDF dans le navigateur
+import requests, webbrowser, time
 
-from agent.agent_core import generer_sql
-from langchain_ollama import OllamaLLM
-import psycopg2
-
-llm = OllamaLLM(
-    model=os.getenv("OLLAMA_MODEL", "qwen2.5-coder:7b"),
-    base_url=os.getenv("OLLAMA_BASE_URL", "http://localhost:11434")
-)
-
-def run_sql(sql):
-    try:
-        conn = psycopg2.connect(
-            host=os.getenv("PG_HOST","localhost"),
-            port=int(os.getenv("PG_PORT",5432)),
-            dbname=os.getenv("PG_DB","erp_db2"),
-            user=os.getenv("PG_USER","erp_user2"),
-            password=os.getenv("PG_PASSWORD",""),
-            client_encoding='utf8'
-        )
-        cur = conn.cursor()
-        cur.execute(sql)
-        rows = cur.fetchall()
-        conn.close()
-        return rows
-    except Exception as e:
-        return f"ERREUR: {e}"
+BASE = "http://localhost:8000"
 
 questions = [
-    "Quelle est l assurance du bus Tesla",
-    "Liste les polices assurance actives",
-    "Quelles polices expirent bientot",
-    "Quel est l etat de la police POL-BUS/2026/0006",
-    "Liste les sinistres",
+    "Rapport consommation carburant",
+    "Bilan assurance et sinistres",
+    "État du parc bus",
+    "Rapport journalier d'exploitation",
+    "Bilan courrier BOC",
 ]
 
-print("=" * 65)
-for q in questions:
-    print(f"\nQuestion : {q}")
-    sql = generer_sql(q, llm, None, True)
-    print(f"SQL      : {sql}")
-    result = run_sql(sql)
-    if isinstance(result, str):
-        print(f"ECHEC    : {result}")
+print("=" * 60)
+print("TEST RAPPORT PDF v2")
+print("=" * 60)
+
+for question in questions:
+    print(f"\nQuestion : {question}")
+    r = requests.post(f"{BASE}/chat",
+        json={"question": question, "session_id": "test_pdf", "is_admin": True},
+        timeout=120)
+    data = r.json()
+
+    reponse      = data.get("reponse", "")
+    pdf_url      = data.get("pdf_url")
+    type_rapport = data.get("type_rapport")
+
+    print(f"Réponse   : {reponse[:100]}")
+    print(f"PDF URL   : {pdf_url}")
+
+    if pdf_url:
+        # Vérifier que le PDF se génère correctement
+        r_pdf = requests.get(pdf_url, timeout=60)
+        if r_pdf.status_code == 200:
+            taille = len(r_pdf.content) // 1024
+            print(f"✓ PDF OK : {taille} Ko")
+
+            # Sauvegarder et ouvrir dans le navigateur
+            nom = f"{type_rapport}.pdf"
+            with open(nom, "wb") as f:
+                f.write(r_pdf.content)
+            webbrowser.open(f"file:///{nom}")
+            time.sleep(1)
+        else:
+            print(f"✗ Erreur PDF {r_pdf.status_code}: {r_pdf.text[:200]}")
     else:
-        print(f"Resultat : {result[:2] if result else 'VIDE'}")
-    print("-" * 65)
+        print("✗ Pas de pdf_url")
+
+print("\n" + "=" * 60)
+print("Les PDFs s'ouvrent dans le navigateur.")
+print("Clic droit → Enregistrer sous pour télécharger.")
+print("=" * 60)

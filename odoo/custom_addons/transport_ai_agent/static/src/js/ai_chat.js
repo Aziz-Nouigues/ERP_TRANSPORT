@@ -1,9 +1,9 @@
-/** @odoo-module **/
-
 import { Component, useState, onPatched, onWillStart } from "@odoo/owl";
 import { registry } from "@web/core/registry";
 import { useService } from "@web/core/utils/hooks";
 import { standardFieldProps } from "@web/views/fields/standard_field_props";
+
+const AGENT_URL = "http://localhost:8000";
 
 class AiChatInterface extends Component {
     static template = "transport_ai_agent.ChatInterface";
@@ -99,12 +99,16 @@ class AiChatInterface extends Component {
                 ["content", "message_type", "create_date"],
                 { order: "create_date asc" }
             );
-            this.state.messages = messages.map((m) => ({
-                id: m.id,
-                content: m.content || "",
-                type: m.message_type,
-                time: this._formatTime(m.create_date),
-            }));
+            this.state.messages = messages.map((m) => {
+                const parsed = this._parseContent(m.content || "");
+                return {
+                    id: m.id,
+                    content: parsed.content,
+                    pdf_url: parsed.pdf_url,
+                    type: m.message_type,
+                    time: this._formatTime(m.create_date),
+                };
+            });
         } catch (e) {
             console.error("Erreur chargement messages:", e);
         }
@@ -129,6 +133,55 @@ class AiChatInterface extends Component {
         this.state.messages = [];
         await this.loadMessages();
     }
+
+    // ── Parsing de la réponse agent ──────────────────────────────────────────
+
+    _parseContent(content) {
+        // Détecter PDF_URL: dans la réponse
+        const pdfMatch = content.match(/PDF_URL:(http\S+)/);
+        if (pdfMatch) {
+            const pdf_url = pdfMatch[1].trim();
+            // Nettoyer le texte en retirant la ligne PDF_URL:
+            const texte = content.replace(/\nPDF_URL:http\S+/, "").trim();
+            return { content: texte, pdf_url };
+        }
+        return { content, pdf_url: null };
+    }
+
+    // ── Téléchargement PDF ───────────────────────────────────────────────────
+
+    ouvrirPDF(pdf_url) {
+        // Ouvrir le PDF dans un nouvel onglet
+        window.open(pdf_url, "_blank");
+    }
+
+    async telechargerPDF(pdf_url, nomFichier) {
+        try {
+            const r = await fetch(pdf_url);
+            if (!r.ok) throw new Error(`Erreur ${r.status}`);
+            const blob = await r.blob();
+            const url  = URL.createObjectURL(blob);
+            const a    = document.createElement("a");
+            a.href     = url;
+            a.download = nomFichier || "rapport.pdf";
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+            URL.revokeObjectURL(url);
+            this.notification.add("PDF téléchargé avec succès.", { type: "success" });
+        } catch(e) {
+            this.notification.add(`Erreur téléchargement : ${e.message}`, { type: "danger" });
+        }
+    }
+
+    _getNomFichier(pdf_url) {
+        // Extraire le type de rapport depuis l'URL
+        const m = pdf_url.match(/\/rapport\/([^/]+)\/pdf/);
+        if (m) return `${m[1]}_${new Date().toISOString().slice(0,10)}.pdf`;
+        return "rapport.pdf";
+    }
+
+    // ── Formatage ────────────────────────────────────────────────────────────
 
     _formatTime(dateStr) {
         if (!dateStr) return "";
@@ -179,6 +232,8 @@ class AiChatInterface extends Component {
         await this.sendQuestion();
     }
 
+    // ── Envoi question ───────────────────────────────────────────────────────
+
     async sendQuestion() {
         const question = this.state.question.trim();
         if (!question || this.state.loading) return;
@@ -190,6 +245,7 @@ class AiChatInterface extends Component {
         this.state.messages.push({
             id: Date.now(),
             content: question,
+            pdf_url: null,
             type: "user",
             time: this._now(),
         });
@@ -208,15 +264,33 @@ class AiChatInterface extends Component {
                 { question: question }
             );
 
-            console.log("Réponse agent:", result, typeof result);
+            // ask_question retourne soit un dict {reponse, pdf_url}
+            // soit un string (ancienne version)
+            let raw = "";
+            let pdf_url = null;
 
-            const content = (typeof result === "string" && result.trim())
-                ? result
-                : "Aucune réponse reçue.";
+            if (result && typeof result === "object") {
+                // Nouveau format : dict avec reponse + pdf_url
+                raw     = result.reponse || result.content || "";
+                pdf_url = result.pdf_url || null;
+            } else if (typeof result === "string" && result.trim()) {
+                // Ancien format : string pur
+                raw = result;
+            } else {
+                raw = "Aucune réponse reçue.";
+            }
+
+            // Parser aussi le texte pour détecter PDF_URL: inline (fallback)
+            const parsed = this._parseContent(raw);
+            if (!pdf_url && parsed.pdf_url) {
+                pdf_url = parsed.pdf_url;
+                raw     = parsed.content;
+            }
 
             this.state.messages.push({
                 id: Date.now() + 1,
-                content: content,
+                content: raw || "Aucune réponse reçue.",
+                pdf_url: pdf_url,
                 type: "agent",
                 time: this._now(),
             });
@@ -228,6 +302,7 @@ class AiChatInterface extends Component {
             this.state.messages.push({
                 id: Date.now() + 1,
                 content: "Erreur de connexion à l'agent IA.",
+                pdf_url: null,
                 type: "agent",
                 time: this._now(),
             });

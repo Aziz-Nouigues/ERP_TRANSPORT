@@ -5,13 +5,15 @@ from contextlib import asynccontextmanager
 from dotenv import load_dotenv
 from fastapi import FastAPI, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
+from fastapi.responses import FileResponse, JSONResponse
 from pydantic import BaseModel
-from fastapi.responses import JSONResponse
 import json
+from pathlib import Path
 
 from agent.agent_core import (
     create_agent, ask_agent,
-    charger_historique, effacer_historique,   # FIX 3
+    charger_historique, effacer_historique,
+    TEMPLATES_RAPPORTS, generer_rapport,
 )
 from langchain_ollama import OllamaLLM
 
@@ -40,7 +42,9 @@ logging.basicConfig(
 logger = logging.getLogger(__name__)
 
 agent_executor = None
-CHAT_TIMEOUT = int(os.getenv("CHAT_TIMEOUT", "120"))
+CHAT_TIMEOUT   = int(os.getenv("CHAT_TIMEOUT", "120"))
+RAPPORTS_DIR   = Path(__file__).parent.parent / "rapports"
+RAPPORTS_DIR.mkdir(exist_ok=True)
 
 
 @asynccontextmanager
@@ -56,18 +60,20 @@ async def lifespan(app: FastAPI):
 app = FastAPI(
     title="Agent IA — ERP Transport Terrestre",
     description="API REST pour l'agent IA intégré dans Odoo 19",
-    version="1.1.0",
+    version="2.0.0",
     lifespan=lifespan
 )
 
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["http://localhost:8070", "http://127.0.0.1:8070"],
+    allow_origins=["*"],
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
 )
 
+
+# ── Modèles ──────────────────────────────────────────────────────────────────
 
 class QuestionRequest(BaseModel):
     question: str
@@ -84,13 +90,11 @@ class ReponseModel(BaseModel):
     statut: str
 
 
+# ── Routes de base ────────────────────────────────────────────────────────────
+
 @app.get("/")
 def root():
-    return {
-        "service": "Agent IA Transport",
-        "statut": "opérationnel",
-        "version": "1.1.0"
-    }
+    return {"service": "Agent IA Transport", "statut": "opérationnel", "version": "2.0.0"}
 
 
 @app.get("/health")
@@ -108,7 +112,6 @@ def health():
 async def chat(request: QuestionRequest):
     if not agent_executor:
         raise HTTPException(status_code=503, detail="Agent non initialisé.")
-
     if not request.question.strip():
         raise HTTPException(status_code=400, detail="Question vide.")
 
@@ -118,8 +121,7 @@ async def chat(request: QuestionRequest):
     )
 
     try:
-        loop = asyncio.get_event_loop()
-        # Executor dédié pour ne pas bloquer la boucle async principale
+        loop   = asyncio.get_event_loop()
         import concurrent.futures
         executor = concurrent.futures.ThreadPoolExecutor(max_workers=4)
         reponse = await asyncio.wait_for(
@@ -137,19 +139,12 @@ async def chat(request: QuestionRequest):
         )
 
     except asyncio.TimeoutError:
-        logger.error(
-            f"[{request.user_name}] TIMEOUT ({CHAT_TIMEOUT}s) "
-            f"pour: {request.question}"
-        )
+        logger.error(f"[{request.user_name}] TIMEOUT ({CHAT_TIMEOUT}s)")
         return UTF8JSONResponse(content={
-            "reponse": (
-                f"La requête a pris trop de temps (>{CHAT_TIMEOUT}s). "
-                "Essayez de reformuler votre question de manière plus précise."
-            ),
+            "reponse": f"La requête a pris trop de temps (>{CHAT_TIMEOUT}s). Reformulez votre question.",
             "session_id": request.session_id,
             "statut": "timeout"
         })
-
     except (ConnectionResetError, ConnectionError, BrokenPipeError) as e:
         logger.warning(f"[{request.user_name}] Connexion interrompue: {e}")
         return UTF8JSONResponse(content={
@@ -157,27 +152,169 @@ async def chat(request: QuestionRequest):
             "session_id": request.session_id,
             "statut": "error"
         })
-
     except Exception as e:
         logger.error(f"[{request.user_name}] Erreur inattendue: {e}")
         raise HTTPException(status_code=500, detail=str(e))
 
     logger.info(f"[{request.user_name}] Réponse : {reponse[:100]}")
 
+    # Détecter si la réponse contient un lien PDF (format PDF_URL:http://...)
+    pdf_url = None
+    type_rapport = None
+    import re as _re
+
+    if "PDF_URL:" in reponse:
+        # Format : "✅ Rapport prêt...\nPDF_URL:http://..."
+        m = _re.search(r'PDF_URL:(http\S+)', reponse)
+        if m:
+            pdf_url = m.group(1).strip()
+            m2 = _re.search(r'/rapport/([^/]+)/pdf', pdf_url)
+            type_rapport = m2.group(1) if m2 else None
+        # Nettoyer la réponse (retirer la ligne PDF_URL:)
+        reponse_propre = _re.sub(r'\nPDF_URL:http\S+', '', reponse).strip()
+    else:
+        # Fallback : ancien format markdown
+        m = _re.search(r'http://localhost:8000/rapport/([^/]+)/pdf', reponse)
+        if m:
+            pdf_url = m.group(0)
+            type_rapport = m.group(1)
+            reponse_propre = _re.sub(
+                r'\n---\n📄 \*\*\[Télécharger.*?\]\(.*?\)\*\*',
+                '', reponse
+            ).strip()
+        else:
+            reponse_propre = reponse
+
     return UTF8JSONResponse(content={
-        "reponse": reponse,
-        "session_id": request.session_id,
-        "statut": "ok"
+        "reponse":      reponse_propre,
+        "session_id":   request.session_id,
+        "statut":       "ok",
+        "pdf_url":      pdf_url,
+        "type_rapport": type_rapport,
     })
 
 
-# ---------------------------------------------------------------------------
-# FIX 3 — Endpoints historique persistant
-# ---------------------------------------------------------------------------
+# ── NIVEAU 3 — Endpoints Rapports PDF ────────────────────────────────────────
+
+@app.get("/rapports")
+def liste_rapports():
+    """Liste tous les rapports disponibles."""
+    rapports = []
+    for type_id, template in TEMPLATES_RAPPORTS.items():
+        rapports.append({
+            "id":     type_id,
+            "label":  template["label"],
+            "url":    f"/rapport/{type_id}/pdf",
+        })
+    return UTF8JSONResponse(content={"rapports": rapports})
+
+
+@app.get("/rapport/{type_rapport}/pdf")
+async def telecharger_rapport_pdf(type_rapport: str):
+    """
+    Génère et retourne un rapport PDF à la demande.
+    Utilisé par le bouton de téléchargement dans l'interface chatbot.
+    """
+    if type_rapport not in TEMPLATES_RAPPORTS:
+        raise HTTPException(
+            status_code=404,
+            detail=f"Rapport '{type_rapport}' inconnu. "
+                   f"Disponibles : {list(TEMPLATES_RAPPORTS.keys())}"
+        )
+
+    if not agent_executor:
+        raise HTTPException(status_code=503, detail="Agent non initialisé.")
+
+    logger.info(f"Génération PDF demandée : {type_rapport}")
+
+    from datetime import date
+    import concurrent.futures
+
+    try:
+        loop = asyncio.get_event_loop()
+        executor = concurrent.futures.ThreadPoolExecutor(max_workers=2)
+
+        def _generer():
+            from agent.agent_core import _executer_requetes_rapport, TEMPLATES_RAPPORTS
+            from rapport_pdf import generer_pdf_rapport
+
+            # Collecter les données via les requêtes SQL du template
+            template = TEMPLATES_RAPPORTS[type_rapport]
+            data = _executer_requetes_rapport(template["requetes"])
+
+            # Chemin du fichier
+            nom = f"{type_rapport}_{date.today().strftime('%Y%m%d_%H%M')}.pdf"
+            chemin = RAPPORTS_DIR / nom
+            generer_pdf_rapport(type_rapport, template["label"], data, chemin)
+            return str(chemin)
+
+        chemin_pdf = await asyncio.wait_for(
+            loop.run_in_executor(executor, _generer),
+            timeout=60
+        )
+
+        nom_fichier = Path(chemin_pdf).name
+        return FileResponse(
+            path=chemin_pdf,
+            filename=nom_fichier,
+            media_type="application/pdf",
+            headers={
+                # inline = s'ouvre dans le navigateur
+                # attachment = force le téléchargement
+                "Content-Disposition": f'inline; filename="{nom_fichier}"',
+                "Access-Control-Expose-Headers": "Content-Disposition",
+                "Access-Control-Allow-Origin": "*",
+            }
+        )
+
+    except asyncio.TimeoutError:
+        raise HTTPException(status_code=504, detail="Génération du rapport trop longue.")
+    except Exception as e:
+        logger.error(f"Erreur génération PDF {type_rapport}: {e}", exc_info=True)
+        raise HTTPException(status_code=500, detail=str(e))
+
+
+def _collecter_donnees_rapport(type_rapport: str) -> dict:
+    """
+    Collecte les données pour un rapport spécifique (non-hebdomadaire).
+    Exécute les requêtes SQL du template correspondant.
+    """
+    from agent.agent_core import _executer_requetes_rapport
+    template = TEMPLATES_RAPPORTS[type_rapport]
+    return _executer_requetes_rapport(template["requetes"])
+
+
+@app.get("/rapports/fichiers")
+def liste_fichiers_pdf():
+    """Liste les rapports PDF déjà générés."""
+    fichiers = []
+    for f in sorted(RAPPORTS_DIR.glob("*.pdf"), reverse=True):
+        fichiers.append({
+            "nom":    f.name,
+            "taille": f"{f.stat().st_size / 1024:.1f} Ko",
+            "date":   f.stat().st_mtime,
+            "url":    f"/rapports/fichiers/{f.name}",
+        })
+    return UTF8JSONResponse(content={"fichiers": fichiers[:20]})
+
+
+@app.get("/rapports/fichiers/{nom_fichier}")
+async def telecharger_fichier_existant(nom_fichier: str):
+    """Télécharge un rapport PDF déjà généré."""
+    chemin = RAPPORTS_DIR / nom_fichier
+    if not chemin.exists() or not chemin.suffix == ".pdf":
+        raise HTTPException(status_code=404, detail="Fichier non trouvé.")
+    return FileResponse(
+        path=str(chemin),
+        filename=nom_fichier,
+        media_type="application/pdf",
+    )
+
+
+# ── Endpoints existants ───────────────────────────────────────────────────────
 
 @app.get("/historique/{session_id}")
 def get_historique(session_id: str, limite: int = 10):
-    """Retourne les N derniers échanges d'une session."""
     try:
         messages = charger_historique(session_id, limite)
         return UTF8JSONResponse(content={
@@ -186,32 +323,22 @@ def get_historique(session_id: str, limite: int = 10):
             "total": len(messages)
         })
     except Exception as e:
-        logger.error(f"Erreur lecture historique {session_id}: {e}")
         raise HTTPException(status_code=500, detail=str(e))
 
 
 @app.delete("/historique/{session_id}")
 def delete_historique(session_id: str):
-    """Efface l'historique d'une session (ex : déconnexion utilisateur)."""
     try:
         effacer_historique(session_id)
-        logger.info(f"Historique effacé pour session: {session_id}")
         return {"statut": "ok", "message": f"Historique de '{session_id}' effacé."}
     except Exception as e:
-        logger.error(f"Erreur effacement historique {session_id}: {e}")
         raise HTTPException(status_code=500, detail=str(e))
 
-
-# ---------------------------------------------------------------------------
-# Endpoints de test et synchronisation ChromaDB
-# ---------------------------------------------------------------------------
 
 @app.get("/test-sql")
 def test_sql():
     from agent.tools.sql_tool import sql_tool
-    result = sql_tool.invoke(
-        "SELECT COUNT(*) FROM transport_exploitation_tournee"
-    )
+    result = sql_tool.invoke("SELECT COUNT(*) FROM transport_exploitation_tournee")
     return {"resultat": result}
 
 
@@ -233,35 +360,21 @@ class SyncRequest(BaseModel):
 def sync_chroma(request: SyncRequest):
     try:
         import chromadb as chroma
-        from pathlib import Path
-
-        # FIX 2 — résolution du chemin ChromaDB
         raw = os.getenv("CHROMA_PATH", "./chroma_db")
         p = Path(raw)
         chroma_path = str(p) if p.is_absolute() else str(
             (Path(__file__).parent.parent / p).resolve()
         )
-
         client = chroma.PersistentClient(path=chroma_path)
         collection = client.get_or_create_collection(name="transport_procedures")
-
         doc_id = f"{request.model.replace('.', '_')}_{request.record_id}"
-
-        if request.operation == 'delete':
+        if request.operation == "delete":
             try:
                 collection.delete(ids=[doc_id])
             except Exception:
                 pass
-            logger.info(f"ChromaDB delete: {doc_id}")
         else:
-            collection.upsert(
-                documents=[request.document],
-                ids=[doc_id]
-            )
-            logger.info(f"ChromaDB upsert: {doc_id}")
-
+            collection.upsert(documents=[request.document], ids=[doc_id])
         return {"statut": "ok", "doc_id": doc_id}
-
     except Exception as e:
-        logger.error(f"Erreur sync ChromaDB: {e}")
         raise HTTPException(status_code=500, detail=str(e))
