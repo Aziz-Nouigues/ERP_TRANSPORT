@@ -1982,7 +1982,10 @@ def _enrichir_question(question: str, session_id: str) -> str:
 # ---------------------------------------------------------------------------
 
 TEMPLATES_RAPPORTS = {
-    # Exploitation
+
+    # ─────────────────────────────────────────────────────────────────────────
+    # EXPLOITATION — JOURNALIER
+    # ─────────────────────────────────────────────────────────────────────────
     "rapport_journalier": {
         "label": "Rapport journalier d'exploitation",
         "requetes": {
@@ -1991,83 +1994,379 @@ TEMPLATES_RAPPORTS = {
             "tournees_realisees":  "SELECT COUNT(*) FROM transport_exploitation_tournee WHERE date = CURRENT_DATE AND state = 'realise'",
             "tournees_annulees":   "SELECT COUNT(*) FROM transport_exploitation_tournee WHERE date = CURRENT_DATE AND state = 'annule'",
             "km_total":            "SELECT COALESCE(SUM(km_realise),0) FROM transport_exploitation_tournee WHERE date = CURRENT_DATE AND state = 'realise'",
-            "ecart_moyen":         "SELECT COALESCE(AVG(ecart_km),0) FROM transport_exploitation_tournee WHERE date = CURRENT_DATE AND state = 'realise'",
-            "detail_annulees":     "SELECT t.name, m.name AS motif FROM transport_exploitation_tournee t LEFT JOIN transport_exploitation_motif m ON t.motif_annulation_id = m.id WHERE t.date = CURRENT_DATE AND t.state = 'annule'",
+            "ecart_moyen":         "SELECT COALESCE(ROUND(AVG(ecart_km)::numeric,1),0) FROM transport_exploitation_tournee WHERE date = CURRENT_DATE AND state = 'realise'",
+            # Detail tournees du jour — name jsonb pour ligne, agence, motif
+            "detail_tournees": (
+                "SELECT t.name AS tournee, "
+                "COALESCE(l.name->>'fr_FR', l.name->>'en_US', l.name::text) AS ligne, "
+                "e.name AS chauffeur, v.license_plate AS bus, "
+                "t.direction, t.state, "
+                "t.heure_depart_reel, t.heure_arrivee_reel, "
+                "t.km_realise, t.ecart_km "
+                "FROM transport_exploitation_tournee t "
+                "LEFT JOIN transport_exploitation_ligne l ON t.ligne_id = l.id "
+                "LEFT JOIN hr_employee e ON t.chauffeur_id = e.id "
+                "LEFT JOIN fleet_vehicle v ON t.vehicle_id = v.id "
+                "WHERE t.date = CURRENT_DATE "
+                "ORDER BY t.state, t.heure_depart_reel"
+            ),
+            "detail_annulees": (
+                "SELECT t.name AS tournee, "
+                "COALESCE(l.name->>'fr_FR', l.name->>'en_US') AS ligne, "
+                "e.name AS chauffeur, "
+                "COALESCE(m.name->>'fr_FR', m.name->>'en_US') AS motif, "
+                "t.note_annulation "
+                "FROM transport_exploitation_tournee t "
+                "LEFT JOIN transport_exploitation_ligne l ON t.ligne_id = l.id "
+                "LEFT JOIN hr_employee e ON t.chauffeur_id = e.id "
+                "LEFT JOIN transport_exploitation_motif m ON t.motif_annulation_id = m.id "
+                "WHERE t.date = CURRENT_DATE AND t.state = 'annule'"
+            ),
         }
     },
+
+    # ─────────────────────────────────────────────────────────────────────────
+    # EXPLOITATION — HEBDOMADAIRE
+    # ─────────────────────────────────────────────────────────────────────────
     "rapport_hebdomadaire": {
         "label": "Rapport hebdomadaire d'exploitation",
         "requetes": {
-            "tournees_realisees":  "SELECT COUNT(*) FROM transport_exploitation_tournee WHERE date >= CURRENT_DATE - INTERVAL '7 days' AND state = 'realise'",
-            "tournees_annulees":   "SELECT COUNT(*) FROM transport_exploitation_tournee WHERE date >= CURRENT_DATE - INTERVAL '7 days' AND state = 'annule'",
-            "tournees_total":      "SELECT COUNT(*) FROM transport_exploitation_tournee WHERE date >= CURRENT_DATE - INTERVAL '7 days'",
-            "km_total":            "SELECT COALESCE(SUM(km_realise),0) FROM transport_exploitation_tournee WHERE date >= CURRENT_DATE - INTERVAL '7 days' AND state = 'realise'",
-            "chauffeur_top":       "SELECT e.name, COUNT(*) AS nb FROM transport_exploitation_tournee t JOIN hr_employee e ON t.chauffeur_id = e.id WHERE t.date >= CURRENT_DATE - INTERVAL '7 days' AND t.state = 'realise' GROUP BY e.name ORDER BY nb DESC LIMIT 1",
-            "bus_top_km":          "SELECT v.name, COALESCE(SUM(t.km_realise),0) AS km FROM transport_exploitation_tournee t JOIN fleet_vehicle v ON t.vehicle_id = v.id WHERE t.date >= CURRENT_DATE - INTERVAL '7 days' AND t.state = 'realise' GROUP BY v.name ORDER BY km DESC LIMIT 1",
+            "tournees_realisees": "SELECT COUNT(*) FROM transport_exploitation_tournee WHERE date >= CURRENT_DATE - INTERVAL '7 days' AND state = 'realise'",
+            "tournees_annulees":  "SELECT COUNT(*) FROM transport_exploitation_tournee WHERE date >= CURRENT_DATE - INTERVAL '7 days' AND state = 'annule'",
+            "tournees_total":     "SELECT COUNT(*) FROM transport_exploitation_tournee WHERE date >= CURRENT_DATE - INTERVAL '7 days'",
+            "km_total":           "SELECT COALESCE(SUM(km_realise),0) FROM transport_exploitation_tournee WHERE date >= CURRENT_DATE - INTERVAL '7 days' AND state = 'realise'",
+            "ecart_moyen":        "SELECT COALESCE(ROUND(AVG(ecart_km)::numeric,1),0) FROM transport_exploitation_tournee WHERE date >= CURRENT_DATE - INTERVAL '7 days' AND state = 'realise'",
+            "top_chauffeurs": (
+                "SELECT e.name AS chauffeur, COUNT(*) AS nb_tournees, "
+                "COALESCE(SUM(t.km_realise),0) AS km_total "
+                "FROM transport_exploitation_tournee t "
+                "JOIN hr_employee e ON t.chauffeur_id = e.id "
+                "WHERE t.date >= CURRENT_DATE - INTERVAL '7 days' AND t.state = 'realise' "
+                "GROUP BY e.name ORDER BY nb_tournees DESC LIMIT 5"
+            ),
+            "km_par_bus": (
+                "SELECT v.name AS bus, v.license_plate, "
+                "COUNT(*) AS nb_tournees, COALESCE(SUM(t.km_realise),0) AS km "
+                "FROM transport_exploitation_tournee t "
+                "JOIN fleet_vehicle v ON t.vehicle_id = v.id "
+                "WHERE t.date >= CURRENT_DATE - INTERVAL '7 days' AND t.state = 'realise' "
+                "GROUP BY v.name, v.license_plate ORDER BY km DESC"
+            ),
+            "annulations_motif": (
+                "SELECT COALESCE(m.name->>'fr_FR', m.name->>'en_US', 'Sans motif') AS motif, "
+                "COUNT(*) AS nb "
+                "FROM transport_exploitation_tournee t "
+                "LEFT JOIN transport_exploitation_motif m ON t.motif_annulation_id = m.id "
+                "WHERE t.date >= CURRENT_DATE - INTERVAL '7 days' AND t.state = 'annule' "
+                "GROUP BY m.name ORDER BY nb DESC"
+            ),
+            "activite_lignes": (
+                "SELECT COALESCE(l.name->>'fr_FR', l.name->>'en_US') AS ligne, "
+                "COUNT(*) AS nb_tournees, COALESCE(SUM(t.km_realise),0) AS km_total "
+                "FROM transport_exploitation_tournee t "
+                "JOIN transport_exploitation_ligne l ON t.ligne_id = l.id "
+                "WHERE t.date >= CURRENT_DATE - INTERVAL '7 days' AND t.state = 'realise' "
+                "GROUP BY l.name ORDER BY nb_tournees DESC LIMIT 5"
+            ),
         }
     },
+
+    # ─────────────────────────────────────────────────────────────────────────
+    # EXPLOITATION — MENSUEL
+    # ─────────────────────────────────────────────────────────────────────────
     "rapport_mensuel": {
         "label": "Rapport mensuel d'exploitation",
         "requetes": {
-            "tournees_realisees":  "SELECT COUNT(*) FROM transport_exploitation_tournee WHERE EXTRACT(MONTH FROM date) = EXTRACT(MONTH FROM CURRENT_DATE) AND EXTRACT(YEAR FROM date) = EXTRACT(YEAR FROM CURRENT_DATE) AND state = 'realise'",
-            "tournees_annulees":   "SELECT COUNT(*) FROM transport_exploitation_tournee WHERE EXTRACT(MONTH FROM date) = EXTRACT(MONTH FROM CURRENT_DATE) AND EXTRACT(YEAR FROM date) = EXTRACT(YEAR FROM CURRENT_DATE) AND state = 'annule'",
-            "tournees_total":      "SELECT COUNT(*) FROM transport_exploitation_tournee WHERE EXTRACT(MONTH FROM date) = EXTRACT(MONTH FROM CURRENT_DATE) AND EXTRACT(YEAR FROM date) = EXTRACT(YEAR FROM CURRENT_DATE)",
-            "km_total":            "SELECT COALESCE(SUM(km_realise),0) FROM transport_exploitation_tournee WHERE EXTRACT(MONTH FROM date) = EXTRACT(MONTH FROM CURRENT_DATE) AND EXTRACT(YEAR FROM date) = EXTRACT(YEAR FROM CURRENT_DATE) AND state = 'realise'",
-            "top_chauffeurs":      "SELECT e.name, COUNT(*) AS nb FROM transport_exploitation_tournee t JOIN hr_employee e ON t.chauffeur_id = e.id WHERE EXTRACT(MONTH FROM t.date) = EXTRACT(MONTH FROM CURRENT_DATE) AND t.state = 'realise' GROUP BY e.name ORDER BY nb DESC LIMIT 3",
-            "km_par_bus":          "SELECT v.name, COALESCE(SUM(t.km_realise),0) AS km FROM transport_exploitation_tournee t JOIN fleet_vehicle v ON t.vehicle_id = v.id WHERE EXTRACT(MONTH FROM t.date) = EXTRACT(MONTH FROM CURRENT_DATE) AND t.state = 'realise' GROUP BY v.name ORDER BY km DESC",
-            "annulations_motif":   "SELECT m.name AS motif, COUNT(*) AS nb FROM transport_exploitation_tournee t LEFT JOIN transport_exploitation_motif m ON t.motif_annulation_id = m.id WHERE EXTRACT(MONTH FROM t.date) = EXTRACT(MONTH FROM CURRENT_DATE) AND t.state = 'annule' GROUP BY m.name ORDER BY nb DESC",
+            "tournees_realisees": "SELECT COUNT(*) FROM transport_exploitation_tournee WHERE EXTRACT(MONTH FROM date)=EXTRACT(MONTH FROM CURRENT_DATE) AND EXTRACT(YEAR FROM date)=EXTRACT(YEAR FROM CURRENT_DATE) AND state='realise'",
+            "tournees_annulees":  "SELECT COUNT(*) FROM transport_exploitation_tournee WHERE EXTRACT(MONTH FROM date)=EXTRACT(MONTH FROM CURRENT_DATE) AND EXTRACT(YEAR FROM date)=EXTRACT(YEAR FROM CURRENT_DATE) AND state='annule'",
+            "tournees_total":     "SELECT COUNT(*) FROM transport_exploitation_tournee WHERE EXTRACT(MONTH FROM date)=EXTRACT(MONTH FROM CURRENT_DATE) AND EXTRACT(YEAR FROM date)=EXTRACT(YEAR FROM CURRENT_DATE)",
+            "km_total":           "SELECT COALESCE(SUM(km_realise),0) FROM transport_exploitation_tournee WHERE EXTRACT(MONTH FROM date)=EXTRACT(MONTH FROM CURRENT_DATE) AND EXTRACT(YEAR FROM date)=EXTRACT(YEAR FROM CURRENT_DATE) AND state='realise'",
+            "ecart_moyen":        "SELECT COALESCE(ROUND(AVG(ecart_km)::numeric,1),0) FROM transport_exploitation_tournee WHERE EXTRACT(MONTH FROM date)=EXTRACT(MONTH FROM CURRENT_DATE) AND EXTRACT(YEAR FROM date)=EXTRACT(YEAR FROM CURRENT_DATE) AND state='realise'",
+            "top_chauffeurs": (
+                "SELECT e.name AS chauffeur, COUNT(*) AS nb_tournees, "
+                "COALESCE(SUM(t.km_realise),0) AS km_total "
+                "FROM transport_exploitation_tournee t "
+                "JOIN hr_employee e ON t.chauffeur_id = e.id "
+                "WHERE EXTRACT(MONTH FROM t.date)=EXTRACT(MONTH FROM CURRENT_DATE) "
+                "AND EXTRACT(YEAR FROM t.date)=EXTRACT(YEAR FROM CURRENT_DATE) "
+                "AND t.state='realise' "
+                "GROUP BY e.name ORDER BY nb_tournees DESC LIMIT 5"
+            ),
+            "km_par_bus": (
+                "SELECT v.name AS bus, v.license_plate, "
+                "COUNT(*) AS nb_tournees, COALESCE(SUM(t.km_realise),0) AS km "
+                "FROM transport_exploitation_tournee t "
+                "JOIN fleet_vehicle v ON t.vehicle_id = v.id "
+                "WHERE EXTRACT(MONTH FROM t.date)=EXTRACT(MONTH FROM CURRENT_DATE) "
+                "AND EXTRACT(YEAR FROM t.date)=EXTRACT(YEAR FROM CURRENT_DATE) "
+                "AND t.state='realise' "
+                "GROUP BY v.name, v.license_plate ORDER BY km DESC"
+            ),
+            "annulations_motif": (
+                "SELECT COALESCE(m.name->>'fr_FR', m.name->>'en_US', 'Sans motif') AS motif, "
+                "COUNT(*) AS nb "
+                "FROM transport_exploitation_tournee t "
+                "LEFT JOIN transport_exploitation_motif m ON t.motif_annulation_id = m.id "
+                "WHERE EXTRACT(MONTH FROM t.date)=EXTRACT(MONTH FROM CURRENT_DATE) "
+                "AND EXTRACT(YEAR FROM t.date)=EXTRACT(YEAR FROM CURRENT_DATE) "
+                "AND t.state='annule' "
+                "GROUP BY m.name ORDER BY nb DESC"
+            ),
+            "activite_lignes": (
+                "SELECT COALESCE(l.name->>'fr_FR', l.name->>'en_US') AS ligne, "
+                "COUNT(*) AS nb_tournees, COALESCE(SUM(t.km_realise),0) AS km_total "
+                "FROM transport_exploitation_tournee t "
+                "JOIN transport_exploitation_ligne l ON t.ligne_id = l.id "
+                "WHERE EXTRACT(MONTH FROM t.date)=EXTRACT(MONTH FROM CURRENT_DATE) "
+                "AND EXTRACT(YEAR FROM t.date)=EXTRACT(YEAR FROM CURRENT_DATE) "
+                "AND t.state='realise' "
+                "GROUP BY l.name ORDER BY nb_tournees DESC"
+            ),
+            "repartition_direction": (
+                "SELECT direction, COUNT(*) AS nb "
+                "FROM transport_exploitation_tournee "
+                "WHERE EXTRACT(MONTH FROM date)=EXTRACT(MONTH FROM CURRENT_DATE) "
+                "AND EXTRACT(YEAR FROM date)=EXTRACT(YEAR FROM CURRENT_DATE) "
+                "AND state='realise' GROUP BY direction"
+            ),
+            "recettes_mois": (
+                "SELECT COALESCE(SUM(recette_reelle),0) AS recette_reelle, "
+                "COALESCE(SUM(recette_prevue),0) AS recette_prevue "
+                "FROM transport_exploitation_tournee "
+                "WHERE EXTRACT(MONTH FROM date)=EXTRACT(MONTH FROM CURRENT_DATE) "
+                "AND EXTRACT(YEAR FROM date)=EXTRACT(YEAR FROM CURRENT_DATE) "
+                "AND state='realise'"
+            ),
         }
     },
+
+    # ─────────────────────────────────────────────────────────────────────────
+    # PARC BUS
+    # fleet_vehicle_state.name → jsonb
+    # ─────────────────────────────────────────────────────────────────────────
     "bilan_parc": {
-        "label": "Synthèse état du parc bus",
+        "label": "Synthese etat du parc bus",
         "requetes": {
-            "total_bus":         "SELECT COUNT(*) FROM fleet_vehicle",
-            "en_service":        "SELECT COUNT(*) FROM fleet_vehicle WHERE state_id = 47",
-            "hors_service":      "SELECT COUNT(*) FROM fleet_vehicle WHERE state_id = 48",
-            "en_panne":          "SELECT COUNT(*) FROM fleet_vehicle WHERE state_id = 5",
-            "en_maintenance":    "SELECT COUNT(*) FROM fleet_vehicle WHERE state_id = 6",
-            "polices_actives":   "SELECT COUNT(*) FROM transport_assurance_bus WHERE state = 'active'",
-            "polices_alerte":    "SELECT COUNT(*) FROM transport_assurance_bus WHERE state = 'alerte'",
-            "polices_expirees":  "SELECT COUNT(*) FROM transport_assurance_bus WHERE state = 'expirée'",
-            "detail_bus":        "SELECT v.name, v.license_plate, "
-             "COALESCE(s.name->>'fr_FR', s.name->>'en_US', s.name::text) AS etat, "
-             "a.numero_police, a.date_fin "
-             "FROM fleet_vehicle v "
-             "LEFT JOIN fleet_vehicle_state s ON v.state_id = s.id "
-             "LEFT JOIN transport_assurance_bus a ON a.vehicle_id = v.id AND a.state = 'active'",
+            "total_bus":        "SELECT COUNT(*) FROM fleet_vehicle WHERE active = True",
+            "en_service":       "SELECT COUNT(*) FROM fleet_vehicle WHERE state_id = 47",
+            "hors_service":     "SELECT COUNT(*) FROM fleet_vehicle WHERE state_id = 48",
+            "en_panne":         "SELECT COUNT(*) FROM fleet_vehicle WHERE state_id = 5",
+            "en_maintenance":   "SELECT COUNT(*) FROM fleet_vehicle WHERE state_id = 6",
+            "polices_actives":  "SELECT COUNT(*) FROM transport_assurance_bus WHERE state='active'",
+            "polices_alerte":   "SELECT COUNT(*) FROM transport_assurance_bus WHERE state='alerte'",
+            "polices_expirees": "SELECT COUNT(*) FROM transport_assurance_bus WHERE state='expirée'",
+            # fleet_vehicle_state.name est jsonb
+            "detail_bus": (
+                "SELECT v.name AS bus, v.license_plate AS immatriculation, "
+                "COALESCE(s.name->>'fr_FR', s.name->>'en_US', s.name::text) AS etat, "
+                "a.numero_police, "
+                "TO_CHAR(a.date_fin,'DD/MM/YYYY') AS expiration_police, "
+                "c.name AS compagnie, "
+                "COALESCE(SUM(t.km_realise),0) AS km_mois "
+                "FROM fleet_vehicle v "
+                "LEFT JOIN fleet_vehicle_state s ON v.state_id = s.id "
+                "LEFT JOIN transport_assurance_bus a ON a.vehicle_id = v.id AND a.state = 'active' "
+                "LEFT JOIN transport_assurance_compagnie c ON a.compagnie_id = c.id "
+                "LEFT JOIN transport_exploitation_tournee t "
+                "  ON t.vehicle_id = v.id AND t.state = 'realise' "
+                "  AND EXTRACT(MONTH FROM t.date)=EXTRACT(MONTH FROM CURRENT_DATE) "
+                "  AND EXTRACT(YEAR FROM t.date)=EXTRACT(YEAR FROM CURRENT_DATE) "
+                "WHERE v.active = True "
+                "GROUP BY v.name, v.license_plate, s.name, "
+                "a.numero_police, a.date_fin, c.name "
+                "ORDER BY v.name"
+            ),
+            "bus_sans_assurance": (
+                "SELECT v.name AS bus, v.license_plate, "
+                "COALESCE(s.name->>'fr_FR', s.name->>'en_US', s.name::text) AS etat "
+                "FROM fleet_vehicle v "
+                "LEFT JOIN fleet_vehicle_state s ON v.state_id = s.id "
+                "LEFT JOIN transport_assurance_bus a ON a.vehicle_id = v.id AND a.state = 'active' "
+                "WHERE a.id IS NULL AND v.active = True"
+            ),
         }
     },
+
+    # ─────────────────────────────────────────────────────────────────────────
+    # ASSURANCE
+    # transport_assurance_sinistre : employe_id (pas chauffeur_id)
+    #   montant_reclame, montant_accorde, montant_net_verse, franchise_appliquee
+    # transport_assurance_type.name : jsonb
+    # transport_assurance_chauffeur : employe_id (pas chauffeur_id)
+    # ─────────────────────────────────────────────────────────────────────────
     "bilan_assurance": {
         "label": "Bilan mensuel assurance et sinistres",
         "requetes": {
-            "polices_actives":   "SELECT COUNT(*) FROM transport_assurance_bus WHERE state = 'active'",
-            "polices_alerte":    "SELECT COUNT(*) FROM transport_assurance_bus WHERE state = 'alerte'",
-            "polices_expirees":  "SELECT COUNT(*) FROM transport_assurance_bus WHERE state = 'expirée'",
-            "polices_resiliees": "SELECT COUNT(*) FROM transport_assurance_bus WHERE state = 'résiliée'",
-            "sinistres_mois":    "SELECT COUNT(*) FROM transport_assurance_sinistre WHERE EXTRACT(MONTH FROM date_sinistre) = EXTRACT(MONTH FROM CURRENT_DATE) AND EXTRACT(YEAR FROM date_sinistre) = EXTRACT(YEAR FROM CURRENT_DATE)",
-            "montant_sinistres": "SELECT COALESCE(SUM(montant_dommage),0) FROM transport_assurance_sinistre WHERE EXTRACT(MONTH FROM date_sinistre) = EXTRACT(MONTH FROM CURRENT_DATE)",
-            "detail_sinistres":  "SELECT s.name, s.state, s.date_sinistre, s.montant_dommage, v.name AS bus FROM transport_assurance_sinistre s LEFT JOIN fleet_vehicle v ON s.vehicle_id = v.id WHERE EXTRACT(MONTH FROM s.date_sinistre) = EXTRACT(MONTH FROM CURRENT_DATE) ORDER BY s.date_sinistre DESC",
-            "expiration_30j":    "SELECT a.numero_police, a.date_fin, v.name AS bus FROM transport_assurance_bus a LEFT JOIN fleet_vehicle v ON a.vehicle_id = v.id WHERE a.state = 'active' AND a.date_fin <= CURRENT_DATE + INTERVAL '30 days' ORDER BY a.date_fin",
+            "polices_actives":   "SELECT COUNT(*) FROM transport_assurance_bus WHERE state='active'",
+            "polices_alerte":    "SELECT COUNT(*) FROM transport_assurance_bus WHERE state='alerte'",
+            "polices_expirees":  "SELECT COUNT(*) FROM transport_assurance_bus WHERE state='expirée'",
+            "polices_resiliees": "SELECT COUNT(*) FROM transport_assurance_bus WHERE state='résiliée'",
+            "sinistres_mois": (
+                "SELECT COUNT(*) FROM transport_assurance_sinistre "
+                "WHERE EXTRACT(MONTH FROM date_sinistre)=EXTRACT(MONTH FROM CURRENT_DATE) "
+                "AND EXTRACT(YEAR FROM date_sinistre)=EXTRACT(YEAR FROM CURRENT_DATE)"
+            ),
+            "montant_sinistres": (
+                "SELECT COALESCE(SUM(montant_accorde),0) FROM transport_assurance_sinistre "
+                "WHERE EXTRACT(MONTH FROM date_sinistre)=EXTRACT(MONTH FROM CURRENT_DATE) "
+                "AND EXTRACT(YEAR FROM date_sinistre)=EXTRACT(YEAR FROM CURRENT_DATE)"
+            ),
+            "montant_net_verse": (
+                "SELECT COALESCE(SUM(montant_net_verse),0) FROM transport_assurance_sinistre "
+                "WHERE EXTRACT(MONTH FROM date_sinistre)=EXTRACT(MONTH FROM CURRENT_DATE) "
+                "AND EXTRACT(YEAR FROM date_sinistre)=EXTRACT(YEAR FROM CURRENT_DATE)"
+            ),
+            # type_police name est jsonb
+            "detail_polices_actives": (
+                "SELECT a.numero_police, "
+                "COALESCE(tp.name->>'en_US', tp.name->>'fr_FR', tp.code) AS type_police, "
+                "c.name AS compagnie, v.name AS bus, v.license_plate, "
+                "TO_CHAR(a.date_debut,'DD/MM/YYYY') AS date_debut, "
+                "TO_CHAR(a.date_fin,'DD/MM/YYYY') AS date_fin, "
+                "a.prime_annuelle, "
+                "CASE WHEN a.is_obligatoire THEN 'Oui' ELSE 'Non' END AS obligatoire "
+                "FROM transport_assurance_bus a "
+                "LEFT JOIN fleet_vehicle v ON a.vehicle_id = v.id "
+                "LEFT JOIN transport_assurance_compagnie c ON a.compagnie_id = c.id "
+                "LEFT JOIN transport_assurance_type tp ON a.type_police_id = tp.id "
+                "WHERE a.state = 'active' ORDER BY a.date_fin ASC"
+            ),
+            # employe_id (pas chauffeur_id), montant_accorde (pas montant_dommage)
+            "detail_sinistres": (
+                "SELECT s.name AS reference, s.state, "
+                "TO_CHAR(s.date_sinistre,'DD/MM/YYYY') AS date_sinistre, "
+                "s.nature_sinistre, s.lieu, "
+                "s.montant_reclame, s.montant_accorde, s.montant_net_verse, "
+                "v.name AS bus, v.license_plate, "
+                "e.name AS chauffeur, "
+                "LEFT(s.description,60) AS description "
+                "FROM transport_assurance_sinistre s "
+                "LEFT JOIN fleet_vehicle v ON s.vehicle_id = v.id "
+                "LEFT JOIN hr_employee e ON s.employe_id = e.id "
+                "WHERE EXTRACT(MONTH FROM s.date_sinistre)=EXTRACT(MONTH FROM CURRENT_DATE) "
+                "AND EXTRACT(YEAR FROM s.date_sinistre)=EXTRACT(YEAR FROM CURRENT_DATE) "
+                "ORDER BY s.date_sinistre DESC"
+            ),
+            "expiration_30j": (
+                "SELECT a.numero_police, "
+                "COALESCE(tp.name->>'en_US', tp.name->>'fr_FR', tp.code) AS type_police, "
+                "c.name AS compagnie, v.name AS bus, "
+                "TO_CHAR(a.date_fin,'DD/MM/YYYY') AS date_fin, "
+                "a.prime_annuelle, "
+                "CASE WHEN a.is_obligatoire THEN 'Oui' ELSE 'Non' END AS obligatoire "
+                "FROM transport_assurance_bus a "
+                "LEFT JOIN fleet_vehicle v ON a.vehicle_id = v.id "
+                "LEFT JOIN transport_assurance_compagnie c ON a.compagnie_id = c.id "
+                "LEFT JOIN transport_assurance_type tp ON a.type_police_id = tp.id "
+                "WHERE a.state = 'active' "
+                "AND a.date_fin <= CURRENT_DATE + INTERVAL '30 days' "
+                "ORDER BY a.date_fin ASC"
+            ),
+            # employe_id (pas chauffeur_id)
+            "assurances_chauffeurs": (
+                "SELECT sc.numero_police, e.name AS chauffeur, "
+                "COALESCE(tp.name->>'en_US', tp.name->>'fr_FR', tp.code) AS type_police, "
+                "sc.state, "
+                "TO_CHAR(sc.date_debut,'DD/MM/YYYY') AS date_debut, "
+                "TO_CHAR(sc.date_fin,'DD/MM/YYYY') AS date_fin, "
+                "cmp.name AS compagnie, sc.prime_annuelle, "
+                "CASE WHEN sc.is_obligatoire THEN 'Oui' ELSE 'Non' END AS obligatoire "
+                "FROM transport_assurance_chauffeur sc "
+                "LEFT JOIN hr_employee e ON sc.employe_id = e.id "
+                "LEFT JOIN transport_assurance_compagnie cmp ON sc.compagnie_id = cmp.id "
+                "LEFT JOIN transport_assurance_type tp ON sc.type_police_id = tp.id "
+                "ORDER BY sc.date_fin ASC LIMIT 10"
+            ),
         }
     },
+
+    # ─────────────────────────────────────────────────────────────────────────
+    # CARBURANT
+    # transport_fuel_voucher n'a PAS de vehicle_id direct
+    # vehicle_id est dans transport_fuel_voucher_line
+    # total_cost existe dans transport_fuel_voucher
+    # ─────────────────────────────────────────────────────────────────────────
     "bilan_carburant": {
         "label": "Rapport mensuel consommation carburant",
         "requetes": {
-            "bons_valides":      "SELECT COUNT(*) FROM transport_fuel_voucher WHERE state = 'done' AND EXTRACT(MONTH FROM date) = EXTRACT(MONTH FROM CURRENT_DATE)",
-            "litres_total":      "SELECT COALESCE(SUM(total_quantity),0) FROM transport_fuel_voucher WHERE state = 'done' AND EXTRACT(MONTH FROM date) = EXTRACT(MONTH FROM CURRENT_DATE)",
-            "bgi_count":         "SELECT COUNT(*) FROM transport_fuel_voucher WHERE state = 'done' AND voucher_type = 'internal' AND EXTRACT(MONTH FROM date) = EXTRACT(MONTH FROM CURRENT_DATE)",
-            "bge_count":         "SELECT COUNT(*) FROM transport_fuel_voucher WHERE state = 'done' AND voucher_type = 'external' AND EXTRACT(MONTH FROM date) = EXTRACT(MONTH FROM CURRENT_DATE)",
-            "litres_par_bus":    "SELECT v.name AS bus, COALESCE(SUM(f.total_quantity),0) AS litres FROM transport_fuel_voucher f LEFT JOIN fleet_vehicle v ON f.vehicle_id = v.id WHERE f.state = 'done' AND EXTRACT(MONTH FROM f.date) = EXTRACT(MONTH FROM CURRENT_DATE) GROUP BY v.name ORDER BY litres DESC",
+            "bons_valides": "SELECT COUNT(*) FROM transport_fuel_voucher WHERE state='done' AND EXTRACT(MONTH FROM date)=EXTRACT(MONTH FROM CURRENT_DATE) AND EXTRACT(YEAR FROM date)=EXTRACT(YEAR FROM CURRENT_DATE)",
+            "litres_total": "SELECT COALESCE(SUM(total_quantity),0) FROM transport_fuel_voucher WHERE state='done' AND EXTRACT(MONTH FROM date)=EXTRACT(MONTH FROM CURRENT_DATE) AND EXTRACT(YEAR FROM date)=EXTRACT(YEAR FROM CURRENT_DATE)",
+            "bgi_count":    "SELECT COUNT(*) FROM transport_fuel_voucher WHERE state='done' AND voucher_type='internal' AND EXTRACT(MONTH FROM date)=EXTRACT(MONTH FROM CURRENT_DATE) AND EXTRACT(YEAR FROM date)=EXTRACT(YEAR FROM CURRENT_DATE)",
+            "bge_count":    "SELECT COUNT(*) FROM transport_fuel_voucher WHERE state='done' AND voucher_type='external' AND EXTRACT(MONTH FROM date)=EXTRACT(MONTH FROM CURRENT_DATE) AND EXTRACT(YEAR FROM date)=EXTRACT(YEAR FROM CURRENT_DATE)",
+            "litres_bgi":   "SELECT COALESCE(SUM(total_quantity),0) FROM transport_fuel_voucher WHERE state='done' AND voucher_type='internal' AND EXTRACT(MONTH FROM date)=EXTRACT(MONTH FROM CURRENT_DATE) AND EXTRACT(YEAR FROM date)=EXTRACT(YEAR FROM CURRENT_DATE)",
+            "litres_bge":   "SELECT COALESCE(SUM(total_quantity),0) FROM transport_fuel_voucher WHERE state='done' AND voucher_type='external' AND EXTRACT(MONTH FROM date)=EXTRACT(MONTH FROM CURRENT_DATE) AND EXTRACT(YEAR FROM date)=EXTRACT(YEAR FROM CURRENT_DATE)",
+            "cout_total":   "SELECT COALESCE(SUM(total_cost),0) FROM transport_fuel_voucher WHERE state='done' AND EXTRACT(MONTH FROM date)=EXTRACT(MONTH FROM CURRENT_DATE) AND EXTRACT(YEAR FROM date)=EXTRACT(YEAR FROM CURRENT_DATE)",
+            # vehicle via fuel_voucher_line
+            "litres_par_bus": (
+                "SELECT v.name AS bus, v.license_plate, "
+                "COUNT(DISTINCT f.id) AS nb_bons, "
+                "COALESCE(SUM(CASE WHEN f.voucher_type='internal' THEN fl.quantity ELSE 0 END),0) AS litres_bgi, "
+                "COALESCE(SUM(CASE WHEN f.voucher_type='external' THEN fl.quantity ELSE 0 END),0) AS litres_bge, "
+                "COALESCE(SUM(fl.quantity),0) AS total_litres "
+                "FROM transport_fuel_voucher f "
+                "JOIN transport_fuel_voucher_line fl ON fl.voucher_id = f.id "
+                "JOIN fleet_vehicle v ON fl.vehicle_id = v.id "
+                "WHERE f.state='done' "
+                "AND EXTRACT(MONTH FROM f.date)=EXTRACT(MONTH FROM CURRENT_DATE) "
+                "AND EXTRACT(YEAR FROM f.date)=EXTRACT(YEAR FROM CURRENT_DATE) "
+                "GROUP BY v.name, v.license_plate ORDER BY total_litres DESC"
+            ),
+            "detail_bons_recents": (
+                "SELECT f.name AS reference, "
+                "CASE WHEN f.voucher_type='internal' THEN 'BGI' ELSE 'BGE' END AS type, "
+                "TO_CHAR(f.date,'DD/MM/YYYY') AS date_bon, "
+                "f.total_quantity AS litres, "
+                "COALESCE(f.total_cost,0) AS cout_tnd "
+                "FROM transport_fuel_voucher f "
+                "WHERE f.state='done' "
+                "AND EXTRACT(MONTH FROM f.date)=EXTRACT(MONTH FROM CURRENT_DATE) "
+                "AND EXTRACT(YEAR FROM f.date)=EXTRACT(YEAR FROM CURRENT_DATE) "
+                "ORDER BY f.date DESC LIMIT 10"
+            ),
         }
     },
+
+    # ─────────────────────────────────────────────────────────────────────────
+    # COURRIER BOC
+    # boc_courrier_arrivee : expediteur_nom (jsonb, pas expediteur)
+    #                        date_arrivee (timestamp)
+    #                        en_retard (boolean calculé)
+    # boc_courrier_depart  : date_depart (pas date_envoi)
+    # ─────────────────────────────────────────────────────────────────────────
     "bilan_boc": {
-        "label": "Synthèse courrier BOC",
+        "label": "Synthese courrier BOC",
         "requetes": {
-            "total_arrivee":     "SELECT COUNT(*) FROM boc_courrier_arrivee WHERE EXTRACT(MONTH FROM date_arrivee) = EXTRACT(MONTH FROM CURRENT_DATE)",
-            "en_attente":        "SELECT COUNT(*) FROM boc_courrier_arrivee WHERE state IN ('enregistre','diffuse') AND EXTRACT(MONTH FROM date_arrivee) = EXTRACT(MONTH FROM CURRENT_DATE)",
-            "traites":           "SELECT COUNT(*) FROM boc_courrier_arrivee WHERE state = 'traite' AND EXTRACT(MONTH FROM date_arrivee) = EXTRACT(MONTH FROM CURRENT_DATE)",
-            "classes":           "SELECT COUNT(*) FROM boc_courrier_arrivee WHERE state = 'classe' AND EXTRACT(MONTH FROM date_arrivee) = EXTRACT(MONTH FROM CURRENT_DATE)",
-            "en_retard":         "SELECT COUNT(*) FROM boc_courrier_arrivee WHERE state NOT IN ('classe','traite') AND date_arrivee < CURRENT_DATE - INTERVAL '7 days'",
+            "total_arrivee": "SELECT COUNT(*) FROM boc_courrier_arrivee WHERE EXTRACT(MONTH FROM date_arrivee)=EXTRACT(MONTH FROM CURRENT_DATE) AND EXTRACT(YEAR FROM date_arrivee)=EXTRACT(YEAR FROM CURRENT_DATE)",
+            "en_attente":    "SELECT COUNT(*) FROM boc_courrier_arrivee WHERE state IN ('enregistre','diffuse') AND EXTRACT(MONTH FROM date_arrivee)=EXTRACT(MONTH FROM CURRENT_DATE) AND EXTRACT(YEAR FROM date_arrivee)=EXTRACT(YEAR FROM CURRENT_DATE)",
+            "traites":       "SELECT COUNT(*) FROM boc_courrier_arrivee WHERE state='traite' AND EXTRACT(MONTH FROM date_arrivee)=EXTRACT(MONTH FROM CURRENT_DATE) AND EXTRACT(YEAR FROM date_arrivee)=EXTRACT(YEAR FROM CURRENT_DATE)",
+            "classes":       "SELECT COUNT(*) FROM boc_courrier_arrivee WHERE state='classe' AND EXTRACT(MONTH FROM date_arrivee)=EXTRACT(MONTH FROM CURRENT_DATE) AND EXTRACT(YEAR FROM date_arrivee)=EXTRACT(YEAR FROM CURRENT_DATE)",
+            # en_retard est un boolean calculé dans la table
+            "en_retard":     "SELECT COUNT(*) FROM boc_courrier_arrivee WHERE en_retard = True",
+            # date_depart (pas date_envoi)
+            "total_depart":  "SELECT COUNT(*) FROM boc_courrier_depart WHERE EXTRACT(MONTH FROM date_depart)=EXTRACT(MONTH FROM CURRENT_DATE) AND EXTRACT(YEAR FROM date_depart)=EXTRACT(YEAR FROM CURRENT_DATE)",
+            # expediteur_nom est jsonb
+            "detail_retard": (
+                "SELECT c.name AS reference, c.sujet, "
+                "COALESCE(c.expediteur_nom->>'fr_FR', c.expediteur_nom->>'en_US', c.expediteur_nom::text) AS expediteur, "
+                "TO_CHAR(c.date_arrivee,'DD/MM/YYYY') AS date_arrivee, "
+                "c.state, c.type_arrivee, "
+                "CURRENT_DATE - c.date_arrivee::date AS jours_retard "
+                "FROM boc_courrier_arrivee c "
+                "WHERE c.en_retard = True "
+                "ORDER BY c.date_arrivee ASC LIMIT 15"
+            ),
+            "detail_en_attente": (
+                "SELECT c.name AS reference, c.sujet, "
+                "COALESCE(c.expediteur_nom->>'fr_FR', c.expediteur_nom->>'en_US', c.expediteur_nom::text) AS expediteur, "
+                "TO_CHAR(c.date_arrivee,'DD/MM/YYYY') AS date_arrivee, "
+                "c.state, c.type_arrivee, "
+                "TO_CHAR(c.date_echeance,'DD/MM/YYYY') AS echeance "
+                "FROM boc_courrier_arrivee c "
+                "WHERE c.state IN ('enregistre','diffuse') "
+                "AND EXTRACT(MONTH FROM c.date_arrivee)=EXTRACT(MONTH FROM CURRENT_DATE) "
+                "AND EXTRACT(YEAR FROM c.date_arrivee)=EXTRACT(YEAR FROM CURRENT_DATE) "
+                "ORDER BY c.date_echeance ASC LIMIT 15"
+            ),
         }
     },
 }

@@ -1,207 +1,467 @@
 # schema_erp_transport.txt
-# Schéma de la base erp_db2 — ERP Transport Terrestre Tunisie
-# À mettre à jour si le schéma change
+# Schéma RÉEL de la base erp_db2 — ERP Transport Terrestre Tunisie
+# Mis à jour le 18/05/2026 depuis PostgreSQL (information_schema)
 # Utilisé par agent_core.py pour injecter dans le prompt generer_sql
 
 === RÈGLES GÉNÉRALES ===
 - Base PostgreSQL, encodage UTF-8
-- Les états (state) sont des VARCHAR avec accents en base
+- Les champs name de type jsonb : utiliser name->>'fr_FR' ou name->>'en_US'
+- Ne jamais utiliser "name" brut pour les tables avec name jsonb
 - Ne jamais utiliser "name" pour transport_assurance_bus → utiliser "numero_police"
 - Les champs Many2one stockent un INTEGER (foreign key)
 - Toujours utiliser ILIKE pour les recherches texte (insensible à la casse)
 - LIMIT 20 par défaut sauf COUNT
 
+=== CHAMPS JSONB (name à extraire avec ->>) ===
+  fleet_vehicle_state.name          → name->>'en_US' ou name->>'fr_FR'
+  transport_exploitation_ligne.name → name->>'fr_FR' ou name->>'en_US'
+  transport_exploitation_agence.name→ name->>'fr_FR' ou name->>'en_US'
+  transport_exploitation_motif.name → name->>'fr_FR' ou name->>'en_US'
+  transport_exploitation_station.name→name->>'fr_FR' ou name->>'en_US'
+  transport_exploitation_centre.name→ name->>'fr_FR' ou name->>'en_US'
+  transport_assurance_type.name     → name->>'en_US' ou name->>'fr_FR'
+  patrimoine_immobilisation.name    → name->>'fr_FR' ou name->>'en_US'
+  patrimoine_categorie.name         → name->>'fr_FR' ou name->>'en_US'
+  boc_courrier_arrivee.expediteur_nom→expediteur_nom->>'fr_FR' ou ->>'en_US'
+  boc_courrier_depart.destinataire_nom→destinataire_nom->>'fr_FR' ou ->>'en_US'
+  boc_organisme.name                → name->>'fr_FR' ou name->>'en_US'
+  transport_fuel_station.name       → name->>'fr_FR' ou name->>'en_US'
+  transport_fuel_cuve.display_name  → VARCHAR (pas jsonb)
+  transport_agilis_carte.chauffeur_principal → jsonb
+
 === MODULE EXPLOITATION ===
 
 TABLE transport_exploitation_tournee :
-  id              INTEGER
-  name            VARCHAR      -- référence ex: TOURN/2026/00005
-  state           VARCHAR      -- VALEURS EXACTES: 'brouillon','planifie','en_cours','realise','annule'
-  date            DATE
-  vehicle_id      INTEGER      -- FK fleet_vehicle.id
-  chauffeur_id    INTEGER      -- FK hr_employee.id
-  ligne_id        INTEGER      -- FK transport_exploitation_ligne.id
-  agence_id       INTEGER      -- FK transport_exploitation_agence.id
-  direction       VARCHAR      -- 'aller' ou 'retour'
-  km_prevu        NUMERIC
-  km_realise      NUMERIC
-  ecart_km        NUMERIC      -- calculé : km_realise - km_prevu
-  heure_depart_prevu   VARCHAR
-  heure_arrivee_prevu  VARCHAR
-  heure_depart_reel    VARCHAR
-  heure_arrivee_reel   VARCHAR
-  compteur_depart      NUMERIC
-  compteur_arrivee     NUMERIC
-  motif_annulation_id  INTEGER  -- FK transport_exploitation_motif.id
-  note_annulation      TEXT
+  id                    INTEGER
+  name                  VARCHAR      -- référence ex: TOURN/2026/00018
+  state                 VARCHAR      -- 'brouillon','planifie','en_cours','realise','annule'
+  date                  DATE
+  ligne_id              INTEGER      -- FK transport_exploitation_ligne.id
+  agence_id             INTEGER      -- FK transport_exploitation_agence.id
+  vehicle_id            INTEGER      -- FK fleet_vehicle.id
+  chauffeur_id          INTEGER      -- FK hr_employee.id
+  motif_annulation_id   INTEGER      -- FK transport_exploitation_motif.id
+  feuille_route_id      INTEGER      -- FK transport_exploitation_feuille_route.id
+  direction             VARCHAR      -- 'aller' ou 'retour'
+  km_prevu              NUMERIC
+  km_realise            NUMERIC
+  ecart_km              NUMERIC      -- calculé : km_realise - km_prevu
+  heure_depart_prevu    NUMERIC      -- décimal ex: 8.0 = 8h00
+  heure_arrivee_prevu   NUMERIC
+  heure_depart_reel     NUMERIC
+  heure_arrivee_reel    NUMERIC
+  compteur_depart       NUMERIC
+  compteur_arrivee      NUMERIC
+  note_annulation       TEXT
+  nb_voyageurs_prevu    INTEGER
+  nb_voyageurs_reel     INTEGER
+  recette_prevue        NUMERIC
+  recette_reelle        NUMERIC
+  ecart_recette         NUMERIC
+  nb_perturbations      INTEGER
+  a_perturbation        BOOLEAN
+  type_ligne            VARCHAR      -- 'urbaine','interurbaine'
 
 TABLE transport_exploitation_ligne :
-  id    INTEGER
-  name  VARCHAR   -- nom de la ligne ex: "Tunis – Sfax"
+  id               INTEGER
+  name             JSONB        -- ex: {'fr_FR':'Tunis – Sfax','en_US':'Tunis – Sfax'}
+  code             VARCHAR      -- ex: 'L01'
+  type_ligne       VARCHAR      -- 'interurbaine','urbaine'
+  station_depart_id INTEGER     -- FK transport_exploitation_station.id
+  station_arrivee_id INTEGER    -- FK transport_exploitation_station.id
+  agence_id        INTEGER      -- FK transport_exploitation_agence.id
+  distance_km      NUMERIC
+  duree_prevue     NUMERIC      -- en minutes
+  tarif_unitaire   NUMERIC
 
 TABLE transport_exploitation_agence :
+  id           INTEGER
+  name         JSONB        -- ex: {'fr_FR':'Agence Tunis Bab Alioua'}
+  code         VARCHAR
+  centre_id    INTEGER      -- FK transport_exploitation_centre.id
+  ville        JSONB
+
+TABLE transport_exploitation_centre :
   id    INTEGER
-  name  VARCHAR
+  name  JSONB    -- ex: {'fr_FR':'Centre Nord'}
+  code  VARCHAR
+  ville JSONB
+
+TABLE transport_exploitation_station :
+  id           INTEGER
+  name         JSONB    -- ex: {'fr_FR':'Tunis – Bab Alioua'}
+  code         VARCHAR
+  type_station VARCHAR  -- 'terminus','intermediaire'
+  agence_id    INTEGER
+  ville        JSONB
 
 TABLE transport_exploitation_motif :
   id    INTEGER
-  name  VARCHAR   -- ex: 'Panne mécanique', 'Absence chauffeur', 'Autre'
+  name  JSONB    -- ex: {'en_US':'Panne mécanique'}
+  code  VARCHAR  -- ex: 'PAN'
+
+TABLE transport_exploitation_feuille_route :
+  id                     INTEGER
+  name                   VARCHAR
+  state                  VARCHAR  -- 'ouvert','cloture'
+  date                   DATE
+  agence_id              INTEGER
+  nb_tournees_prevues    INTEGER
+  nb_tournees_realisees  INTEGER
+  nb_tournees_annulees   INTEGER
+  taux_realisation       NUMERIC
+  km_total_prevu         NUMERIC
+  km_total_realise       NUMERIC
 
 === MODULE FLEET (BUS) ===
 
 TABLE fleet_vehicle :
-  id             INTEGER
-  name           VARCHAR      -- ex: 'Audi/Bus 15001', 'Tesla Motors/tesla'
-  license_plate  VARCHAR      -- ex: '123 TU 456', '255 TU 1550'
-  state_id       INTEGER      -- FK fleet_vehicle_state.id
+  id                INTEGER
+  name              VARCHAR      -- ex: 'Audi/Bus 15001/123 TU 456'
+  license_plate     VARCHAR      -- ex: '123 TU 456'
+  state_id          INTEGER      -- FK fleet_vehicle_state.id
+  active            BOOLEAN
+  bus_type          VARCHAR      -- 'standard','articulé'
+  activity_type     VARCHAR      -- 'urban','interurban'
+  theoretical_fuel_consumption NUMERIC  -- consommation théorique L/100km
+  fuel_tank_capacity NUMERIC
+  immobilisation_id INTEGER      -- FK patrimoine_immobilisation.id
+  assurance_statut  VARCHAR      -- 'assure','non_assure','alerte'
+  assurance_nb_polices INTEGER
+  assurance_prochaine_echeance DATE
 
 TABLE fleet_vehicle_state :
   id        INTEGER
-  name      VARCHAR
+  name      JSONB    -- ex: {'en_US':'En panne'} — JSONB pas VARCHAR !
   sequence  INTEGER
-  -- VALEURS CONNUES: id=1 New Request, id=2 To Order, id=3 Registered
-  --                  id=4 Downgraded, id=47 En service, id=5 En panne
-  --                  id=6 En maintenance, id=48 Hors service, id=49 Réformé
+  -- IDs connus: 5=En panne, 6=En maintenance, 47=En service, 48=Hors service, 49=Réformé
+
+TABLE fleet_vehicle_odometer :
+  id         INTEGER
+  vehicle_id INTEGER  -- FK fleet_vehicle.id
+  date       DATE
+  value      DOUBLE PRECISION  -- valeur compteur en km
 
 === MODULE ASSURANCE ===
 
 TABLE transport_assurance_bus :
-  id                  INTEGER
-  numero_police       VARCHAR      -- référence ex: POL-BUS/2026/0001  (PAS "name")
-  state               VARCHAR      -- VALEURS EXACTES: 'active','résiliée','expirée','brouillon','alerte'
-  vehicle_id          INTEGER      -- FK fleet_vehicle.id
-  compagnie_id        INTEGER      -- FK transport_assurance_compagnie.id
-  type_police_id      INTEGER      -- FK transport_assurance_type.id
-  date_debut          DATE
-  date_fin            DATE
-  date_alerte         DATE
+  id                    INTEGER
+  numero_police         VARCHAR      -- ex: POL-BUS/2026/0001  (PAS "name")
+  state                 VARCHAR      -- 'active','résiliée','expirée','brouillon','alerte'
+  vehicle_id            INTEGER      -- FK fleet_vehicle.id
+  compagnie_id          INTEGER      -- FK transport_assurance_compagnie.id
+  type_police_id        INTEGER      -- FK transport_assurance_type.id
+  date_debut            DATE
+  date_fin              DATE
+  date_alerte           DATE
   date_visite_technique DATE
-  prime_annuelle      NUMERIC
-  franchise           NUMERIC
-  plafond_garantie    NUMERIC
+  prime_annuelle        NUMERIC
+  franchise             NUMERIC
+  plafond_garantie      NUMERIC
   montant_total_indemnise NUMERIC
-  is_obligatoire      BOOLEAN
-  nb_sinistres        INTEGER
-  notes               TEXT
+  is_obligatoire        BOOLEAN
+  nb_sinistres          INTEGER
 
 TABLE transport_assurance_compagnie :
   id    INTEGER
-  name  VARCHAR   -- ex: 'GAT Assurance', 'STAR Assurances'
+  name  VARCHAR   -- VARCHAR (pas jsonb) — ex: 'GAT Assurance'
+  code  VARCHAR   -- ex: 'STAR','GAT'
+  telephone VARCHAR
+  email VARCHAR
 
 TABLE transport_assurance_type :
-  id    INTEGER
-  name  VARCHAR   -- ex: 'Responsabilité civile (RC)', 'Tous risques'
+  id             INTEGER
+  name           JSONB    -- JSONB ! ex: {'en_US':'Responsabilité civile (RC)'}
+  code           VARCHAR  -- ex: 'RC','VOYAGE'
+  categorie      VARCHAR  -- 'bus','chauffeur'
+  is_obligatoire BOOLEAN
 
 TABLE transport_assurance_chauffeur :
-  id            INTEGER
-  chauffeur_id  INTEGER   -- FK hr_employee.id
-  numero_police VARCHAR
-  state         VARCHAR   -- mêmes valeurs que transport_assurance_bus
-  date_debut    DATE
-  date_fin      DATE
-  compagnie_id  INTEGER
+  id             INTEGER
+  employe_id     INTEGER  -- FK hr_employee.id  (PAS chauffeur_id !)
+  numero_police  VARCHAR
+  name           VARCHAR
+  state          VARCHAR  -- mêmes valeurs que transport_assurance_bus
+  date_debut     DATE
+  date_fin       DATE
+  date_alerte    DATE
+  compagnie_id   INTEGER  -- FK transport_assurance_compagnie.id
+  type_police_id INTEGER  -- FK transport_assurance_type.id
+  prime_annuelle NUMERIC
+  capital_assure NUMERIC
+  is_obligatoire BOOLEAN
 
 TABLE transport_assurance_sinistre :
-  id              INTEGER
-  name            VARCHAR   -- référence sinistre
-  state           VARCHAR   -- 'brouillon','declare','instruction','cloture','rejete'
-  vehicle_id      INTEGER   -- FK fleet_vehicle.id
-  chauffeur_id    INTEGER   -- FK hr_employee.id
-  date_sinistre   DATE
-  montant_dommage NUMERIC
-  montant_indemnise NUMERIC
-  description     TEXT
+  id                   INTEGER
+  name                 VARCHAR   -- référence ex: SIN/2026/00001
+  state                VARCHAR   -- 'brouillon','declare','instruction','cloture','rejete'
+  vehicle_id           INTEGER   -- FK fleet_vehicle.id
+  employe_id           INTEGER   -- FK hr_employee.id  (PAS chauffeur_id !)
+  police_bus_id        INTEGER   -- FK transport_assurance_bus.id
+  compagnie_id         INTEGER   -- FK transport_assurance_compagnie.id
+  tournee_id           INTEGER   -- FK transport_exploitation_tournee.id
+  date_sinistre        DATE
+  date_declaration     DATE
+  date_cloture         DATE
+  objet_sinistre       VARCHAR   -- 'bus','chauffeur'
+  nature_sinistre      VARCHAR   -- 'collision','incendie','vol'
+  lieu                 VARCHAR
+  gouvernorat          VARCHAR
+  description          TEXT
+  montant_reclame      NUMERIC   -- montant réclamé  (PAS montant_dommage !)
+  montant_accorde      NUMERIC   -- montant accordé par la compagnie
+  franchise_appliquee  NUMERIC
+  montant_net_verse    NUMERIC   -- net versé après franchise (PAS montant_indemnise !)
+  nb_blesses           INTEGER
+  nb_deces             INTEGER
+  tiers_implique       BOOLEAN
 
 === MODULE CARBURANT (ENERGY) ===
 
 TABLE transport_fuel_voucher :
-  id            INTEGER
-  name          VARCHAR   -- référence ex: BGI/2026/00031
-  voucher_type  VARCHAR   -- 'internal' (BGI) ou 'external' (BGE)
-  state         VARCHAR   -- 'draft','confirmed','done','cancelled'
-  vehicle_id    INTEGER   -- FK fleet_vehicle.id
-  date          DATE
-  total_quantity NUMERIC  -- en litres
+  id             INTEGER
+  name           VARCHAR   -- ex: BGI/2026/00031
+  voucher_type   VARCHAR   -- 'internal' (BGI) ou 'external' (BGE)
+  state          VARCHAR   -- 'draft','confirmed','done','cancelled'
+  -- ATTENTION : PAS de vehicle_id direct ici !
+  -- Le vehicle_id est dans transport_fuel_voucher_line
+  station_id     INTEGER   -- FK transport_fuel_station.id
+  fuel_type_id   INTEGER
+  date           DATE
+  total_quantity NUMERIC   -- litres totaux du bon
+  total_cost     NUMERIC   -- coût total TND
 
-TABLE transport_fuel_line :
-  id          INTEGER
-  voucher_id  INTEGER   -- FK transport_fuel_voucher.id
-  product_id  INTEGER
-  quantity    NUMERIC
-  price_unit  NUMERIC
+TABLE transport_fuel_voucher_line :
+  id           INTEGER
+  voucher_id   INTEGER  -- FK transport_fuel_voucher.id
+  vehicle_id   INTEGER  -- FK fleet_vehicle.id  ← vehicle ici, pas dans voucher !
+  quantity     NUMERIC
+  unit_price   NUMERIC
+  subtotal     NUMERIC
+
+TABLE transport_fuel_station :
+  id     INTEGER
+  name   JSONB    -- ex: {'fr_FR':'Station Dépôt Tunis'}
+  code   VARCHAR
+  active BOOLEAN
+
+TABLE transport_fuel_cuve :
+  id             INTEGER
+  station_id     INTEGER  -- FK transport_fuel_station.id
+  fuel_type_id   INTEGER
+  display_name   VARCHAR  -- VARCHAR (pas jsonb)
+  capacity       NUMERIC
+  current_stock  NUMERIC
+  min_stock_alert NUMERIC
+  stock_status   VARCHAR  -- 'ok','low','critical'
 
 TABLE transport_facture_energie :
+  id                  INTEGER
+  name                VARCHAR   -- ex: STEG-2026-001
+  type_facture        VARCHAR   -- 'steg','sonede','autre'
+  statut              VARCHAR   -- 'saisie','payee','annulee'  (PAS "state" !)
+  site                VARCHAR
+  numero_compteur     VARCHAR
+  date_reception      DATE
+  date_debut_periode  DATE
+  date_fin_periode    DATE
+  quantite_consommee  NUMERIC
+  montant             NUMERIC
+  consommation_n1     NUMERIC   -- consommation N-1
+  montant_n1          NUMERIC   -- montant N-1
+  ecart_consommation  NUMERIC
+  ecart_pourcentage   NUMERIC
+
+TABLE transport_agilis_carte :
   id              INTEGER
-  name            VARCHAR   -- référence ex: STEG-2026-002
-  type_facture    VARCHAR   -- 'steg','sonede','autre'
-  statut          VARCHAR   -- 'saisie','payee','annulee'  (PAS "state")
-  site            VARCHAR
-  montant         NUMERIC
-  date_reception  DATE
-  date_paiement   DATE
+  name            VARCHAR   -- ex: AGILIS-001
+  statut          VARCHAR   -- 'active','bloquee','expiree'
+  vehicle_id      INTEGER   -- FK fleet_vehicle.id
+  solde_actuel    NUMERIC
+  total_recharge  NUMERIC
+  total_utilise   NUMERIC
+  date_expiration DATE
+
+TABLE transport_agilis_utilisation :
+  id          INTEGER
+  carte_id    INTEGER  -- FK transport_agilis_carte.id
+  vehicle_id  INTEGER  -- FK fleet_vehicle.id
+  quantite    NUMERIC
+  montant     NUMERIC
+  date        TIMESTAMP
 
 === MODULE BOC (COURRIER) ===
 
 TABLE boc_courrier_arrivee :
-  id           INTEGER
-  name         VARCHAR   -- référence ex: ARR/2026/0007
-  state        VARCHAR   -- VALEURS: 'brouillon','enregistre','diffuse','traite','classe'
-  sujet        VARCHAR
-  expediteur   VARCHAR
-  date_arrivee TIMESTAMP
-  type_arrivee VARCHAR   -- 'interne','externe'
+  id                   INTEGER
+  name                 VARCHAR    -- référence ex: ARR/2026/0007
+  state                VARCHAR    -- 'brouillon','enregistre','diffuse','traite','classe'
+  sujet                VARCHAR
+  expediteur_nom       JSONB      -- JSONB ! (PAS expediteur simple)
+  type_arrivee         VARCHAR    -- 'interne','externe'
+  date_arrivee         TIMESTAMP  -- timestamp (pas date)
+  date_echeance        DATE
+  date_rappel          DATE
+  date_reponse         DATE
+  en_retard            BOOLEAN    -- calculé automatiquement
+  necessite_reponse    BOOLEAN
+  reponse_fournie      BOOLEAN
+  montant_facture      NUMERIC
+  est_facture          BOOLEAN
+  type_courrier_id     INTEGER    -- FK boc_type_courrier.id
+  organisme_id         INTEGER    -- FK boc_organisme.id
 
 TABLE boc_courrier_depart :
-  id      INTEGER
-  name    VARCHAR
-  state   VARCHAR   -- 'brouillon','enregistre','envoye','classe'
-  sujet   VARCHAR
-  date_envoi DATE
+  id                INTEGER
+  name              VARCHAR    -- ex: DEP/2026/0001
+  state             VARCHAR    -- 'brouillon','enregistre','envoye','classe'
+  sujet             VARCHAR
+  destinataire_nom  JSONB      -- JSONB !
+  type_depart       VARCHAR    -- 'interne','externe'
+  date_depart       DATE       -- (PAS date_envoi !)
+  support           VARCHAR    -- 'papier','email'
+  service_expediteur VARCHAR
+
+TABLE boc_organisme :
+  id             INTEGER
+  name           JSONB    -- ex: {'fr_FR':'Ministère des Transports'}
+  type_organisme VARCHAR  -- 'interne','externe'
+  code           VARCHAR
+
+TABLE boc_transmission :
+  id                 INTEGER
+  arrivee_id         INTEGER   -- FK boc_courrier_arrivee.id
+  state              VARCHAR   -- 'en_attente','transmis','traite'
+  destinataire_nom   VARCHAR
+  instruction        VARCHAR
+  date_transmission  DATE
+  date_echeance      DATE
 
 === MODULE PATRIMOINE ===
 
 TABLE patrimoine_immobilisation :
   id                    INTEGER
-  name                  VARCHAR
-  statut                VARCHAR   -- 'en_service','hors_service','cede','rebut'  (PAS "state")
+  name                  JSONB        -- JSONB ! ex: {'fr_FR':'Véhicule Bus 15001'}
+  numero_inventaire     VARCHAR      -- ex: IMM/2026/00001
+  statut                VARCHAR      -- 'en_service','hors_service','cede','rebut' (PAS "state" !)
+  categorie_id          INTEGER      -- FK patrimoine_categorie.id
+  cout_acquisition      NUMERIC
+  frais_accessoires     NUMERIC
+  cout_entree           NUMERIC
   valeur_nette_comptable NUMERIC
-  valeur_acquisition    NUMERIC
-  duree_amortissement   INTEGER   -- en mois
-  date_mise_en_service  DATE
+  amortissements_cumules NUMERIC
+  base_amortissable     NUMERIC
   taux_amortissement    NUMERIC
+  duree_amortissement   INTEGER      -- en années
+  methode_amortissement VARCHAR      -- 'lineaire','degressif'
+  date_acquisition      DATE
+  date_mise_en_service  DATE
+  fin_amortissement     DATE
+  vehicle_id            INTEGER      -- FK fleet_vehicle.id
+
+TABLE patrimoine_categorie :
+  id    INTEGER
+  name  JSONB    -- ex: {'fr_FR':'Matériel de transport'}
+  code  VARCHAR
 
 TABLE patrimoine_cession :
-  id          INTEGER
-  name        VARCHAR
-  state       VARCHAR   -- 'brouillon','confirme','comptabilise'
-  date_cession DATE
-  valeur_cession NUMERIC
+  id                    INTEGER
+  name                  VARCHAR
+  state                 VARCHAR   -- 'brouillon','confirme','comptabilise'
+  immobilisation_id     INTEGER   -- FK patrimoine_immobilisation.id
+  type_sortie           VARCHAR   -- 'cession','rebut','don'
+  motif                 VARCHAR
+  date                  DATE
+  prix_cession          NUMERIC
+  vnc_sortie            NUMERIC   -- valeur nette comptable à la sortie
+  plus_moins_value      NUMERIC
+
+TABLE patrimoine_amortissement_ligne :
+  id                     INTEGER
+  immobilisation_id      INTEGER  -- FK patrimoine_immobilisation.id
+  annee                  INTEGER
+  state                  VARCHAR  -- 'brouillon','valide','comptabilise'
+  date_debut             DATE
+  date_fin               DATE
+  montant_amortissement  NUMERIC
+  amortissements_cumules NUMERIC
+  valeur_nette           NUMERIC
+
+TABLE patrimoine_affectation :
+  id                INTEGER
+  name              VARCHAR   -- ex: AFF/2026/0001
+  state             VARCHAR   -- 'active','retournee'
+  immobilisation_id INTEGER   -- FK patrimoine_immobilisation.id
+  beneficiaire_id   INTEGER   -- FK hr_employee.id (ou res.partner)
+  department_id     INTEGER
+  emplacement_id    INTEGER   -- FK patrimoine_emplacement.id
+  date              DATE
+  date_retour       DATE
+  quantite          NUMERIC
+
+TABLE patrimoine_inventaire :
+  id             INTEGER
+  name           VARCHAR   -- ex: INV/2026/0001
+  state          VARCHAR   -- 'brouillon','en_cours','termine'
+  date           DATE
+  responsable_id INTEGER
 
 === MODULE RH (CHAUFFEURS) ===
 
 TABLE hr_employee :
-  id        INTEGER
-  name      VARCHAR   -- ex: 'louay', 'omar'
-  job_title VARCHAR
-  active    BOOLEAN
+  id                    INTEGER
+  name                  VARCHAR   -- ex: 'louay', 'omar' — VARCHAR (pas jsonb)
+  active                BOOLEAN
+  est_chauffeur         BOOLEAN
+  categorie_permis      VARCHAR
+  permis_statut         VARCHAR   -- 'valide','expire','aucun'
+  visite_statut         VARCHAR   -- 'valide','expiree','aucune'
+  conducteur_statut     VARCHAR
+  permis_date_expiration DATE
+  visite_date_prochaine  DATE
+  vehicle_id            INTEGER   -- FK fleet_vehicle.id (bus affecté)
+  ligne_id              INTEGER   -- FK transport_exploitation_ligne.id
+  matricule_interne     VARCHAR
+  centre_id             INTEGER
 
-=== JOINTURES FRÉQUENTES ===
+=== JOINTURES FRÉQUENTES — CORRIGÉES ===
 
--- Tournée avec bus et chauffeur
-SELECT t.name, t.state, v.name AS bus, v.license_plate, e.name AS chauffeur
+-- Tournée avec bus, chauffeur et ligne (name jsonb)
+SELECT t.name, t.state, t.direction,
+       COALESCE(l.name->>'fr_FR', l.name->>'en_US') AS ligne,
+       v.name AS bus, v.license_plate,
+       e.name AS chauffeur
 FROM transport_exploitation_tournee t
+LEFT JOIN transport_exploitation_ligne l ON t.ligne_id = l.id
 LEFT JOIN fleet_vehicle v ON t.vehicle_id = v.id
 LEFT JOIN hr_employee e ON t.chauffeur_id = e.id
 
--- Police assurance avec compagnie et bus
+-- Police assurance avec compagnie, type (jsonb) et bus
 SELECT a.numero_police, a.state, a.date_debut, a.date_fin,
-       v.name AS bus, c.name AS compagnie
+       COALESCE(tp.name->>'en_US', tp.name->>'fr_FR') AS type_police,
+       c.name AS compagnie, v.name AS bus
 FROM transport_assurance_bus a
 LEFT JOIN fleet_vehicle v ON a.vehicle_id = v.id
 LEFT JOIN transport_assurance_compagnie c ON a.compagnie_id = c.id
+LEFT JOIN transport_assurance_type tp ON a.type_police_id = tp.id
 
--- Bon carburant avec bus
+-- Bon carburant avec bus (via fuel_voucher_line !)
 SELECT f.name, f.voucher_type, f.total_quantity, f.state, f.date,
-       v.name AS bus
+       v.name AS bus, v.license_plate
 FROM transport_fuel_voucher f
-LEFT JOIN fleet_vehicle v ON f.vehicle_id = v.id
+JOIN transport_fuel_voucher_line fl ON fl.voucher_id = f.id
+JOIN fleet_vehicle v ON fl.vehicle_id = v.id
+
+-- Sinistre avec bus et chauffeur (employe_id pas chauffeur_id)
+SELECT s.name, s.state, s.nature_sinistre,
+       s.montant_accorde, s.montant_net_verse,
+       v.name AS bus, e.name AS chauffeur
+FROM transport_assurance_sinistre s
+LEFT JOIN fleet_vehicle v ON s.vehicle_id = v.id
+LEFT JOIN hr_employee e ON s.employe_id = e.id
+
+-- Courrier avec expéditeur (jsonb)
+SELECT c.name, c.sujet,
+       COALESCE(c.expediteur_nom->>'fr_FR', c.expediteur_nom->>'en_US') AS expediteur,
+       c.state, c.date_arrivee, c.en_retard
+FROM boc_courrier_arrivee c
