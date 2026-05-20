@@ -1,7 +1,7 @@
 """
-lire_schema_complet.py
-Lit le vrai schéma de toutes les tables custom du projet depuis PostgreSQL.
-Lancer : python3 lire_schema_complet.py > schema_reel.txt
+verifier_boc.py
+Vérifie les données réelles dans boc_courrier_arrivee
+Lancer : python3 verifier_boc.py
 """
 import os
 import psycopg2
@@ -19,70 +19,63 @@ conn = psycopg2.connect(
 )
 cur = conn.cursor()
 
-# Récupérer toutes les tables custom
+print("=" * 60)
+print("VÉRIFICATION DONNÉES BOC")
+print("=" * 60)
+
+# 1. Total courriers
+cur.execute("SELECT COUNT(*) FROM boc_courrier_arrivee")
+print(f"\nTotal courriers arrivée : {cur.fetchone()[0]}")
+
+# 2. Répartition par state
+cur.execute("SELECT state, COUNT(*) FROM boc_courrier_arrivee GROUP BY state ORDER BY COUNT(*) DESC")
+rows = cur.fetchall()
+print("\nRépartition par état :")
+for state, nb in rows:
+    print(f"  {state} : {nb}")
+
+# 3. Dates des courriers
+cur.execute("SELECT MIN(date_arrivee), MAX(date_arrivee) FROM boc_courrier_arrivee")
+row = cur.fetchone()
+print(f"\nDate min arrivée : {row[0]}")
+print(f"Date max arrivée : {row[1]}")
+
+# 4. Courriers ce mois
 cur.execute("""
-    SELECT table_name
-    FROM information_schema.tables
-    WHERE table_schema = 'public'
-      AND table_type = 'BASE TABLE'
-      AND (
-          table_name LIKE 'transport_%'
-       OR table_name LIKE 'fleet_vehicle%'
-       OR table_name LIKE 'hr_employee%'
-       OR table_name LIKE 'boc_%'
-       OR table_name LIKE 'patrimoine_%'
-      )
-    ORDER BY table_name
+    SELECT COUNT(*) FROM boc_courrier_arrivee
+    WHERE EXTRACT(MONTH FROM date_arrivee) = EXTRACT(MONTH FROM CURRENT_DATE)
+    AND EXTRACT(YEAR FROM date_arrivee) = EXTRACT(YEAR FROM CURRENT_DATE)
 """)
-tables = [r[0] for r in cur.fetchall()]
+print(f"\nCourriers ce mois : {cur.fetchone()[0]}")
 
-print("=" * 70)
-print("SCHÉMA COMPLET — ERP TRANSPORT TERRESTRE")
-print("=" * 70)
-print(f"Nombre de tables trouvées : {len(tables)}")
-print()
+# 5. Courriers en attente (enregistre ou diffuse)
+cur.execute("""
+    SELECT COUNT(*) FROM boc_courrier_arrivee
+    WHERE state IN ('enregistre', 'diffuse')
+""")
+print(f"Courriers en attente (enregistre/diffuse) : {cur.fetchone()[0]}")
 
-for table in tables:
-    print(f"\nTABLE {table} :")
+# 6. Courriers en attente ce mois
+cur.execute("""
+    SELECT COUNT(*) FROM boc_courrier_arrivee
+    WHERE state IN ('enregistre', 'diffuse')
+    AND EXTRACT(MONTH FROM date_arrivee) = EXTRACT(MONTH FROM CURRENT_DATE)
+    AND EXTRACT(YEAR FROM date_arrivee) = EXTRACT(YEAR FROM CURRENT_DATE)
+""")
+print(f"Courriers en attente CE MOIS : {cur.fetchone()[0]}")
 
-    # Colonnes
-    cur.execute("""
-        SELECT column_name, data_type, is_nullable, column_default
-        FROM information_schema.columns
-        WHERE table_name = %s
-        ORDER BY ordinal_position
-    """, (table,))
-    cols = cur.fetchall()
-
-    for col_name, dtype, nullable, default in cols:
-        null_str = "NULL" if nullable == "YES" else "NOT NULL"
-        print(f"  {col_name:<40} {dtype:<30} {null_str}")
-
-    # Compter les lignes
-    try:
-        cur.execute(f"SELECT COUNT(*) FROM {table}")
-        count = cur.fetchone()[0]
-        print(f"  -- {count} ligne(s) en base")
-    except Exception as e:
-        conn.rollback()
-        print(f"  -- Impossible de compter : {e}")
-
-    # Exemple 1 ligne
-    try:
-        cur.execute(f"SELECT * FROM {table} LIMIT 1")
-        row = cur.fetchone()
-        if row:
-            col_names = [d[0] for d in cur.description]
-            print(f"  -- Exemple :")
-            for c, v in zip(col_names, row):
-                if v is not None and str(v).strip():
-                    print(f"       {c} = {str(v)[:80]}")
-    except Exception as e:
-        conn.rollback()
-        print(f"  -- Exemple impossible : {e}")
+# 7. Exemple de données
+cur.execute("""
+    SELECT name, sujet, state, date_arrivee::date
+    FROM boc_courrier_arrivee
+    ORDER BY date_arrivee DESC
+    LIMIT 5
+""")
+rows = cur.fetchall()
+print(f"\nDerniers courriers :")
+for r in rows:
+    print(f"  {r[0]} | {r[1][:30]} | {r[2]} | {r[3]}")
 
 cur.close()
 conn.close()
-print("\n" + "=" * 70)
-print("FIN")
-print("=" * 70)
+print("\n" + "=" * 60)

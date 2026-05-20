@@ -153,7 +153,7 @@ class AiConversation(models.Model):
             return texte_propre, pdf_url
         return reponse_text, None
 
-    def ask_question(self, question=False, **kwargs):
+    def ask_question(self, question=False, mode_rapport=False, **kwargs):
         self.ensure_one()
 
         if not question:
@@ -204,6 +204,7 @@ class AiConversation(models.Model):
                 "user_name": user.name,
                 "allowed_tables": list(allowed_tables) if allowed_tables else ["ALL"],
                 "is_admin": allowed_tables is None,
+                "mode_rapport": mode_rapport or kwargs.get("mode_rapport", False),
             }
             response = requests.post(FASTAPI_URL, json=payload, timeout=120)
             response.raise_for_status()

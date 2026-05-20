@@ -2,57 +2,86 @@
 <templates xml:space="preserve">
 
 <t t-name="transport_ai_agent.ChatInterface" owl="1">
-  <div class="ai_chat_wrapper">
+<div class="ai_chat_wrapper">
 
-    <!-- Sidebar -->
-    <div class="ai_sidebar">
-      <div class="ai_sidebar_logo">
-        <div class="ai_sidebar_logo_icon">⚡</div>
-        <div>
-          <div class="ai_sidebar_logo_text">Agent IA</div>
-          <div class="ai_sidebar_logo_sub">ERP Transport</div>
-        </div>
+  <!-- ══ SIDEBAR ══════════════════════════════════════════════════════════ -->
+  <div class="ai_sidebar">
+
+    <div class="ai_sidebar_logo">
+      <div class="ai_sidebar_logo_icon">⚡</div>
+      <div>
+        <div class="ai_sidebar_logo_text">Agent IA</div>
+        <div class="ai_sidebar_logo_sub">ERP Transport</div>
       </div>
+    </div>
 
+    <!-- Sélecteur de mode -->
+    <div class="ai_mode_tabs">
+      <button t-attf-class="ai_mode_tab {{ state.mode === 'chat' ? 'active' : '' }}"
+              t-on-click="() => this.setMode('chat')">
+        💬 Chat
+      </button>
+      <button t-attf-class="ai_mode_tab {{ state.mode === 'rapport' ? 'active' : '' }}"
+              t-on-click="() => this.setMode('rapport')">
+        📊 Rapports
+      </button>
+    </div>
+
+    <!-- Sidebar Chat : nouvelle conv + historique -->
+    <t t-if="state.mode === 'chat'">
       <button class="ai_new_chat_btn" t-on-click="newConversation">
         ✏️ Nouvelle conversation
       </button>
-
       <div class="ai_sidebar_section">Conversations récentes</div>
-
       <div class="ai_history_list">
         <t t-foreach="state.history" t-as="conv" t-key="conv.id">
           <div t-attf-class="ai_history_item {{ conv.id === state.currentId ? 'active' : '' }}"
                t-on-click="() => this.loadConversation(conv.id)">
             <div class="ai_history_item_content">
-              <span class="ai_history_name">
-                <t t-esc="conv.name"/>
-              </span>
-              <span class="ai_history_date">
-                <t t-esc="conv.date"/>
-              </span>
+              <span class="ai_history_name"><t t-esc="conv.name"/></span>
+              <span class="ai_history_date"><t t-esc="conv.date"/></span>
             </div>
           </div>
         </t>
       </div>
+    </t>
 
-      <div class="ai_sidebar_user">
-        <div class="ai_user_avatar">
-          <t t-esc="state.userInitials"/>
-        </div>
-        <div class="ai_user_info">
-          <span class="ai_user_name"><t t-esc="state.userName"/></span>
-          <span class="ai_user_role">Utilisateur ERP</span>
-        </div>
+    <!-- Sidebar Rapport : liste des rapports disponibles -->
+    <t t-if="state.mode === 'rapport'">
+      <div class="ai_sidebar_section">Choisir un rapport</div>
+      <div class="ai_rapport_list">
+        <t t-foreach="RAPPORTS" t-as="rpt" t-key="rpt.id">
+          <div t-attf-class="ai_rapport_item {{ state.rapportSelectionne === rpt.id ? 'active' : '' }}"
+               t-on-click="() => this.selectRapport(rpt.id)">
+            <div class="ai_rapport_item_label"><t t-esc="rpt.label"/></div>
+            <div class="ai_rapport_item_desc"><t t-esc="rpt.description"/></div>
+          </div>
+        </t>
+      </div>
+    </t>
+
+    <!-- Footer utilisateur -->
+    <div class="ai_sidebar_user">
+      <div class="ai_user_avatar"><t t-esc="state.userInitials"/></div>
+      <div class="ai_user_info">
+        <span class="ai_user_name"><t t-esc="state.userName"/></span>
+        <span class="ai_user_role">Utilisateur ERP</span>
       </div>
     </div>
 
-    <!-- Zone principale -->
-    <div class="ai_main">
+  </div>
+  <!-- ════════════════════════════════════════════════════════════════════ -->
+
+  <!-- ══ ZONE PRINCIPALE ══════════════════════════════════════════════════ -->
+  <div class="ai_main">
+
+    <!-- ── MODE CHAT ─────────────────────────────────────────────────────── -->
+    <t t-if="state.mode === 'chat'">
 
       <div class="ai_messages_area" id="ai_messages_list">
         <div class="ai_messages_inner">
 
+          <!-- Écran d'accueil -->
           <t t-if="state.messages.length === 0">
             <div class="ai_welcome">
               <div class="ai_welcome_icon">⚡</div>
@@ -78,25 +107,25 @@
                   Assurances expirant bientôt
                 </button>
                 <button class="ai_suggestion_btn"
-                  t-on-click="() => this.askSuggestion('Donne-moi un résumé de l\'état du parc bus')">
+                  t-on-click="() => this.askSuggestion('Donne-moi l\'état de tous les bus du parc')">
                   <span class="ai_suggestion_icon">📊</span>
                   État du parc bus
                 </button>
-                <!-- Suggestion rapports PDF -->
                 <button class="ai_suggestion_btn"
-                  t-on-click="() => this.askSuggestion('Bilan assurance et sinistres')">
-                  <span class="ai_suggestion_icon">📄</span>
-                  Bilan assurance (PDF)
+                  t-on-click="() => this.askSuggestion('Quelles sont les tournées réalisées ce mois ?')">
+                  <span class="ai_suggestion_icon">📋</span>
+                  Tournées du mois
                 </button>
                 <button class="ai_suggestion_btn"
-                  t-on-click="() => this.askSuggestion('Rapport journalier d\'exploitation')">
-                  <span class="ai_suggestion_icon">📄</span>
-                  Rapport journalier (PDF)
+                  t-on-click="() => this.askSuggestion('Montre-moi les courriers en retard')">
+                  <span class="ai_suggestion_icon">📬</span>
+                  Courriers en retard
                 </button>
               </div>
             </div>
           </t>
 
+          <!-- Messages -->
           <t t-foreach="state.messages" t-as="msg" t-key="msg.id">
             <div t-attf-class="ai_message_row ai_message_row_{{ msg.type }}">
               <div t-attf-class="ai_message_avatar ai_avatar_{{ msg.type }}">
@@ -104,8 +133,6 @@
                 <t t-else=""><t t-esc="state.userInitials"/></t>
               </div>
               <div class="ai_message_content">
-
-                <!-- Bulle message -->
                 <div t-attf-class="ai_bubble ai_bubble_{{ msg.type }}">
                   <t t-if="msg.content">
                     <t t-esc="msg.content"/>
@@ -114,8 +141,6 @@
                     <span style="color:#9ca3af;font-style:italic;">...</span>
                   </t>
                 </div>
-
-                <!-- ── BOUTONS PDF — apparaissent si la réponse contient un rapport ── -->
                 <t t-if="msg.type === 'agent' and msg.pdf_url">
                   <div class="ai_pdf_actions">
                     <button class="ai_pdf_btn_open"
@@ -128,15 +153,12 @@
                     </button>
                   </div>
                 </t>
-                <!-- ──────────────────────────────────────────────────────────────── -->
-
-                <span class="ai_message_time">
-                  <t t-esc="msg.time"/>
-                </span>
+                <span class="ai_message_time"><t t-esc="msg.time"/></span>
               </div>
             </div>
           </t>
 
+          <!-- Indicateur chargement -->
           <t t-if="state.loading">
             <div class="ai_typing_row">
               <div class="ai_message_avatar ai_avatar_agent">⚡</div>
@@ -176,8 +198,150 @@
         </div>
       </div>
 
-    </div>
+    </t>
+    <!-- ── FIN MODE CHAT ──────────────────────────────────────────────────── -->
+
+    <!-- ── MODE RAPPORT ──────────────────────────────────────────────────── -->
+    <t t-if="state.mode === 'rapport'">
+
+      <div class="ai_rapport_main">
+
+        <!-- En-tête -->
+        <div class="ai_rapport_header">
+          <div class="ai_rapport_header_icon">📊</div>
+          <div>
+            <h2 class="ai_rapport_header_title">Génération de rapports PDF</h2>
+            <p class="ai_rapport_header_sub">
+              Décrivez le rapport souhaité ou choisissez dans la liste.
+            </p>
+          </div>
+        </div>
+
+        <!-- Zone saisie libre -->
+        <div class="ai_rapport_input_zone">
+          <div class="ai_rapport_input_box">
+            <span class="ai_rapport_input_icon">🔍</span>
+            <input
+              type="text"
+              class="ai_rapport_input"
+              placeholder="Ex: rapport assurance, bilan carburant, état du parc..."
+              t-att-value="state.rapportTexte"
+              t-on-input="onRapportTexteInput"
+              t-on-keydown="onRapportTexteKeyDown"
+              t-att-disabled="state.rapportLoading"
+            />
+            <t t-if="state.rapportTexte">
+              <button class="ai_rapport_input_clear"
+                      t-on-click="() => { state.rapportTexte=''; state.rapportDetecte=null; state.rapportDetectionMsg=''; }">
+                ✕
+              </button>
+            </t>
+            <button class="ai_rapport_input_send"
+                    t-on-click="envoyerTexteRapport"
+                    t-att-disabled="state.rapportLoading or !state.rapportTexte.trim()">
+              <t t-if="state.rapportLoading">…</t>
+              <t t-else="">➤</t>
+            </button>
+          </div>
+          <t t-if="state.rapportDetectionMsg">
+            <div t-attf-class="ai_rapport_detection_msg {{ state.rapportDetectionMsg.startsWith('⏳') ? 'info' : 'warn' }}">
+              <t t-esc="state.rapportDetectionMsg"/>
+            </div>
+          </t>
+        </div>
+
+        <!-- Aucun rapport sélectionné et pas de résultat -->
+        <t t-if="!state.rapportSelectionne and !state.rapportResultat and !state.rapportErreur">
+          <div class="ai_rapport_placeholder">
+            <div class="ai_rapport_placeholder_icon">👈</div>
+            <p>Saisissez votre demande ou choisissez un rapport dans le menu de gauche</p>
+          </div>
+        </t>
+
+        <!-- Rapport sélectionné dans la liste → afficher la carte -->
+        <t t-if="state.rapportSelectionne">
+          <div class="ai_rapport_card">
+            <t t-foreach="RAPPORTS" t-as="rpt" t-key="rpt.id">
+              <t t-if="rpt.id === state.rapportSelectionne">
+                <div class="ai_rapport_card_top">
+                  <div class="ai_rapport_card_label"><t t-esc="rpt.label"/></div>
+                  <div class="ai_rapport_card_badge"><t t-esc="rpt.categorie"/></div>
+                </div>
+                <div class="ai_rapport_card_desc"><t t-esc="rpt.description"/></div>
+              </t>
+            </t>
+            <button
+              class="ai_rapport_generate_btn"
+              t-on-click="genererRapport"
+              t-att-disabled="state.rapportLoading or !state.rapportSelectionne">
+              <t t-if="state.rapportLoading">
+                <span class="ai_rapport_spinner"/>
+                Génération en cours...
+              </t>
+              <t t-else="">
+                ⚡ Générer le rapport PDF
+              </t>
+            </button>
+          </div>
+        </t>
+
+        <!-- Résultat — affiché quel que soit le mode (liste ou texte libre) -->
+        <t t-if="state.rapportResultat">
+          <div class="ai_rapport_result">
+            <div class="ai_rapport_result_icon">✅</div>
+            <div class="ai_rapport_result_content">
+              <div class="ai_rapport_result_title">
+                Rapport prêt : <t t-esc="state.rapportResultat.label"/>
+              </div>
+              <div class="ai_rapport_result_date">
+                Généré le
+                <t t-esc="new Date().toLocaleDateString('fr-FR', {day:'2-digit',month:'long',year:'numeric'})"/>
+                à
+                <t t-esc="new Date().toLocaleTimeString('fr-FR', {hour:'2-digit',minute:'2-digit'})"/>
+              </div>
+              <div class="ai_rapport_result_actions">
+                <button class="ai_pdf_btn_open ai_rapport_btn"
+                        t-on-click="ouvrirRapportPDF">
+                  🔍 Ouvrir le PDF
+                </button>
+                <button class="ai_pdf_btn_dl ai_rapport_btn"
+                        t-on-click="telechargerRapportPDF">
+                  ⬇ Télécharger
+                </button>
+              </div>
+            </div>
+          </div>
+        </t>
+
+        <!-- Erreur -->
+        <t t-if="state.rapportErreur">
+          <div class="ai_rapport_error">
+            ❌ <t t-esc="state.rapportErreur"/>
+          </div>
+        </t>
+
+        <!-- Grille des rapports disponibles (aperçu rapide) -->
+        <div class="ai_rapport_grid_title">Tous les rapports disponibles</div>
+        <div class="ai_rapport_grid">
+          <t t-foreach="RAPPORTS" t-as="rpt" t-key="rpt.id">
+            <div t-attf-class="ai_rapport_grid_item {{ state.rapportSelectionne === rpt.id ? 'selected' : '' }}"
+                 t-on-click="() => this.selectRapport(rpt.id)">
+              <div class="ai_rapport_grid_label"><t t-esc="rpt.label"/></div>
+              <div class="ai_rapport_grid_desc"><t t-esc="rpt.description"/></div>
+              <div class="ai_rapport_grid_badge"><t t-esc="rpt.categorie"/></div>
+            </div>
+          </t>
+        </div>
+
+      </div>
+
+    </t>
+    <!-- ── FIN MODE RAPPORT ───────────────────────────────────────────────── -->
+
   </div>
+  <!-- ════════════════════════════════════════════════════════════════════ -->
+
+</div>
 </t>
 
 </templates>

@@ -15,7 +15,25 @@ from agent.tools.rpc_tool import rpc_tool
 from agent.tools.rag_tool import rag_tool
 from agent.prompts import SYSTEM_PROMPT
 
-load_dotenv(Path(__file__).parent.parent / ".env")
+# Chercher .env dans plusieurs emplacements (robuste Windows/Linux, uvicorn/direct)
+def _find_and_load_dotenv():
+    candidates = [
+        Path(__file__).parent.parent / ".env",   # agent_core.py → transport_ai_agent/.env
+        Path(__file__).parent / ".env",           # agent/.env
+        Path.cwd() / ".env",                       # répertoire courant (uvicorn)
+        Path.cwd().parent / ".env",
+    ]
+    for p in candidates:
+        if p.exists():
+            load_dotenv(p, override=True)
+            break
+    # Toujours aussi charger sans argument (répertoire courant uvicorn)
+    load_dotenv(override=False)
+
+_find_and_load_dotenv()
+
+# URL FastAPI — hardcodé, pas de dépendance au .env
+_AGENT_URL = "http://localhost:8000"
 
 _logger = logging.getLogger(__name__)
 
@@ -2396,52 +2414,71 @@ def _executer_requetes_rapport(requetes: dict) -> dict:
 
 
 def _detecter_rapport(question: str) -> str | None:
-    """Détecte quel type de rapport est demandé."""
+    """
+    Détecte quel type de rapport prédéfini est demandé.
+    Ordre : du plus spécifique au plus général.
+    Retourne None si aucun rapport prédéfini ne correspond
+    (→ laisse generer_rapport_libre prendre le relais).
+    """
     import unicodedata
-    q = question.lower()
+    q = question.lower().strip()
     q_norm = unicodedata.normalize("NFD", q)
     q_norm = "".join(c for c in q_norm if unicodedata.category(c) != "Mn")
 
-    patterns = {
-        "rapport_journalier": [
-            "rapport journalier", "resume journalier", "bilan journalier",
-            "rapport du jour", "journee exploitation", "aujourd'hui exploitation",
-            "resume du jour", "synthese du jour", "rapport exploitation journalier",
-        ],
-        "rapport_hebdomadaire": [
-            "rapport hebdomadaire", "bilan semaine", "resume semaine",
-            "cette semaine", "semaine exploitation", "rapport semaine",
-            "synthese semaine", "bilan hebdomadaire",
-        ],
-        "rapport_mensuel": [
-            "rapport mensuel", "bilan mensuel", "resume mensuel",
-            "ce mois", "mois exploitation", "synthese mensuelle",
-            "rapport du mois", "bilan du mois",
-        ],
-        "bilan_parc": [
-            "etat du parc", "bilan parc", "synthese parc",
-            "etat des bus", "parc bus", "flotte",
-            "disponibilite bus", "etat flotte",
-        ],
-        "bilan_assurance": [
-            "bilan assurance", "rapport assurance", "synthese assurance",
-            "sinistres mois", "bilan sinistres", "etat assurance",
-            "polices assurance", "rapport sinistres",
-        ],
-        "bilan_carburant": [
-            "bilan carburant", "rapport carburant", "consommation carburant",
-            "synthese carburant", "bons carburant mois",
-            "rapport fuel", "consommation mensuelle carburant",
-        ],
-        "bilan_boc": [
+    # ── Ordre IMPORTANT : plus spécifique d'abord ─────────────────────────────
+    patterns = [
+        # BOC — avant rapport_mensuel pour éviter "courriers ce mois" → mensuel
+        ("bilan_boc", [
             "bilan courrier", "rapport courrier", "synthese courrier",
             "bilan boc", "etat courriers", "courriers mois",
-        ],
-    }
+            "courrier boc", "arrivee courrier", "depart courrier",
+            "courriers en attente", "courriers en retard", "boite ordre",
+        ]),
+        # ASSURANCE — avant rapport_mensuel pour "bilan mensuel assurance"
+        ("bilan_assurance", [
+            "bilan assurance", "rapport assurance", "synthese assurance",
+            "bilan sinistres", "rapport sinistres", "etat assurance",
+            "polices assurance", "assurance bus", "sinistres bus",
+            "bilan mensuel assurance",
+        ]),
+        # CARBURANT
+        ("bilan_carburant", [
+            "bilan carburant", "rapport carburant", "consommation carburant",
+            "synthese carburant", "bons carburant", "rapport fuel",
+            "consommation mensuelle carburant", "bgi bge",
+        ]),
+        # PARC BUS
+        ("bilan_parc", [
+            "etat du parc", "bilan parc", "synthese parc",
+            "etat des bus", "parc bus", "flotte bus",
+            "disponibilite bus", "etat flotte",
+        ]),
+        # JOURNALIER
+        ("rapport_journalier", [
+            "rapport journalier", "resume journalier", "bilan journalier",
+            "rapport du jour", "journee exploitation",
+            "resume du jour", "synthese du jour",
+            "rapport exploitation journalier", "tournees du jour",
+        ]),
+        # HEBDOMADAIRE
+        ("rapport_hebdomadaire", [
+            "rapport hebdomadaire", "bilan semaine", "resume semaine",
+            "rapport semaine", "synthese semaine", "bilan hebdomadaire",
+            "cette semaine exploitation", "semaine exploitation",
+        ]),
+        # MENSUEL — en dernier car "ce mois" est très générique
+        ("rapport_mensuel", [
+            "rapport mensuel exploitation", "bilan mensuel exploitation",
+            "rapport mensuel tournees", "bilan mensuel tournees",
+            "synthese mensuelle exploitation", "rapport du mois exploitation",
+            "bilan du mois exploitation", "mois exploitation",
+            "genere le rapport mensuel", "rapport mensuel",
+        ]),
+    ]
 
-    for type_rapport, mots_cles in patterns.items():
+    for type_rapport, mots_cles in patterns:
         for mot in mots_cles:
-            if mot in q or mot in q_norm:
+            if mot in q_norm:
                 return type_rapport
     return None
 
@@ -2564,13 +2601,167 @@ def generer_rapport(type_rapport: str, llm) -> str:
         return rapport_brut
 
 
+def generer_rapport_libre(question: str, llm, allowed_tables: list = None,
+                          is_admin: bool = False) -> dict:
+    """
+    Génère un rapport PDF à partir d'une question libre.
+    1. Génère le SQL via le LLM
+    2. Exécute la requête
+    3. Crée le PDF avec les données
+    Retourne {"label": str, "pdf_path": Path, "data": dict}
+    """
+    from datetime import date, datetime
+    from pathlib import Path
+
+    _logger.info(f"Rapport libre: {question}")
+
+    # ── Étape 1 : générer le SQL ──────────────────────────────────────────────
+    try:
+        requete = generer_sql(question, llm, allowed_tables, is_admin)
+        print(f"  -> SQL rapport libre: {requete}")
+    except Exception as e:
+        _logger.error(f"Erreur génération SQL rapport libre: {e}")
+        return {"erreur": f"Impossible de générer la requête SQL : {e}"}
+
+    if not requete or not requete.strip().upper().startswith("SELECT"):
+        return {"erreur": "La question ne correspond pas à une requête de données."}
+
+    # ── Étape 2 : exécuter la requête ────────────────────────────────────────
+    try:
+        conn = get_pg_connection()
+        cur  = conn.cursor()
+
+        # Vérifier et corriger si erreur SQL
+        valide, erreur_col = verifier_colonnes_sql(requete)
+        if not valide:
+            diagnostic = diagnostiquer_erreur_sql(requete, erreur_col)
+            extra = (
+                "\nERREUR DETECTEE: " + str(erreur_col) + "\n" +
+                str(diagnostic) + "\n" +
+                "Reecrire avec les colonnes correctes.\n"
+            )
+            requete = generer_sql(question, llm, allowed_tables, is_admin,
+                                  diagnostic_extra=extra)
+
+        cur.execute(requete)
+        rows    = cur.fetchall()
+        colonnes = [desc[0] for desc in cur.description] if cur.description else []
+        conn.close()
+    except Exception as e:
+        _logger.error(f"Erreur SQL rapport libre: {e}")
+        return {"erreur": f"Erreur lors de l'exécution de la requête : {e}"}
+
+    if not rows:
+        return {"erreur": "Aucune donnée trouvée pour cette question."}
+
+    # ── Étape 3 : construire le label et le nom de fichier ───────────────────
+    # Normaliser la question en slug pour le nom de fichier
+    import unicodedata, re as _re2
+    def _slugify(s, max_len=40):
+        s = unicodedata.normalize("NFD", s).encode("ascii", "ignore").decode()
+        s = _re2.sub(r"[^a-zA-Z0-9]+", "_", s).strip("_").lower()
+        return s[:max_len] or "rapport"
+
+    slug  = _slugify(question)
+    label = question.strip().capitalize()
+    if len(label) > 60:
+        label = label[:57] + "..."
+
+    # ── Étape 4 : construire data pour rapport_pdf ────────────────────────────
+    # Séparer scalaires et listes
+    data = {}
+
+    if len(rows) == 1 and len(rows[0]) == 1:
+        # Résultat scalaire unique
+        data["resultat"] = rows[0][0]
+    elif len(rows) >= 1:
+        # Résultat tabulaire → une seule clé "resultats" avec les lignes
+        data["resultats"] = rows
+        # Stocker les noms de colonnes pour le PDF
+        data["_colonnes"] = colonnes
+
+    # ── Étape 5 : générer le PDF ──────────────────────────────────────────────
+    try:
+        from rapport_pdf import generer_pdf_rapport_libre
+        rapports_dir = Path(__file__).parent.parent / "rapports"
+        rapports_dir.mkdir(exist_ok=True)
+        nom = f"{slug}_{datetime.now().strftime('%Y%m%d_%H%M%S')}.pdf"
+        chemin = rapports_dir / nom
+
+        generer_pdf_rapport_libre(
+            label=label,
+            question=question,
+            data=data,
+            colonnes=colonnes,
+            rows=rows,
+            chemin=chemin,
+            llm=llm,
+        )
+
+        _logger.info(f"Rapport libre généré: {chemin}")
+        return {"label": label, "pdf_path": chemin, "nom": nom, "data": data}
+
+    except Exception as e:
+        _logger.error(f"Erreur génération PDF rapport libre: {e}")
+        return {"erreur": f"Erreur génération PDF : {e}"}
+
+
+
 def ask_agent(question: str, llm: OllamaLLM,
               allowed_tables: list = None,
               is_admin: bool = False,
-              session_id: str = "default") -> str:
+              session_id: str = "default",
+              mode_rapport: bool = False) -> str:
     try:
         # Enrichir la question avec le contexte conversationnel si nécessaire
         question = _enrichir_question(question, session_id)
+
+        # ── MODE RAPPORT LIBRE : générer un PDF pour n'importe quelle question ──
+        if mode_rapport:
+            _logger.info(f"Mode rapport libre activé pour: {question}")
+            # En mode rapport, TOUJOURS générer un rapport SQL ciblé sur la question
+            # On ne redirige vers les rapports prédéfinis QUE si la demande est explicite
+            # ex: "génère le bilan assurance", "rapport mensuel", etc.
+            DEMANDES_PREDEFINIES = [
+                "bilan assurance", "bilan parc", "bilan carburant", "bilan boc",
+                "rapport mensuel exploitation", "rapport hebdomadaire", "rapport journalier",
+                "genere le bilan", "genere le rapport", "rapport complet",
+                "synthese parc", "synthese carburant", "synthese courrier",
+            ]
+            import unicodedata as _ud
+            q_norm = _ud.normalize("NFD", question.lower())
+            q_norm = "".join(c for c in q_norm if _ud.category(c) != "Mn")
+
+            utiliser_predefini = any(p in q_norm for p in DEMANDES_PREDEFINIES)
+
+            if utiliser_predefini:
+                type_rapport = _detecter_rapport(question)
+                if type_rapport:
+                    agent_url = _AGENT_URL
+                    lien_pdf  = f"{agent_url}/rapport/{type_rapport}/pdf"
+                    label     = TEMPLATES_RAPPORTS[type_rapport]["label"]
+                    from datetime import date as _date
+                    return (
+                        f"✅ Rapport prêt : **{label}**\n"
+                        f"Généré le {_date.today().strftime('%d/%m/%Y')}\n"
+                        f"PDF_URL:{lien_pdf}"
+                    )
+            # Toujours → rapport libre SQL ciblé sur la question exacte
+            resultat = generer_rapport_libre(question, llm, allowed_tables, is_admin)
+            if "erreur" in resultat:
+                return f"❌ {resultat['erreur']}"
+            agent_url = _AGENT_URL
+            nom       = resultat["nom"]
+            print(f"  [DEBUG] _AGENT_URL = {_AGENT_URL!r}")
+            print(f"  [DEBUG] nom fichier = {nom!r}")
+            lien_pdf  = f"{agent_url}/rapports/fichiers/{nom}"
+            print(f"  [DEBUG] lien_pdf = {lien_pdf!r}")
+            from datetime import date as _date
+            return (
+                f"✅ Rapport prêt : **{resultat['label']}**\n"
+                f"Généré le {_date.today().strftime('%d/%m/%Y')}\n"
+                f"PDF_URL:{lien_pdf}"
+            )
 
         acces_erreur = verifier_acces_question(question, allowed_tables, is_admin)
         if acces_erreur:
@@ -2581,7 +2772,7 @@ def ask_agent(question: str, llm: OllamaLLM,
         if type_rapport:
             _logger.info(f"Rapport détecté: {type_rapport}")
             print(f"  -> Rapport: {type_rapport}")
-            agent_url  = os.getenv("AGENT_URL", "http://localhost:8000")
+            agent_url  = _AGENT_URL
             lien_pdf   = f"{agent_url}/rapport/{type_rapport}/pdf"
             label      = TEMPLATES_RAPPORTS[type_rapport]["label"]
             from datetime import date as _date

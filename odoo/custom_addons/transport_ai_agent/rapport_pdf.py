@@ -543,3 +543,306 @@ def generer_pdf_rapport(type_rapport: str, label: str, data: dict, chemin: Path)
     ))
 
     doc.build(story)
+
+
+# ---------------------------------------------------------------------------
+# RAPPORT LIBRE — génère un PDF pour n'importe quelle question SQL
+# ---------------------------------------------------------------------------
+
+def generer_pdf_rapport_libre(label: str, question: str, data: dict,
+                               colonnes: list, rows: list, chemin,
+                               llm=None):
+    """
+    Génère un PDF enrichi pour un rapport libre :
+    - En-tête professionnel
+    - KPI cards (si scalaire) ou tableau de données
+    - Synthèse analytique générée par le LLM (ou fallback automatique)
+    - Conclusion
+    - Pied de page
+    """
+    from reportlab.lib.pagesizes import A4
+    from reportlab.lib.styles import getSampleStyleSheet, ParagraphStyle
+    from reportlab.lib.colors import HexColor, white
+    from reportlab.lib.units import cm
+    from reportlab.platypus import (
+        SimpleDocTemplate, Paragraph, Spacer, Table,
+        TableStyle, HRFlowable, KeepTogether
+    )
+    from reportlab.lib.enums import TA_CENTER
+    from datetime import date, datetime
+
+    # ── Couleurs ──────────────────────────────────────────────────────────────
+    BLEU    = HexColor("#1a3a6b")
+    BLEU_C  = HexColor("#2196F3")
+    BLEU_LT = HexColor("#e8f0fe")
+    GRIS    = HexColor("#f8f9fa")
+    GRIS_B  = HexColor("#e9ecef")
+    VERT    = HexColor("#28a745")
+    VERT_L  = HexColor("#d4edda")
+    VERT_B  = HexColor("#155724")
+    ROUGE   = HexColor("#dc3545")
+    ROUGE_L = HexColor("#f8d7da")
+    ROUGE_B = HexColor("#721c24")
+    TEXTE   = HexColor("#212529")
+    TSEC    = HexColor("#6c757d")
+    WHITE   = white
+
+    styles = getSampleStyleSheet()
+    W = 17.4 * cm
+
+    S_TITRE  = ParagraphStyle("titre", parent=styles["Normal"],
+        fontSize=18, textColor=BLEU, alignment=TA_CENTER,
+        spaceAfter=2, fontName="Helvetica-Bold")
+    S_DATE   = ParagraphStyle("date", parent=styles["Normal"],
+        fontSize=10, textColor=TSEC, alignment=TA_CENTER, spaceAfter=6)
+    S_QUEST  = ParagraphStyle("quest", parent=styles["Normal"],
+        fontSize=10, textColor=TSEC, alignment=TA_CENTER,
+        spaceAfter=14, fontName="Helvetica-Oblique")
+    S_PIED   = ParagraphStyle("pied", parent=styles["Normal"],
+        fontSize=8, textColor=TSEC, alignment=TA_CENTER)
+    S_HDR    = ParagraphStyle("th", parent=styles["Normal"],
+        fontSize=9, fontName="Helvetica-Bold", textColor=WHITE, leftIndent=4)
+    S_CELL   = ParagraphStyle("td", parent=styles["Normal"],
+        fontSize=9, textColor=TEXTE, leftIndent=4)
+    S_SCAL   = ParagraphStyle("scal", parent=styles["Normal"],
+        fontSize=32, textColor=BLEU_C, alignment=TA_CENTER,
+        fontName="Helvetica-Bold")
+    S_SH     = ParagraphStyle("sh", parent=styles["Normal"],
+        fontSize=11, textColor=WHITE, fontName="Helvetica-Bold", leftIndent=6)
+    S_BV     = ParagraphStyle("bv", parent=styles["Normal"],
+        fontSize=10, textColor=VERT_B, leftIndent=10, spaceAfter=5)
+    S_BR     = ParagraphStyle("br", parent=styles["Normal"],
+        fontSize=10, textColor=ROUGE_B, leftIndent=10, spaceAfter=5)
+    S_CONCL  = ParagraphStyle("concl", parent=styles["Normal"],
+        fontSize=10, textColor=TEXTE, leftIndent=8, rightIndent=8,
+        spaceBefore=4, spaceAfter=4)
+
+    doc = SimpleDocTemplate(
+        str(chemin), pagesize=A4,
+        rightMargin=1.8*cm, leftMargin=1.8*cm,
+        topMargin=1.8*cm, bottomMargin=1.8*cm,
+        title=label, author="Agent IA Transport",
+    )
+
+    story = []
+
+    # ── EN-TÊTE ───────────────────────────────────────────────────────────────
+    barre = Table([[" "]], colWidths=[W], rowHeights=[0.4*cm])
+    barre.setStyle(TableStyle([("BACKGROUND", (0,0), (-1,-1), BLEU)]))
+    story.append(barre)
+    story.append(Spacer(1, 0.3*cm))
+    story.append(Paragraph(label, S_TITRE))
+    story.append(Paragraph(
+        f"ERP Transport Terrestre — {date.today().strftime('%d/%m/%Y')} a {datetime.now().strftime('%H:%M')}",
+        S_DATE
+    ))
+    story.append(Paragraph(f"Demande : {question}", S_QUEST))
+    story.append(HRFlowable(width=W, thickness=1.5, color=BLEU_C))
+    story.append(Spacer(1, 0.4*cm))
+
+    # ── RÉSULTAT SCALAIRE ─────────────────────────────────────────────────────
+    is_scalaire = len(rows) == 1 and len(rows[0]) == 1
+    if is_scalaire:
+        val     = rows[0][0]
+        val_str = f"{val:,.1f}" if isinstance(val, float) else str(val)
+        lbl_str = colonnes[0].replace("_", " ").title() if colonnes else "Resultat"
+
+        card = Table([
+            [Paragraph(val_str, S_SCAL)],
+            [Paragraph(lbl_str, ParagraphStyle("lbl", parent=styles["Normal"],
+                fontSize=12, textColor=TSEC, alignment=TA_CENTER))],
+        ], colWidths=[W])
+        card.setStyle(TableStyle([
+            ("BACKGROUND",    (0,0), (-1,-1), GRIS),
+            ("TOPPADDING",    (0,0), (-1,-1), 24),
+            ("BOTTOMPADDING", (0,0), (-1,-1), 24),
+            ("BOX",           (0,0), (-1,-1), 0.5, GRIS_B),
+        ]))
+        story.append(card)
+        story.append(Spacer(1, 0.4*cm))
+
+    # ── RÉSULTAT TABULAIRE ────────────────────────────────────────────────────
+    elif rows and colonnes:
+        nb  = min(len(colonnes), 8)
+        cw  = [W / nb] * nb
+
+        # Bandeau
+        sh = Table([[Paragraph(f"Donnees : {len(rows)} ligne(s)", S_SH)]],
+            colWidths=[W], rowHeights=[0.65*cm])
+        sh.setStyle(TableStyle([
+            ("BACKGROUND", (0,0), (-1,-1), BLEU_C),
+            ("VALIGN",     (0,0), (-1,-1), "MIDDLE"),
+        ]))
+        story.append(sh)
+        story.append(Spacer(1, 0.2*cm))
+
+        # Tableau
+        hdr = [Paragraph(str(colonnes[i]).replace("_", " ").title(), S_HDR) for i in range(nb)]
+        trows = [hdr]
+        for row in rows[:50]:
+            trow = []
+            for cell in list(row)[:nb]:
+                if cell is None:     v = "-"
+                elif isinstance(cell, float): v = f"{cell:,.2f}"
+                else:                v = str(cell)[:55]
+                trow.append(Paragraph(v, S_CELL))
+            while len(trow) < nb:
+                trow.append(Paragraph("", S_CELL))
+            trows.append(trow)
+
+        det = Table(trows, colWidths=cw, repeatRows=1)
+        det.setStyle(TableStyle([
+            ("BACKGROUND",    (0,0), (-1,0),  BLEU_C),
+            ("TEXTCOLOR",     (0,0), (-1,0),  WHITE),
+            ("ROWBACKGROUNDS",(0,1), (-1,-1), [white, GRIS]),
+            ("GRID",          (0,0), (-1,-1), 0.4, GRIS_B),
+            ("VALIGN",        (0,0), (-1,-1), "MIDDLE"),
+            ("TOPPADDING",    (0,0), (-1,-1), 5),
+            ("BOTTOMPADDING", (0,0), (-1,-1), 5),
+        ]))
+        story.append(det)
+
+        if len(rows) > 50:
+            story.append(Spacer(1, 0.2*cm))
+            story.append(Paragraph(
+                f"* Affichage limite a 50 lignes sur {len(rows)} resultats.",
+                ParagraphStyle("note", parent=styles["Normal"], fontSize=8, textColor=TSEC)
+            ))
+        story.append(Spacer(1, 0.4*cm))
+
+    # ── SYNTHÈSE ANALYTIQUE ───────────────────────────────────────────────────
+    # Générer les points via LLM ou fallback automatique
+    positifs   = []
+    attentions = []
+
+    if llm is not None and rows:
+        try:
+            # Résumé des données pour le LLM
+            nb_lignes  = len(rows)
+            apercu     = []
+            for row in rows[:5]:
+                apercu.append(" | ".join(str(v) for v in row if v is not None))
+            apercu_str = "\n".join(apercu)
+
+            prompt_synthese = (
+                f"Tu analyses un rapport ERP Transport Terrestre tunisien.\n"
+                f"Question : {question}\n"
+                f"Nombre de resultats : {nb_lignes}\n"
+                f"Apercu des donnees :\n{apercu_str}\n\n"
+                f"Redige en JSON UNIQUEMENT (sans markdown) :\n"
+                f"{{\n"
+                f"  \"positifs\": [\"point1\", \"point2\"],\n"
+                f"  \"attentions\": [\"point1\", \"point2\"],\n"
+                f"  \"conclusion\": \"texte court\"\n"
+                f"}}\n"
+                f"Maximum 2 points chacun. Sois concis et factuel."
+            )
+            import json as _json
+            raw = llm.invoke(prompt_synthese).strip()
+            # Nettoyer le JSON
+            raw = raw.replace("```json", "").replace("```", "").strip()
+            parsed = _json.loads(raw)
+            positifs   = parsed.get("positifs",   [])[:3]
+            attentions = parsed.get("attentions", [])[:3]
+            conclusion_llm = parsed.get("conclusion", "")
+        except Exception:
+            positifs   = []
+            attentions = []
+            conclusion_llm = ""
+    else:
+        conclusion_llm = ""
+
+    # Fallback si LLM n'a rien retourné
+    if not positifs and rows:
+        nb = len(rows)
+        if is_scalaire:
+            positifs = [f"Donnee recuperee avec succes : {rows[0][0]}"]
+        else:
+            positifs = [f"{nb} enregistrement(s) trouve(s) pour cette demande."]
+
+    if not attentions:
+        if not rows:
+            attentions = ["Aucune donnee trouvee pour cette periode ou ce filtre."]
+        elif len(rows) >= 50:
+            attentions = ["Resultats limites a 50 lignes — filtrer pour plus de precision."]
+        else:
+            attentions = ["Aucun point d'attention critique detecte."]
+
+    if not conclusion_llm:
+        if not rows:
+            conclusion_llm = "Aucune donnee disponible pour cette demande."
+        else:
+            conclusion_llm = f"Rapport genere avec succes. {len(rows)} enregistrement(s) correspondent a la demande."
+
+    # Bandeau synthèse
+    sh_syn = Table([[Paragraph("Synthese analytique", S_SH)]],
+        colWidths=[W], rowHeights=[0.65*cm])
+    sh_syn.setStyle(TableStyle([
+        ("BACKGROUND", (0,0), (-1,-1), BLEU),
+        ("VALIGN",     (0,0), (-1,-1), "MIDDLE"),
+    ]))
+    story.append(sh_syn)
+    story.append(Spacer(1, 0.25*cm))
+
+    col_w = (W - 0.3*cm) / 2
+
+    def _bloc(titre, points, bg_h, bg_b, sty, icone):
+        hdr = Table([[Paragraph(f"{icone}  {titre}", ParagraphStyle("bh",
+                parent=styles["Normal"], fontSize=10,
+                fontName="Helvetica-Bold", textColor=WHITE, leftIndent=6))]],
+            colWidths=[col_w], rowHeights=[0.55*cm])
+        hdr.setStyle(TableStyle([
+            ("BACKGROUND", (0,0), (-1,-1), bg_h),
+            ("VALIGN",     (0,0), (-1,-1), "MIDDLE"),
+        ]))
+        lignes = [[Paragraph(f"• {pt}", sty)] for pt in points] or                  [[Paragraph("  —", sty)]]
+        bdy = Table(lignes, colWidths=[col_w])
+        bdy.setStyle(TableStyle([
+            ("BACKGROUND",    (0,0), (-1,-1), bg_b),
+            ("TOPPADDING",    (0,0), (-1,-1), 7),
+            ("BOTTOMPADDING", (0,0), (-1,-1), 7),
+            ("LEFTPADDING",   (0,0), (-1,-1), 8),
+            ("RIGHTPADDING",  (0,0), (-1,-1), 8),
+        ]))
+        return hdr, bdy
+
+    h_v, b_v = _bloc("Points positifs",    positifs,   VERT,  VERT_L,  S_BV, "✔")
+    h_r, b_r = _bloc("Points d'attention", attentions, ROUGE, ROUGE_L, S_BR, "⚠")
+
+    row_h = Table([[h_v, h_r]], colWidths=[col_w, col_w])
+    row_b = Table([[b_v, b_r]], colWidths=[col_w, col_w])
+    row_b.setStyle(TableStyle([
+        ("VALIGN",       (0,0), (-1,-1), "TOP"),
+        ("LEFTPADDING",  (0,0), (-1,-1), 0),
+        ("RIGHTPADDING", (0,0), (-1,-1), 0),
+        ("TOPPADDING",   (0,0), (-1,-1), 0),
+        ("BOTTOMPADDING",(0,0), (-1,-1), 0),
+    ]))
+    story.append(KeepTogether([row_h, row_b]))
+
+    # ── CONCLUSION ────────────────────────────────────────────────────────────
+    story.append(Spacer(1, 0.35*cm))
+    concl = Table([[Paragraph(f"Conclusion : {conclusion_llm}", S_CONCL)]],
+        colWidths=[W])
+    concl.setStyle(TableStyle([
+        ("BACKGROUND",    (0,0), (-1,-1), BLEU_LT),
+        ("BOX",           (0,0), (-1,-1), 0.8, BLEU_C),
+        ("TOPPADDING",    (0,0), (-1,-1), 10),
+        ("BOTTOMPADDING", (0,0), (-1,-1), 10),
+        ("LEFTPADDING",   (0,0), (-1,-1), 12),
+        ("RIGHTPADDING",  (0,0), (-1,-1), 12),
+    ]))
+    story.append(concl)
+
+    # ── PIED DE PAGE ──────────────────────────────────────────────────────────
+    story.append(Spacer(1, 0.5*cm))
+    bb = Table([[" "]], colWidths=[W], rowHeights=[0.2*cm])
+    bb.setStyle(TableStyle([("BACKGROUND", (0,0), (-1,-1), BLEU_C)]))
+    story.append(bb)
+    story.append(Spacer(1, 0.15*cm))
+    story.append(Paragraph(
+        f"Genere par Agent IA Transport — ERP Odoo 19 — {datetime.now().strftime('%d/%m/%Y a %H:%M')}",
+        S_PIED
+    ))
+
+    doc.build(story)

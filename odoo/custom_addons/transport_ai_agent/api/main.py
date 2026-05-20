@@ -82,6 +82,7 @@ class QuestionRequest(BaseModel):
     user_name: str = "Utilisateur"
     allowed_tables: list = []
     is_admin: bool = False
+    mode_rapport: bool = False
 
 
 class ReponseModel(BaseModel):
@@ -132,7 +133,8 @@ async def chat(request: QuestionRequest):
                     llm=agent_executor,
                     allowed_tables=request.allowed_tables,
                     is_admin=request.is_admin,
-                    session_id=request.session_id
+                    session_id=request.session_id,
+                    mode_rapport=request.mode_rapport
                 )
             ),
             timeout=CHAT_TIMEOUT
@@ -165,13 +167,16 @@ async def chat(request: QuestionRequest):
 
     if "PDF_URL:" in reponse:
         # Format : "✅ Rapport prêt...\nPDF_URL:http://..."
-        m = _re.search(r'PDF_URL:(http\S+)', reponse)
+        # Robuste : \S+ peut rater sur Windows à cause de \r — on extrait jusqu'à fin de ligne
+        m = _re.search(r'PDF_URL:(https?://[^\s\r\n]+)', reponse)
         if m:
-            pdf_url = m.group(1).strip()
+            pdf_url = m.group(1).strip().rstrip("\r")
+            print(f"  [DEBUG main.py] pdf_url extrait = {pdf_url!r}")
+            # Type rapport prédéfini ou None pour rapport libre
             m2 = _re.search(r'/rapport/([^/]+)/pdf', pdf_url)
             type_rapport = m2.group(1) if m2 else None
         # Nettoyer la réponse (retirer la ligne PDF_URL:)
-        reponse_propre = _re.sub(r'\nPDF_URL:http\S+', '', reponse).strip()
+        reponse_propre = _re.sub(r'\nPDF_URL:https?://[^\r\n]+', '', reponse).strip()
     else:
         # Fallback : ancien format markdown
         m = _re.search(r'http://localhost:8000/rapport/([^/]+)/pdf', reponse)
@@ -299,15 +304,23 @@ def liste_fichiers_pdf():
 
 
 @app.get("/rapports/fichiers/{nom_fichier}")
-async def telecharger_fichier_existant(nom_fichier: str):
-    """Télécharge un rapport PDF déjà généré."""
+async def telecharger_fichier_existant(
+    nom_fichier: str,
+    dl: bool = False   # ?dl=true → téléchargement, ?dl=false → affichage inline
+):
+    """Ouvre ou télécharge un rapport PDF déjà généré."""
     chemin = RAPPORTS_DIR / nom_fichier
     if not chemin.exists() or not chemin.suffix == ".pdf":
         raise HTTPException(status_code=404, detail="Fichier non trouvé.")
+    disposition = "attachment" if dl else "inline"
     return FileResponse(
         path=str(chemin),
         filename=nom_fichier,
         media_type="application/pdf",
+        headers={
+            "Content-Disposition": f'{disposition}; filename="{nom_fichier}"',
+            "Access-Control-Allow-Origin": "*",
+        }
     )
 
 
