@@ -1,54 +1,48 @@
-import { Component, useState, onPatched, onWillStart } from "@odoo/owl";
+import { Component, useState, onPatched, onWillStart, onMounted } from "@odoo/owl";
 import { registry } from "@web/core/registry";
 import { useService } from "@web/core/utils/hooks";
 import { standardFieldProps } from "@web/views/fields/standard_field_props";
 
 const AGENT_URL = "http://localhost:8000";
 
-// ── Liste des rapports disponibles ──────────────────────────────────────────
+// ── Rapports prédéfinis ──────────────────────────────────────────────────────
 const RAPPORTS = [
-    {
-        id: "rapport_journalier",
-        label: "📋 Rapport journalier d'exploitation",
-        description: "Tournées du jour, km, écarts, annulations",
-        categorie: "Exploitation",
-    },
-    {
-        id: "rapport_hebdomadaire",
-        label: "📋 Rapport hebdomadaire d'exploitation",
-        description: "Bilan 7 jours : tournées, chauffeurs, lignes",
-        categorie: "Exploitation",
-    },
-    {
-        id: "rapport_mensuel",
-        label: "📋 Rapport mensuel d'exploitation",
-        description: "Bilan du mois : km, recettes, top chauffeurs",
-        categorie: "Exploitation",
-    },
-    {
-        id: "bilan_parc",
-        label: "🚌 Synthèse état du parc bus",
-        description: "État de chaque bus, assurances, km du mois",
-        categorie: "Parc",
-    },
-    {
-        id: "bilan_assurance",
-        label: "🛡️ Bilan mensuel assurance et sinistres",
-        description: "Polices actives, sinistres, expirations à 30j",
-        categorie: "Assurance",
-    },
-    {
-        id: "bilan_carburant",
-        label: "⛽ Rapport mensuel consommation carburant",
-        description: "BGI/BGE, litres par bus, coût total",
-        categorie: "Carburant",
-    },
-    {
-        id: "bilan_boc",
-        label: "📬 Synthèse courrier BOC",
-        description: "Courriers reçus, en attente, en retard",
-        categorie: "BOC",
-    },
+    { id: "rapport_journalier",   label: "📋 Rapport journalier d'exploitation",  description: "Tournées du jour, km, écarts, annulations",         categorie: "Exploitation" },
+    { id: "rapport_hebdomadaire", label: "📋 Rapport hebdomadaire d'exploitation", description: "Bilan 7 jours : tournées, chauffeurs, lignes",       categorie: "Exploitation" },
+    { id: "rapport_mensuel",      label: "📋 Rapport mensuel d'exploitation",      description: "Bilan du mois : km, recettes, top chauffeurs",       categorie: "Exploitation" },
+    { id: "bilan_parc",           label: "🚌 Synthèse état du parc bus",           description: "État de chaque bus, assurances, km du mois",        categorie: "Parc"         },
+    { id: "bilan_assurance",      label: "🛡️ Bilan mensuel assurance et sinistres", description: "Polices actives, sinistres, expirations à 30j",    categorie: "Assurance"    },
+    { id: "bilan_carburant",      label: "⛽ Rapport mensuel consommation carburant", description: "BGI/BGE, litres par bus, coût total",             categorie: "Carburant"    },
+    { id: "bilan_boc",            label: "📬 Synthèse courrier BOC",               description: "Courriers reçus, en attente, en retard",            categorie: "BOC"          },
+];
+
+// ── Raccourcis statistiques par module ──────────────────────────────────────
+const STATS_RACCOURCIS = [
+    { module: "🚌 Parc bus",    couleur: "#2196F3", questions: [
+        "Combien de bus disponibles ?",
+        "Répartition des bus par état",
+        "Bus sans tournée ce mois",
+    ]},
+    { module: "⛽ Carburant",   couleur: "#FF9800", questions: [
+        "Consommation par bus",
+        "Litres BGI vs BGE",
+        "Évolution du coût carburant",
+    ]},
+    { module: "📋 Tournées",    couleur: "#4CAF50", questions: [
+        "Tournées par ligne ce mois",
+        "Taux de réalisation",
+        "Évolution sur 6 mois",
+    ]},
+    { module: "🛡️ Assurances",  couleur: "#9C27B0", questions: [
+        "Polices expirant dans 30 jours",
+        "Répartition par type",
+        "Sinistres ce trimestre",
+    ]},
+    { module: "📬 BOC",         couleur: "#F44336", questions: [
+        "Courriers en attente",
+        "Répartition arrivée/départ",
+        "Courriers par statut",
+    ]},
 ];
 
 class AiChatInterface extends Component {
@@ -58,20 +52,21 @@ class AiChatInterface extends Component {
     setup() {
         this.orm          = useService("orm");
         this.notification = useService("notification");
-        this.RAPPORTS     = RAPPORTS;
+        this.RAPPORTS          = RAPPORTS;
+        this.STATS_RACCOURCIS  = STATS_RACCOURCIS;
+        this._chartInstance    = null;
 
         this.state = useState({
-            // Mode : "chat" ou "rapport"
-            mode: "chat",
+            mode: "chat",  // "chat" | "rapport" | "stats"
 
-            // Chat
+            // ── Chat ──────────────────────────────────────────────────────────
             messages: [],
             question: "",
             loading: false,
             history: [],
             currentId: this.props.record.resId || null,
 
-            // Rapport
+            // ── Rapport ───────────────────────────────────────────────────────
             rapportSelectionne: null,
             rapportTexte: "",
             rapportDetectionMsg: "",
@@ -79,7 +74,19 @@ class AiChatInterface extends Component {
             rapportResultat: null,
             rapportErreur: null,
 
-            // User
+            // ── Statistiques ──────────────────────────────────────────────────
+            statsQuestion: "",
+            statsLoading: false,
+            statsErreur: null,
+            statsTexte: "",
+            statsKpis: [],
+            statsViz: null,
+            statsVizType: "bar",
+            statsHasResult: false,
+            statsHistory: [],       // historique indépendant
+            statsCurrentId: null,   // conversation stats dédiée
+
+            // ── User ──────────────────────────────────────────────────────────
             userInitials: "??",
             userName: "Chargement...",
             userId: null,
@@ -88,21 +95,376 @@ class AiChatInterface extends Component {
         onWillStart(async () => {
             await this.loadUserInfo();
             await this.loadHistory();
-            if (this.state.currentId) {
-                await this.loadMessages();
+            await this.loadStatsHistory();
+            if (this.state.currentId) await this.loadMessages();
+        });
+
+        onMounted(() => {
+            if (this.state.mode === "stats" && this.state.statsViz && !this._chartInstance) {
+                this._renderChart();
             }
         });
 
-        onPatched(() => this.scrollToBottom());
+        onPatched(() => {
+            this.scrollToBottom();
+            // Créer le graphique seulement s'il n'existe pas encore
+            if (this.state.mode === "stats" && this.state.statsViz && !this._chartInstance) {
+                this._renderChart();
+            }
+        });
     }
 
     // ── Mode switch ──────────────────────────────────────────────────────────
-
     setMode(mode) {
         this.state.mode = mode;
     }
 
-    // ── Rapport ──────────────────────────────────────────────────────────────
+    nouvelleStatsConversation() {
+        this.state.statsCurrentId = null;
+        this.state.statsQuestion  = "";
+        this.state.statsHasResult = false;
+        this.state.statsViz       = null;
+        this.state.statsKpis      = [];
+        this.state.statsTexte     = "";
+        this.state.statsErreur    = null;
+        this._destroyChart();
+    }
+
+    // ── Historique Stats indépendant ─────────────────────────────────────────
+
+    async loadStatsHistory() {
+        try {
+            const domain = this.state.userId
+                ? [["create_uid", "=", this.state.userId], ["name", "=like", "[STATS]%"]]
+                : [["name", "=like", "[STATS]%"]];
+            const convs = await this.orm.searchRead(
+                "transport.ai.conversation", domain,
+                ["id","name","create_date","message_ids"],
+                { order: "create_date desc", limit: 20 }
+            );
+            this.state.statsHistory = convs
+                .filter(c => c.message_ids.length > 0)
+                .map(c => ({
+                    id:   c.id,
+                    name: c.name.replace("[STATS] ", ""),
+                    date: this._formatDate(c.create_date),
+                }));
+        } catch (e) {}
+    }
+
+    async newStatsConversation(question) {
+        const nom = `[STATS] ${question.slice(0, 45)}`;
+        const id  = await this.orm.create("transport.ai.conversation", [{ name: nom }]);
+        this.state.statsCurrentId = id;
+        return id;
+    }
+
+    async loadStatsConversation(id) {
+        this.state.statsCurrentId = id;
+        this._destroyChart();
+        this.state.statsHasResult = false;
+        this.state.statsViz       = null;
+        this.state.statsKpis      = [];
+        this.state.statsTexte     = "";
+        this.state.statsErreur    = null;
+        this.state.statsLoading   = true;
+
+        try {
+            // Récupérer tous les messages de la conversation
+            const msgs = await this.orm.searchRead(
+                "transport.ai.message",
+                [["conversation_id", "=", id]],
+                ["content", "message_type", "create_date"],
+                { order: "create_date asc" }
+            );
+
+            // Récupérer la question (message user)
+            const userMsg = msgs.find(m => m.message_type === "user");
+            if (userMsg) this.state.statsQuestion = userMsg.content;
+
+            // Récupérer la réponse agent (message agent)
+            const agentMsg = msgs.filter(m => m.message_type === "agent").pop();
+            if (agentMsg && agentMsg.content) {
+                const parsed = this._parseStatsJSON(agentMsg.content);
+                if (parsed) {
+                    this._appliquerStats(parsed, parsed.texte || agentMsg.content);
+                } else {
+                    // Réponse texte simple
+                    this.state.statsTexte    = agentMsg.content;
+                    this.state.statsHasResult= true;
+                }
+            }
+        } catch (e) {
+            console.error("Erreur chargement stats:", e);
+            this.state.statsErreur = "Erreur lors du chargement de la statistique.";
+        } finally {
+            this.state.statsLoading = false;
+        }
+    }
+
+    // ══════════════════════════════════════════════════════════════════════════
+    // STATISTIQUES
+    // ══════════════════════════════════════════════════════════════════════════
+
+    onStatsInput(ev) {
+        this.state.statsQuestion = ev.target.value;
+    }
+
+    onStatsKeyDown(ev) {
+        if (ev.key === "Enter" && !ev.shiftKey) {
+            ev.preventDefault();
+            this.envoyerStatsQuestion();
+        }
+    }
+
+    clickRaccourci(question) {
+        this.state.statsQuestion = question;
+        this.envoyerStatsQuestion();
+    }
+
+    async envoyerStatsQuestion() {
+        const q = this.state.statsQuestion.trim();
+        if (!q || this.state.statsLoading) return;
+
+        this.state.statsLoading  = true;
+        this.state.statsErreur   = null;
+        this.state.statsTexte    = "";
+        this.state.statsKpis     = [];
+        this.state.statsViz      = null;
+        this.state.statsHasResult= false;
+        this._destroyChart();
+
+        try {
+            // Utiliser une conversation stats dédiée (préfixe [STATS])
+            if (!this.state.statsCurrentId) {
+                await this.newStatsConversation(q);
+            }
+
+            const result = await this.orm.call(
+                "transport.ai.conversation",
+                "ask_question",
+                [[this.state.statsCurrentId]],
+                { question: q, mode_stats: true }
+            );
+
+            let raw = "";
+            if (result && typeof result === "object") {
+                raw = result.reponse || result.content || result.texte || "";
+                if (result.stats) {
+                    this._appliquerStats(result.stats, raw);
+                    await this.loadStatsHistory();
+                    return;
+                }
+            } else if (typeof result === "string") {
+                raw = result;
+            }
+
+            // Vérifier si accès refusé
+            if (raw && (raw.includes("Acces refuse") || raw.includes("Accès refusé") || raw.startsWith("🔒"))) {
+                this.state.statsErreur    = raw;
+                this.state.statsHasResult = false;
+                return;
+            }
+
+            const parsed = this._parseStatsJSON(raw);
+            if (parsed) {
+                this._appliquerStats(parsed, parsed.texte || raw);
+            } else {
+                this.state.statsTexte    = raw;
+                this.state.statsHasResult= true;
+            }
+
+            // Mettre à jour le nom de la conversation avec la question
+            await this.orm.write(
+                "transport.ai.conversation",
+                [this.state.statsCurrentId],
+                { name: `[STATS] ${q.slice(0, 45)}` }
+            );
+
+            // Prochaine question = nouvelle conversation
+            this.state.statsCurrentId = null;
+            await this.loadStatsHistory();
+
+        } catch (e) {
+            console.error("Erreur stats:", e);
+            this.state.statsErreur = "Erreur de connexion à l'agent IA.";
+        } finally {
+            this.state.statsLoading = false;
+        }
+    }
+
+    _parseStatsJSON(raw) {
+        try {
+            // Chercher un bloc JSON dans le texte
+            const m = raw.match(/\{[\s\S]*"kpis"[\s\S]*\}/);
+            if (m) return JSON.parse(m[0]);
+            // Essayer le texte entier
+            const clean = raw.replace(/```json|```/g, "").trim();
+            if (clean.startsWith("{")) return JSON.parse(clean);
+        } catch (e) {}
+        return null;
+    }
+
+    _appliquerStats(data, texte) {
+        this.state.statsTexte     = texte || data.texte || "";
+        this.state.statsHasResult = true;
+
+        // KPI cards — toujours afficher si présents
+        this.state.statsKpis = data.kpis || [];
+
+        // Si pas de KPIs mais valeur scalaire dans texte → créer un KPI auto
+        if (this.state.statsKpis.length === 0 && data.visualisation) {
+            const viz = data.visualisation;
+            if ((viz.type === "kpi" || !viz.labels || viz.labels.length === 0)
+                && viz.data && viz.data.length > 0) {
+                // Extraire la valeur depuis data
+                this.state.statsKpis = [{
+                    label:    viz.title || this.state.statsQuestion,
+                    valeur:   viz.data[0],
+                    tendance: "=",
+                }];
+            }
+        }
+
+        const viz = data.visualisation;
+        // Graphique seulement si labels multiples et pas type kpi
+        if (viz && viz.labels && Array.isArray(viz.labels)
+            && viz.labels.length > 1 && viz.data && viz.data.length > 1
+            && viz.type !== "kpi") {
+            this.state.statsViz     = viz;
+            this.state.statsVizType = viz.type || "bar";
+        } else {
+            this.state.statsViz = null;
+        }
+    }
+
+    setVizType(type) {
+        this._destroyChart();
+        this.state.statsVizType = type;
+        // Délai pour laisser le DOM se mettre à jour avant de recréer le canvas
+        setTimeout(() => this._renderChart(), 50);
+    }
+
+    _destroyChart() {
+        if (this._chartInstance) {
+            try { this._chartInstance.destroy(); } catch(e) {}
+            this._chartInstance = null;
+        }
+        // Vider le canvas pour éviter l'effet "graphique fantôme"
+        const canvas = document.getElementById("ai_stats_chart");
+        if (canvas) {
+            const ctx = canvas.getContext("2d");
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+        }
+    }
+
+    async _renderChart() {
+        const viz = this.state.statsViz;
+        if (!viz || !viz.labels || !viz.data) return;
+
+        // Attendre que Chart.js soit disponible (chargé depuis CDN)
+        let attempts = 0;
+        while (typeof window.Chart === "undefined" && attempts < 20) {
+            await new Promise(r => setTimeout(r, 100));
+            attempts++;
+        }
+        if (typeof window.Chart === "undefined") {
+            console.error("Chart.js non disponible");
+            return;
+        }
+
+        const canvas = document.getElementById("ai_stats_chart");
+        if (!canvas) return;
+
+        this._destroyChart();
+
+        const type      = this.state.statsVizType || viz.type || "bar";
+        const ctx       = canvas.getContext("2d");
+        const chartType = type === "donut" ? "doughnut" : type;
+        const isRound   = ["doughnut","pie","polarArea"].includes(chartType);
+        const isRadar   = chartType === "radar";
+        const hasScales = !isRound && !isRadar;
+
+        const COULEURS = [
+            "#2196F3","#4CAF50","#FF9800","#9C27B0","#F44336",
+            "#00BCD4","#8BC34A","#FF5722","#607D8B","#E91E63",
+        ];
+
+        let datasets;
+        if (Array.isArray(viz.data[0])) {
+            datasets = viz.data.map((d, i) => ({
+                label:           viz.series ? viz.series[i] : `Série ${i+1}`,
+                data:            d,
+                backgroundColor: isRound
+                    ? COULEURS.slice(0, d.length).map(c => c + "CC")
+                    : COULEURS[i % COULEURS.length] + (isRadar ? "40" : "CC"),
+                borderColor:     COULEURS[i % COULEURS.length],
+                borderWidth:     type === "line" ? 2.5 : 1.5,
+                tension:         0.4,
+                fill:            isRadar,
+                pointRadius:     type === "line" ? 5 : 3,
+            }));
+        } else {
+            datasets = [{
+                label:           viz.title || "Données",
+                data:            viz.data,
+                backgroundColor: isRound || isRadar
+                    ? COULEURS.slice(0, viz.data.length).map(c => c + "CC")
+                    : "#2196F3CC",
+                borderColor: isRound || isRadar
+                    ? COULEURS.slice(0, viz.data.length)
+                    : "#2196F3",
+                borderWidth:      type === "line" ? 2.5 : 1.5,
+                tension:          0.4,
+                fill:             isRadar,
+                pointRadius:      type === "line" ? 5 : 3,
+                pointHoverRadius: type === "line" ? 7 : 4,
+            }];
+        }
+
+        try {
+            this._chartInstance = new window.Chart(ctx, {
+                type: chartType,
+                data: { labels: viz.labels, datasets },
+                options: {
+                    responsive:          true,
+                    maintainAspectRatio: false,
+                    animation:           { duration: 700, easing: "easeInOutQuart" },
+                    plugins: {
+                        legend: {
+                            display:  isRound || isRadar || datasets.length > 1,
+                            position: "bottom",
+                            labels:   { font: { size: 11 }, padding: 14, usePointStyle: true },
+                        },
+                        tooltip: {
+                            callbacks: {
+                                label: ctx => {
+                                    const v = ctx.parsed?.y ?? ctx.parsed?.r ?? ctx.raw;
+                                    return ` ${ctx.dataset.label}: ${typeof v === "number" ? v.toLocaleString("fr-FR") : v}`;
+                                }
+                            }
+                        },
+                    },
+                    scales: hasScales ? {
+                        x: { grid: { color: "#f1f5f9" }, ticks: { font: { size: 10 } } },
+                        y: {
+                            grid:        { color: "#f1f5f9" },
+                            ticks:       { font: { size: 10 }, callback: v => Number(v).toLocaleString("fr-FR") },
+                            beginAtZero: true,
+                        },
+                    } : isRadar ? {
+                        r: { ticks: { font: { size: 9 }, backdropColor: "transparent" } }
+                    } : {},
+                },
+            });
+        } catch(e) {
+            console.error("Erreur rendu Chart.js:", e);
+        }
+    }
+
+    // ══════════════════════════════════════════════════════════════════════════
+    // RAPPORT
+    // ══════════════════════════════════════════════════════════════════════════
 
     selectRapport(id) {
         this.state.rapportSelectionne  = id;
@@ -110,6 +472,11 @@ class AiChatInterface extends Component {
         this.state.rapportDetectionMsg = "";
         this.state.rapportResultat     = null;
         this.state.rapportErreur       = null;
+    }
+
+    getRapportLabel(id) {
+        const r = RAPPORTS.find(r => r.id === id);
+        return r ? r.label : id;
     }
 
     onRapportTexteInput(ev) {
@@ -124,8 +491,6 @@ class AiChatInterface extends Component {
             this.envoyerTexteRapport();
         }
     }
-
-    // ── Envoi texte → agent avec instruction "génère un rapport PDF" ─────────
 
     async envoyerTexteRapport() {
         const texte = this.state.rapportTexte.trim();
@@ -146,53 +511,36 @@ class AiChatInterface extends Component {
                 { question: texte, mode_rapport: true }
             );
 
-            let raw     = "";
-            let pdf_url = null;
-
+            let raw = "", pdf_url = null;
             if (result && typeof result === "object") {
                 raw     = result.reponse || result.content || result.texte || "";
                 pdf_url = result.pdf_url || null;
             } else if (typeof result === "string") {
                 raw = result;
-                // Odoo retourne parfois le texte brut avec PDF_URL dedans
-                const parsed0 = this._parseContent(raw);
-                if (parsed0.pdf_url) {
-                    pdf_url = parsed0.pdf_url;
-                    raw     = parsed0.content;
-                }
             }
 
             const parsed = this._parseContent(raw);
-            if (!pdf_url && parsed.pdf_url) {
-                pdf_url = parsed.pdf_url;
-                raw     = parsed.content;
-            }
+            if (!pdf_url && parsed.pdf_url) { pdf_url = parsed.pdf_url; raw = parsed.content; }
 
             if (pdf_url) {
-                // Extraire le type depuis l'URL (rapport prédéfini ou libre)
-                const m1 = pdf_url.match(/\/rapport\/([^/]+)\/pdf/);
-                const m2 = pdf_url.match(/\/rapports\/fichiers\/([^/]+\.pdf)/);
+                const m1  = pdf_url.match(/\/rapport\/([^/]+)\/pdf/);
+                const m2  = pdf_url.match(/\/rapports\/fichiers\/([^/]+\.pdf)/);
                 const tid = m1 ? m1[1] : null;
                 const nom = m2 ? m2[1] : null;
                 const rpt = tid ? RAPPORTS.find(r => r.id === tid) : null;
-
                 this.state.rapportResultat = {
-                    label:   rpt ? rpt.label : "Rapport personnalisé",
-                    pdf_url,
-                    texte:   raw,
+                    label: rpt ? rpt.label : "Rapport personnalisé",
+                    pdf_url, texte: raw,
                     nom_fichier: nom || (tid ? `${tid}_${this._dateStr()}.pdf` : "rapport.pdf"),
                 };
                 if (tid) this.state.rapportSelectionne = tid;
                 this.state.rapportDetectionMsg = "";
                 this.notification.add("Rapport généré !", { type: "success" });
             } else {
-                // L'agent n'a pas trouvé de rapport correspondant
                 this.state.rapportDetectionMsg = "";
-                this.state.rapportErreur = raw || "Aucun rapport trouvé pour cette demande. Essayez : \"données sur les bus\", \"assurances\", \"carburant\"...";
+                this.state.rapportErreur = raw || "Aucun rapport trouvé. Essayez une formulation différente.";
             }
-
         } catch (e) {
-            console.error("Erreur rapport:", e);
             this.state.rapportDetectionMsg = "";
             this.state.rapportErreur = "Erreur de connexion à l'agent IA.";
         } finally {
@@ -200,161 +548,146 @@ class AiChatInterface extends Component {
         }
     }
 
-    getRapportLabel(id) {
-        const r = RAPPORTS.find(r => r.id === id);
-        return r ? r.label : id;
-    }
-
     async genererRapport() {
-        const id = this.state.rapportDetecte || this.state.rapportSelectionne;
+        const id = this.state.rapportSelectionne;
         if (!id || this.state.rapportLoading) return;
 
-        this.state.rapportLoading = true;
+        this.state.rapportLoading  = true;
         this.state.rapportResultat = null;
         this.state.rapportErreur   = null;
 
         try {
-            const res = await fetch(`${AGENT_URL}/rapport/${id}/pdf`, {
-                method: "GET",
-                headers: { "Accept": "application/json" },
-            });
+            // Passer par ask_question pour vérification des accès Odoo
+            if (!this.state.currentId) await this.newConversation();
 
-            if (!res.ok) {
-                const err = await res.json().catch(() => ({}));
-                throw new Error(err.detail || `Erreur HTTP ${res.status}`);
+            const result = await this.orm.call(
+                "transport.ai.conversation",
+                "ask_question",
+                [[this.state.currentId]],
+                { question: `genere le ${id}`, mode_rapport: true }
+            );
+
+            let raw = "", pdf_url = null;
+            if (result && typeof result === "object") {
+                raw     = result.reponse || result.content || result.texte || "";
+                pdf_url = result.pdf_url || null;
+            } else if (typeof result === "string") {
+                raw = result;
             }
 
-            const data = await res.json();
-            const pdf_url = data.pdf_url || `${AGENT_URL}/rapport/${id}/pdf`;
-            const label   = this.getRapportLabel(id);
+            // Vérifier si accès refusé
+            if (raw && raw.includes("Acces refuse")) {
+                this.state.rapportErreur   = raw;
+                this.state.rapportLoading  = false;
+                return;
+            }
 
-            this.state.rapportResultat = {
-                label,
-                pdf_url,
-                texte: data.texte || `Rapport ${label} généré avec succès.`,
-            };
+            const parsed = this._parseContent(raw);
+            if (!pdf_url && parsed.pdf_url) { pdf_url = parsed.pdf_url; raw = parsed.content; }
 
-            this.notification.add("Rapport généré avec succès !", { type: "success" });
-
+            if (pdf_url) {
+                const label = this.getRapportLabel(id);
+                this.state.rapportResultat = {
+                    label, pdf_url,
+                    nom_fichier: `${id}_${this._dateStr()}.pdf`,
+                };
+                this.notification.add("Rapport généré !", { type: "success" });
+            } else {
+                // Fallback direct FastAPI si ask_question ne retourne pas l'URL
+                const pdf_url_direct = `${AGENT_URL}/rapport/${id}/pdf`;
+                const label = this.getRapportLabel(id);
+                this.state.rapportResultat = {
+                    label, pdf_url: pdf_url_direct,
+                    nom_fichier: `${id}_${this._dateStr()}.pdf`,
+                };
+            }
         } catch (e) {
-            // Fallback : si l'API ne retourne pas JSON, construire l'URL directement
-            const pdf_url = `${AGENT_URL}/rapport/${id}/pdf`;
-            const label   = this.getRapportLabel(id);
-            this.state.rapportResultat = {
-                label,
-                pdf_url,
-                texte: `Rapport ${label} prêt.`,
-            };
+            console.error("Erreur rapport:", e);
+            this.state.rapportErreur = "Erreur de connexion à l'agent IA.";
         } finally {
             this.state.rapportLoading = false;
         }
     }
 
     ouvrirRapportPDF() {
-        if (this.state.rapportResultat?.pdf_url) {
-            // Ouvrir inline dans un nouvel onglet
+        if (this.state.rapportResultat?.pdf_url)
             window.open(this.state.rapportResultat.pdf_url, "_blank");
-        }
     }
 
     async telechargerRapportPDF() {
         const r = this.state.rapportResultat;
         if (!r?.pdf_url) return;
-        const nom = r.nom_fichier ||
-            `${this.state.rapportSelectionne || "rapport"}_${this._dateStr()}.pdf`;
-        // Ajouter ?dl=true pour forcer le téléchargement
-        const url_dl = r.pdf_url.includes("?") ? r.pdf_url + "&dl=true" : r.pdf_url + "?dl=true";
-        await this.telechargerPDF(url_dl, nom);
+        const url = r.pdf_url.includes("?") ? r.pdf_url + "&dl=true" : r.pdf_url + "?dl=true";
+        await this.telechargerPDF(url, r.nom_fichier || "rapport.pdf");
     }
 
-    _dateStr() {
-        return new Date().toISOString().slice(0, 10);
-    }
-
-    // ── User info ────────────────────────────────────────────────────────────
+    // ══════════════════════════════════════════════════════════════════════════
+    // CHAT
+    // ══════════════════════════════════════════════════════════════════════════
 
     async loadUserInfo() {
         try {
-            const res = await fetch("/web/session/get_session_info", {
+            const res  = await fetch("/web/session/get_session_info", {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify({ jsonrpc: "2.0", method: "call", params: {} }),
             });
             const data = await res.json();
             if (data.result) {
-                const userName = data.result.name || data.result.partner_display_name || "Utilisateur";
-                const parts = userName.trim().split(" ");
-                const initials = parts.length >= 2
+                const name   = data.result.name || "Utilisateur";
+                const parts  = name.trim().split(" ");
+                this.state.userName     = name;
+                this.state.userInitials = parts.length >= 2
                     ? (parts[0][0] + parts[1][0]).toUpperCase()
-                    : userName.substring(0, 2).toUpperCase();
-                this.state.userName     = userName;
-                this.state.userInitials = initials;
-                this.state.userId       = data.result.uid || null;
+                    : name.substring(0, 2).toUpperCase();
+                this.state.userId = data.result.uid || null;
             }
         } catch (e) {
-            this.state.userName     = "Utilisateur";
+            this.state.userName = "Utilisateur";
             this.state.userInitials = "UT";
         }
     }
 
-    // ── Historique conversations ─────────────────────────────────────────────
-
     async loadHistory() {
         try {
-            const domain = this.state.userId ? [["create_uid", "=", this.state.userId]] : [];
+            const domain = this.state.userId
+                ? [["create_uid", "=", this.state.userId]]
+                : [];
             const convs  = await this.orm.searchRead(
-                "transport.ai.conversation",
-                domain,
-                ["id", "name", "create_date", "message_ids"],
+                "transport.ai.conversation", domain,
+                ["id","name","create_date","message_ids"],
                 { order: "create_date desc", limit: 30 }
             );
             this.state.history = convs
-                .filter(c => c.message_ids.length > 0 && c.name !== "Nouvelle conversation")
-                .map(c => ({
-                    id:   c.id,
-                    name: c.name,
-                    date: this._formatDate(c.create_date),
-                }));
-        } catch (e) {
-            console.error("Erreur chargement historique:", e);
-        }
+                .filter(c =>
+                    c.message_ids.length > 0 &&
+                    c.name !== "Nouvelle conversation" &&
+                    !c.name.startsWith("[STATS]")   // exclure les conversations stats
+                )
+                .map(c => ({ id: c.id, name: c.name, date: this._formatDate(c.create_date) }));
+        } catch (e) {}
     }
 
     async loadMessages() {
         try {
-            const messages = await this.orm.searchRead(
+            const msgs = await this.orm.searchRead(
                 "transport.ai.message",
                 [["conversation_id", "=", this.state.currentId]],
-                ["content", "message_type", "create_date"],
+                ["content","message_type","create_date"],
                 { order: "create_date asc" }
             );
-            this.state.messages = messages.map(m => {
-                const parsed = this._parseContent(m.content || "");
-                return {
-                    id:      m.id,
-                    content: parsed.content,
-                    pdf_url: parsed.pdf_url,
-                    type:    m.message_type,
-                    time:    this._formatTime(m.create_date),
-                };
+            this.state.messages = msgs.map(m => {
+                const p = this._parseContent(m.content || "");
+                return { id: m.id, content: p.content, pdf_url: p.pdf_url, type: m.message_type, time: this._formatTime(m.create_date) };
             });
-        } catch (e) {
-            console.error("Erreur chargement messages:", e);
-        }
+        } catch (e) {}
     }
 
     async newConversation() {
-        try {
-            const id = await this.orm.create(
-                "transport.ai.conversation",
-                [{ name: "Nouvelle conversation" }]
-            );
-            this.state.currentId = id;
-            this.state.messages  = [];
-            await this.loadHistory();
-        } catch (e) {
-            console.error("Erreur nouvelle conversation:", e);
-        }
+        const id = await this.orm.create("transport.ai.conversation", [{ name: "Nouvelle conversation" }]);
+        this.state.currentId = id;
+        this.state.messages  = [];
+        await this.loadHistory();
     }
 
     async loadConversation(id) {
@@ -363,87 +696,24 @@ class AiChatInterface extends Component {
         await this.loadMessages();
     }
 
-    // ── Parsing ──────────────────────────────────────────────────────────────
-
-    _parseContent(content) {
-        const pdfMatch = content.match(/PDF_URL:(http\S+)/);
-        if (pdfMatch) {
-            const pdf_url = pdfMatch[1].trim();
-            const texte   = content.replace(/\nPDF_URL:http\S+/, "").trim();
-            return { content: texte, pdf_url };
-        }
-        return { content, pdf_url: null };
-    }
-
-    // ── PDF helpers ──────────────────────────────────────────────────────────
-
-    ouvrirPDF(pdf_url) {
-        // Ouvre inline dans un nouvel onglet
-        window.open(pdf_url, "_blank");
-    }
-
-    async telechargerPDF(pdf_url, nomFichier) {
-        // Ajouter ?dl=true si c'est une URL FastAPI
-        const url = pdf_url.includes("localhost:8000") && !pdf_url.includes("?dl")
-            ? (pdf_url.includes("?") ? pdf_url + "&dl=true" : pdf_url + "?dl=true")
-            : pdf_url;
-        try {
-            const r    = await fetch(url);
-            if (!r.ok) throw new Error(`Erreur ${r.status}`);
-            const blob = await r.blob();
-            const a    = Object.assign(document.createElement("a"), {
-                href:     URL.createObjectURL(blob),
-                download: nomFichier || "rapport.pdf",
-            });
-            document.body.appendChild(a);
-            a.click();
-            document.body.removeChild(a);
-            URL.revokeObjectURL(a.href);
-            this.notification.add("PDF téléchargé avec succès.", { type: "success" });
-        } catch (e) {
-            this.notification.add(`Erreur téléchargement : ${e.message}`, { type: "danger" });
-        }
-    }
-
-    _getNomFichier(pdf_url) {
-        const m = pdf_url.match(/\/rapport\/([^/]+)\/pdf/);
-        if (m) return `${m[1]}_${this._dateStr()}.pdf`;
-        return "rapport.pdf";
-    }
-
-    // ── Envoi question (mode chat) ────────────────────────────────────────────
-
     async sendQuestion() {
-        const question = this.state.question.trim();
-        if (!question || this.state.loading) return;
-
+        const q = this.state.question.trim();
+        if (!q || this.state.loading) return;
         if (!this.state.currentId) await this.newConversation();
 
-        this.state.messages.push({
-            id:      Date.now(),
-            content: question,
-            pdf_url: null,
-            type:    "user",
-            time:    this._now(),
-        });
-
+        this.state.messages.push({ id: Date.now(), content: q, pdf_url: null, type: "user", time: this._now() });
         this.state.question = "";
         this.state.loading  = true;
-
-        const textarea = document.querySelector(".ai_textarea");
-        if (textarea) textarea.style.height = "auto";
+        const ta = document.querySelector(".ai_textarea");
+        if (ta) ta.style.height = "auto";
 
         try {
             const result = await this.orm.call(
-                "transport.ai.conversation",
-                "ask_question",
-                [[this.state.currentId]],
-                { question }
+                "transport.ai.conversation", "ask_question",
+                [[this.state.currentId]], { question: q }
             );
 
-            let raw     = "";
-            let pdf_url = null;
-
+            let raw = "", pdf_url = null;
             if (result && typeof result === "object") {
                 raw     = result.reponse || result.content || result.texte || "";
                 pdf_url = result.pdf_url || null;
@@ -454,54 +724,70 @@ class AiChatInterface extends Component {
             }
 
             const parsed = this._parseContent(raw);
-            if (!pdf_url && parsed.pdf_url) {
-                pdf_url = parsed.pdf_url;
-                raw     = parsed.content;
-            }
+            if (!pdf_url && parsed.pdf_url) { pdf_url = parsed.pdf_url; raw = parsed.content; }
 
             this.state.messages.push({
-                id:      Date.now() + 1,
-                content: raw || "Aucune réponse reçue.",
-                pdf_url,
-                type:    "agent",
-                time:    this._now(),
+                id: Date.now() + 1, content: raw || "Aucune réponse reçue.",
+                pdf_url, type: "agent", time: this._now(),
             });
-
             await this.loadHistory();
-
         } catch (e) {
-            console.error("Erreur sendQuestion:", e);
             this.state.messages.push({
-                id:      Date.now() + 1,
-                content: "Erreur de connexion à l'agent IA.",
-                pdf_url: null,
-                type:    "agent",
-                time:    this._now(),
+                id: Date.now() + 1, content: "Erreur de connexion à l'agent IA.",
+                pdf_url: null, type: "agent", time: this._now(),
             });
-            this.notification.add("Erreur agent IA", { type: "danger" });
         } finally {
             this.state.loading = false;
         }
     }
 
-    async askSuggestion(question) {
-        this.state.question = question;
-        await this.sendQuestion();
-    }
+    async askSuggestion(q) { this.state.question = q; await this.sendQuestion(); }
 
     // ── Utilitaires ──────────────────────────────────────────────────────────
 
+    _parseContent(content) {
+        const m = content.match(/PDF_URL:(https?:\/\/[^\r\n\s]+)/);
+        if (m) {
+            return { content: content.replace(/\nPDF_URL:https?:\/\/[^\r\n]+/, "").trim(), pdf_url: m[1].trim().replace(/\r$/, "") };
+        }
+        return { content, pdf_url: null };
+    }
+
+    ouvrirPDF(pdf_url) { window.open(pdf_url, "_blank"); }
+
+    async telechargerPDF(pdf_url, nomFichier) {
+        const url = pdf_url.includes("localhost:8000") && !pdf_url.includes("?dl")
+            ? (pdf_url.includes("?") ? pdf_url + "&dl=true" : pdf_url + "?dl=true")
+            : pdf_url;
+        try {
+            const r    = await fetch(url);
+            if (!r.ok) throw new Error(`Erreur ${r.status}`);
+            const blob = await r.blob();
+            const a    = Object.assign(document.createElement("a"), {
+                href: URL.createObjectURL(blob), download: nomFichier || "rapport.pdf",
+            });
+            document.body.appendChild(a); a.click();
+            document.body.removeChild(a);
+            URL.revokeObjectURL(a.href);
+            this.notification.add("PDF téléchargé.", { type: "success" });
+        } catch (e) {
+            this.notification.add(`Erreur : ${e.message}`, { type: "danger" });
+        }
+    }
+
+    _getNomFichier(pdf_url) {
+        const m = pdf_url.match(/\/rapport\/([^/]+)\/pdf/);
+        return m ? `${m[1]}_${this._dateStr()}.pdf` : "rapport.pdf";
+    }
+
     onInput(ev) {
-        this.state.question      = ev.target.value;
-        ev.target.style.height   = "auto";
-        ev.target.style.height   = Math.min(ev.target.scrollHeight, 140) + "px";
+        this.state.question    = ev.target.value;
+        ev.target.style.height = "auto";
+        ev.target.style.height = Math.min(ev.target.scrollHeight, 140) + "px";
     }
 
     onKeyDown(ev) {
-        if (ev.key === "Enter" && !ev.shiftKey) {
-            ev.preventDefault();
-            this.sendQuestion();
-        }
+        if (ev.key === "Enter" && !ev.shiftKey) { ev.preventDefault(); this.sendQuestion(); }
     }
 
     scrollToBottom() {
@@ -509,25 +795,19 @@ class AiChatInterface extends Component {
         if (el) el.scrollTop = el.scrollHeight;
     }
 
-    _formatTime(dateStr) {
-        if (!dateStr) return "";
-        return new Date(dateStr).toLocaleTimeString("fr-FR", { hour: "2-digit", minute: "2-digit" });
-    }
-
-    _formatDate(dateStr) {
-        if (!dateStr) return "";
-        const d    = new Date(dateStr);
+    _formatTime(d) { return d ? new Date(d).toLocaleTimeString("fr-FR", { hour: "2-digit", minute: "2-digit" }) : ""; }
+    _formatDate(d) {
+        if (!d) return "";
+        const dt   = new Date(d);
         const now  = new Date();
-        const diff = Math.floor((now - d) / (1000 * 60 * 60 * 24));
+        const diff = Math.floor((now - dt) / 86400000);
         if (diff === 0) return "Aujourd'hui";
         if (diff === 1) return "Hier";
-        if (diff < 7)   return `Il y a ${diff} jours`;
-        return d.toLocaleDateString("fr-FR", { day: "2-digit", month: "short" });
+        if (diff < 7)   return `Il y a ${diff} j`;
+        return dt.toLocaleDateString("fr-FR", { day: "2-digit", month: "short" });
     }
-
-    _now() {
-        return new Date().toLocaleTimeString("fr-FR", { hour: "2-digit", minute: "2-digit" });
-    }
+    _now()    { return new Date().toLocaleTimeString("fr-FR", { hour: "2-digit", minute: "2-digit" }); }
+    _dateStr(){ return new Date().toISOString().slice(0, 10); }
 }
 
 registry.category("fields").add("ai_chat_messages", {

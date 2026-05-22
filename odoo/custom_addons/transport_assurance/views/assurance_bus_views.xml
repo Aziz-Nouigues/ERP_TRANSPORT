@@ -22,13 +22,11 @@
                 </header>
                 <div class="alert alert-danger" role="alert"
                      invisible="not is_obligatoire or state not in ('expirée','résiliée')">
-                    <strong>Police obligatoire expirée</strong> — Ce bus ne peut plus
-                    être affecté à des tournées (règle Tunisie).
+                    <p><strong translate="True">Police obligatoire expirée</strong> — <span translate="True">Ce bus ne peut plus être affecté à des tournées (règle Tunisie).</span></p>
                 </div>
                 <div class="alert alert-warning" role="alert"
                      invisible="visite_technique_valide or not type_police_id">
-                    <strong>Visite technique</strong> — Absente ou expirée.
-                    Le renouvellement RC sera bloqué.
+                    <p><strong translate="True">Visite technique</strong> — <span translate="True">Absente ou expirée. Le renouvellement RC sera bloqué.</span></p>
                 </div>
                 <sheet>
                     <div class="oe_title">

@@ -1,0 +1,2222 @@
+# ترجمة وحدة transport_assurance — العربية
+# This file contains the translation of the following modules:
+# 	* transport_assurance
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: Odoo Server 19.0\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2026-05-22 08:27+0000\n"
+"PO-Revision-Date: 2026-05-22 08:27+0000\n"
+"Last-Translator: ERP Transport\n"
+"Language-Team: \n"
+"Language: ar_001\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=6; plural=n==0 ? 0 : n==1 ? 1 : n==2 ? 2 : n%100>=3 && n%100<=10 ? 3 : n%100>=11 && n%100<=99 ? 4 : 5;\n"
+
+#. module: transport_assurance
+#: model:res.groups,comment:transport_assurance.group_assurance_manager
+msgid ""
+"\n"
+"                Accès complet au module Assurance, y compris configuration,\n"
+"                clôture de sinistres, validation des indemnités et rapports complets.\n"
+"            "
+msgstr ""
+"\n"
+"                صلاحية الوصول الكامل إلى وحدة التأمين، بما يشمل الإعداد،\n"
+"                إغلاق الحوادث، اعتماد التعويضات والتقارير الشاملة.\n"
+"            "
+
+#. module: transport_assurance
+#: model:transport.assurance.type,description:transport_assurance.type_vie_groupe
+msgid ""
+"\n"
+"                Couverture décès / invalidité permanente totale (IPT)\n"
+"                pour l'ensemble du personnel. Versement du capital au bénéficiaire désigné.\n"
+"            "
+msgstr ""
+"\n"
+"                تغطية الوفاة / العجز الدائم الكلي (IPT)\n"
+"                لجميع الموظفين. صرف رأس المال للمستفيد المحدد.\n"
+"            "
+
+#. module: transport_assurance
+#: model:transport.assurance.type,description:transport_assurance.type_at_cnam
+msgid ""
+"\n"
+"                Couverture obligatoire CNAM des accidents de travail et maladies\n"
+"                professionnelles. Blessure survenue en service.\n"
+"            "
+msgstr ""
+"\n"
+"                التغطية الإلزامية للصندوق الوطني للتأمين الصحي (CNAM) لحوادث العمل\n"
+"                والأمراض المهنية. الإصابات التي تقع أثناء الخدمة.\n"
+"            "
+
+#. module: transport_assurance
+#: model:transport.assurance.type,description:transport_assurance.type_rc
+msgid ""
+"\n"
+"                Couverture obligatoire des dommages causés aux tiers\n"
+"                (personnes et biens) lors d'un accident de circulation.\n"
+"                Exige une visite technique annuelle valide (règle Tunisie).\n"
+"            "
+msgstr ""
+"\n"
+"                التغطية الإلزامية للأضرار التي تلحق بالغير\n"
+"                (الأشخاص والممتلكات) عند وقوع حادث مرور.\n"
+"                يستوجب فحص تقني سنوي سارية المفعول (قاعدة تونس).\n"
+"            "
+
+#. module: transport_assurance
+#: model:transport.assurance.type,description:transport_assurance.type_voyage
+msgid ""
+"\n"
+"                Couverture obligatoire des passagers transportés en cas d'accident.\n"
+"                Couvre les préjudices corporels des voyageurs à bord.\n"
+"            "
+msgstr ""
+"\n"
+"                التغطية الإلزامية للمسافرين المنقولين في حالة وقوع حادث.\n"
+"                تغطي الأضرار الجسدية للمسافرين على متن وسيلة النقل.\n"
+"            "
+
+#. module: transport_assurance
+#: model:transport.assurance.type,description:transport_assurance.type_tous_risques
+msgid ""
+"\n"
+"                Couverture étendue des dommages au véhicule lui-même\n"
+"                (collision, accident matériel) quelle qu'en soit la cause.\n"
+"            "
+msgstr ""
+"\n"
+"                تغطية شاملة للأضرار التي تلحق بالمركبة ذاتها\n"
+"                (تصادم، حادث مادي) مهما كان السبب.\n"
+"            "
+
+#. module: transport_assurance
+#: model:res.groups,comment:transport_assurance.group_assurance_gestionnaire
+msgid ""
+"\n"
+"                Peut créer et gérer les polices d'assurance bus et chauffeurs,\n"
+"                déclarer et instruire les sinistres.\n"
+"            "
+msgstr ""
+"\n"
+"                يمكنه إنشاء وإدارة وثائق تأمين الحافلات والسائقين،\n"
+"                والتصريح بالحوادث ومتابعتها.\n"
+"            "
+
+#. module: transport_assurance
+#: model:transport.assurance.type,description:transport_assurance.type_incendie_vol
+msgid ""
+"\n"
+"                Protection spécifique contre l'incendie et le vol du véhicule\n"
+"                (y compris tentative de vol et vandalisme).\n"
+"            "
+msgstr ""
+"\n"
+"                حماية خاصة ضد الحريق وسرقة المركبة\n"
+"                (بما في ذلك محاولة السرقة والتخريب).\n"
+"            "
+
+#. module: transport_assurance
+#: model:transport.assurance.type,description:transport_assurance.type_rc_pro
+msgid ""
+"\n"
+"                RC du chauffeur en tant que professionnel de transport.\n"
+"                Couvre les dommages causés dans l'exercice de ses fonctions.\n"
+"            "
+msgstr ""
+"\n"
+"                المسؤولية المدنية للسائق بوصفه محترفاً في مجال النقل.\n"
+"                تغطي الأضرار الناجمة في إطار ممارسة مهامه.\n"
+"            "
+
+#. module: transport_assurance
+#: model:transport.assurance.type,description:transport_assurance.type_complementaire_sante
+msgid ""
+"\n"
+"                Remboursement des frais médicaux au-delà de la prise en charge\n"
+"                de la CNAM. Couverture hospitalisation, soins ambulatoires, optique.\n"
+"            "
+msgstr ""
+"\n"
+"                تسديد النفقات الطبية التي تتجاوز تغطية\n"
+"                الصندوق الوطني للتأمين الصحي (CNAM). يشمل الاستشفاء والرعاية الخارجية والبصريات.\n"
+"            "
+
+#. module: transport_assurance
+#: model:ir.model.fields.selection,name:transport_assurance.selection__transport_assurance_wizard_rapport__echeance_horizon__12
+msgid "12 mois"
+msgstr "12 شهراً"
+
+#. module: transport_assurance
+#: model:ir.model.fields.selection,name:transport_assurance.selection__transport_assurance_wizard_rapport__echeance_horizon__3
+msgid "3 mois"
+msgstr "3 أشهر"
+
+#. module: transport_assurance
+#: model:ir.model.fields.selection,name:transport_assurance.selection__transport_assurance_wizard_rapport__echeance_horizon__6
+msgid "6 mois"
+msgstr "6 أشهر"
+
+#. module: transport_assurance
+#: model_terms:ir.ui.view,arch_db:transport_assurance.view_assurance_bus_form
+msgid ""
+"<strong>Police obligatoire expirée</strong> — Ce bus ne peut plus\n"
+"                    être affecté à des tournées (règle Tunisie)."
+msgstr ""
+"<strong>وثيقة تأمين إلزامية منتهية الصلاحية</strong> — لا يمكن تخصيص هذه وسيلة النقل\n"
+"                    لأي رحلة (قاعدة تونس)."
+
+#. module: transport_assurance
+#: model_terms:ir.ui.view,arch_db:transport_assurance.view_assurance_bus_form
+msgid ""
+"<strong>Visite technique</strong> — Absente ou expirée.\n"
+"                    Le renouvellement RC sera bloqué."
+msgstr ""
+"<strong>المعاينة التقنية</strong> — غائبة أو منتهية الصلاحية.\n"
+"                    سيتم تعليق تجديد المسؤولية المدنية."
+
+#. module: transport_assurance
+#: model_terms:ir.ui.view,arch_db:transport_assurance.report_bus_non_assures
+msgid ""
+"<strong>⚠ ALERTE LÉGALE CRITIQUE — Bus sans couverture obligatoire</strong>"
+msgstr ""
+"<strong>⚠ تنبيه قانوني بالغ الخطورة — حافلات غير مؤمَّنة بالتغطية الإلزامية</strong>"
+
+#. module: transport_assurance
+#: model_terms:ir.ui.view,arch_db:transport_assurance.view_assurance_chauffeur_form
+msgid "<strong>⚠ Échéance proche</strong> — Cette police expire dans"
+msgstr "<strong>⚠ تاريخ استحقاق قريب</strong> — تنتهي صلاحية هذه الوثيقة خلال"
+
+#. module: transport_assurance
+#: model_terms:ir.ui.view,arch_db:transport_assurance.view_assurance_chauffeur_search
+msgid "AT / CNAM"
+msgstr "حوادث العمل / CNAM"
+
+#. module: transport_assurance
+#: model:ir.model.fields.selection,name:transport_assurance.selection__transport_assurance_sinistre__nature_sinistre__accident_travail
+msgid "Accident de travail"
+msgstr "حادث عمل"
+
+#. module: transport_assurance
+#: model:transport.assurance.type,name:transport_assurance.type_at_cnam
+msgid "Accident de travail (CNAM)"
+msgstr "حادث عمل (CNAM)"
+
+#. module: transport_assurance
+#: model:ir.model.fields,field_description:transport_assurance.field_transport_assurance_bus__message_needaction
+#: model:ir.model.fields,field_description:transport_assurance.field_transport_assurance_chauffeur__message_needaction
+#: model:ir.model.fields,field_description:transport_assurance.field_transport_assurance_compagnie__message_needaction
+#: model:ir.model.fields,field_description:transport_assurance.field_transport_assurance_sinistre__message_needaction
+msgid "Action Needed"
+msgstr "إجراء مطلوب"
+
+#. module: transport_assurance
+#: model:ir.model.fields,field_description:transport_assurance.field_transport_assurance_compagnie__active
+#: model:ir.model.fields,field_description:transport_assurance.field_transport_assurance_type__active
+#: model:ir.model.fields.selection,name:transport_assurance.selection__transport_assurance_bus__state__active
+#: model:ir.model.fields.selection,name:transport_assurance.selection__transport_assurance_chauffeur__state__active
+msgid "Active"
+msgstr "نشطة"
+
+#. module: transport_assurance
+#: model_terms:ir.ui.view,arch_db:transport_assurance.view_assurance_bus_form
+#: model_terms:ir.ui.view,arch_db:transport_assurance.view_assurance_chauffeur_form
+msgid "Activer"
+msgstr "تفعيل"
+
+#. module: transport_assurance
+#: model_terms:ir.ui.view,arch_db:transport_assurance.view_assurance_bus_search
+#: model_terms:ir.ui.view,arch_db:transport_assurance.view_assurance_chauffeur_search
+msgid "Actives"
+msgstr "النشطة"
+
+#. module: transport_assurance
+#: model:ir.model.fields,field_description:transport_assurance.field_transport_assurance_bus__activity_ids
+#: model:ir.model.fields,field_description:transport_assurance.field_transport_assurance_chauffeur__activity_ids
+#: model:ir.model.fields,field_description:transport_assurance.field_transport_assurance_compagnie__activity_ids
+#: model:ir.model.fields,field_description:transport_assurance.field_transport_assurance_sinistre__activity_ids
+msgid "Activities"
+msgstr "الأنشطة"
+
+#. module: transport_assurance
+#: model:ir.model.fields,field_description:transport_assurance.field_transport_assurance_bus__activity_exception_decoration
+#: model:ir.model.fields,field_description:transport_assurance.field_transport_assurance_chauffeur__activity_exception_decoration
+#: model:ir.model.fields,field_description:transport_assurance.field_transport_assurance_compagnie__activity_exception_decoration
+#: model:ir.model.fields,field_description:transport_assurance.field_transport_assurance_sinistre__activity_exception_decoration
+msgid "Activity Exception Decoration"
+msgstr "تمييز استثناء النشاط"
+
+#. module: transport_assurance
+#: model:ir.model.fields,field_description:transport_assurance.field_transport_assurance_bus__activity_state
+#: model:ir.model.fields,field_description:transport_assurance.field_transport_assurance_chauffeur__activity_state
+#: model:ir.model.fields,field_description:transport_assurance.field_transport_assurance_compagnie__activity_state
+#: model:ir.model.fields,field_description:transport_assurance.field_transport_assurance_sinistre__activity_state
+msgid "Activity State"
+msgstr "حالة النشاط"
+
+#. module: transport_assurance
+#: model:ir.model.fields,field_description:transport_assurance.field_transport_assurance_bus__activity_type_icon
+#: model:ir.model.fields,field_description:transport_assurance.field_transport_assurance_chauffeur__activity_type_icon
+#: model:ir.model.fields,field_description:transport_assurance.field_transport_assurance_compagnie__activity_type_icon
+#: model:ir.model.fields,field_description:transport_assurance.field_transport_assurance_sinistre__activity_type_icon
+msgid "Activity Type Icon"
+msgstr "أيقونة نوع النشاط"
+
+#. module: transport_assurance
+#: model:ir.model.fields,field_description:transport_assurance.field_transport_assurance_compagnie__adresse
+msgid "Adresse"
+msgstr "العنوان"
+
+#. module: transport_assurance
+#: model:ir.model.fields.selection,name:transport_assurance.selection__transport_assurance_bus__state__alerte
+#: model:ir.model.fields.selection,name:transport_assurance.selection__transport_assurance_chauffeur__state__alerte
+msgid "Alerte échéance"
+msgstr "تنبيه الاستحقاق"
+
+#. module: transport_assurance
+#: model_terms:ir.ui.view,arch_db:transport_assurance.view_assurance_sinistre_pivot
+msgid "Analyse sinistres"
+msgstr "تحليل الحوادث"
+
+#. module: transport_assurance
+#: model_terms:ir.ui.view,arch_db:transport_assurance.view_wizard_rapport_assurance_form
+#: model_terms:ir.ui.view,arch_db:transport_assurance.view_wizard_renouvellement_form
+msgid "Annuler"
+msgstr "إلغاء"
+
+#. module: transport_assurance
+#: model:ir.model.fields.selection,name:transport_assurance.selection__transport_assurance_sinistre__gouvernorat__ariana
+msgid "Ariana"
+msgstr "أريانة"
+
+#. module: transport_assurance
+#: model:ir.ui.menu,name:transport_assurance.menu_assurance_root
+msgid "Assurance"
+msgstr "التأمين"
+
+#. module: transport_assurance
+#: model:res.groups.privilege,name:transport_assurance.privilege_transport_assurance
+msgid "Assurance Transport"
+msgstr "تأمين النقل"
+
+#. module: transport_assurance
+#: model:ir.model.fields,field_description:transport_assurance.field_transport_assurance_sinistre__tiers_assurance
+msgid "Assurance du tiers"
+msgstr "تأمين الطرف الثالث"
+
+#. module: transport_assurance
+#: model:transport.assurance.type,name:transport_assurance.type_vie_groupe
+msgid "Assurance vie groupe"
+msgstr "تأمين الحياة الجماعي"
+
+#. module: transport_assurance
+#: model:ir.actions.server,name:transport_assurance.cron_assurance_alertes_ir_actions_server
+msgid "Assurance — Alertes échéances polices"
+msgstr "التأمين — تنبيهات استحقاق الوثائق"
+
+#. module: transport_assurance
+#: model:ir.actions.server,name:transport_assurance.cron_assurance_update_states_ir_actions_server
+msgid "Assurance — Mise à jour états polices"
+msgstr "التأمين — تحديث حالات الوثائق"
+
+#. module: transport_assurance
+#: model:ir.actions.server,name:transport_assurance.cron_assurance_bus_non_assures_ir_actions_server
+msgid "Assurance — Vérification bus non assurés"
+msgstr "التأمين — التحقق من الحافلات غير المؤمَّنة"
+
+#. module: transport_assurance
+#: model:ir.model.fields,field_description:transport_assurance.field_transport_assurance_bus__message_attachment_count
+#: model:ir.model.fields,field_description:transport_assurance.field_transport_assurance_chauffeur__message_attachment_count
+#: model:ir.model.fields,field_description:transport_assurance.field_transport_assurance_compagnie__message_attachment_count
+#: model:ir.model.fields,field_description:transport_assurance.field_transport_assurance_sinistre__message_attachment_count
+msgid "Attachment Count"
+msgstr "عدد المرفقات"
+
+#. module: transport_assurance
+#: model:ir.model.fields,field_description:transport_assurance.field_transport_assurance_wizard_rapport__date_fin
+msgid "Au"
+msgstr "إلى"
+
+#. module: transport_assurance
+#: model:ir.model.fields.selection,name:transport_assurance.selection__transport_assurance_sinistre__nature_sinistre__autre
+msgid "Autre"
+msgstr "أخرى"
+
+#. module: transport_assurance
+#: model:ir.model.fields,field_description:transport_assurance.field_transport_assurance_type__base_legale
+msgid "Base légale"
+msgstr "الأساس القانوني"
+
+#. module: transport_assurance
+#: model:ir.model.fields.selection,name:transport_assurance.selection__transport_assurance_sinistre__gouvernorat__ben_arous
+msgid "Ben Arous"
+msgstr "بن عروس"
+
+#. module: transport_assurance
+#: model:ir.model.fields.selection,name:transport_assurance.selection__transport_assurance_sinistre__gouvernorat__bizerte
+msgid "Bizerte"
+msgstr "بنزرت"
+
+#. module: transport_assurance
+#: model:ir.model.fields.selection,name:transport_assurance.selection__transport_assurance_sinistre__nature_sinistre__bris_glace
+msgid "Bris de glace"
+msgstr "كسر الزجاج"
+
+#. module: transport_assurance
+#: model:ir.model.fields.selection,name:transport_assurance.selection__transport_assurance_bus__state__brouillon
+#: model:ir.model.fields.selection,name:transport_assurance.selection__transport_assurance_chauffeur__state__brouillon
+#: model:ir.model.fields.selection,name:transport_assurance.selection__transport_assurance_sinistre__state__brouillon
+msgid "Brouillon"
+msgstr "مسودة"
+
+#. module: transport_assurance
+#: model:ir.model.fields,field_description:transport_assurance.field_transport_assurance_wizard_renouvellement__vehicle_id
+#: model_terms:ir.ui.view,arch_db:transport_assurance.report_echeancier
+#: model_terms:ir.ui.view,arch_db:transport_assurance.report_polices_actives
+#: model_terms:ir.ui.view,arch_db:transport_assurance.report_sinistres
+#: model_terms:ir.ui.view,arch_db:transport_assurance.view_assurance_sinistre_search
+msgid "Bus"
+msgstr "وسيلة النقل"
+
+#. module: transport_assurance
+#: model_terms:ir.ui.view,arch_db:transport_assurance.report_bus_non_assures
+msgid "Bus / Immatriculation"
+msgstr "وسيلة النقل / رقم التسجيل"
+
+#. module: transport_assurance
+#: model:ir.model.fields,field_description:transport_assurance.field_transport_assurance_bus__vehicle_id
+#: model:ir.model.fields.selection,name:transport_assurance.selection__transport_assurance_sinistre__objet_sinistre__bus
+#: model:ir.model.fields.selection,name:transport_assurance.selection__transport_assurance_type__categorie__bus
+msgid "Bus / Véhicule"
+msgstr "حافلة / مركبة"
+
+#. module: transport_assurance
+#: model_terms:ir.ui.view,arch_db:transport_assurance.report_bus_non_assures
+msgid "Bus actifs sans police obligatoire valide"
+msgstr "حافلات نشطة بدون وثيقة تأمين إلزامية سارية"
+
+#. module: transport_assurance
+#: model:ir.model.fields.selection,name:transport_assurance.selection__transport_assurance_type__categorie__both
+msgid "Bus et chauffeur"
+msgstr "حافلة وسائق"
+
+#. module: transport_assurance
+#: model:ir.actions.report,name:transport_assurance.report_bus_non_assures_action
+msgid "Bus non assurés — Alerte légale"
+msgstr "حافلات غير مؤمَّنة — تنبيه قانوني"
+
+#. module: transport_assurance
+#: model:ir.model.fields.selection,name:transport_assurance.selection__transport_assurance_wizard_rapport__type_rapport__bus_non_assures
+msgid "Bus non assurés — alerte légale"
+msgstr "حافلات غير مؤمَّنة — تنبيه قانوني"
+
+#. module: transport_assurance
+#: model:ir.model.fields.selection,name:transport_assurance.selection__transport_assurance_sinistre__gouvernorat__beja
+msgid "Béja"
+msgstr "باجة"
+
+#. module: transport_assurance
+#: model:ir.model.fields,field_description:transport_assurance.field_transport_assurance_chauffeur__beneficiaire
+#: model_terms:ir.ui.view,arch_db:transport_assurance.view_assurance_chauffeur_form
+msgid "Bénéficiaire désigné"
+msgstr "المستفيد المحدد"
+
+#. module: transport_assurance
+#: model:ir.model.fields,field_description:transport_assurance.field_transport_assurance_chauffeur__capital_assure
+msgid "Capital assuré / Plafond"
+msgstr "رأس المال المؤمَّن / السقف"
+
+#. module: transport_assurance
+#: model:ir.model.fields.selection,name:transport_assurance.selection__transport_assurance_sinistre__nature_sinistre__catastrophe
+msgid "Catastrophe naturelle"
+msgstr "كارثة طبيعية"
+
+#. module: transport_assurance
+#: model:ir.model.fields,field_description:transport_assurance.field_transport_assurance_type__categorie
+msgid "Catégorie"
+msgstr "الفئة"
+
+#. module: transport_assurance
+#: model:ir.model.fields,field_description:transport_assurance.field_transport_assurance_chauffeur__employe_id
+#: model:ir.model.fields,field_description:transport_assurance.field_transport_assurance_wizard_renouvellement__employe_id
+msgid "Chauffeur / Employé"
+msgstr "سائق / موظف"
+
+#. module: transport_assurance
+#: model:ir.model.fields.selection,name:transport_assurance.selection__transport_assurance_sinistre__objet_sinistre__chauffeur
+#: model:ir.model.fields.selection,name:transport_assurance.selection__transport_assurance_type__categorie__chauffeur
+msgid "Chauffeur / Personnel"
+msgstr "سائق / موظف"
+
+#. module: transport_assurance
+#: model_terms:ir.ui.view,arch_db:transport_assurance.view_assurance_sinistre_search
+msgid "Chauffeurs"
+msgstr "السائقون"
+
+#. module: transport_assurance
+#: model_terms:ir.ui.view,arch_db:transport_assurance.view_assurance_sinistre_form
+msgid "Clôturer"
+msgstr "إغلاق"
+
+#. module: transport_assurance
+#: model:ir.model.fields.selection,name:transport_assurance.selection__transport_assurance_sinistre__state__cloture
+msgid "Clôturé"
+msgstr "مُغلق"
+
+#. module: transport_assurance
+#: model_terms:ir.ui.view,arch_db:transport_assurance.view_assurance_sinistre_search
+msgid "Clôturés"
+msgstr "المُغلقة"
+
+#. module: transport_assurance
+#: model:ir.model.fields,field_description:transport_assurance.field_transport_assurance_type__code
+msgid "Code"
+msgstr "الرمز"
+
+#. module: transport_assurance
+#: model:ir.model.fields,field_description:transport_assurance.field_transport_assurance_compagnie__code
+msgid "Code compagnie"
+msgstr "رمز الشركة"
+
+#. module: transport_assurance
+#: model_terms:ir.ui.view,arch_db:transport_assurance.view_assurance_compagnie_form
+msgid "Code court"
+msgstr "الرمز المختصر"
+
+#. module: transport_assurance
+#: model:ir.model.fields.selection,name:transport_assurance.selection__transport_assurance_sinistre__nature_sinistre__collision
+msgid "Collision / Accident circulation"
+msgstr "تصادم / حادث مرور"
+
+#. module: transport_assurance
+#: model:ir.model.fields,field_description:transport_assurance.field_transport_assurance_bus__compagnie_id
+#: model:ir.model.fields,field_description:transport_assurance.field_transport_assurance_sinistre__compagnie_id
+#: model:ir.model.fields,field_description:transport_assurance.field_transport_assurance_wizard_renouvellement__compagnie_id
+#: model_terms:ir.ui.view,arch_db:transport_assurance.report_echeancier
+#: model_terms:ir.ui.view,arch_db:transport_assurance.report_polices_actives
+#: model_terms:ir.ui.view,arch_db:transport_assurance.report_sinistres
+#: model_terms:ir.ui.view,arch_db:transport_assurance.view_assurance_chauffeur_search
+#: model_terms:ir.ui.view,arch_db:transport_assurance.view_assurance_sinistre_search
+msgid "Compagnie"
+msgstr "الشركة"
+
+#. module: transport_assurance
+#: model:ir.model.fields,field_description:transport_assurance.field_transport_assurance_wizard_rapport__compagnie_id
+msgid "Compagnie (filtre)"
+msgstr "الشركة (تصفية)"
+
+#. module: transport_assurance
+#: model:ir.model.fields,field_description:transport_assurance.field_transport_assurance_chauffeur__compagnie_id
+msgid "Compagnie / Organisme"
+msgstr "الشركة / الهيئة"
+
+#. module: transport_assurance
+#: model:ir.model,name:transport_assurance.model_transport_assurance_compagnie
+#: model_terms:ir.ui.view,arch_db:transport_assurance.view_assurance_compagnie_form
+msgid "Compagnie d'assurance"
+msgstr "شركة التأمين"
+
+#. module: transport_assurance
+#: model:ir.actions.act_window,name:transport_assurance.action_assurance_compagnie
+#: model:ir.ui.menu,name:transport_assurance.menu_assurance_compagnies
+#: model_terms:ir.ui.view,arch_db:transport_assurance.view_assurance_compagnie_list
+msgid "Compagnies d'assurance"
+msgstr "شركات التأمين"
+
+#. module: transport_assurance
+#: model:transport.assurance.type,name:transport_assurance.type_complementaire_sante
+msgid "Complémentaire santé"
+msgstr "تأمين صحي تكميلي"
+
+#. module: transport_assurance
+#: model_terms:ir.ui.view,arch_db:transport_assurance.view_assurance_bus_form
+#: model_terms:ir.ui.view,arch_db:transport_assurance.view_assurance_chauffeur_form
+msgid "Conditions financières"
+msgstr "الشروط المالية"
+
+#. module: transport_assurance
+#: model_terms:ir.ui.view,arch_db:transport_assurance.view_wizard_renouvellement_form
+msgid "Conditions particulières du nouveau contrat…"
+msgstr "الشروط الخاصة بالعقد الجديد…"
+
+#. module: transport_assurance
+#: model_terms:ir.ui.view,arch_db:transport_assurance.view_assurance_chauffeur_form
+msgid "Conditions particulières…"
+msgstr "شروط خاصة…"
+
+#. module: transport_assurance
+#: model:ir.ui.menu,name:transport_assurance.menu_assurance_config
+msgid "Configuration"
+msgstr "الإعداد"
+
+#. module: transport_assurance
+#: model_terms:ir.ui.view,arch_db:transport_assurance.view_wizard_renouvellement_form
+msgid "Confirmer le renouvellement"
+msgstr "تأكيد التجديد"
+
+#. module: transport_assurance
+#: model_terms:ir.ui.view,arch_db:transport_assurance.view_assurance_compagnie_form
+msgid "Contact dédié"
+msgstr "جهة الاتصال المخصصة"
+
+#. module: transport_assurance
+#: model_terms:ir.ui.view,arch_db:transport_assurance.view_assurance_compagnie_form
+msgid "Coordonnées"
+msgstr "بيانات الاتصال"
+
+#. module: transport_assurance
+#: model:ir.model.fields.selection,name:transport_assurance.selection__transport_assurance_wizard_rapport__type_rapport__cout
+msgid "Coût des assurances (primes)"
+msgstr "تكلفة التأمينات (الأقساط)"
+
+#. module: transport_assurance
+#: model:ir.model.fields,field_description:transport_assurance.field_transport_assurance_bus__create_uid
+#: model:ir.model.fields,field_description:transport_assurance.field_transport_assurance_chauffeur__create_uid
+#: model:ir.model.fields,field_description:transport_assurance.field_transport_assurance_compagnie__create_uid
+#: model:ir.model.fields,field_description:transport_assurance.field_transport_assurance_sinistre__create_uid
+#: model:ir.model.fields,field_description:transport_assurance.field_transport_assurance_type__create_uid
+#: model:ir.model.fields,field_description:transport_assurance.field_transport_assurance_wizard_rapport__create_uid
+#: model:ir.model.fields,field_description:transport_assurance.field_transport_assurance_wizard_renouvellement__create_uid
+msgid "Created by"
+msgstr "أُنشئ بواسطة"
+
+#. module: transport_assurance
+#: model:ir.model.fields,field_description:transport_assurance.field_transport_assurance_bus__create_date
+#: model:ir.model.fields,field_description:transport_assurance.field_transport_assurance_chauffeur__create_date
+#: model:ir.model.fields,field_description:transport_assurance.field_transport_assurance_compagnie__create_date
+#: model:ir.model.fields,field_description:transport_assurance.field_transport_assurance_sinistre__create_date
+#: model:ir.model.fields,field_description:transport_assurance.field_transport_assurance_type__create_date
+#: model:ir.model.fields,field_description:transport_assurance.field_transport_assurance_wizard_rapport__create_date
+#: model:ir.model.fields,field_description:transport_assurance.field_transport_assurance_wizard_renouvellement__create_date
+msgid "Created on"
+msgstr "تاريخ الإنشاء"
+
+#. module: transport_assurance
+#: model:ir.model,name:transport_assurance.model_transport_assurance_cron
+msgid "Crons assurance transport"
+msgstr "مهام مجدولة لتأمين النقل"
+
+#. module: transport_assurance
+#: model:ir.model.fields,field_description:transport_assurance.field_transport_assurance_bus__currency_id
+#: model:ir.model.fields,field_description:transport_assurance.field_transport_assurance_chauffeur__currency_id
+#: model:ir.model.fields,field_description:transport_assurance.field_transport_assurance_sinistre__currency_id
+#: model:ir.model.fields,field_description:transport_assurance.field_transport_assurance_wizard_renouvellement__currency_id
+msgid "Currency"
+msgstr "العملة"
+
+#. module: transport_assurance
+#: model:ir.model.fields,field_description:transport_assurance.field_transport_assurance_sinistre__date_pv
+msgid "Date PV"
+msgstr "تاريخ محضر الضبط"
+
+#. module: transport_assurance
+#: model:ir.model.fields,field_description:transport_assurance.field_transport_assurance_bus__date_alerte
+#: model:ir.model.fields,field_description:transport_assurance.field_transport_assurance_chauffeur__date_alerte
+msgid "Date d'alerte"
+msgstr "تاريخ التنبيه"
+
+#. module: transport_assurance
+#: model:ir.model.fields,field_description:transport_assurance.field_transport_assurance_sinistre__date_expertise
+msgid "Date d'expertise"
+msgstr "تاريخ الخبرة"
+
+#. module: transport_assurance
+#: model:ir.model.fields,field_description:transport_assurance.field_transport_assurance_sinistre__date_cloture
+msgid "Date de clôture"
+msgstr "تاريخ الإغلاق"
+
+#. module: transport_assurance
+#: model:ir.model.fields,field_description:transport_assurance.field_transport_assurance_bus__date_debut
+#: model:ir.model.fields,field_description:transport_assurance.field_transport_assurance_chauffeur__date_debut
+msgid "Date de début"
+msgstr "تاريخ البداية"
+
+#. module: transport_assurance
+#: model:ir.model.fields,field_description:transport_assurance.field_transport_assurance_sinistre__date_declaration
+msgid "Date de déclaration"
+msgstr "تاريخ التصريح"
+
+#. module: transport_assurance
+#: model:ir.model.fields,field_description:transport_assurance.field_transport_assurance_bus__date_fin
+#: model:ir.model.fields,field_description:transport_assurance.field_transport_assurance_chauffeur__date_fin
+msgid "Date de fin / Expiration"
+msgstr "تاريخ الانتهاء / انقضاء الصلاحية"
+
+#. module: transport_assurance
+#: model:ir.model.fields,field_description:transport_assurance.field_transport_assurance_sinistre__date_sinistre
+msgid "Date du sinistre"
+msgstr "تاريخ الحادث"
+
+#. module: transport_assurance
+#: model_terms:ir.ui.view,arch_db:transport_assurance.report_sinistres
+msgid "Date sinistre"
+msgstr "تاريخ الحادث"
+
+#. module: transport_assurance
+#: model:ir.model.fields,field_description:transport_assurance.field_transport_assurance_bus__date_visite_technique
+#: model:ir.model.fields,field_description:transport_assurance.field_transport_assurance_wizard_renouvellement__date_visite_technique
+msgid "Date visite technique"
+msgstr "تاريخ المعاينة التقنية"
+
+#. module: transport_assurance
+#: model_terms:ir.ui.view,arch_db:transport_assurance.report_bus_non_assures
+msgid "Dernière police connue"
+msgstr "آخر وثيقة تأمين معروفة"
+
+#. module: transport_assurance
+#: model:ir.model.fields,field_description:transport_assurance.field_transport_assurance_type__description
+msgid "Description"
+msgstr "الوصف"
+
+#. module: transport_assurance
+#: model:ir.model.fields,field_description:transport_assurance.field_transport_assurance_sinistre__description
+#: model_terms:ir.ui.view,arch_db:transport_assurance.report_sinistres
+#: model_terms:ir.ui.view,arch_db:transport_assurance.view_assurance_sinistre_form
+msgid "Description des faits"
+msgstr "وصف الوقائع"
+
+#. module: transport_assurance
+#: model_terms:ir.ui.view,arch_db:transport_assurance.view_assurance_type_form
+msgid "Description du type de police…"
+msgstr "وصف نوع وثيقة التأمين…"
+
+#. module: transport_assurance
+#: model:ir.model.fields,field_description:transport_assurance.field_transport_assurance_bus__display_name
+#: model:ir.model.fields,field_description:transport_assurance.field_transport_assurance_chauffeur__display_name
+#: model:ir.model.fields,field_description:transport_assurance.field_transport_assurance_compagnie__display_name
+#: model:ir.model.fields,field_description:transport_assurance.field_transport_assurance_cron__display_name
+#: model:ir.model.fields,field_description:transport_assurance.field_transport_assurance_sinistre__display_name
+#: model:ir.model.fields,field_description:transport_assurance.field_transport_assurance_type__display_name
+#: model:ir.model.fields,field_description:transport_assurance.field_transport_assurance_wizard_rapport__display_name
+#: model:ir.model.fields,field_description:transport_assurance.field_transport_assurance_wizard_renouvellement__display_name
+msgid "Display Name"
+msgstr "الاسم المعروض"
+
+#. module: transport_assurance
+#: model_terms:ir.ui.view,arch_db:transport_assurance.view_assurance_sinistre_form
+msgid "Documents & Expertise"
+msgstr "الوثائق والخبرة"
+
+#. module: transport_assurance
+#: model:ir.model.fields,field_description:transport_assurance.field_transport_assurance_wizard_rapport__date_debut
+msgid "Du"
+msgstr "من"
+
+#. module: transport_assurance
+#: model_terms:ir.ui.view,arch_db:transport_assurance.report_polices_actives
+msgid "Début"
+msgstr "البداية"
+
+#. module: transport_assurance
+#: model_terms:ir.ui.view,arch_db:transport_assurance.view_assurance_sinistre_form
+msgid "Déclarer"
+msgstr "تصريح"
+
+#. module: transport_assurance
+#: model:ir.model.fields.selection,name:transport_assurance.selection__transport_assurance_sinistre__state__declare
+msgid "Déclaré"
+msgstr "مُصرَّح به"
+
+#. module: transport_assurance
+#: model_terms:ir.ui.view,arch_db:transport_assurance.view_assurance_sinistre_form
+msgid "Décrivez les circonstances du sinistre…"
+msgstr "صِف ملابسات الحادث…"
+
+#. module: transport_assurance
+#: model:ir.model.fields.selection,name:transport_assurance.selection__transport_assurance_sinistre__nature_sinistre__deces
+msgid "Décès"
+msgstr "وفاة"
+
+#. module: transport_assurance
+#: model:ir.model.fields,field_description:transport_assurance.field_transport_assurance_chauffeur__department_id
+#: model_terms:ir.ui.view,arch_db:transport_assurance.view_assurance_chauffeur_search
+msgid "Département"
+msgstr "القسم"
+
+#. module: transport_assurance
+#: model:ir.model.fields,field_description:transport_assurance.field_transport_assurance_compagnie__email
+msgid "Email"
+msgstr "البريد الإلكتروني"
+
+#. module: transport_assurance
+#: model:ir.model.fields,field_description:transport_assurance.field_transport_assurance_compagnie__contact_email
+msgid "Email contact"
+msgstr "بريد جهة الاتصال"
+
+#. module: transport_assurance
+#: model_terms:ir.ui.view,arch_db:transport_assurance.report_echeancier
+#: model_terms:ir.ui.view,arch_db:transport_assurance.report_polices_actives
+#: model_terms:ir.ui.view,arch_db:transport_assurance.report_sinistres
+msgid "Employé"
+msgstr "الموظف"
+
+#. module: transport_assurance
+#: model_terms:ir.ui.view,arch_db:transport_assurance.view_assurance_chauffeur_form
+msgid "Employé / Bénéficiaire"
+msgstr "الموظف / المستفيد"
+
+#. module: transport_assurance
+#: model:ir.model.fields,field_description:transport_assurance.field_transport_assurance_sinistre__employe_id
+msgid "Employé / Chauffeur impliqué"
+msgstr "الموظف / السائق المعني"
+
+#. module: transport_assurance
+#: model_terms:ir.ui.view,arch_db:transport_assurance.view_assurance_bus_search
+#: model_terms:ir.ui.view,arch_db:transport_assurance.view_assurance_chauffeur_search
+msgid "En alerte"
+msgstr "في حالة تنبيه"
+
+#. module: transport_assurance
+#: model_terms:ir.ui.view,arch_db:transport_assurance.view_assurance_sinistre_search
+msgid "En cours"
+msgstr "قيد التنفيذ"
+
+#. module: transport_assurance
+#: model:ir.model.fields.selection,name:transport_assurance.selection__transport_assurance_sinistre__state__instruction
+msgid "En instruction"
+msgstr "قيد المعالجة"
+
+#. module: transport_assurance
+#: model:ir.model.fields,help:transport_assurance.field_transport_assurance_chauffeur__lien_beneficiaire
+msgid "Ex : conjoint, enfant, parent…"
+msgstr "مثال: الزوج/الزوجة، الطفل، أحد الوالدين…"
+
+#. module: transport_assurance
+#: model:ir.model.fields,field_description:transport_assurance.field_transport_assurance_sinistre__expert_nom
+msgid "Expert mandaté"
+msgstr "الخبير المعيَّن"
+
+#. module: transport_assurance
+#: model_terms:ir.ui.view,arch_db:transport_assurance.view_assurance_sinistre_form
+msgid "Expertise"
+msgstr "الخبرة"
+
+#. module: transport_assurance
+#: model:ir.model.fields,field_description:transport_assurance.field_transport_assurance_sinistre__expertise_demandee
+msgid "Expertise demandée"
+msgstr "خبرة مطلوبة"
+
+#. module: transport_assurance
+#: model_terms:ir.ui.view,arch_db:transport_assurance.report_echeancier
+#: model_terms:ir.ui.view,arch_db:transport_assurance.view_assurance_bus_list
+msgid "Expiration"
+msgstr "تاريخ الانتهاء"
+
+#. module: transport_assurance
+#: model:ir.model.fields.selection,name:transport_assurance.selection__transport_assurance_bus__state__expirée
+#: model:ir.model.fields.selection,name:transport_assurance.selection__transport_assurance_chauffeur__state__expirée
+msgid "Expirée"
+msgstr "منتهية الصلاحية"
+
+#. module: transport_assurance
+#: model_terms:ir.ui.view,arch_db:transport_assurance.report_bus_non_assures
+msgid "Expirée le"
+msgstr "انتهت في"
+
+#. module: transport_assurance
+#: model_terms:ir.ui.view,arch_db:transport_assurance.view_assurance_bus_search
+#: model_terms:ir.ui.view,arch_db:transport_assurance.view_assurance_chauffeur_search
+msgid "Expirées"
+msgstr "المنتهية الصلاحية"
+
+#. module: transport_assurance
+#: model_terms:ir.ui.view,arch_db:transport_assurance.view_assurance_sinistre_form
+msgid "Fait générateur"
+msgstr "السبب المنشئ"
+
+#. module: transport_assurance
+#: model:ir.model.fields,field_description:transport_assurance.field_transport_assurance_compagnie__fax
+msgid "Fax"
+msgstr "الفاكس"
+
+#. module: transport_assurance
+#: model_terms:ir.ui.view,arch_db:transport_assurance.report_sinistres
+msgid "Fiche sinistre —"
+msgstr "بطاقة الحادث —"
+
+#. module: transport_assurance
+#: model_terms:ir.ui.view,arch_db:transport_assurance.view_wizard_rapport_assurance_form
+msgid "Filtres"
+msgstr "عوامل التصفية"
+
+#. module: transport_assurance
+#: model_terms:ir.ui.view,arch_db:transport_assurance.report_polices_actives
+msgid "Fin"
+msgstr "النهاية"
+
+#. module: transport_assurance
+#: model:ir.model.fields,field_description:transport_assurance.field_transport_assurance_bus__message_follower_ids
+#: model:ir.model.fields,field_description:transport_assurance.field_transport_assurance_chauffeur__message_follower_ids
+#: model:ir.model.fields,field_description:transport_assurance.field_transport_assurance_compagnie__message_follower_ids
+#: model:ir.model.fields,field_description:transport_assurance.field_transport_assurance_sinistre__message_follower_ids
+msgid "Followers"
+msgstr "المتابعون"
+
+#. module: transport_assurance
+#: model:ir.model.fields,field_description:transport_assurance.field_transport_assurance_bus__message_partner_ids
+#: model:ir.model.fields,field_description:transport_assurance.field_transport_assurance_chauffeur__message_partner_ids
+#: model:ir.model.fields,field_description:transport_assurance.field_transport_assurance_compagnie__message_partner_ids
+#: model:ir.model.fields,field_description:transport_assurance.field_transport_assurance_sinistre__message_partner_ids
+msgid "Followers (Partners)"
+msgstr "المتابعون (الشركاء)"
+
+#. module: transport_assurance
+#: model:ir.model.fields,help:transport_assurance.field_transport_assurance_bus__activity_type_icon
+#: model:ir.model.fields,help:transport_assurance.field_transport_assurance_chauffeur__activity_type_icon
+#: model:ir.model.fields,help:transport_assurance.field_transport_assurance_compagnie__activity_type_icon
+#: model:ir.model.fields,help:transport_assurance.field_transport_assurance_sinistre__activity_type_icon
+msgid "Font awesome icon e.g. fa-tasks"
+msgstr "أيقونة Font Awesome مثلاً: fa-tasks"
+
+#. module: transport_assurance
+#: model:ir.model.fields,field_description:transport_assurance.field_transport_assurance_bus__franchise
+#: model:ir.model.fields,field_description:transport_assurance.field_transport_assurance_chauffeur__franchise
+#: model:ir.model.fields,field_description:transport_assurance.field_transport_assurance_wizard_renouvellement__franchise
+msgid "Franchise (TND)"
+msgstr "التحمّل (دينار تونسي)"
+
+#. module: transport_assurance
+#: model:ir.model.fields,field_description:transport_assurance.field_transport_assurance_sinistre__franchise
+msgid "Franchise applicable"
+msgstr "التحمّل المنطبق"
+
+#. module: transport_assurance
+#: model:ir.model.fields,field_description:transport_assurance.field_transport_assurance_sinistre__franchise_appliquee
+#: model_terms:ir.ui.view,arch_db:transport_assurance.report_sinistres
+msgid "Franchise déduite"
+msgstr "التحمّل المُخصوم"
+
+#. module: transport_assurance
+#: model:ir.model.fields.selection,name:transport_assurance.selection__transport_assurance_sinistre__gouvernorat__gabes
+msgid "Gabès"
+msgstr "قابس"
+
+#. module: transport_assurance
+#: model:ir.model.fields.selection,name:transport_assurance.selection__transport_assurance_sinistre__gouvernorat__gafsa
+msgid "Gafsa"
+msgstr "قفصة"
+
+#. module: transport_assurance
+#: model:res.groups,name:transport_assurance.group_assurance_gestionnaire
+msgid "Gestionnaire"
+msgstr "مسؤول الإدارة"
+
+#. module: transport_assurance
+#: model:ir.model.fields,field_description:transport_assurance.field_transport_assurance_sinistre__gouvernorat
+msgid "Gouvernorat"
+msgstr "الولاية"
+
+#. module: transport_assurance
+#: model_terms:ir.ui.view,arch_db:transport_assurance.view_wizard_rapport_assurance_form
+msgid "Générer le rapport"
+msgstr "إنشاء التقرير"
+
+#. module: transport_assurance
+#: model:ir.ui.menu,name:transport_assurance.menu_assurance_wizard_rapport
+msgid "Générer un rapport"
+msgstr "إنشاء تقرير"
+
+#. module: transport_assurance
+#: model:ir.model.fields,field_description:transport_assurance.field_transport_assurance_bus__has_message
+#: model:ir.model.fields,field_description:transport_assurance.field_transport_assurance_chauffeur__has_message
+#: model:ir.model.fields,field_description:transport_assurance.field_transport_assurance_compagnie__has_message
+#: model:ir.model.fields,field_description:transport_assurance.field_transport_assurance_sinistre__has_message
+msgid "Has Message"
+msgstr "توجد رسالة"
+
+#. module: transport_assurance
+#: model:ir.model.fields,field_description:transport_assurance.field_transport_assurance_sinistre__heure_sinistre
+msgid "Heure (h)"
+msgstr "الساعة (س)"
+
+#. module: transport_assurance
+#: model:ir.model.fields,field_description:transport_assurance.field_transport_assurance_wizard_rapport__echeance_horizon
+msgid "Horizon échéancier"
+msgstr "أفق جدول الاستحقاق"
+
+#. module: transport_assurance
+#: model:ir.model.fields,field_description:transport_assurance.field_transport_assurance_bus__id
+#: model:ir.model.fields,field_description:transport_assurance.field_transport_assurance_chauffeur__id
+#: model:ir.model.fields,field_description:transport_assurance.field_transport_assurance_compagnie__id
+#: model:ir.model.fields,field_description:transport_assurance.field_transport_assurance_cron__id
+#: model:ir.model.fields,field_description:transport_assurance.field_transport_assurance_sinistre__id
+#: model:ir.model.fields,field_description:transport_assurance.field_transport_assurance_type__id
+#: model:ir.model.fields,field_description:transport_assurance.field_transport_assurance_wizard_rapport__id
+#: model:ir.model.fields,field_description:transport_assurance.field_transport_assurance_wizard_renouvellement__id
+msgid "ID"
+msgstr "المعرّف"
+
+#. module: transport_assurance
+#: model:ir.model.fields,field_description:transport_assurance.field_transport_assurance_bus__activity_exception_icon
+#: model:ir.model.fields,field_description:transport_assurance.field_transport_assurance_chauffeur__activity_exception_icon
+#: model:ir.model.fields,field_description:transport_assurance.field_transport_assurance_compagnie__activity_exception_icon
+#: model:ir.model.fields,field_description:transport_assurance.field_transport_assurance_sinistre__activity_exception_icon
+msgid "Icon"
+msgstr "الأيقونة"
+
+#. module: transport_assurance
+#: model:ir.model.fields,help:transport_assurance.field_transport_assurance_bus__activity_exception_icon
+#: model:ir.model.fields,help:transport_assurance.field_transport_assurance_chauffeur__activity_exception_icon
+#: model:ir.model.fields,help:transport_assurance.field_transport_assurance_compagnie__activity_exception_icon
+#: model:ir.model.fields,help:transport_assurance.field_transport_assurance_sinistre__activity_exception_icon
+msgid "Icon to indicate an exception activity."
+msgstr "أيقونة للإشارة إلى نشاط استثنائي."
+
+#. module: transport_assurance
+#: model:ir.model.fields,help:transport_assurance.field_transport_assurance_compagnie__code
+msgid "Identifiant court (ex : STAR, GAT, COMAR…)"
+msgstr "معرّف مختصر (مثال: STAR، GAT، COMAR…)"
+
+#. module: transport_assurance
+#: model_terms:ir.ui.view,arch_db:transport_assurance.view_assurance_compagnie_form
+msgid "Identification"
+msgstr "التعريف"
+
+#. module: transport_assurance
+#: model_terms:ir.ui.view,arch_db:transport_assurance.view_assurance_bus_form
+msgid "Identification police"
+msgstr "تعريف الوثيقة"
+
+#. module: transport_assurance
+#: model:ir.model.fields,help:transport_assurance.field_transport_assurance_bus__message_needaction
+#: model:ir.model.fields,help:transport_assurance.field_transport_assurance_chauffeur__message_needaction
+#: model:ir.model.fields,help:transport_assurance.field_transport_assurance_compagnie__message_needaction
+#: model:ir.model.fields,help:transport_assurance.field_transport_assurance_sinistre__message_needaction
+msgid "If checked, new messages require your attention."
+msgstr "إذا كان مُفعَّلاً، تستوجب الرسائل الجديدة انتباهك."
+
+#. module: transport_assurance
+#: model:ir.model.fields,help:transport_assurance.field_transport_assurance_bus__message_has_error
+#: model:ir.model.fields,help:transport_assurance.field_transport_assurance_bus__message_has_sms_error
+#: model:ir.model.fields,help:transport_assurance.field_transport_assurance_chauffeur__message_has_error
+#: model:ir.model.fields,help:transport_assurance.field_transport_assurance_chauffeur__message_has_sms_error
+#: model:ir.model.fields,help:transport_assurance.field_transport_assurance_compagnie__message_has_error
+#: model:ir.model.fields,help:transport_assurance.field_transport_assurance_compagnie__message_has_sms_error
+#: model:ir.model.fields,help:transport_assurance.field_transport_assurance_sinistre__message_has_error
+#: model:ir.model.fields,help:transport_assurance.field_transport_assurance_sinistre__message_has_sms_error
+msgid "If checked, some messages have a delivery error."
+msgstr "إذا كان مُفعَّلاً، فإن بعض الرسائل بها خطأ في الإرسال."
+
+#. module: transport_assurance
+#: model:ir.model.fields,field_description:transport_assurance.field_transport_assurance_sinistre__tiers_vehicule
+msgid "Immatriculation véhicule tiers"
+msgstr "رقم تسجيل مركبة الطرف الثالث"
+
+#. module: transport_assurance
+#: model:ir.model.fields.selection,name:transport_assurance.selection__transport_assurance_sinistre__nature_sinistre__incendie
+msgid "Incendie"
+msgstr "حريق"
+
+#. module: transport_assurance
+#: model:transport.assurance.type,name:transport_assurance.type_incendie_vol
+msgid "Incendie / Vol"
+msgstr "حريق / سرقة"
+
+#. module: transport_assurance
+#: model:ir.model.fields,field_description:transport_assurance.field_transport_assurance_wizard_rapport__inclure_bus
+msgid "Inclure polices bus"
+msgstr "تضمين وثائق الحافلات"
+
+#. module: transport_assurance
+#: model:ir.model.fields,field_description:transport_assurance.field_transport_assurance_wizard_rapport__inclure_chauffeurs
+msgid "Inclure polices chauffeurs"
+msgstr "تضمين وثائق السائقين"
+
+#. module: transport_assurance
+#: model_terms:ir.ui.view,arch_db:transport_assurance.view_assurance_sinistre_form
+msgid "Indemnisation"
+msgstr "التعويض"
+
+#. module: transport_assurance
+#: model_terms:ir.ui.view,arch_db:transport_assurance.view_assurance_sinistre_form
+msgid "Instruire"
+msgstr "معالجة"
+
+#. module: transport_assurance
+#: model:ir.model.fields,field_description:transport_assurance.field_transport_assurance_bus__message_is_follower
+#: model:ir.model.fields,field_description:transport_assurance.field_transport_assurance_chauffeur__message_is_follower
+#: model:ir.model.fields,field_description:transport_assurance.field_transport_assurance_compagnie__message_is_follower
+#: model:ir.model.fields,field_description:transport_assurance.field_transport_assurance_sinistre__message_is_follower
+msgid "Is Follower"
+msgstr "متابع"
+
+#. module: transport_assurance
+#: model:ir.model.fields,help:transport_assurance.field_transport_assurance_bus__date_alerte
+msgid "J-30 avant date_fin."
+msgstr "30 يوماً قبل تاريخ الانتهاء."
+
+#. module: transport_assurance
+#: model_terms:ir.ui.view,arch_db:transport_assurance.report_bus_non_assures
+msgid "Jamais assurée"
+msgstr "لم تُؤمَّن قط"
+
+#. module: transport_assurance
+#: model:ir.model.fields.selection,name:transport_assurance.selection__transport_assurance_sinistre__gouvernorat__jendouba
+msgid "Jendouba"
+msgstr "جندوبة"
+
+#. module: transport_assurance
+#: model:ir.model.fields,field_description:transport_assurance.field_transport_assurance_chauffeur__jours_restants
+msgid "Jours restants"
+msgstr "الأيام المتبقية"
+
+#. module: transport_assurance
+#: model:ir.model.fields.selection,name:transport_assurance.selection__transport_assurance_sinistre__gouvernorat__kairouan
+msgid "Kairouan"
+msgstr "القيروان"
+
+#. module: transport_assurance
+#: model:ir.model.fields.selection,name:transport_assurance.selection__transport_assurance_sinistre__gouvernorat__kasserine
+msgid "Kasserine"
+msgstr "القصرين"
+
+#. module: transport_assurance
+#: model:ir.model.fields.selection,name:transport_assurance.selection__transport_assurance_sinistre__gouvernorat__kebili
+msgid "Kébili"
+msgstr "قبلي"
+
+#. module: transport_assurance
+#: model:ir.model.fields.selection,name:transport_assurance.selection__transport_assurance_sinistre__gouvernorat__manouba
+msgid "La Manouba"
+msgstr "منوبة"
+
+#. module: transport_assurance
+#: model:ir.model.fields,field_description:transport_assurance.field_transport_assurance_bus__write_uid
+#: model:ir.model.fields,field_description:transport_assurance.field_transport_assurance_chauffeur__write_uid
+#: model:ir.model.fields,field_description:transport_assurance.field_transport_assurance_compagnie__write_uid
+#: model:ir.model.fields,field_description:transport_assurance.field_transport_assurance_sinistre__write_uid
+#: model:ir.model.fields,field_description:transport_assurance.field_transport_assurance_type__write_uid
+#: model:ir.model.fields,field_description:transport_assurance.field_transport_assurance_wizard_rapport__write_uid
+#: model:ir.model.fields,field_description:transport_assurance.field_transport_assurance_wizard_renouvellement__write_uid
+msgid "Last Updated by"
+msgstr "آخر تحديث بواسطة"
+
+#. module: transport_assurance
+#: model:ir.model.fields,field_description:transport_assurance.field_transport_assurance_bus__write_date
+#: model:ir.model.fields,field_description:transport_assurance.field_transport_assurance_chauffeur__write_date
+#: model:ir.model.fields,field_description:transport_assurance.field_transport_assurance_compagnie__write_date
+#: model:ir.model.fields,field_description:transport_assurance.field_transport_assurance_sinistre__write_date
+#: model:ir.model.fields,field_description:transport_assurance.field_transport_assurance_type__write_date
+#: model:ir.model.fields,field_description:transport_assurance.field_transport_assurance_wizard_rapport__write_date
+#: model:ir.model.fields,field_description:transport_assurance.field_transport_assurance_wizard_renouvellement__write_date
+msgid "Last Updated on"
+msgstr "تاريخ آخر تحديث"
+
+#. module: transport_assurance
+#: model:ir.model.fields.selection,name:transport_assurance.selection__transport_assurance_sinistre__gouvernorat__kef
+msgid "Le Kef"
+msgstr "الكاف"
+
+#. module: transport_assurance
+#: model:res.groups,comment:transport_assurance.group_assurance_user
+msgid "Lecture seule sur les polices et les sinistres."
+msgstr "قراءة فقط على الوثائق والحوادث."
+
+#. module: transport_assurance
+#: model:ir.model.fields,field_description:transport_assurance.field_transport_assurance_type__name
+msgid "Libellé"
+msgstr "التسمية"
+
+#. module: transport_assurance
+#: model:ir.model.fields,field_description:transport_assurance.field_transport_assurance_chauffeur__lien_beneficiaire
+msgid "Lien avec l'assuré"
+msgstr "العلاقة بالمؤمَّن عليه"
+
+#. module: transport_assurance
+#: model_terms:ir.ui.view,arch_db:transport_assurance.report_sinistres
+msgid "Lieu"
+msgstr "الموقع"
+
+#. module: transport_assurance
+#: model:ir.model.fields,field_description:transport_assurance.field_transport_assurance_sinistre__lieu
+msgid "Lieu du sinistre"
+msgstr "موقع الحادث"
+
+#. module: transport_assurance
+#: model:ir.model.fields.selection,name:transport_assurance.selection__transport_assurance_sinistre__gouvernorat__mahdia
+msgid "Mahdia"
+msgstr "المهدية"
+
+#. module: transport_assurance
+#: model:ir.model.fields.selection,name:transport_assurance.selection__transport_assurance_sinistre__nature_sinistre__maladie
+msgid "Maladie professionnelle"
+msgstr "مرض مهني"
+
+#. module: transport_assurance
+#: model:ir.model.fields,field_description:transport_assurance.field_transport_assurance_bus__message_has_error
+#: model:ir.model.fields,field_description:transport_assurance.field_transport_assurance_chauffeur__message_has_error
+#: model:ir.model.fields,field_description:transport_assurance.field_transport_assurance_compagnie__message_has_error
+#: model:ir.model.fields,field_description:transport_assurance.field_transport_assurance_sinistre__message_has_error
+msgid "Message Delivery error"
+msgstr "خطأ في إرسال الرسالة"
+
+#. module: transport_assurance
+#: model:ir.model.fields,field_description:transport_assurance.field_transport_assurance_bus__message_ids
+#: model:ir.model.fields,field_description:transport_assurance.field_transport_assurance_chauffeur__message_ids
+#: model:ir.model.fields,field_description:transport_assurance.field_transport_assurance_compagnie__message_ids
+#: model:ir.model.fields,field_description:transport_assurance.field_transport_assurance_sinistre__message_ids
+msgid "Messages"
+msgstr "الرسائل"
+
+#. module: transport_assurance
+#: model_terms:ir.ui.view,arch_db:transport_assurance.view_assurance_sinistre_search
+msgid "Mois"
+msgstr "الشهر"
+
+#. module: transport_assurance
+#: model:ir.model.fields.selection,name:transport_assurance.selection__transport_assurance_sinistre__gouvernorat__monastir
+msgid "Monastir"
+msgstr "المنستير"
+
+#. module: transport_assurance
+#: model_terms:ir.ui.view,arch_db:transport_assurance.report_sinistres
+msgid "Montant accordé"
+msgstr "المبلغ الممنوح"
+
+#. module: transport_assurance
+#: model:ir.model.fields,field_description:transport_assurance.field_transport_assurance_sinistre__montant_accorde
+msgid "Montant accordé (TND)"
+msgstr "المبلغ الممنوح (دينار تونسي)"
+
+#. module: transport_assurance
+#: model:ir.model.fields,help:transport_assurance.field_transport_assurance_chauffeur__capital_assure
+msgid "Montant maximal couvert (ex : capital vie, plafond santé)."
+msgstr "الحد الأقصى للمبلغ المغطَّى (مثال: رأس مال الحياة، سقف الصحة)."
+
+#. module: transport_assurance
+#: model:ir.model.fields,field_description:transport_assurance.field_transport_assurance_sinistre__montant_net_verse
+#: model_terms:ir.ui.view,arch_db:transport_assurance.report_sinistres
+msgid "Montant net versé"
+msgstr "المبلغ الصافي المدفوع"
+
+#. module: transport_assurance
+#: model_terms:ir.ui.view,arch_db:transport_assurance.report_sinistres
+msgid "Montant réclamé"
+msgstr "المبلغ المطالَب به"
+
+#. module: transport_assurance
+#: model:ir.model.fields,field_description:transport_assurance.field_transport_assurance_sinistre__montant_reclame
+msgid "Montant réclamé (TND)"
+msgstr "المبلغ المطالَب به (دينار تونسي)"
+
+#. module: transport_assurance
+#: model_terms:ir.ui.view,arch_db:transport_assurance.view_assurance_sinistre_form
+msgid "Montants"
+msgstr "المبالغ"
+
+#. module: transport_assurance
+#: model:ir.model.fields,field_description:transport_assurance.field_transport_assurance_sinistre__motif_rejet
+msgid "Motif de rejet / réduction"
+msgstr "سبب الرفض / التخفيض"
+
+#. module: transport_assurance
+#: model_terms:ir.ui.view,arch_db:transport_assurance.view_assurance_sinistre_form
+msgid "Motif de rejet ou de réduction du montant…"
+msgstr "سبب رفض أو تخفيض المبلغ…"
+
+#. module: transport_assurance
+#: model_terms:ir.ui.view,arch_db:transport_assurance.report_sinistres
+msgid "Motif rejet / réduction"
+msgstr "سبب الرفض / التخفيض"
+
+#. module: transport_assurance
+#: model:ir.model.fields,field_description:transport_assurance.field_transport_assurance_bus__my_activity_date_deadline
+#: model:ir.model.fields,field_description:transport_assurance.field_transport_assurance_chauffeur__my_activity_date_deadline
+#: model:ir.model.fields,field_description:transport_assurance.field_transport_assurance_compagnie__my_activity_date_deadline
+#: model:ir.model.fields,field_description:transport_assurance.field_transport_assurance_sinistre__my_activity_date_deadline
+msgid "My Activity Deadline"
+msgstr "موعد نشاطي"
+
+#. module: transport_assurance
+#: model:ir.model.fields.selection,name:transport_assurance.selection__transport_assurance_sinistre__gouvernorat__medenine
+msgid "Médenine"
+msgstr "مدنين"
+
+#. module: transport_assurance
+#: model:ir.model.fields.selection,name:transport_assurance.selection__transport_assurance_sinistre__gouvernorat__nabeul
+msgid "Nabeul"
+msgstr "نابل"
+
+#. module: transport_assurance
+#: model_terms:ir.ui.view,arch_db:transport_assurance.report_sinistres
+#: model_terms:ir.ui.view,arch_db:transport_assurance.view_assurance_sinistre_search
+msgid "Nature"
+msgstr "الطبيعة"
+
+#. module: transport_assurance
+#: model:ir.model.fields,field_description:transport_assurance.field_transport_assurance_sinistre__nature_sinistre
+msgid "Nature du sinistre"
+msgstr "طبيعة الحادث"
+
+#. module: transport_assurance
+#: model:ir.model.fields,field_description:transport_assurance.field_transport_assurance_bus__nb_sinistres
+#: model:ir.model.fields,field_description:transport_assurance.field_transport_assurance_chauffeur__nb_sinistres
+msgid "Nb sinistres"
+msgstr "عدد الحوادث"
+
+#. module: transport_assurance
+#: model:ir.model.fields,field_description:transport_assurance.field_transport_assurance_bus__activity_date_deadline
+#: model:ir.model.fields,field_description:transport_assurance.field_transport_assurance_chauffeur__activity_date_deadline
+#: model:ir.model.fields,field_description:transport_assurance.field_transport_assurance_compagnie__activity_date_deadline
+#: model:ir.model.fields,field_description:transport_assurance.field_transport_assurance_sinistre__activity_date_deadline
+msgid "Next Activity Deadline"
+msgstr "موعد النشاط التالي"
+
+#. module: transport_assurance
+#: model:ir.model.fields,field_description:transport_assurance.field_transport_assurance_bus__activity_summary
+#: model:ir.model.fields,field_description:transport_assurance.field_transport_assurance_chauffeur__activity_summary
+#: model:ir.model.fields,field_description:transport_assurance.field_transport_assurance_compagnie__activity_summary
+#: model:ir.model.fields,field_description:transport_assurance.field_transport_assurance_sinistre__activity_summary
+msgid "Next Activity Summary"
+msgstr "ملخص النشاط التالي"
+
+#. module: transport_assurance
+#: model:ir.model.fields,field_description:transport_assurance.field_transport_assurance_bus__activity_type_id
+#: model:ir.model.fields,field_description:transport_assurance.field_transport_assurance_chauffeur__activity_type_id
+#: model:ir.model.fields,field_description:transport_assurance.field_transport_assurance_compagnie__activity_type_id
+#: model:ir.model.fields,field_description:transport_assurance.field_transport_assurance_sinistre__activity_type_id
+msgid "Next Activity Type"
+msgstr "نوع النشاط التالي"
+
+#. module: transport_assurance
+#: model:ir.model.fields,field_description:transport_assurance.field_transport_assurance_compagnie__contact_nom
+msgid "Nom du contact dédié"
+msgstr "اسم جهة الاتصال المخصصة"
+
+#. module: transport_assurance
+#: model:ir.model.fields,field_description:transport_assurance.field_transport_assurance_sinistre__tiers_nom
+msgid "Nom du tiers"
+msgstr "اسم الطرف الثالث"
+
+#. module: transport_assurance
+#: model:ir.model.fields,field_description:transport_assurance.field_transport_assurance_sinistre__nb_blesses
+msgid "Nombre de blessés"
+msgstr "عدد المصابين"
+
+#. module: transport_assurance
+#: model:ir.model.fields,field_description:transport_assurance.field_transport_assurance_sinistre__nb_deces
+msgid "Nombre de décès"
+msgstr "عدد الوفيات"
+
+#. module: transport_assurance
+#: model:ir.model.fields,help:transport_assurance.field_transport_assurance_sinistre__nb_passagers
+msgid "Nombre de passagers à bord au moment du sinistre."
+msgstr "عدد الركاب على متن وسيلة النقل وقت وقوع الحادث."
+
+#. module: transport_assurance
+#: model_terms:ir.ui.view,arch_db:transport_assurance.view_assurance_bus_form
+#: model_terms:ir.ui.view,arch_db:transport_assurance.view_assurance_chauffeur_form
+msgid "Notes"
+msgstr "ملاحظات"
+
+#. module: transport_assurance
+#: model:ir.model.fields,field_description:transport_assurance.field_transport_assurance_bus__notes
+#: model:ir.model.fields,field_description:transport_assurance.field_transport_assurance_chauffeur__notes
+#: model:ir.model.fields,field_description:transport_assurance.field_transport_assurance_wizard_renouvellement__notes
+msgid "Notes / Conditions particulières"
+msgstr "ملاحظات / شروط خاصة"
+
+#. module: transport_assurance
+#: model:ir.model.fields,field_description:transport_assurance.field_transport_assurance_compagnie__notes
+#: model:ir.model.fields,field_description:transport_assurance.field_transport_assurance_type__notes
+msgid "Notes internes"
+msgstr "ملاحظات داخلية"
+
+#. module: transport_assurance
+#: model_terms:ir.ui.view,arch_db:transport_assurance.view_assurance_compagnie_form
+#: model_terms:ir.ui.view,arch_db:transport_assurance.view_assurance_type_form
+msgid "Notes internes…"
+msgstr "ملاحظات داخلية…"
+
+#. module: transport_assurance
+#: model_terms:ir.ui.view,arch_db:transport_assurance.view_wizard_renouvellement_form
+msgid "Nouvelle compagnie"
+msgstr "الشركة الجديدة"
+
+#. module: transport_assurance
+#: model:ir.model.fields,field_description:transport_assurance.field_transport_assurance_wizard_renouvellement__date_debut
+msgid "Nouvelle date de début"
+msgstr "تاريخ البداية الجديد"
+
+#. module: transport_assurance
+#: model:ir.model.fields,field_description:transport_assurance.field_transport_assurance_wizard_renouvellement__date_fin
+msgid "Nouvelle date de fin"
+msgstr "تاريخ النهاية الجديد"
+
+#. module: transport_assurance
+#: model_terms:ir.ui.view,arch_db:transport_assurance.view_wizard_renouvellement_form
+msgid "Nouvelle période"
+msgstr "الفترة الجديدة"
+
+#. module: transport_assurance
+#: model_terms:ir.ui.view,arch_db:transport_assurance.view_wizard_renouvellement_form
+msgid "Nouvelles conditions"
+msgstr "الشروط الجديدة"
+
+#. module: transport_assurance
+#: model:ir.model.fields,field_description:transport_assurance.field_transport_assurance_bus__message_needaction_counter
+#: model:ir.model.fields,field_description:transport_assurance.field_transport_assurance_chauffeur__message_needaction_counter
+#: model:ir.model.fields,field_description:transport_assurance.field_transport_assurance_compagnie__message_needaction_counter
+#: model:ir.model.fields,field_description:transport_assurance.field_transport_assurance_sinistre__message_needaction_counter
+msgid "Number of Actions"
+msgstr "عدد الإجراءات"
+
+#. module: transport_assurance
+#: model:ir.model.fields,field_description:transport_assurance.field_transport_assurance_bus__message_has_error_counter
+#: model:ir.model.fields,field_description:transport_assurance.field_transport_assurance_chauffeur__message_has_error_counter
+#: model:ir.model.fields,field_description:transport_assurance.field_transport_assurance_compagnie__message_has_error_counter
+#: model:ir.model.fields,field_description:transport_assurance.field_transport_assurance_sinistre__message_has_error_counter
+msgid "Number of errors"
+msgstr "عدد الأخطاء"
+
+#. module: transport_assurance
+#: model:ir.model.fields,help:transport_assurance.field_transport_assurance_bus__message_needaction_counter
+#: model:ir.model.fields,help:transport_assurance.field_transport_assurance_chauffeur__message_needaction_counter
+#: model:ir.model.fields,help:transport_assurance.field_transport_assurance_compagnie__message_needaction_counter
+#: model:ir.model.fields,help:transport_assurance.field_transport_assurance_sinistre__message_needaction_counter
+msgid "Number of messages requiring action"
+msgstr "عدد الرسائل التي تستوجب إجراءً"
+
+#. module: transport_assurance
+#: model:ir.model.fields,help:transport_assurance.field_transport_assurance_bus__message_has_error_counter
+#: model:ir.model.fields,help:transport_assurance.field_transport_assurance_chauffeur__message_has_error_counter
+#: model:ir.model.fields,help:transport_assurance.field_transport_assurance_compagnie__message_has_error_counter
+#: model:ir.model.fields,help:transport_assurance.field_transport_assurance_sinistre__message_has_error_counter
+msgid "Number of messages with delivery error"
+msgstr "عدد الرسائل التي بها خطأ في الإرسال"
+
+#. module: transport_assurance
+#: model_terms:ir.ui.view,arch_db:transport_assurance.report_sinistres
+msgid "N° PV Police"
+msgstr "رقم محضر الشرطة"
+
+#. module: transport_assurance
+#: model:ir.model.fields,field_description:transport_assurance.field_transport_assurance_sinistre__numero_pv_police
+msgid "N° PV Police / Gendarmerie"
+msgstr "رقم محضر الشرطة / الحرس الوطني"
+
+#. module: transport_assurance
+#: model:ir.model.fields,field_description:transport_assurance.field_transport_assurance_chauffeur__numero_police
+#: model_terms:ir.ui.view,arch_db:transport_assurance.report_echeancier
+#: model_terms:ir.ui.view,arch_db:transport_assurance.report_polices_actives
+msgid "N° Police"
+msgstr "رقم الوثيقة"
+
+#. module: transport_assurance
+#: model:ir.model.fields,field_description:transport_assurance.field_transport_assurance_bus__numero_police
+msgid "N° Police assurance"
+msgstr "رقم وثيقة التأمين"
+
+#. module: transport_assurance
+#: model:ir.model.fields,field_description:transport_assurance.field_transport_assurance_sinistre__name
+msgid "N° Sinistre"
+msgstr "رقم الحادث"
+
+#. module: transport_assurance
+#: model:ir.model.fields,field_description:transport_assurance.field_transport_assurance_chauffeur__numero_cnam
+msgid "N° affilié CNAM"
+msgstr "رقم الانخراط في CNAM"
+
+#. module: transport_assurance
+#: model:ir.model.fields,field_description:transport_assurance.field_transport_assurance_compagnie__numero_agrement
+msgid "N° agrément ministériel"
+msgstr "رقم الترخيص الوزاري"
+
+#. module: transport_assurance
+#: model_terms:ir.ui.view,arch_db:transport_assurance.report_sinistres
+msgid "Objet"
+msgstr "الموضوع"
+
+#. module: transport_assurance
+#: model:ir.model.fields,field_description:transport_assurance.field_transport_assurance_sinistre__objet_sinistre
+#: model_terms:ir.ui.view,arch_db:transport_assurance.view_assurance_sinistre_form
+msgid "Objet du sinistre"
+msgstr "موضوع الحادث"
+
+#. module: transport_assurance
+#: model_terms:ir.ui.view,arch_db:transport_assurance.report_echeancier
+msgid "Oblig."
+msgstr "إلزامي"
+
+#. module: transport_assurance
+#: model:ir.model.fields,help:transport_assurance.field_transport_assurance_bus__date_visite_technique
+msgid "Obligatoire avant renouvellement RC en Tunisie."
+msgstr "إلزامي قبل تجديد المسؤولية المدنية في تونس."
+
+#. module: transport_assurance
+#: model:ir.model.fields,field_description:transport_assurance.field_transport_assurance_bus__is_obligatoire
+#: model:ir.model.fields,field_description:transport_assurance.field_transport_assurance_chauffeur__is_obligatoire
+#: model:ir.model.fields,field_description:transport_assurance.field_transport_assurance_type__is_obligatoire
+msgid "Obligatoire légalement"
+msgstr "إلزامي قانوناً"
+
+#. module: transport_assurance
+#: model:ir.model.fields,help:transport_assurance.field_transport_assurance_wizard_renouvellement__date_visite_technique
+msgid "Obligatoire pour le renouvellement RC (règle Tunisie)."
+msgstr "إلزامي لتجديد المسؤولية المدنية (قاعدة تونس)."
+
+#. module: transport_assurance
+#: model_terms:ir.ui.view,arch_db:transport_assurance.view_assurance_bus_search
+#: model_terms:ir.ui.view,arch_db:transport_assurance.view_assurance_chauffeur_search
+msgid "Obligatoires"
+msgstr "الإلزامية"
+
+#. module: transport_assurance
+#: model_terms:ir.ui.view,arch_db:transport_assurance.view_wizard_rapport_assurance_form
+msgid "Options"
+msgstr "الخيارات"
+
+#. module: transport_assurance
+#: model_terms:ir.ui.view,arch_db:transport_assurance.view_assurance_sinistre_form
+msgid "PV Police / Gendarmerie"
+msgstr "محضر الشرطة / الحرس الوطني"
+
+#. module: transport_assurance
+#: model_terms:ir.ui.view,arch_db:transport_assurance.view_assurance_bus_search
+msgid "Par compagnie"
+msgstr "حسب الشركة"
+
+#. module: transport_assurance
+#: model_terms:ir.ui.view,arch_db:transport_assurance.view_assurance_bus_search
+msgid "Par type"
+msgstr "حسب النوع"
+
+#. module: transport_assurance
+#: model_terms:ir.ui.view,arch_db:transport_assurance.view_assurance_bus_search
+msgid "Par état"
+msgstr "حسب الحالة"
+
+#. module: transport_assurance
+#: model:ir.model.fields,field_description:transport_assurance.field_transport_assurance_sinistre__nb_passagers
+msgid "Passagers transportés"
+msgstr "الركاب المنقولون"
+
+#. module: transport_assurance
+#: model:ir.model.fields,field_description:transport_assurance.field_transport_assurance_bus__plafond_garantie
+msgid "Plafond de garantie (TND)"
+msgstr "سقف الضمان (دينار تونسي)"
+
+#. module: transport_assurance
+#: model:ir.model.fields,field_description:transport_assurance.field_transport_assurance_wizard_renouvellement__plafond_garantie
+msgid "Plafond garantie (TND)"
+msgstr "سقف الضمان (دينار تونسي)"
+
+#. module: transport_assurance
+#: model_terms:ir.ui.view,arch_db:transport_assurance.view_assurance_chauffeur_form
+msgid "Police"
+msgstr "الوثيقة"
+
+#. module: transport_assurance
+#: model:ir.model,name:transport_assurance.model_transport_assurance_bus
+#: model_terms:ir.ui.view,arch_db:transport_assurance.view_assurance_bus_form
+msgid "Police assurance bus"
+msgstr "وثيقة تأمين وسيلة النقل"
+
+#. module: transport_assurance
+#: model_terms:ir.ui.view,arch_db:transport_assurance.view_assurance_chauffeur_form
+msgid "Police assurance chauffeur"
+msgstr "وثيقة تأمين السائق"
+
+#. module: transport_assurance
+#: model:ir.model,name:transport_assurance.model_transport_assurance_chauffeur
+msgid "Police assurance chauffeur / personnel"
+msgstr "وثيقة تأمين السائق / الموظف"
+
+#. module: transport_assurance
+#: model:ir.model.fields,field_description:transport_assurance.field_transport_assurance_sinistre__police_bus_id
+#: model:ir.model.fields.selection,name:transport_assurance.selection__transport_assurance_wizard_renouvellement__type_renouvellement__bus
+msgid "Police bus"
+msgstr "وثيقة وسيلة النقل"
+
+#. module: transport_assurance
+#: model:ir.model.fields,field_description:transport_assurance.field_transport_assurance_wizard_renouvellement__police_bus_id
+msgid "Police bus à renouveler"
+msgstr "وثيقة وسيلة النقل المراد تجديدها"
+
+#. module: transport_assurance
+#: model:ir.model.fields,field_description:transport_assurance.field_transport_assurance_sinistre__police_chauffeur_id
+#: model:ir.model.fields.selection,name:transport_assurance.selection__transport_assurance_wizard_renouvellement__type_renouvellement__chauffeur
+msgid "Police chauffeur"
+msgstr "وثيقة السائق"
+
+#. module: transport_assurance
+#: model:ir.model.fields,field_description:transport_assurance.field_transport_assurance_wizard_renouvellement__police_chauffeur_id
+msgid "Police chauffeur à renouveler"
+msgstr "وثيقة السائق المراد تجديدها"
+
+#. module: transport_assurance
+#: model:ir.model.fields,field_description:transport_assurance.field_transport_assurance_bus__police_precedente_id
+msgid "Police précédente"
+msgstr "الوثيقة السابقة"
+
+#. module: transport_assurance
+#: model:ir.model.fields,field_description:transport_assurance.field_transport_assurance_bus__police_suivante_id
+msgid "Police suivante"
+msgstr "الوثيقة التالية"
+
+#. module: transport_assurance
+#: model_terms:ir.ui.view,arch_db:transport_assurance.view_wizard_renouvellement_form
+msgid "Police à renouveler"
+msgstr "الوثيقة المراد تجديدها"
+
+#. module: transport_assurance
+#: model:ir.actions.report,name:transport_assurance.report_polices_actives_action
+msgid "Polices actives"
+msgstr "الوثائق النشطة"
+
+#. module: transport_assurance
+#: model:ir.model.fields.selection,name:transport_assurance.selection__transport_assurance_wizard_rapport__type_rapport__polices_actives
+msgid "Polices actives (bus + chauffeurs)"
+msgstr "الوثائق النشطة (حافلات + سائقون)"
+
+#. module: transport_assurance
+#: model:ir.actions.act_window,name:transport_assurance.action_assurance_bus
+#: model_terms:ir.ui.view,arch_db:transport_assurance.view_assurance_bus_list
+msgid "Polices assurance bus"
+msgstr "وثائق تأمين الحافلات"
+
+#. module: transport_assurance
+#: model:ir.actions.act_window,name:transport_assurance.action_assurance_chauffeur
+#: model_terms:ir.ui.view,arch_db:transport_assurance.view_assurance_chauffeur_list
+msgid "Polices assurance chauffeurs"
+msgstr "وثائق تأمين السائقين"
+
+#. module: transport_assurance
+#: model:ir.ui.menu,name:transport_assurance.menu_assurance_bus_root
+#: model_terms:ir.ui.view,arch_db:transport_assurance.report_polices_actives
+msgid "Polices bus"
+msgstr "وثائق الحافلات"
+
+#. module: transport_assurance
+#: model:ir.model.fields,field_description:transport_assurance.field_transport_assurance_compagnie__nb_polices_bus
+msgid "Polices bus actives"
+msgstr "وثائق الحافلات النشطة"
+
+#. module: transport_assurance
+#: model_terms:ir.ui.view,arch_db:transport_assurance.report_echeancier
+msgid "Polices bus à renouveler"
+msgstr "وثائق الحافلات المراد تجديدها"
+
+#. module: transport_assurance
+#: model:ir.ui.menu,name:transport_assurance.menu_assurance_chauffeur_root
+#: model_terms:ir.ui.view,arch_db:transport_assurance.report_polices_actives
+msgid "Polices chauffeurs"
+msgstr "وثائق السائقين"
+
+#. module: transport_assurance
+#: model:ir.model.fields,field_description:transport_assurance.field_transport_assurance_compagnie__nb_polices_chauffeur
+msgid "Polices chauffeurs actives"
+msgstr "وثائق السائقين النشطة"
+
+#. module: transport_assurance
+#: model_terms:ir.ui.view,arch_db:transport_assurance.report_echeancier
+msgid "Polices chauffeurs à renouveler"
+msgstr "وثائق السائقين المراد تجديدها"
+
+#. module: transport_assurance
+#: model_terms:ir.ui.view,arch_db:transport_assurance.report_polices_actives
+msgid "Polices d'assurance actives"
+msgstr "وثائق التأمين النشطة"
+
+#. module: transport_assurance
+#: model:ir.model.fields,field_description:transport_assurance.field_transport_assurance_chauffeur__job_id
+msgid "Poste"
+msgstr "المنصب"
+
+#. module: transport_assurance
+#: model:ir.model.fields,field_description:transport_assurance.field_transport_assurance_compagnie__contact_poste
+msgid "Poste / Fonction"
+msgstr "المنصب / الوظيفة"
+
+#. module: transport_assurance
+#: model:ir.model.fields,help:transport_assurance.field_transport_assurance_chauffeur__beneficiaire
+msgid "Pour assurance vie groupe : nom du bénéficiaire en cas de décès."
+msgstr "لتأمين الحياة الجماعي: اسم المستفيد في حالة الوفاة."
+
+#. module: transport_assurance
+#: model:ir.model.fields,help:transport_assurance.field_transport_assurance_chauffeur__compagnie_id
+msgid "Pour l'AT/CNAM, renseigner la CNAM comme compagnie."
+msgstr "بالنسبة لحوادث العمل/CNAM، أدخل CNAM باعتبارها الشركة."
+
+#. module: transport_assurance
+#: model:ir.model.fields,field_description:transport_assurance.field_transport_assurance_bus__prime_annuelle
+#: model:ir.model.fields,field_description:transport_assurance.field_transport_assurance_chauffeur__prime_annuelle
+#: model:ir.model.fields,field_description:transport_assurance.field_transport_assurance_wizard_renouvellement__prime_annuelle
+msgid "Prime annuelle (TND)"
+msgstr "القسط السنوي (دينار تونسي)"
+
+#. module: transport_assurance
+#: model:ir.model.fields,field_description:transport_assurance.field_transport_assurance_bus__prime_mensuelle
+#: model:ir.model.fields,field_description:transport_assurance.field_transport_assurance_chauffeur__prime_mensuelle
+msgid "Prime mensuelle"
+msgstr "القسط الشهري"
+
+#. module: transport_assurance
+#: model_terms:ir.ui.view,arch_db:transport_assurance.report_echeancier
+#: model_terms:ir.ui.view,arch_db:transport_assurance.report_polices_actives
+msgid "Prime/an"
+msgstr "القسط/السنة"
+
+#. module: transport_assurance
+#: model_terms:ir.ui.view,arch_db:transport_assurance.view_wizard_rapport_assurance_form
+msgid "Période"
+msgstr "الفترة"
+
+#. module: transport_assurance
+#: model_terms:ir.ui.view,arch_db:transport_assurance.view_assurance_bus_search
+msgid "RC"
+msgstr "المسؤولية المدنية"
+
+#. module: transport_assurance
+#: model:ir.model.fields,field_description:transport_assurance.field_transport_assurance_compagnie__name
+msgid "Raison sociale"
+msgstr "الاسم التجاري"
+
+#. module: transport_assurance
+#: model_terms:ir.ui.view,arch_db:transport_assurance.view_assurance_compagnie_form
+msgid "Raison sociale de la compagnie"
+msgstr "الاسم التجاري للشركة"
+
+#. module: transport_assurance
+#: model:ir.model.fields,field_description:transport_assurance.field_transport_assurance_wizard_rapport__type_rapport
+msgid "Rapport"
+msgstr "التقرير"
+
+#. module: transport_assurance
+#: model:ir.actions.report,name:transport_assurance.report_sinistres_action
+msgid "Rapport sinistres"
+msgstr "تقرير الحوادث"
+
+#. module: transport_assurance
+#: model_terms:ir.ui.view,arch_db:transport_assurance.view_wizard_rapport_assurance_form
+msgid "Rapport souhaité"
+msgstr "التقرير المطلوب"
+
+#. module: transport_assurance
+#: model:ir.ui.menu,name:transport_assurance.menu_assurance_rapports
+msgid "Rapports"
+msgstr "التقارير"
+
+#. module: transport_assurance
+#: model:ir.actions.act_window,name:transport_assurance.action_wizard_rapport_assurance
+#: model_terms:ir.ui.view,arch_db:transport_assurance.view_wizard_rapport_assurance_form
+msgid "Rapports assurance"
+msgstr "تقارير التأمين"
+
+#. module: transport_assurance
+#: model_terms:ir.ui.view,arch_db:transport_assurance.view_assurance_bus_search
+msgid "Recherche polices bus"
+msgstr "البحث في وثائق الحافلات"
+
+#. module: transport_assurance
+#: model_terms:ir.ui.view,arch_db:transport_assurance.view_assurance_chauffeur_search
+msgid "Recherche polices chauffeurs"
+msgstr "البحث في وثائق السائقين"
+
+#. module: transport_assurance
+#: model_terms:ir.ui.view,arch_db:transport_assurance.view_assurance_sinistre_search
+msgid "Recherche sinistres"
+msgstr "البحث في الحوادث"
+
+#. module: transport_assurance
+#: model_terms:ir.ui.view,arch_db:transport_assurance.view_assurance_sinistre_form
+msgid "Rejeter"
+msgstr "رفض"
+
+#. module: transport_assurance
+#: model:ir.model.fields.selection,name:transport_assurance.selection__transport_assurance_sinistre__state__rejete
+msgid "Rejeté"
+msgstr "مرفوض"
+
+#. module: transport_assurance
+#: model_terms:ir.ui.view,arch_db:transport_assurance.view_assurance_sinistre_search
+msgid "Rejetés"
+msgstr "المرفوضة"
+
+#. module: transport_assurance
+#: model_terms:ir.ui.view,arch_db:transport_assurance.view_assurance_sinistre_form
+msgid "Remettre en brouillon"
+msgstr "إعادة إلى المسودة"
+
+#. module: transport_assurance
+#: model_terms:ir.ui.view,arch_db:transport_assurance.view_assurance_bus_form
+#: model_terms:ir.ui.view,arch_db:transport_assurance.view_assurance_chauffeur_form
+msgid "Renouveler"
+msgstr "تجديد"
+
+#. module: transport_assurance
+#: model_terms:ir.ui.view,arch_db:transport_assurance.view_wizard_renouvellement_form
+msgid "Renouveler la police"
+msgstr "تجديد الوثيقة"
+
+#. module: transport_assurance
+#: model:ir.model.fields,field_description:transport_assurance.field_transport_assurance_bus__est_renouvelable
+msgid "Renouvellement possible"
+msgstr "التجديد ممكن"
+
+#. module: transport_assurance
+#: model:ir.model.fields,help:transport_assurance.field_transport_assurance_chauffeur__numero_cnam
+msgid "Renseigner pour les polices AT liées à la CNAM."
+msgstr "يُملأ بالنسبة لوثائق حوادث العمل المرتبطة بـ CNAM."
+
+#. module: transport_assurance
+#: model:ir.model.fields,help:transport_assurance.field_transport_assurance_sinistre__tournee_id
+msgid ""
+"Renseignez si le sinistre s'est produit pendant une tournée. Nécessite le "
+"module transport_exploitation."
+msgstr ""
+"أدخل إذا وقع الحادث أثناء رحلة. يستلزم وحدة transport_exploitation."
+
+#. module: transport_assurance
+#: model:transport.assurance.type,name:transport_assurance.type_rc
+msgid "Responsabilité civile (RC)"
+msgstr "المسؤولية المدنية (RC)"
+
+#. module: transport_assurance
+#: model:transport.assurance.type,name:transport_assurance.type_rc_pro
+msgid "Responsabilité civile professionnelle"
+msgstr "المسؤولية المدنية المهنية"
+
+#. module: transport_assurance
+#: model:res.groups,name:transport_assurance.group_assurance_manager
+msgid "Responsable"
+msgstr "المسؤول"
+
+#. module: transport_assurance
+#: model:ir.model.fields,field_description:transport_assurance.field_transport_assurance_sinistre__responsable_id
+msgid "Responsable suivi"
+msgstr "المسؤول عن المتابعة"
+
+#. module: transport_assurance
+#: model:ir.model.fields,field_description:transport_assurance.field_transport_assurance_bus__activity_user_id
+#: model:ir.model.fields,field_description:transport_assurance.field_transport_assurance_chauffeur__activity_user_id
+#: model:ir.model.fields,field_description:transport_assurance.field_transport_assurance_compagnie__activity_user_id
+#: model:ir.model.fields,field_description:transport_assurance.field_transport_assurance_sinistre__activity_user_id
+msgid "Responsible User"
+msgstr "المستخدم المسؤول"
+
+#. module: transport_assurance
+#: model_terms:ir.ui.view,arch_db:transport_assurance.report_echeancier
+msgid "Rouge = expire dans ≤ 15 jours | Orange = expire dans ≤ 90 jours"
+msgstr "أحمر = تنتهي خلال ≤ 15 يوماً | برتقالي = تنتهي خلال ≤ 90 يوماً"
+
+#. module: transport_assurance
+#: model:ir.model.fields,field_description:transport_assurance.field_transport_assurance_chauffeur__name
+msgid "Référence"
+msgstr "المرجع"
+
+#. module: transport_assurance
+#: model:ir.model.fields,help:transport_assurance.field_transport_assurance_type__base_legale
+msgid "Référence réglementaire (ex : Décret n° X du JJ/MM/AAAA)"
+msgstr "المرجع التنظيمي (مثال: مرسوم رقم X بتاريخ يي/شش/سسسس)"
+
+#. module: transport_assurance
+#: model_terms:ir.ui.view,arch_db:transport_assurance.view_assurance_bus_form
+#: model_terms:ir.ui.view,arch_db:transport_assurance.view_assurance_chauffeur_form
+msgid "Résilier"
+msgstr "فسخ العقد"
+
+#. module: transport_assurance
+#: model:ir.model.fields.selection,name:transport_assurance.selection__transport_assurance_bus__state__résiliée
+#: model:ir.model.fields.selection,name:transport_assurance.selection__transport_assurance_chauffeur__state__résiliée
+msgid "Résiliée"
+msgstr "مفسوخة"
+
+#. module: transport_assurance
+#: model:ir.model.fields,field_description:transport_assurance.field_transport_assurance_bus__message_has_sms_error
+#: model:ir.model.fields,field_description:transport_assurance.field_transport_assurance_chauffeur__message_has_sms_error
+#: model:ir.model.fields,field_description:transport_assurance.field_transport_assurance_compagnie__message_has_sms_error
+#: model:ir.model.fields,field_description:transport_assurance.field_transport_assurance_sinistre__message_has_sms_error
+msgid "SMS Delivery error"
+msgstr "خطأ في إرسال الرسالة القصيرة"
+
+#. module: transport_assurance
+#: model:ir.model.fields.selection,name:transport_assurance.selection__transport_assurance_sinistre__gouvernorat__sfax
+msgid "Sfax"
+msgstr "صفاقس"
+
+#. module: transport_assurance
+#: model:ir.model.fields,help:transport_assurance.field_transport_assurance_bus__is_obligatoire
+#: model:ir.model.fields,help:transport_assurance.field_transport_assurance_chauffeur__is_obligatoire
+#: model:ir.model.fields,help:transport_assurance.field_transport_assurance_type__is_obligatoire
+msgid ""
+"Si coché, l'expiration de cette police sans renouvellement bloque le bus "
+"dans le module Exploitation (règle Tunisie)."
+msgstr ""
+"إذا كان مُفعَّلاً، فإن انتهاء صلاحية هذه الوثيقة دون تجديد يُعلِّق وسيلة النقل "
+"في وحدة الاستغلال (قاعدة تونس)."
+
+#. module: transport_assurance
+#: model:ir.model.fields.selection,name:transport_assurance.selection__transport_assurance_sinistre__gouvernorat__sidi_bouzid
+msgid "Sidi Bouzid"
+msgstr "سيدي بوزيد"
+
+#. module: transport_assurance
+#: model:ir.model.fields.selection,name:transport_assurance.selection__transport_assurance_sinistre__gouvernorat__siliana
+msgid "Siliana"
+msgstr "سليانة"
+
+#. module: transport_assurance
+#: model_terms:ir.ui.view,arch_db:transport_assurance.view_assurance_bus_form
+msgid "Sinistralité"
+msgstr "معدل الحوادث"
+
+#. module: transport_assurance
+#: model:ir.model,name:transport_assurance.model_transport_assurance_sinistre
+#: model_terms:ir.ui.view,arch_db:transport_assurance.view_assurance_sinistre_form
+msgid "Sinistre assurance"
+msgstr "حادث تأمين"
+
+#. module: transport_assurance
+#: model:ir.actions.act_window,name:transport_assurance.action_assurance_sinistre
+#: model:ir.ui.menu,name:transport_assurance.menu_assurance_sinistres_root
+#: model_terms:ir.ui.view,arch_db:transport_assurance.view_assurance_chauffeur_form
+#: model_terms:ir.ui.view,arch_db:transport_assurance.view_assurance_sinistre_list
+msgid "Sinistres"
+msgstr "الحوادث"
+
+#. module: transport_assurance
+#: model:ir.model.fields,field_description:transport_assurance.field_transport_assurance_compagnie__nb_sinistres_ouverts
+msgid "Sinistres en cours"
+msgstr "الحوادث الجارية"
+
+#. module: transport_assurance
+#: model:ir.model.fields,field_description:transport_assurance.field_transport_assurance_bus__sinistre_ids
+#: model:ir.model.fields,field_description:transport_assurance.field_transport_assurance_chauffeur__sinistre_ids
+#: model_terms:ir.ui.view,arch_db:transport_assurance.view_assurance_bus_form
+msgid "Sinistres liés"
+msgstr "الحوادث المرتبطة"
+
+#. module: transport_assurance
+#: model:ir.model.fields.selection,name:transport_assurance.selection__transport_assurance_wizard_rapport__type_rapport__sinistres
+msgid "Sinistres par véhicule"
+msgstr "الحوادث حسب المركبة"
+
+#. module: transport_assurance
+#: model:ir.model.fields,field_description:transport_assurance.field_transport_assurance_compagnie__site_web
+msgid "Site web"
+msgstr "الموقع الإلكتروني"
+
+#. module: transport_assurance
+#: model:ir.model.fields.selection,name:transport_assurance.selection__transport_assurance_sinistre__gouvernorat__sousse
+msgid "Sousse"
+msgstr "سوسة"
+
+#. module: transport_assurance
+#: model_terms:ir.ui.view,arch_db:transport_assurance.view_assurance_compagnie_form
+msgid "Statistiques"
+msgstr "إحصائيات"
+
+#. module: transport_assurance
+#: model:ir.model.fields,help:transport_assurance.field_transport_assurance_bus__activity_state
+#: model:ir.model.fields,help:transport_assurance.field_transport_assurance_chauffeur__activity_state
+#: model:ir.model.fields,help:transport_assurance.field_transport_assurance_compagnie__activity_state
+#: model:ir.model.fields,help:transport_assurance.field_transport_assurance_sinistre__activity_state
+msgid ""
+"Status based on activities\n"
+"Overdue: Due date is already passed\n"
+"Today: Activity date is today\n"
+"Planned: Future activities."
+msgstr ""
+"الحالة بناءً على الأنشطة\n"
+"متأخر: تجاوز تاريخ الاستحقاق\n"
+"اليوم: تاريخ النشاط هو اليوم\n"
+"مخطط: أنشطة مستقبلية."
+
+#. module: transport_assurance
+#: model_terms:ir.ui.view,arch_db:transport_assurance.view_assurance_sinistre_form
+msgid "Suivi"
+msgstr "المتابعة"
+
+#. module: transport_assurance
+#: model:ir.model.fields,field_description:transport_assurance.field_transport_assurance_type__sequence
+msgid "Séquence"
+msgstr "الترتيب"
+
+#. module: transport_assurance
+#: model_terms:ir.ui.view,arch_db:transport_assurance.report_echeancier
+#: model_terms:ir.ui.view,arch_db:transport_assurance.report_polices_actives
+#: model_terms:ir.ui.view,arch_db:transport_assurance.report_sinistres
+msgid "TND"
+msgstr "د.ت"
+
+#. module: transport_assurance
+#: model:ir.model.fields.selection,name:transport_assurance.selection__transport_assurance_sinistre__gouvernorat__tataouine
+msgid "Tataouine"
+msgstr "تطاوين"
+
+#. module: transport_assurance
+#: model:ir.model.fields.selection,name:transport_assurance.selection__transport_assurance_wizard_rapport__type_rapport__sinistralite
+msgid "Taux de sinistralité"
+msgstr "معدل الخسائر"
+
+#. module: transport_assurance
+#: model:ir.model.fields.selection,name:transport_assurance.selection__transport_assurance_sinistre__nature_sinistre__tentative_vol
+msgid "Tentative de vol"
+msgstr "محاولة سرقة"
+
+#. module: transport_assurance
+#: model_terms:ir.ui.view,arch_db:transport_assurance.view_assurance_sinistre_form
+msgid "Tiers & Victimes"
+msgstr "الأطراف الثالثة والضحايا"
+
+#. module: transport_assurance
+#: model:ir.model.fields,field_description:transport_assurance.field_transport_assurance_sinistre__tiers_implique
+#: model_terms:ir.ui.view,arch_db:transport_assurance.view_assurance_sinistre_form
+msgid "Tiers impliqué"
+msgstr "طرف ثالث معني"
+
+#. module: transport_assurance
+#: model:ir.model.fields,field_description:transport_assurance.field_transport_assurance_bus__montant_total_indemnise
+msgid "Total indemnisé"
+msgstr "إجمالي التعويضات"
+
+#. module: transport_assurance
+#: model:ir.model.fields,field_description:transport_assurance.field_transport_assurance_sinistre__tournee_id
+msgid "Tournée en cours"
+msgstr "الرحلة الجارية"
+
+#. module: transport_assurance
+#: model:ir.ui.menu,name:transport_assurance.menu_assurance_sinistres_list
+msgid "Tous les sinistres"
+msgstr "جميع الحوادث"
+
+#. module: transport_assurance
+#: model:transport.assurance.type,name:transport_assurance.type_tous_risques
+msgid "Tous risques"
+msgstr "جميع المخاطر"
+
+#. module: transport_assurance
+#: model_terms:ir.ui.view,arch_db:transport_assurance.report_bus_non_assures
+msgid ""
+"Tout bus en service doit disposer d'une police <strong>RC</strong> et\n"
+"                        <strong>Voyage/passagers</strong> valides. Les bus listés ci-dessous\n"
+"                        <strong>ne peuvent légalement pas effectuer de tournées</strong>."
+msgstr ""
+"كل حافلة في الخدمة يجب أن تمتلك وثيقة <strong>مسؤولية مدنية (RC)</strong> و\n"
+"                        <strong>سفر/ركاب</strong> سارية المفعول. الحافلات المدرجة أدناه\n"
+"                        <strong>لا يجوز لها قانونياً القيام بأي رحلة</strong>."
+
+#. module: transport_assurance
+#: model:ir.ui.menu,name:transport_assurance.menu_assurance_bus_list
+msgid "Toutes les polices bus"
+msgstr "جميع وثائق الحافلات"
+
+#. module: transport_assurance
+#: model:ir.ui.menu,name:transport_assurance.menu_assurance_chauffeur_list
+msgid "Toutes les polices chauffeurs"
+msgstr "جميع وثائق السائقين"
+
+#. module: transport_assurance
+#: model:ir.model.fields.selection,name:transport_assurance.selection__transport_assurance_sinistre__gouvernorat__tozeur
+msgid "Tozeur"
+msgstr "توزر"
+
+#. module: transport_assurance
+#: model:ir.model.fields.selection,name:transport_assurance.selection__transport_assurance_sinistre__gouvernorat__tunis
+msgid "Tunis"
+msgstr "تونس"
+
+#. module: transport_assurance
+#: model:ir.model.fields,field_description:transport_assurance.field_transport_assurance_wizard_renouvellement__type_renouvellement
+#: model_terms:ir.ui.view,arch_db:transport_assurance.report_echeancier
+#: model_terms:ir.ui.view,arch_db:transport_assurance.report_polices_actives
+#: model_terms:ir.ui.view,arch_db:transport_assurance.view_assurance_chauffeur_search
+msgid "Type"
+msgstr "النوع"
+
+#. module: transport_assurance
+#: model:ir.model.fields,field_description:transport_assurance.field_transport_assurance_bus__type_police_id
+#: model:ir.model.fields,field_description:transport_assurance.field_transport_assurance_chauffeur__type_police_id
+#: model:ir.model.fields,field_description:transport_assurance.field_transport_assurance_sinistre__type_police_id
+#: model:ir.model.fields,field_description:transport_assurance.field_transport_assurance_wizard_renouvellement__type_police_id
+#: model_terms:ir.ui.view,arch_db:transport_assurance.view_assurance_type_form
+msgid "Type de police"
+msgstr "نوع الوثيقة"
+
+#. module: transport_assurance
+#: model:ir.model.fields,field_description:transport_assurance.field_transport_assurance_wizard_rapport__type_police_id
+msgid "Type de police (filtre)"
+msgstr "نوع الوثيقة (تصفية)"
+
+#. module: transport_assurance
+#: model:ir.model,name:transport_assurance.model_transport_assurance_type
+msgid "Type de police d'assurance"
+msgstr "نوع وثيقة التأمين"
+
+#. module: transport_assurance
+#: model_terms:ir.ui.view,arch_db:transport_assurance.report_bus_non_assures
+msgid "Type de police manquante"
+msgstr "نوع الوثيقة الناقصة"
+
+#. module: transport_assurance
+#: model:ir.model.fields,help:transport_assurance.field_transport_assurance_bus__activity_exception_decoration
+#: model:ir.model.fields,help:transport_assurance.field_transport_assurance_chauffeur__activity_exception_decoration
+#: model:ir.model.fields,help:transport_assurance.field_transport_assurance_compagnie__activity_exception_decoration
+#: model:ir.model.fields,help:transport_assurance.field_transport_assurance_sinistre__activity_exception_decoration
+msgid "Type of the exception activity on record."
+msgstr "نوع النشاط الاستثنائي المسجَّل."
+
+#. module: transport_assurance
+#: model:ir.actions.act_window,name:transport_assurance.action_assurance_type
+#: model:ir.ui.menu,name:transport_assurance.menu_assurance_types
+#: model_terms:ir.ui.view,arch_db:transport_assurance.view_assurance_type_list
+msgid "Types de polices"
+msgstr "أنواع الوثائق"
+
+#. module: transport_assurance
+#: model:ir.model.fields,field_description:transport_assurance.field_transport_assurance_compagnie__telephone
+msgid "Téléphone"
+msgstr "الهاتف"
+
+#. module: transport_assurance
+#: model:ir.model.fields,field_description:transport_assurance.field_transport_assurance_compagnie__contact_telephone
+msgid "Téléphone contact"
+msgstr "هاتف جهة الاتصال"
+
+#. module: transport_assurance
+#: model:res.groups,name:transport_assurance.group_assurance_user
+msgid "Utilisateur"
+msgstr "مستخدم"
+
+#. module: transport_assurance
+#: model_terms:ir.ui.view,arch_db:transport_assurance.view_assurance_bus_form
+#: model_terms:ir.ui.view,arch_db:transport_assurance.view_assurance_chauffeur_form
+msgid "Validité"
+msgstr "الصلاحية"
+
+#. module: transport_assurance
+#: model:ir.model.fields.selection,name:transport_assurance.selection__transport_assurance_sinistre__nature_sinistre__vandalisme
+msgid "Vandalisme / Dégradations"
+msgstr "تخريب / إتلاف"
+
+#. module: transport_assurance
+#: model_terms:ir.ui.view,arch_db:transport_assurance.view_assurance_sinistre_form
+msgid "Victimes"
+msgstr "الضحايا"
+
+#. module: transport_assurance
+#: model_terms:ir.ui.view,arch_db:transport_assurance.view_assurance_chauffeur_search
+msgid "Vie groupe"
+msgstr "حياة جماعية"
+
+#. module: transport_assurance
+#: model:ir.model.fields,field_description:transport_assurance.field_transport_assurance_compagnie__ville
+msgid "Ville"
+msgstr "المدينة"
+
+#. module: transport_assurance
+#: model_terms:ir.ui.view,arch_db:transport_assurance.view_wizard_renouvellement_form
+msgid "Visite technique (obligatoire pour RC)"
+msgstr "المعاينة التقنية (إلزامية للمسؤولية المدنية)"
+
+#. module: transport_assurance
+#: model:ir.model.fields,field_description:transport_assurance.field_transport_assurance_bus__visite_technique_valide
+msgid "Visite technique valide"
+msgstr "معاينة تقنية سارية"
+
+#. module: transport_assurance
+#: model_terms:ir.ui.view,arch_db:transport_assurance.view_assurance_bus_form
+msgid "Voir sinistres"
+msgstr "عرض الحوادث"
+
+#. module: transport_assurance
+#: model:ir.model.fields.selection,name:transport_assurance.selection__transport_assurance_sinistre__nature_sinistre__vol
+msgid "Vol du véhicule"
+msgstr "سرقة المركبة"
+
+#. module: transport_assurance
+#: model_terms:ir.ui.view,arch_db:transport_assurance.view_assurance_bus_search
+msgid "Voyage"
+msgstr "السفر"
+
+#. module: transport_assurance
+#: model:transport.assurance.type,name:transport_assurance.type_voyage
+msgid "Voyage / Passagers"
+msgstr "سفر / ركاب"
+
+#. module: transport_assurance
+#: model_terms:ir.ui.view,arch_db:transport_assurance.view_assurance_sinistre_search
+msgid "Véhicule"
+msgstr "المركبة"
+
+#. module: transport_assurance
+#: model:ir.model.fields,field_description:transport_assurance.field_transport_assurance_sinistre__vehicle_id
+msgid "Véhicule (Bus)"
+msgstr "المركبة (وسيلة النقل)"
+
+#. module: transport_assurance
+#: model:ir.model.fields,field_description:transport_assurance.field_transport_assurance_bus__website_message_ids
+#: model:ir.model.fields,field_description:transport_assurance.field_transport_assurance_chauffeur__website_message_ids
+#: model:ir.model.fields,field_description:transport_assurance.field_transport_assurance_compagnie__website_message_ids
+#: model:ir.model.fields,field_description:transport_assurance.field_transport_assurance_sinistre__website_message_ids
+msgid "Website Messages"
+msgstr "رسائل الموقع الإلكتروني"
+
+#. module: transport_assurance
+#: model:ir.model.fields,help:transport_assurance.field_transport_assurance_bus__website_message_ids
+#: model:ir.model.fields,help:transport_assurance.field_transport_assurance_chauffeur__website_message_ids
+#: model:ir.model.fields,help:transport_assurance.field_transport_assurance_compagnie__website_message_ids
+#: model:ir.model.fields,help:transport_assurance.field_transport_assurance_sinistre__website_message_ids
+msgid "Website communication history"
+msgstr "سجل التواصل عبر الموقع الإلكتروني"
+
+#. module: transport_assurance
+#: model:ir.model,name:transport_assurance.model_transport_assurance_wizard_rapport
+msgid "Wizard rapports assurance"
+msgstr "معالج تقارير التأمين"
+
+#. module: transport_assurance
+#: model:ir.model,name:transport_assurance.model_transport_assurance_wizard_renouvellement
+msgid "Wizard renouvellement police assurance"
+msgstr "معالج تجديد وثيقة التأمين"
+
+#. module: transport_assurance
+#: model:ir.model.fields.selection,name:transport_assurance.selection__transport_assurance_sinistre__gouvernorat__zaghouan
+msgid "Zaghouan"
+msgstr "زغوان"
+
+#. module: transport_assurance
+#: model_terms:ir.ui.view,arch_db:transport_assurance.view_assurance_chauffeur_form
+msgid "jours. Procédez au renouvellement."
+msgstr "أياماً. تفضل بإجراء التجديد."
+
+#. module: transport_assurance
+#: model:ir.actions.report,name:transport_assurance.report_echeancier_action
+msgid "Échéancier assurances"
+msgstr "جدول استحقاقات التأمينات"
+
+#. module: transport_assurance
+#: model:ir.model.fields.selection,name:transport_assurance.selection__transport_assurance_wizard_rapport__type_rapport__echeancier
+#: model_terms:ir.ui.view,arch_db:transport_assurance.report_echeancier
+msgid "Échéancier des renouvellements"
+msgstr "جدول التجديدات"
+
+#. module: transport_assurance
+#: model_terms:ir.ui.view,arch_db:transport_assurance.report_bus_non_assures
+#: model_terms:ir.ui.view,arch_db:transport_assurance.report_echeancier
+#: model_terms:ir.ui.view,arch_db:transport_assurance.report_polices_actives
+msgid "Édité le :"
+msgstr "تاريخ الطباعة:"
+
+#. module: transport_assurance
+#: model:ir.model.fields,field_description:transport_assurance.field_transport_assurance_bus__state
+#: model:ir.model.fields,field_description:transport_assurance.field_transport_assurance_chauffeur__state
+#: model:ir.model.fields,field_description:transport_assurance.field_transport_assurance_sinistre__state
+#: model_terms:ir.ui.view,arch_db:transport_assurance.report_polices_actives
+#: model_terms:ir.ui.view,arch_db:transport_assurance.report_sinistres
+#: model_terms:ir.ui.view,arch_db:transport_assurance.view_assurance_chauffeur_search
+#: model_terms:ir.ui.view,arch_db:transport_assurance.view_assurance_sinistre_search
+msgid "État"
+msgstr "الحالة"
+
+#. module: transport_assurance
+#: model_terms:ir.ui.view,arch_db:transport_assurance.report_polices_actives
+msgid "★ Police obligatoire légalement (Tunisie)"
+msgstr "★ وثيقة إلزامية قانوناً (تونس)"

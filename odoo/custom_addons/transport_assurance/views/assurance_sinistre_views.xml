@@ -61,7 +61,7 @@
                             <group>
                                 <group string="Tiers impliqué">
                                     <field name="tiers_implique"/>
-                                    <field name="tiers_nom" invisible="not tiers_implique"/>
+                                    <field name="tiers_nom"      invisible="not tiers_implique"/>
                                     <field name="tiers_vehicule" invisible="not tiers_implique"/>
                                     <field name="tiers_assurance" invisible="not tiers_implique"/>
                                 </group>
@@ -82,7 +82,7 @@
                                 <group string="Expertise">
                                     <field name="expertise_demandee"/>
                                     <field name="date_expertise" invisible="not expertise_demandee"/>
-                                    <field name="expert_nom" invisible="not expertise_demandee"/>
+                                    <field name="expert_nom"     invisible="not expertise_demandee"/>
                                 </group>
                             </group>
                         </page>
@@ -93,12 +93,12 @@
                                     <field name="montant_reclame"/>
                                     <field name="montant_accorde"/>
                                     <field name="franchise_appliquee" readonly="1"/>
-                                    <field name="montant_net_verse" readonly="1"/>
+                                    <field name="montant_net_verse"   readonly="1"/>
                                     <field name="currency_id" groups="base.group_multi_currency"/>
                                 </group>
                                 <group string="Suivi">
                                     <field name="date_declaration" readonly="1"/>
-                                    <field name="date_cloture" readonly="1"/>
+                                    <field name="date_cloture"     readonly="1"/>
                                     <field name="responsable_id"/>
                                 </group>
                             </group>
@@ -146,10 +146,10 @@
         <field name="model">transport.assurance.sinistre</field>
         <field name="arch" type="xml">
             <pivot string="Analyse sinistres">
-                <field name="compagnie_id" type="row"/>
+                <field name="compagnie_id"    type="row"/>
                 <field name="nature_sinistre" type="col"/>
-                <field name="montant_reclame" type="measure"/>
-                <field name="montant_accorde" type="measure"/>
+                <field name="montant_reclame"  type="measure"/>
+                <field name="montant_accorde"  type="measure"/>
                 <field name="montant_net_verse" type="measure"/>
             </pivot>
         </field>
@@ -168,16 +168,16 @@
                 <filter string="En cours" name="en_cours"
                         domain="[('state','in',['declare','instruction'])]"/>
                 <filter string="Clôturés" name="clotures" domain="[('state','=','cloture')]"/>
-                <filter string="Rejetés" name="rejetes" domain="[('state','=','rejete')]"/>
+                <filter string="Rejetés"  name="rejetes"  domain="[('state','=','rejete')]"/>
                 <separator/>
-                <filter string="Bus" name="bus" domain="[('objet_sinistre','=','bus')]"/>
+                <filter string="Bus"       name="bus"       domain="[('objet_sinistre','=','bus')]"/>
                 <filter string="Chauffeurs" name="chauffeurs" domain="[('objet_sinistre','=','chauffeur')]"/>
                 <group>
-                    <filter string="État" name="group_state" context="{'group_by': 'state'}"/>
+                    <filter string="État"      name="group_state"     context="{'group_by': 'state'}"/>
                     <filter string="Compagnie" name="group_compagnie" context="{'group_by': 'compagnie_id'}"/>
-                    <filter string="Nature" name="group_nature" context="{'group_by': 'nature_sinistre'}"/>
-                    <filter string="Véhicule" name="group_vehicle" context="{'group_by': 'vehicle_id'}"/>
-                    <filter string="Mois" name="group_month" context="{'group_by': 'date_sinistre:month'}"/>
+                    <filter string="Nature"    name="group_nature"    context="{'group_by': 'nature_sinistre'}"/>
+                    <filter string="Véhicule"  name="group_vehicle"   context="{'group_by': 'vehicle_id'}"/>
+                    <filter string="Mois"      name="group_month"     context="{'group_by': 'date_sinistre:month'}"/>
                 </group>
             </search>
         </field>

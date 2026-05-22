@@ -557,9 +557,36 @@ def detecter_outil(question: str, llm=None) -> str:
     """
     import unicodedata
     q = question.lower()
-    # Normaliser sans accents pour robustesse Windows/Linux
     q_norm = unicodedata.normalize('NFD', q)
     q_norm = ''.join(c for c in q_norm if unicodedata.category(c) != 'Mn')
+
+    # Préfixes RPC impératifs — détectés EN PREMIER (verbe d'action au début)
+    PREFIXES_RPC = [
+        "cree ", "creer ", "ajoute ", "ajouter ", "valide ", "valider ",
+        "modifie ", "modifier ", "annule ", "annuler ", "supprime ", "supprimer ",
+        "affecte ", "affecter ", "assigne ", "assigner ", "planifie ", "planifier ",
+        "demarre ", "terminer ", "termine ", "cloture ", "cloturer ",
+        "passe ", "mets ", "met ", "change ", "mettre ",
+        "enregistre ", "enregistrer ", "diffuse ", "diffuser ",
+        "traite ", "classer ", "classe ", "resilier ", "resilier ",
+        "declare ", "declarer ", "paye ", "payer ",
+    ]
+    for pref in PREFIXES_RPC:
+        if q_norm.startswith(pref) or q.startswith(pref):
+            return "rpc"
+
+    # Mots interrogatifs = lecture SQL
+    MOTS_LECTURE = {
+        "quel", "quelle", "quels", "quelles", "combien", "liste",
+        "afficher", "montrer", "voir", "donner", "donne",
+        "quoi", "lequel", "laquelle", "qui a", "qui est",
+        "meilleur", "maximum", "minimum", "grand nombre",
+        "top", "rang", "statistique", "analyse", "rapport", "bilan",
+        "etat actuel", "etat de", "situation", "evolution",
+    }
+    for mot in MOTS_LECTURE:
+        if mot in q or mot in q_norm:
+            return "sql"
 
     for mot in _MOTS_RAG:
         if mot in q or mot in q_norm:
@@ -830,9 +857,12 @@ def generer_sql(question: str, llm: OllamaLLM,
         f"{schema}\n"
         f"{diagnostic_extra}\n"
         "RULES:\n"
-        "  [BUS] COUNT(*) FROM fleet_vehicle needs no WHERE. "
-        "state jsonb: COALESCE(s.name->>'fr_FR',s.name->>'en_US'). "
-        "No cols: type_vehicule,activity_type,vehicle_type.\n"
+        "  [BUS] ALWAYS SELECT v.name AS bus, v.license_plate. "
+        "state jsonb: LEFT JOIN fleet_vehicle_state s ON v.state_id=s.id, COALESCE(s.name->>'fr_FR',s.name->>'en_US') AS etat. "
+        "NEVER add WHERE on state unless user explicitly asks for a specific state. "
+        "NEVER use @> operator on state. Use state_id IN(47,48,5,6) to filter if needed. "
+        "COUNT(*) FROM fleet_vehicle needs no WHERE. "
+        "No cols: type_vehicule,activity_type,vehicle_type. NEVER select raw id columns.\n"
         "  [ASSURANCE] colonne ref=numero_police (jamais name). state valeurs EXACTES: 'active','resiliee','expiree','brouillon','alerte'. JOIN compagnie: LEFT JOIN transport_assurance_compagnie c ON a.compagnie_id=c.id.\n"
         "  [TOURNEES] state: brouillon,planifie,en_cours,realise,annule. "
         "km_realise=actual, km_prevu=planned, ecart_km=diff.\n"
@@ -2473,7 +2503,15 @@ def _detecter_rapport(question: str) -> str | None:
             "synthese mensuelle exploitation", "rapport du mois exploitation",
             "bilan du mois exploitation", "mois exploitation",
             "genere le rapport mensuel", "rapport mensuel",
+            "rapport_mensuel",
         ]),
+        # IDs directs envoyés par le JS via genererRapport()
+        ("rapport_journalier",   ["rapport_journalier"]),
+        ("rapport_hebdomadaire", ["rapport_hebdomadaire"]),
+        ("bilan_parc",           ["genere le bilan_parc"]),
+        ("bilan_assurance",      ["genere le bilan_assurance"]),
+        ("bilan_carburant",      ["genere le bilan_carburant"]),
+        ("bilan_boc",            ["genere le bilan_boc"]),
     ]
 
     for type_rapport, mots_cles in patterns:
@@ -2711,10 +2749,136 @@ def ask_agent(question: str, llm: OllamaLLM,
               allowed_tables: list = None,
               is_admin: bool = False,
               session_id: str = "default",
-              mode_rapport: bool = False) -> str:
+              mode_rapport: bool = False,
+              mode_stats: bool = False) -> str:
     try:
         # Enrichir la question avec le contexte conversationnel si nécessaire
         question = _enrichir_question(question, session_id)
+
+        # ── MODE STATISTIQUES : générer JSON avec KPIs + visualisation ────────
+        if mode_stats:
+            _logger.info(f"Mode stats activé pour: {question}")
+            try:
+                import json as _json
+
+                # ── Étape 1 : générer le SQL avec contexte métier + retry ────
+                HINT_STATS = (
+                    "\nRÈGLES SQL STATISTIQUES:\n"
+                    "- Pour répartition arrivée/départ BOC : "
+                    "SELECT 'Arrivée' AS type, COUNT(*) FROM boc_courrier_arrivee "
+                    "UNION ALL SELECT 'Départ', COUNT(*) FROM boc_courrier_depart\n"
+                    "- Pour répartition état bus : "
+                    "SELECT s.name->>'en_US' AS etat, COUNT(*) FROM fleet_vehicle v "
+                    "JOIN fleet_vehicle_state s ON v.state_id=s.id GROUP BY s.name\n"
+                    "- Pour BGI vs BGE : "
+                    "SELECT voucher_type, COUNT(*), SUM(total_quantity) "
+                    "FROM transport_fuel_voucher WHERE state='done' GROUP BY voucher_type\n"
+                    "- Pour répartition état polices : "
+                    "SELECT state, COUNT(*) FROM transport_assurance_bus GROUP BY state\n"
+                    "- NE JAMAIS joindre boc_courrier_arrivee et boc_courrier_depart pour les compter\n"
+                    "- Toujours utiliser GROUP BY pour les répartitions\n"
+                )
+                requete = generer_sql(question, llm, allowed_tables, is_admin,
+                                      diagnostic_extra=HINT_STATS)
+                print(f"  -> SQL stats: {requete}")
+
+                # Vérification colonnes avant exécution
+                valide, erreur_col = verifier_colonnes_sql(requete)
+                if not valide:
+                    diagnostic = diagnostiquer_erreur_sql(requete, erreur_col)
+                    extra = (
+                        HINT_STATS +
+                        "\nERREUR COLONNES: " + str(erreur_col) + "\n" +
+                        str(diagnostic) + "\n" +
+                        "Utiliser UNIQUEMENT les colonnes listées dans le diagnostic.\n"
+                    )
+                    requete = generer_sql(question, llm, allowed_tables, is_admin, diagnostic_extra=extra)
+                    print(f"  -> SQL stats corrigé: {requete}")
+
+                donnees = sql_tool.invoke(requete)
+
+                # Retry si erreur SQL à l'exécution
+                if "Erreur SQL" in donnees:
+                    diagnostic = diagnostiquer_erreur_sql(requete, donnees)
+                    extra = (
+                        "\nSQL ÉCHOUÉ: " + requete + "\nErreur: " + donnees[:200] + "\n" +
+                        str(diagnostic) + "\n" +
+                        "Réécrire avec les colonnes exactes du diagnostic.\n"
+                    )
+                    requete2 = generer_sql(question, llm, allowed_tables, is_admin, diagnostic_extra=extra)
+                    if requete2 != requete and requete2.upper().startswith("SELECT"):
+                        print(f"  -> SQL stats re-corrigé: {requete2}")
+                        donnees = sql_tool.invoke(requete2)
+
+                if not donnees or not donnees.strip():
+                    donnees = "Aucune donnée trouvée."
+
+                # ── Étape 2 : générer le JSON stats avec le LLM ──────────────
+                # Contexte métier pour guider le SQL et l'interprétation
+                CONTEXTE_METIER = (
+                    "CONTEXTE ERP TRANSPORT TUNISIE:\n"
+                    "- boc_courrier_arrivee : courriers reçus (state: brouillon/enregistre/diffuse/traite/classe)\n"
+                    "- boc_courrier_depart : courriers envoyés (state: brouillon/enregistre/envoye/classe)\n"
+                    "- transport_assurance_sinistre : sinistres (montant_reclame, montant_accorde, montant_net_verse)\n"
+                    "- fleet_vehicle : bus (state_id: 47=En service, 48=Hors service, 5=En panne, 6=En maintenance)\n"
+                    "- transport_exploitation_tournee : tournées (state: brouillon/planifie/en_cours/realise/annule)\n"
+                    "- transport_fuel_voucher : bons carburant (voucher_type: internal=BGI, external=BGE)\n"
+                    "NE PAS faire de jointure entre arrivee et depart — les compter séparément.\n"
+                )
+
+                prompt_stats = (
+                    f"Tu es l'assistant IA d'un ERP transport terrestre tunisien.\n"
+                    f"{CONTEXTE_METIER}\n"
+                    f"Question : {question}\n"
+                    f"Données SQL :\n{donnees[:800]}\n\n"
+                    f"Génère UNIQUEMENT un JSON valide (sans markdown) avec cette structure exacte :\n"
+                    f"{{\n"
+                    f"  \"texte\": \"phrase résumé en français avec les chiffres clés\",\n"
+                    f"  \"kpis\": [\n"
+                    f"    {{\"label\": \"nom de l'indicateur\", \"valeur\": \"valeur formatée\", \"tendance\": \"↑|↓|=\"}}\n"
+                    f"  ],\n"
+                    f"  \"visualisation\": {{\n"
+                    f"    \"type\": \"bar|line|donut|pie|kpi\",\n"
+                    f"    \"title\": \"titre\",\n"
+                    f"    \"labels\": [],\n"
+                    f"    \"data\": []\n"
+                    f"  }}\n"
+                    f"}}\n"
+                    f"RÈGLES IMPORTANTES :\n"
+                    f"1. TOUJOURS remplir kpis avec AU MOINS 1 entrée contenant la valeur principale.\n"
+                    f"   Exemple scalaire: kpis=[{{label:\"Montant total\",valeur:\"3 500 TND\",tendance:\"=\"}}]\n"
+                    f"2. Si 1 seule valeur: type=\"kpi\", labels=[], data=[valeur_numerique]\n"
+                    f"3. Si plusieurs valeurs: type=\"bar\" ou \"donut\", remplir labels et data.\n"
+                    f"4. donut/pie=répartition, bar=comparaison, line=évolution temporelle.\n"
+                    f"5. Valeurs dans data = nombres uniquement (pas de strings).\n"
+                    f"6. Formate les valeurs dans kpis.valeur lisiblement: 3500 → \"3 500 TND\".\n"
+                    f"Réponds UNIQUEMENT avec le JSON."
+                )
+
+                raw_stats = llm.invoke(prompt_stats).strip()
+                raw_stats = raw_stats.replace("```json","").replace("```","").strip()
+
+                # Extraire le JSON même s'il y a du texte autour
+                import re as _re_json
+                m_json = _re_json.search(r'\{[\s\S]+\}', raw_stats)
+                if m_json:
+                    raw_stats = m_json.group(0)
+
+                stats_data = _json.loads(raw_stats)
+                return _json.dumps(stats_data, ensure_ascii=False)
+
+            except Exception as e:
+                _logger.error(f"Erreur mode stats: {e}")
+                # Fallback : retourner une réponse texte simple
+                try:
+                    donnees_fb = sql_tool.invoke(generer_sql(question, llm, allowed_tables, is_admin))
+                    reponse_fb = formuler_reponse(question, donnees_fb, llm)
+                    fallback = {"texte": reponse_fb, "kpis": [], "visualisation": None}
+                    return _json.dumps(fallback, ensure_ascii=False)
+                except Exception as e2:
+                    _logger.error(f"Fallback stats échoué: {e2}")
+                    err = {"texte": "Impossible de générer les statistiques pour cette question.", "kpis": [], "visualisation": None}
+                    return _json.dumps(err, ensure_ascii=False)
 
         # ── MODE RAPPORT LIBRE : générer un PDF pour n'importe quelle question ──
         if mode_rapport:

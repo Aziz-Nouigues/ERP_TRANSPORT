@@ -83,6 +83,7 @@ class QuestionRequest(BaseModel):
     allowed_tables: list = []
     is_admin: bool = False
     mode_rapport: bool = False
+    mode_stats: bool = False
 
 
 class ReponseModel(BaseModel):
@@ -134,7 +135,8 @@ async def chat(request: QuestionRequest):
                     allowed_tables=request.allowed_tables,
                     is_admin=request.is_admin,
                     session_id=request.session_id,
-                    mode_rapport=request.mode_rapport
+                    mode_rapport=request.mode_rapport,
+                    mode_stats=request.mode_stats
                 )
             ),
             timeout=CHAT_TIMEOUT

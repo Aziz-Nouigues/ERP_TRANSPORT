@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <templates xml:space="preserve">
-
 <t t-name="transport_ai_agent.ChatInterface" owl="1">
 <div class="ai_chat_wrapper">
 
@@ -15,38 +14,32 @@
       </div>
     </div>
 
-    <!-- Sélecteur de mode -->
+    <!-- Onglets de mode -->
     <div class="ai_mode_tabs">
       <button t-attf-class="ai_mode_tab {{ state.mode === 'chat' ? 'active' : '' }}"
-              t-on-click="() => this.setMode('chat')">
-        💬 Chat
-      </button>
+              t-on-click="() => this.setMode('chat')">💬 Chat</button>
       <button t-attf-class="ai_mode_tab {{ state.mode === 'rapport' ? 'active' : '' }}"
-              t-on-click="() => this.setMode('rapport')">
-        📊 Rapports
-      </button>
+              t-on-click="() => this.setMode('rapport')">📊 Rapports</button>
+      <button t-attf-class="ai_mode_tab {{ state.mode === 'stats' ? 'active' : '' }}"
+              t-on-click="() => this.setMode('stats')">📈 Stats</button>
     </div>
 
-    <!-- Sidebar Chat : nouvelle conv + historique -->
+    <!-- Sidebar Chat -->
     <t t-if="state.mode === 'chat'">
-      <button class="ai_new_chat_btn" t-on-click="newConversation">
-        ✏️ Nouvelle conversation
-      </button>
+      <button class="ai_new_chat_btn" t-on-click="newConversation">✏️ Nouvelle conversation</button>
       <div class="ai_sidebar_section">Conversations récentes</div>
       <div class="ai_history_list">
         <t t-foreach="state.history" t-as="conv" t-key="conv.id">
           <div t-attf-class="ai_history_item {{ conv.id === state.currentId ? 'active' : '' }}"
                t-on-click="() => this.loadConversation(conv.id)">
-            <div class="ai_history_item_content">
-              <span class="ai_history_name"><t t-esc="conv.name"/></span>
-              <span class="ai_history_date"><t t-esc="conv.date"/></span>
-            </div>
+            <span class="ai_history_name"><t t-esc="conv.name"/></span>
+            <span class="ai_history_date"><t t-esc="conv.date"/></span>
           </div>
         </t>
       </div>
     </t>
 
-    <!-- Sidebar Rapport : liste des rapports disponibles -->
+    <!-- Sidebar Rapport -->
     <t t-if="state.mode === 'rapport'">
       <div class="ai_sidebar_section">Choisir un rapport</div>
       <div class="ai_rapport_list">
@@ -60,7 +53,44 @@
       </div>
     </t>
 
-    <!-- Footer utilisateur -->
+    <!-- Sidebar Stats -->
+    <t t-if="state.mode === 'stats'">
+      <button class="ai_new_chat_btn" t-on-click="nouvelleStatsConversation">✏️ Nouvelle statistique</button>
+      <div class="ai_sidebar_section">Historique statistiques</div>
+      <div class="ai_history_list">
+        <t t-if="state.statsHistory.length === 0">
+          <div style="padding:8px 12px; font-size:11px; color:rgba(255,255,255,0.3);">
+            Aucune statistique récente
+          </div>
+        </t>
+        <t t-foreach="state.statsHistory" t-as="sh" t-key="sh.id">
+          <div t-attf-class="ai_history_item {{ sh.id === state.statsCurrentId ? 'active' : '' }}"
+               t-on-click="() => this.loadStatsConversation(sh.id)">
+            <span class="ai_history_name">📈 <t t-esc="sh.name"/></span>
+            <span class="ai_history_date"><t t-esc="sh.date"/></span>
+          </div>
+        </t>
+      </div>
+      <div class="ai_sidebar_section" style="margin-top:8px;">Raccourcis</div>
+      <div class="ai_stats_sidebar_list">
+        <t t-foreach="STATS_RACCOURCIS" t-as="module" t-key="module.module">
+          <div class="ai_stats_module_group">
+            <div class="ai_stats_module_title"
+                 t-attf-style="color: {{ module.couleur }}">
+              <t t-esc="module.module"/>
+            </div>
+            <t t-foreach="module.questions" t-as="q" t-key="q">
+              <div class="ai_stats_shortcut"
+                   t-on-click="() => this.clickRaccourci(q)">
+                <t t-esc="q"/>
+              </div>
+            </t>
+          </div>
+        </t>
+      </div>
+    </t>
+
+    <!-- Utilisateur -->
     <div class="ai_sidebar_user">
       <div class="ai_user_avatar"><t t-esc="state.userInitials"/></div>
       <div class="ai_user_info">
@@ -70,62 +100,29 @@
     </div>
 
   </div>
-  <!-- ════════════════════════════════════════════════════════════════════ -->
 
   <!-- ══ ZONE PRINCIPALE ══════════════════════════════════════════════════ -->
   <div class="ai_main">
 
     <!-- ── MODE CHAT ─────────────────────────────────────────────────────── -->
     <t t-if="state.mode === 'chat'">
-
       <div class="ai_messages_area" id="ai_messages_list">
         <div class="ai_messages_inner">
-
-          <!-- Écran d'accueil -->
           <t t-if="state.messages.length === 0">
             <div class="ai_welcome">
               <div class="ai_welcome_icon">⚡</div>
               <p class="ai_welcome_title">Comment puis-je vous aider ?</p>
-              <p class="ai_welcome_sub">
-                Posez vos questions sur les tournées, le carburant,
-                les assurances, le patrimoine ou le courrier BOC.
-              </p>
+              <p class="ai_welcome_sub">Posez vos questions sur les tournées, le carburant, les assurances ou le courrier BOC.</p>
               <div class="ai_suggestions">
-                <button class="ai_suggestion_btn"
-                  t-on-click="() => this.askSuggestion('Combien de tournées sont planifiées aujourd\'hui ?')">
-                  <span class="ai_suggestion_icon">🚌</span>
-                  Tournées planifiées aujourd'hui
-                </button>
-                <button class="ai_suggestion_btn"
-                  t-on-click="() => this.askSuggestion('Quel est le stock actuel des cuves carburant ?')">
-                  <span class="ai_suggestion_icon">⛽</span>
-                  Stock des cuves carburant
-                </button>
-                <button class="ai_suggestion_btn"
-                  t-on-click="() => this.askSuggestion('Quelles assurances expirent dans les 30 prochains jours ?')">
-                  <span class="ai_suggestion_icon">🛡️</span>
-                  Assurances expirant bientôt
-                </button>
-                <button class="ai_suggestion_btn"
-                  t-on-click="() => this.askSuggestion('Donne-moi l\'état de tous les bus du parc')">
-                  <span class="ai_suggestion_icon">📊</span>
-                  État du parc bus
-                </button>
-                <button class="ai_suggestion_btn"
-                  t-on-click="() => this.askSuggestion('Quelles sont les tournées réalisées ce mois ?')">
-                  <span class="ai_suggestion_icon">📋</span>
-                  Tournées du mois
-                </button>
-                <button class="ai_suggestion_btn"
-                  t-on-click="() => this.askSuggestion('Montre-moi les courriers en retard')">
-                  <span class="ai_suggestion_icon">📬</span>
-                  Courriers en retard
-                </button>
+                <button class="ai_suggestion_btn" t-on-click="() => this.askSuggestion('Quel est l\'état actuel de chaque bus ?')"><span class="ai_suggestion_icon">🚌</span>État du parc bus</button>
+                <button class="ai_suggestion_btn" t-on-click="() => this.askSuggestion('Quelles polices expirent dans les 30 prochains jours ?')"><span class="ai_suggestion_icon">🛡️</span>Assurances à renouveler</button>
+                <button class="ai_suggestion_btn" t-on-click="() => this.askSuggestion('Combien de litres de carburant ce mois ?')"><span class="ai_suggestion_icon">⛽</span>Carburant du mois</button>
+                <button class="ai_suggestion_btn" t-on-click="() => this.askSuggestion('Quelles tournées ont été annulées ce mois ?')"><span class="ai_suggestion_icon">📋</span>Tournées annulées</button>
+                <button class="ai_suggestion_btn" t-on-click="() => this.askSuggestion('Quels courriers sont en retard ?')"><span class="ai_suggestion_icon">📬</span>Courriers en retard</button>
+                <button class="ai_suggestion_btn" t-on-click="() => this.askSuggestion('Quel chauffeur a le plus de tournées ?')"><span class="ai_suggestion_icon">👨‍✈️</span>Top chauffeurs</button>
               </div>
             </div>
           </t>
-
-          <!-- Messages -->
           <t t-foreach="state.messages" t-as="msg" t-key="msg.id">
             <div t-attf-class="ai_message_row ai_message_row_{{ msg.type }}">
               <div t-attf-class="ai_message_avatar ai_avatar_{{ msg.type }}">
@@ -134,113 +131,70 @@
               </div>
               <div class="ai_message_content">
                 <div t-attf-class="ai_bubble ai_bubble_{{ msg.type }}">
-                  <t t-if="msg.content">
-                    <t t-esc="msg.content"/>
-                  </t>
-                  <t t-else="">
-                    <span style="color:#9ca3af;font-style:italic;">...</span>
-                  </t>
+                  <t t-if="msg.content"><t t-esc="msg.content"/></t>
+                  <t t-else=""><span style="color:#9ca3af;font-style:italic;">...</span></t>
                 </div>
                 <t t-if="msg.type === 'agent' and msg.pdf_url">
                   <div class="ai_pdf_actions">
-                    <button class="ai_pdf_btn_open"
-                            t-on-click="() => this.ouvrirPDF(msg.pdf_url)">
-                      🔍 Ouvrir le PDF
-                    </button>
-                    <button class="ai_pdf_btn_dl"
-                            t-on-click="() => this.telechargerPDF(msg.pdf_url, this._getNomFichier(msg.pdf_url))">
-                      ⬇ Télécharger
-                    </button>
+                    <button class="ai_pdf_btn_open" t-on-click="() => this.ouvrirPDF(msg.pdf_url)">🔍 Ouvrir</button>
+                    <button class="ai_pdf_btn_dl" t-on-click="() => this.telechargerPDF(msg.pdf_url, this._getNomFichier(msg.pdf_url))">⬇ Télécharger</button>
                   </div>
                 </t>
                 <span class="ai_message_time"><t t-esc="msg.time"/></span>
               </div>
             </div>
           </t>
-
-          <!-- Indicateur chargement -->
           <t t-if="state.loading">
             <div class="ai_typing_row">
               <div class="ai_message_avatar ai_avatar_agent">⚡</div>
-              <div class="ai_typing_bubble">
-                <span/><span/><span/>
-              </div>
+              <div class="ai_typing_bubble"><span/><span/><span/></div>
             </div>
           </t>
-
         </div>
       </div>
-
-      <!-- Zone saisie -->
       <div class="ai_input_area">
         <div class="ai_input_inner">
           <div class="ai_input_box">
-            <textarea
-              class="ai_textarea"
-              placeholder="Posez votre question en français..."
-              t-att-value="state.question"
-              t-on-input="onInput"
-              t-on-keydown="onKeyDown"
-              t-att-disabled="state.loading"
-              rows="1"
-            />
-            <button
-              class="ai_send_button"
-              t-on-click="sendQuestion"
+            <textarea class="ai_textarea" placeholder="Posez votre question en français..."
+              t-att-value="state.question" t-on-input="onInput" t-on-keydown="onKeyDown"
+              t-att-disabled="state.loading" rows="1"/>
+            <button class="ai_send_button" t-on-click="sendQuestion"
               t-att-disabled="state.loading or !state.question.trim()">
-              <t t-if="state.loading">…</t>
-              <t t-else="">➤</t>
+              <t t-if="state.loading">…</t><t t-else="">➤</t>
             </button>
           </div>
-          <p class="ai_input_hint">
-            Entrée pour envoyer · Shift+Entrée pour nouvelle ligne
-          </p>
+          <p class="ai_input_hint">Entrée pour envoyer · Shift+Entrée pour nouvelle ligne</p>
         </div>
       </div>
-
     </t>
-    <!-- ── FIN MODE CHAT ──────────────────────────────────────────────────── -->
 
-    <!-- ── MODE RAPPORT ──────────────────────────────────────────────────── -->
+    <!-- ── MODE RAPPORT ───────────────────────────────────────────────────── -->
     <t t-if="state.mode === 'rapport'">
-
       <div class="ai_rapport_main">
-
-        <!-- En-tête -->
         <div class="ai_rapport_header">
           <div class="ai_rapport_header_icon">📊</div>
           <div>
             <h2 class="ai_rapport_header_title">Génération de rapports PDF</h2>
-            <p class="ai_rapport_header_sub">
-              Décrivez le rapport souhaité ou choisissez dans la liste.
-            </p>
+            <p class="ai_rapport_header_sub">Décrivez le rapport souhaité ou choisissez dans la liste.</p>
           </div>
         </div>
-
-        <!-- Zone saisie libre -->
         <div class="ai_rapport_input_zone">
           <div class="ai_rapport_input_box">
             <span class="ai_rapport_input_icon">🔍</span>
-            <input
-              type="text"
-              class="ai_rapport_input"
-              placeholder="Ex: rapport assurance, bilan carburant, état du parc..."
+            <input type="text" class="ai_rapport_input"
+              placeholder="Ex: données sur les bus, polices assurance, consommation carburant..."
               t-att-value="state.rapportTexte"
               t-on-input="onRapportTexteInput"
               t-on-keydown="onRapportTexteKeyDown"
-              t-att-disabled="state.rapportLoading"
-            />
+              t-att-disabled="state.rapportLoading"/>
             <t t-if="state.rapportTexte">
               <button class="ai_rapport_input_clear"
-                      t-on-click="() => { state.rapportTexte=''; state.rapportDetecte=null; state.rapportDetectionMsg=''; }">
-                ✕
-              </button>
+                t-on-click="() => { state.rapportTexte=''; state.rapportDetectionMsg=''; }">✕</button>
             </t>
             <button class="ai_rapport_input_send"
-                    t-on-click="envoyerTexteRapport"
-                    t-att-disabled="state.rapportLoading or !state.rapportTexte.trim()">
-              <t t-if="state.rapportLoading">…</t>
-              <t t-else="">➤</t>
+              t-on-click="envoyerTexteRapport"
+              t-att-disabled="state.rapportLoading or !state.rapportTexte.trim()">
+              <t t-if="state.rapportLoading">…</t><t t-else="">➤</t>
             </button>
           </div>
           <t t-if="state.rapportDetectionMsg">
@@ -250,15 +204,12 @@
           </t>
         </div>
 
-        <!-- Aucun rapport sélectionné et pas de résultat -->
         <t t-if="!state.rapportSelectionne and !state.rapportResultat and !state.rapportErreur">
           <div class="ai_rapport_placeholder">
             <div class="ai_rapport_placeholder_icon">👈</div>
             <p>Saisissez votre demande ou choisissez un rapport dans le menu de gauche</p>
           </div>
         </t>
-
-        <!-- Rapport sélectionné dans la liste → afficher la carte -->
         <t t-if="state.rapportSelectionne">
           <div class="ai_rapport_card">
             <t t-foreach="RAPPORTS" t-as="rpt" t-key="rpt.id">
@@ -270,57 +221,32 @@
                 <div class="ai_rapport_card_desc"><t t-esc="rpt.description"/></div>
               </t>
             </t>
-            <button
-              class="ai_rapport_generate_btn"
-              t-on-click="genererRapport"
+            <button class="ai_rapport_generate_btn" t-on-click="genererRapport"
               t-att-disabled="state.rapportLoading or !state.rapportSelectionne">
-              <t t-if="state.rapportLoading">
-                <span class="ai_rapport_spinner"/>
-                Génération en cours...
-              </t>
-              <t t-else="">
-                ⚡ Générer le rapport PDF
-              </t>
+              <t t-if="state.rapportLoading"><span class="ai_rapport_spinner"/>Génération...</t>
+              <t t-else="">⚡ Générer le rapport PDF</t>
             </button>
           </div>
         </t>
-
-        <!-- Résultat — affiché quel que soit le mode (liste ou texte libre) -->
         <t t-if="state.rapportResultat">
           <div class="ai_rapport_result">
             <div class="ai_rapport_result_icon">✅</div>
             <div class="ai_rapport_result_content">
-              <div class="ai_rapport_result_title">
-                Rapport prêt : <t t-esc="state.rapportResultat.label"/>
-              </div>
+              <div class="ai_rapport_result_title">Rapport prêt : <t t-esc="state.rapportResultat.label"/></div>
               <div class="ai_rapport_result_date">
-                Généré le
-                <t t-esc="new Date().toLocaleDateString('fr-FR', {day:'2-digit',month:'long',year:'numeric'})"/>
-                à
-                <t t-esc="new Date().toLocaleTimeString('fr-FR', {hour:'2-digit',minute:'2-digit'})"/>
+                Généré le <t t-esc="new Date().toLocaleDateString('fr-FR', {day:'2-digit',month:'long',year:'numeric'})"/>
               </div>
               <div class="ai_rapport_result_actions">
-                <button class="ai_pdf_btn_open ai_rapport_btn"
-                        t-on-click="ouvrirRapportPDF">
-                  🔍 Ouvrir le PDF
-                </button>
-                <button class="ai_pdf_btn_dl ai_rapport_btn"
-                        t-on-click="telechargerRapportPDF">
-                  ⬇ Télécharger
-                </button>
+                <button class="ai_pdf_btn_open ai_rapport_btn" t-on-click="ouvrirRapportPDF">🔍 Ouvrir</button>
+                <button class="ai_pdf_btn_dl ai_rapport_btn" t-on-click="telechargerRapportPDF">⬇ Télécharger</button>
               </div>
             </div>
           </div>
         </t>
-
-        <!-- Erreur -->
         <t t-if="state.rapportErreur">
-          <div class="ai_rapport_error">
-            ❌ <t t-esc="state.rapportErreur"/>
-          </div>
+          <div class="ai_rapport_error">❌ <t t-esc="state.rapportErreur"/></div>
         </t>
 
-        <!-- Grille des rapports disponibles (aperçu rapide) -->
         <div class="ai_rapport_grid_title">Tous les rapports disponibles</div>
         <div class="ai_rapport_grid">
           <t t-foreach="RAPPORTS" t-as="rpt" t-key="rpt.id">
@@ -332,16 +258,140 @@
             </div>
           </t>
         </div>
-
       </div>
-
     </t>
-    <!-- ── FIN MODE RAPPORT ───────────────────────────────────────────────── -->
+
+    <!-- ── MODE STATISTIQUES ─────────────────────────────────────────────── -->
+    <t t-if="state.mode === 'stats'">
+      <div class="ai_stats_main">
+
+        <!-- En-tête -->
+        <div class="ai_stats_header">
+          <div class="ai_stats_header_icon">📈</div>
+          <div>
+            <h2 class="ai_stats_header_title">Statistiques &amp; Visualisations</h2>
+            <p class="ai_stats_header_sub">Posez une question — l'agent génère le graphique le plus adapté.</p>
+          </div>
+        </div>
+
+        <!-- Zone saisie -->
+        <div class="ai_stats_input_zone">
+          <div class="ai_stats_input_box">
+            <span class="ai_stats_input_icon">📊</span>
+            <input type="text" class="ai_stats_input"
+              placeholder="Ex: tournées par ligne ce mois, répartition des bus par état..."
+              t-att-value="state.statsQuestion"
+              t-on-input="onStatsInput"
+              t-on-keydown="onStatsKeyDown"
+              t-att-disabled="state.statsLoading"/>
+            <t t-if="state.statsQuestion">
+              <button class="ai_rapport_input_clear"
+                t-on-click="() => { state.statsQuestion=''; state.statsHasResult=false; state.statsViz=null; state.statsKpis=[]; }">✕</button>
+            </t>
+            <button class="ai_stats_send_btn"
+              t-on-click="envoyerStatsQuestion"
+              t-att-disabled="state.statsLoading or !state.statsQuestion.trim()">
+              <t t-if="state.statsLoading"><span class="ai_rapport_spinner"/></t>
+              <t t-else="">➤</t>
+            </button>
+          </div>
+        </div>
+
+        <!-- État initial (aucune question) -->
+        <t t-if="!state.statsHasResult and !state.statsLoading and !state.statsErreur">
+          <div class="ai_stats_welcome">
+            <div class="ai_stats_welcome_icon">📈</div>
+            <p class="ai_stats_welcome_title">Visualisations automatiques</p>
+            <p class="ai_stats_welcome_sub">L'agent analyse votre question et choisit automatiquement le meilleur visuel.</p>
+            <div class="ai_stats_chips_grid">
+              <t t-foreach="STATS_RACCOURCIS" t-as="module" t-key="module.module">
+                <div class="ai_stats_chip_group">
+                  <div class="ai_stats_chip_module" t-attf-style="border-color: {{ module.couleur }}20; background: {{ module.couleur }}10;">
+                    <span t-attf-style="color: {{ module.couleur }}"><t t-esc="module.module"/></span>
+                  </div>
+                  <t t-foreach="module.questions" t-as="q2" t-key="q2">
+                    <button class="ai_stats_chip" t-on-click="() => this.clickRaccourci(q2)">
+                      <t t-esc="q2"/>
+                    </button>
+                  </t>
+                </div>
+              </t>
+            </div>
+          </div>
+        </t>
+
+        <!-- Chargement -->
+        <t t-if="state.statsLoading">
+          <div class="ai_stats_loading">
+            <div class="ai_stats_loading_spinner"/>
+            <p>Analyse en cours...</p>
+          </div>
+        </t>
+
+        <!-- Erreur -->
+        <t t-if="state.statsErreur">
+          <div class="ai_rapport_error">❌ <t t-esc="state.statsErreur"/></div>
+        </t>
+
+        <!-- Résultats -->
+        <t t-if="state.statsHasResult and !state.statsLoading">
+
+          <!-- KPI Cards -->
+          <t t-if="state.statsKpis.length > 0">
+            <div class="ai_stats_kpi_row">
+              <t t-foreach="state.statsKpis" t-as="kpi" t-key="kpi.label">
+                <div class="ai_stats_kpi_card">
+                  <div class="ai_stats_kpi_value"><t t-esc="kpi.valeur"/></div>
+                  <div class="ai_stats_kpi_label"><t t-esc="kpi.label"/></div>
+                  <t t-if="kpi.tendance">
+                    <div t-attf-class="ai_stats_kpi_badge {{ kpi.tendance === '↑' ? 'up' : kpi.tendance === '↓' ? 'down' : 'neutral' }}">
+                      <t t-esc="kpi.tendance"/>
+                    </div>
+                  </t>
+                </div>
+              </t>
+            </div>
+          </t>
+
+          <!-- Zone graphique -->
+          <t t-if="state.statsViz">
+            <div class="ai_stats_chart_zone">
+              <!-- Titre + sélecteur de type -->
+              <div class="ai_stats_chart_header">
+                <div class="ai_stats_chart_title">
+                  <t t-esc="state.statsViz.title or state.statsQuestion"/>
+                </div>
+                <div class="ai_stats_viz_selector">
+                  <t t-foreach="[['bar','📊 Bar'],['line','📈 Ligne'],['donut','🍩 Donut'],['pie','🥧 Camembert'],['radar','🕸️ Radar'],['polarArea','🎯 Polaire']]" t-as="vt" t-key="vt[0]">
+                    <button t-attf-class="ai_viz_btn {{ state.statsVizType === vt[0] ? 'active' : '' }}"
+                            t-on-click="() => this.setVizType(vt[0])">
+                      <t t-esc="vt[1]"/>
+                    </button>
+                  </t>
+                </div>
+              </div>
+              <!-- Canvas Chart.js -->
+              <div class="ai_stats_chart_container">
+                <canvas id="ai_stats_chart"/>
+              </div>
+            </div>
+          </t>
+
+          <!-- Réponse textuelle -->
+          <t t-if="state.statsTexte">
+            <div class="ai_stats_text_zone">
+              <div class="ai_stats_text_icon">⚡</div>
+              <div class="ai_stats_text_content">
+                <t t-esc="state.statsTexte"/>
+              </div>
+            </div>
+          </t>
+
+        </t>
+      </div>
+    </t>
 
   </div>
-  <!-- ════════════════════════════════════════════════════════════════════ -->
-
 </div>
 </t>
-
 </templates>

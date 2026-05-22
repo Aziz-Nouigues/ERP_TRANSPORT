@@ -1,0 +1,879 @@
+ Translation of Odoo Server.
+ This file contains the translation of the following modules:
+ 	 transportassurance
+
+msgid ""
+msgstr ""
+"Project-Id-Version: Odoo Server 19.0\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2026-05-22 08:27+0000\n"
+"PO-Revision-Date: 2026-05-22 08:27+0000\n"
+"Last-Translator: \n"
+"Language-Team: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: \n"
+"Plural-Forms: \n"
+
+. module: transportassurance
+: model:res.groups,comment:transportassurance.groupassurancemanager
+msgid ""
+"\n"
+"                Accès complet au module Assurance, y compris configuration,\n"
+"                clôture de sinistres, validation des indemnités et rapports complets.\n"
+"            "
+msgstr ""
+"\n"
+"                Full access to the Insurance module, including configuration,\n"
+"                claim closure, indemnity validation, and comprehensive reports.\n"
+"            "
+
+. module: transportassurance
+: model:transport.assurance.type,description:transportassurance.typeviegroupe
+msgid ""
+"\n"
+"                Couverture décès / invalidité permanente totale (IPT)\n"
+"                pour l'ensemble du personnel. Versement du capital au bénéficiaire désigné.\n"
+"            "
+msgstr ""
+"\n"
+"                Death / total permanent disability (TPD) coverage\n"
+"                for all personnel. Payment of the capital to the designated beneficiary.\n"
+"            "
+
+. module: transportassurance
+: model:transport.assurance.type,description:transportassurance.typeatcnam
+msgid ""
+"\n"
+"                Couverture obligatoire CNAM des accidents de travail et maladies\n"
+"                professionnelles. Blessure survenue en service.\n"
+"            "
+msgstr ""
+"\n"
+"                Mandatory CNAM coverage for work accidents and occupational diseases.\n"
+"                Injury occurring during service.\n"
+"            "
+
+. module: transportassurance
+: model:transport.assurance.type,description:transportassurance.typerc
+msgid ""
+"\n"
+"                Couverture obligatoire des dommages causés aux tiers\n"
+"                (personnes et biens) lors d'un accident de circulation.\n"
+"                Exige une visite technique annuelle valide (règle Tunisie).\n"
+"            "
+msgstr ""
+"\n"
+"                Mandatory coverage for damages caused to third parties\n"
+"                (persons and property) during a traffic accident.\n"
+"                Requires a valid annual technical inspection (Tunisia rule).\n"
+"            "
+
+. module: transportassurance
+: model:transport.assurance.type,description:transportassurance.typevoyage
+msgid ""
+"\n"
+"                Couverture obligatoire des passagers transportés en cas d'accident.\n"
+"                Couvre les préjudices corporels des voyageurs à bord.\n"
+"            "
+msgstr ""
+"\n"
+"                Mandatory coverage for transported passengers in case of an accident.\n"
+"                Covers bodily injury to travelers on board.\n"
+"            "
+
+. module: transportassurance
+: model:transport.assurance.type,description:transportassurance.typetousrisques
+msgid ""
+"\n"
+"                Couverture étendue des dommages au véhicule lui-même\n"
+"                (collision, accident matériel) quelle qu'en soit la cause.\n"
+"            "
+msgstr ""
+"\n"
+"                Extended coverage for damage to the vehicle itself\n"
+"                (collision, material damage) regardless of the cause.\n"
+"            "
+
+. module: transportassurance
+: model:res.groups,comment:transportassurance.groupassurancegestionnaire
+msgid ""
+"\n"
+"                Peut créer et gérer les polices d'assurance bus et chauffeurs,\n"
+"                déclarer et instruire les sinistres.\n"
+"            "
+msgstr ""
+"\n"
+"                Can create and manage bus and driver insurance policies,\n"
+"                report and process claims.\n"
+"            "
+
+. module: transportassurance
+: model:transport.assurance.type,description:transportassurance.typeincendievol
+msgid ""
+"\n"
+"                Protection spécifique contre l'incendie et le vol du véhicule\n"
+"                (y compris tentative de vol et vandalisme).\n"
+"            "
+msgstr ""
+"\n"
+"                Specific protection against fire and theft of the vehicle\n"
+"                (including attempted theft and vandalism).\n"
+"            "
+
+. module: transportassurance
+: model:transport.assurance.type,description:transportassurance.typercpro
+msgid ""
+"\n"
+"                RC du chauffeur en tant que professionnel de transport.\n"
+"                Couvre les dommages causés dans l'exercice de ses fonctions.\n"
+"            "
+msgstr ""
+"\n"
+"                Driver's liability as a transport professional.\n"
+"                Covers damages caused in the performance of their duties.\n"
+"            "
+
+. module: transportassurance
+: model:transport.assurance.type,description:transportassurance.typecomplementairesante
+msgid ""
+"\n"
+"                Remboursement des frais médicaux au-delà de la prise en charge\n"
+"                de la CNAM. Couverture hospitalisation, soins ambulatoires, optique.\n"
+"            "
+msgstr ""
+"\n"
+"                Reimbursement of medical expenses beyond CNAM coverage.\n"
+"                Coverage for hospitalization, outpatient care, and optical.\n"
+"            "
+
+. module: transportassurance
+: model:ir.model.fields.selection,name:transportassurance.selectiontransportassurancewizardrapportecheancehorizon12
+msgid "12 mois"
+msgstr "12 months"
+
+. module: transportassurance
+: model:ir.model.fields.selection,name:transportassurance.selectiontransportassurancewizardrapportecheancehorizon3
+msgid "3 mois"
+msgstr "3 months"
+
+. module: transportassurance
+: model:ir.model.fields.selection,name:transportassurance.selectiontransportassurancewizardrapportecheancehorizon6
+msgid "6 mois"
+msgstr "6 months"
+
+. module: transportassurance
+: modelterms:ir.ui.view,archdb:transportassurance.viewassurancebusform
+msgid ""
+"<strong>Police obligatoire expirée</strong> — Ce bus ne peut plus\n"
+"                    être affecté à des tournées (règle Tunisie)."
+msgstr ""
+"<strong>Mandatory policy expired</strong> — This bus can no longer\n"
+"                    be assigned to routes (Tunisia rule)."
+
+. module: transportassurance
+: modelterms:ir.ui.view,archdb:transportassurance.viewassurancebusform
+msgid ""
+"<strong>Visite technique</strong> — Absente ou expirée.\n"
+"                    Le renouvellement RC sera bloqué."
+msgstr ""
+"<strong>Technical inspection</strong> — Missing or expired.\n"
+"                    RC renewal will be blocked."
+
+. module: transportassurance
+: modelterms:ir.ui.view,archdb:transportassurance.reportbusnonassures
+msgid ""
+"<strong>⚠ ALERTE LÉGALE CRITIQUE — Bus sans couverture obligatoire</strong>"
+msgstr ""
+"<strong>⚠ CRITICAL LEGAL ALERT — Bus without mandatory coverage</strong>"
+
+. module: transportassurance
+: modelterms:ir.ui.view,archdb:transportassurance.viewassurancechauffeurform
+msgid "<strong>⚠ Échéance proche</strong> — Cette police expire dans"
+msgstr "<strong>⚠ Approaching expiry</strong> — This policy expires in"
+
+. module: transportassurance
+: modelterms:ir.ui.view,archdb:transportassurance.viewassurancechauffeursearch
+msgid "AT / CNAM"
+msgstr "AT / CNAM"
+
+. module: transportassurance
+: model:ir.model.fields.selection,name:transportassurance.selectiontransportassurancesinistrenaturesinistreaccidenttravail
+msgid "Accident de travail"
+msgstr "Work accident"
+
+. module: transportassurance
+: model:transport.assurance.type,name:transportassurance.typeatcnam
+msgid "Accident de travail (CNAM)"
+msgstr "Work accident (CNAM)"
+
+. module: transportassurance
+: model:ir.model.fields,fielddescription:transportassurance.fieldtransportassurancebusmessageneedaction
+: model:ir.model.fields,fielddescription:transportassurance.fieldtransportassurancechauffeurmessageneedaction
+: model:ir.model.fields,fielddescription:transportassurance.fieldtransportassurancecompagniemessageneedaction
+: model:ir.model.fields,fielddescription:transportassurance.fieldtransportassurancesinistremessageneedaction
+msgid "Action Needed"
+msgstr "Action Needed"
+
+. module: transportassurance
+: model:ir.model.fields,fielddescription:transportassurance.fieldtransportassurancecompagnieactive
+: model:ir.model.fields,fielddescription:transportassurance.fieldtransportassurancetypeactive
+: model:ir.model.fields.selection,name:transportassurance.selectiontransportassurancebusstateactive
+: model:ir.model.fields.selection,name:transportassurance.selectiontransportassurancechauffeurstateactive
+msgid "Active"
+msgstr "Active"
+
+. module: transportassurance
+: modelterms:ir.ui.view,archdb:transportassurance.viewassurancebusform
+: modelterms:ir.ui.view,archdb:transportassurance.viewassurancechauffeurform
+msgid "Activer"
+msgstr "Activate"
+
+. module: transportassurance
+: modelterms:ir.ui.view,archdb:transportassurance.viewassurancebussearch
+: modelterms:ir.ui.view,archdb:transportassurance.viewassurancechauffeursearch
+msgid "Actives"
+msgstr "Actives"
+
+. module: transportassurance
+: model:ir.model.fields,fielddescription:transportassurance.fieldtransportassurancebusactivityids
+: model:ir.model.fields,fielddescription:transportassurance.fieldtransportassurancechauffeuractivityids
+: model:ir.model.fields,fielddescription:transportassurance.fieldtransportassurancecompagnieactivityids
+: model:ir.model.fields,fielddescription:transportassurance.fieldtransportassurancesinistreactivityids
+msgid "Activities"
+msgstr "Activities"
+
+. module: transportassurance
+: model:ir.model.fields,fielddescription:transportassurance.fieldtransportassurancebusactivityexceptiondecoration
+: model:ir.model.fields,fielddescription:transportassurance.fieldtransportassurancechauffeuractivityexceptiondecoration
+: model:ir.model.fields,fielddescription:transportassurance.fieldtransportassurancecompagnieactivityexceptiondecoration
+: model:ir.model.fields,fielddescription:transportassurance.fieldtransportassurancesinistreactivityexceptiondecoration
+msgid "Activity Exception Decoration"
+msgstr "Activity Exception Decoration"
+
+. module: transportassurance
+: model:ir.model.fields,fielddescription:transportassurance.fieldtransportassurancebusactivitystate
+: model:ir.model.fields,fielddescription:transportassurance.fieldtransportassurancechauffeuractivitystate
+: model:ir.model.fields,fielddescription:transportassurance.fieldtransportassurancecompagnieactivitystate
+: model:ir.model.fields,fielddescription:transportassurance.fieldtransportassurancesinistreactivitystate
+msgid "Activity State"
+msgstr "Activity State"
+
+. module: transportassurance
+: model:ir.model.fields,fielddescription:transportassurance.fieldtransportassurancebusactivitytypeicon
+: model:ir.model.fields,fielddescription:transportassurance.fieldtransportassurancechauffeuractivitytypeicon
+: model:ir.model.fields,fielddescription:transportassurance.fieldtransportassurancecompagnieactivitytypeicon
+: model:ir.model.fields,fielddescription:transportassurance.fieldtransportassurancesinistreactivitytypeicon
+msgid "Activity Type Icon"
+msgstr "Activity Type Icon"
+
+. module: transportassurance
+: model:ir.model.fields,fielddescription:transportassurance.fieldtransportassurancecompagnieadresse
+msgid "Adresse"
+msgstr "Address"
+
+. module: transportassurance
+: model:ir.model.fields.selection,name:transportassurance.selectiontransportassurancebusstatealerte
+: model:ir.model.fields.selection,name:transportassurance.selectiontransportassurancechauffeurstatealerte
+msgid "Alerte échéance"
+msgstr "Expiry Alert"
+
+. module: transportassurance
+: modelterms:ir.ui.view,archdb:transportassurance.viewassurancesinistrepivot
+msgid "Analyse sinistres"
+msgstr "Claims Analysis"
+
+. module: transportassurance
+: modelterms:ir.ui.view,archdb:transportassurance.viewwizardrapportassuranceform
+: modelterms:ir.ui.view,archdb:transportassurance.viewwizardrenouvellementform
+msgid "Annuler"
+msgstr "Cancel"
+
+. module: transportassurance
+: model:ir.model.fields.selection,name:transportassurance.selectiontransportassurancesinistregouvernoratariana
+msgid "Ariana"
+msgstr "Ariana"
+
+. module: transportassurance
+: model:ir.ui.menu,name:transportassurance.menuassuranceroot
+msgid "Assurance"
+msgstr "Insurance"
+
+. module: transportassurance
+: model:res.groups.privilege,name:transportassurance.privilegetransportassurance
+msgid "Assurance Transport"
+msgstr "Transport Insurance"
+
+. module: transportassurance
+: model:ir.model.fields,fielddescription:transportassurance.fieldtransportassurancesinistretiersassurance
+msgid "Assurance du tiers"
+msgstr "Third Party Insurance"
+
+. module: transportassurance
+: model:transport.assurance.type,name:transportassurance.typeviegroupe
+msgid "Assurance vie groupe"
+msgstr "Group life insurance"
+
+. module: transportassurance
+: model:ir.actions.server,name:transportassurance.cronassurancealertesiractionsserver
+msgid "Assurance — Alertes échéances polices"
+msgstr "Insurance — Policy Expiry Alerts"
+
+. module: transportassurance
+: model:ir.actions.server,name:transportassurance.cronassuranceupdatestatesiractionsserver
+msgid "Assurance — Mise à jour états polices"
+msgstr "Insurance — Policy Status Update"
+
+. module: transportassurance
+: model:ir.actions.server,name:transportassurance.cronassurancebusnonassuresiractionsserver
+msgid "Assurance — Vérification bus non assurés"
+msgstr "Insurance — Uninsured Bus Check"
+
+. module: transportassurance
+: model:ir.model.fields,fielddescription:transportassurance.fieldtransportassurancebusmessageattachmentcount
+: model:ir.model.fields,fielddescription:transportassurance.fieldtransportassurancechauffeurmessageattachmentcount
+: model:ir.model.fields,fielddescription:transportassurance.fieldtransportassurancecompagniemessageattachmentcount
+: model:ir.model.fields,fielddescription:transportassurance.fieldtransportassurancesinistremessageattachmentcount
+msgid "Attachment Count"
+msgstr "Attachment Count"
+
+. module: transportassurance
+: model:ir.model.fields.selection,name:transportassurance.selectiontransportassurancewizardrapportdatefin
+msgid "Au"
+msgstr "To"
+
+. module: transportassurance
+: model:ir.model.fields.selection,name:transportassurance.selectiontransportassurancesinistrenaturesinistreautre
+msgid "Autre"
+msgstr "Other"
+
+. module: transportassurance
+: model:ir.model.fields,fielddescription:transportassurance.fieldtransportassurancetypebaselegale
+msgid "Base légale"
+msgstr "Legal basis"
+
+. module: transportassurance
+: model:ir.model.fields.selection,name:transportassurance.selectiontransportassurancesinistregouvernoratbenarous
+msgid "Ben Arous"
+msgstr "Ben Arous"
+
+. module: transportassurance
+: model:ir.model.fields.selection,name:transportassurance.selectiontransportassurancesinistregouvernoratbizerte
+msgid "Bizerte"
+msgstr "Bizerte"
+
+. module: transportassurance
+: model:ir.model.fields.selection,name:transportassurance.selectiontransportassurancesinistrenaturesinistrebrisglace
+msgid "Bris de glace"
+msgstr "Glass breakage"
+
+. module: transportassurance
+: model:ir.model.fields.selection,name:transportassurance.selectiontransportassurancebusstatebrouillon
+: model:ir.model.fields.selection,name:transportassurance.selectiontransportassurancechauffeurstatebrouillon
+: model:ir.model.fields.selection,name:transportassurance.selectiontransportassurancesinistrestatebrouillon
+msgid "Brouillon"
+msgstr "Draft"
+
+. module: transportassurance
+: model:ir.model.fields,fielddescription:transportassurance.fieldtransportassurancewizardrenouvellementvehicleid
+: modelterms:ir.ui.view,archdb:transportassurance.reportecheancier
+: modelterms:ir.ui.view,archdb:transportassurance.reportpolicesactives
+: modelterms:ir.ui.view,archdb:transportassurance.reportsinistres
+: modelterms:ir.ui.view,archdb:transportassurance.viewassurancesinistresearch
+msgid "Bus"
+msgstr "Bus"
+
+. module: transportassurance
+: modelterms:ir.ui.view,archdb:transportassurance.reportbusnonassures
+msgid "Bus / Immatriculation"
+msgstr "Bus / Registration"
+
+. module: transportassurance
+: model:ir.model.fields,fielddescription:transportassurance.fieldtransportassurancebusvehicleid
+: model:ir.model.fields.selection,name:transportassurance.selectiontransportassurancesinistreobjetsinistrebus
+: model:ir.model.fields.selection,name:transportassurance.selectiontransportassurancetypecategoriebus
+msgid "Bus / Véhicule"
+msgstr "Bus / Vehicle"
+
+. module: transportassurance
+: modelterms:ir.ui.view,archdb:transportassurance.reportbusnonassures
+msgid "Bus actifs sans police obligatoire valide"
+msgstr "Active buses without a valid mandatory policy"
+
+. module: transportassurance
+: model:ir.model.fields.selection,name:transportassurance.selectiontransportassurancetypecategorieboth
+msgid "Bus et chauffeur"
+msgstr "Bus and driver"
+
+. module: transportassurance
+: model:ir.actions.report,name:transportassurance.reportbusnonassuresaction
+msgid "Bus non assurés — Alerte légale"
+msgstr "Uninsured buses — Legal alert"
+
+. module: transportassurance
+: model:ir.model.fields.selection,name:transportassurance.selectiontransportassurancewizardrapporttyperapportbusnonassures
+msgid "Bus non assurés — alerte légale"
+msgstr "Uninsured buses — legal alert"
+
+. module: transportassurance
+: model:ir.model.fields.selection,name:transportassurance.selectiontransportassurancesinistregouvernoratbeja
+msgid "Béja"
+msgstr "Beja"
+
+. module: transportassurance
+: model:ir.model.fields,fielddescription:transportassurance.fieldtransportassurancechauffeurbeneficiaire
+: modelterms:ir.ui.view,archdb:transportassurance.viewassurancechauffeurform
+msgid "Bénéficiaire désigné"
+msgstr "Designated beneficiary"
+
+. module: transportassurance
+: model:ir.model.fields,fielddescription:transportassurance.fieldtransportassurancechauffeurcapitalassure
+msgid "Capital assuré / Plafond"
+msgstr "Insured capital / Ceiling"
+
+. module: transportassurance
+: model:ir.model.fields.selection,name:transportassurance.selectiontransportassurancesinistrenaturesinistrecatastrophe
+msgid "Catastrophe naturelle"
+msgstr "Natural disaster"
+
+. module: transportassurance
+: model:ir.model.fields,fielddescription:transportassurance.fieldtransportassurancetypecategorie
+msgid "Catégorie"
+msgstr "Category"
+
+. module: transportassurance
+: model:ir.model.fields,fielddescription:transportassurance.fieldtransportassurancechauffeuremployeid
+: model:ir.model.fields,fielddescription:transportassurance.fieldtransportassurancewizardrenouvellementemployeid
+msgid "Chauffeur / Employé"
+msgstr "Driver / Employee"
+
+. module: transportassurance
+: model:ir.model.fields.selection,name:transportassurance.selectiontransportassurancesinistreobjetsinistrechauffeur
+: model:ir.model.fields.selection,name:transportassurance.selectiontransportassurancetypecategoriechauffeur
+msgid "Chauffeur / Personnel"
+msgstr "Driver / Personnel"
+
+. module: transportassurance
+: modelterms:ir.ui.view,archdb:transportassurance.viewassurancesinistresearch
+msgid "Chauffeurs"
+msgstr "Drivers"
+
+. module: transportassurance
+: modelterms:ir.ui.view,archdb:transportassurance.viewassurancesinistreform
+msgid "Clôturer"
+msgstr "Close"
+
+. module: transportassurance
+: model:ir.model.fields.selection,name:transportassurance.selectiontransportassurancesinistrestatecloture
+msgid "Clôturé"
+msgstr "Closed"
+
+. module: transportassurance
+: modelterms:ir.ui.view,archdb:transportassurance.viewassurancesinistresearch
+msgid "Clôturés"
+msgstr "Closed"
+
+. module: transportassurance
+: model:ir.model.fields,fielddescription:transportassurance.fieldtransportassurancetypecode
+msgid "Code"
+msgstr "Code"
+
+. module: transportassurance
+: model:ir.model.fields,fielddescription:transportassurance.fieldtransportassurancecompagniecode
+msgid "Code compagnie"
+msgstr "Company code"
+
+. module: transportassurance
+: modelterms:ir.ui.view,archdb:transportassurance.viewassurancecompagnieform
+msgid "Code court"
+msgstr "Short code"
+
+. module: transportassurance
+: model:ir.model.fields.selection,name:transportassurance.selectiontransportassurancesinistrenaturesinistrecollision
+msgid "Collision / Accident circulation"
+msgstr "Collision / Traffic accident"
+
+. module: transportassurance
+: model:ir.model.fields,fielddescription:transportassurance.fieldtransportassurancebuscompagnieid
+: model:ir.model.fields,fielddescription:transportassurance.fieldtransportassurancesinistrecompagnieid
+: model:ir.model.fields,fielddescription:transportassurance.fieldtransportassurancewizardrenouvellementcompagnieid
+: modelterms:ir.ui.view,archdb:transportassurance.reportecheancier
+: modelterms:ir.ui.view,archdb:transportassurance.reportpolicesactives
+: modelterms:ir.ui.view,archdb:transportassurance.reportsinistres
+: modelterms:ir.ui.view,archdb:transportassurance.viewassurancechauffeursearch
+: modelterms:ir.ui.view,archdb:transportassurance.viewassurancesinistresearch
+msgid "Compagnie"
+msgstr "Company"
+
+. module: transportassurance
+: model:ir.model.fields,fielddescription:transportassurance.fieldtransportassurancewizardrapportcompagnieid
+msgid "Compagnie (filtre)"
+msgstr "Company (filter)"
+
+. module: transportassurance
+: model:ir.model.fields,fielddescription:transportassurance.fieldtransportassurancechauffeurcompagnieid
+msgid "Compagnie / Organisme"
+msgstr "Company / Organization"
+
+. module: transportassurance
+: model:ir.model,name:transportassurance.modeltransportassurancecompagnie
+: modelterms:ir.ui.view,archdb:transportassurance.viewassurancecompagnieform
+msgid "Compagnie d'assurance"
+msgstr "Insurance company"
+
+. module: transportassurance
+: model:ir.actions.actwindow,name:transportassurance.actionassurancecompagnie
+: model:ir.ui.menu,name:transportassurance.menuassurancecompagnies
+: modelterms:ir.ui.view,archdb:transportassurance.viewassurancecompagnielist
+msgid "Compagnies d'assurance"
+msgstr "Insurance companies"
+
+. module: transportassurance
+: model:transport.assurance.type,name:transportassurance.typecomplementairesante
+msgid "Complémentaire santé"
+msgstr "Health supplement"
+
+. module: transportassurance
+: modelterms:ir.ui.view,archdb:transportassurance.viewassurancebusform
+: modelterms:ir.ui.view,archdb:transportassurance.viewassurancechauffeurform
+msgid "Conditions financières"
+msgstr "Financial conditions"
+
+. module: transportassurance
+: modelterms:ir.ui.view,archdb:transportassurance.viewwizardrenouvellementform
+msgid "Conditions particulières du nouveau contrat…"
+msgstr "Special conditions of the new contract…"
+
+. module: transportassurance
+: modelterms:ir.ui.view,archdb:transportassurance.viewassurancechauffeurform
+msgid "Conditions particulières…"
+msgstr "Special conditions…"
+
+. module: transportassurance
+: model:ir.ui.menu,name:transportassurance.menuassuranceconfig
+msgid "Configuration"
+msgstr "Configuration"
+
+. module: transportassurance
+: modelterms:ir.ui.view,archdb:transportassurance.viewwizardrenouvellementform
+msgid "Confirmer le renouvellement"
+msgstr "Confirm renewal"
+
+. module: transportassurance
+: modelterms:ir.ui.view,archdb:transportassurance.viewassurancecompagnieform
+msgid "Contact dédié"
+msgstr "Dedicated contact"
+
+. module: transportassurance
+: modelterms:ir.ui.view,archdb:transportassurance.viewassurancecompagnieform
+msgid "Coordonnées"
+msgstr "Contact details"
+
+. module: transportassurance
+: model:ir.model.fields.selection,name:transportassurance.selectiontransportassurancewizardrapporttyperapportcout
+msgid "Coût des assurances (primes)"
+msgstr "Cost of insurance (premiums)"
+
+. module: transportassurance
+: model:ir.model.fields,fielddescription:transportassurance.fieldtransportassurancebuscreateuid
+: model:ir.model.fields,fielddescription:transportassurance.fieldtransportassurancechauffeurcreateuid
+: model:ir.model.fields,fielddescription:transportassurance.fieldtransportassurancecompagniecreateuid
+: model:ir.model.fields,fielddescription:transportassurance.fieldtransportassurancesinistrecreateuid
+: model:ir.model.fields,fielddescription:transportassurance.fieldtransportassurancetypecreateuid
+: model:ir.model.fields,fielddescription:transportassurance.fieldtransportassurancewizardrapportcreateuid
+: model:ir.model.fields,fielddescription:transportassurance.fieldtransportassurancewizardrenouvellementcreateuid
+msgid "Created by"
+msgstr "Created by"
+
+. module: transportassurance
+: model:ir.model.fields,fielddescription:transportassurance.fieldtransportassurancebuscreatedate
+: model:ir.model.fields,fielddescription:transportassurance.fieldtransportassurancechauffeurcreatedate
+: model:ir.model.fields,fielddescription:transportassurance.fieldtransportassurancecompagniecreatedate
+: model:ir.model.fields,fielddescription:transportassurance.fieldtransportassurancesinistrecreatedate
+: model:ir.model.fields,fielddescription:transportassurance.fieldtransportassurancetypecreatedate
+: model:ir.model.fields,fielddescription:transportassurance.fieldtransportassurancewizardrapportcreatedate
+: model:ir.model.fields,fielddescription:transportassurance.fieldtransportassurancewizardrenouvellementcreatedate
+msgid "Created on"
+msgstr "Created on"
+
+. module: transportassurance
+: model:ir.model,name:transportassurance.modeltransportassurancecron
+msgid "Crons assurance transport"
+msgstr "Transport insurance crons"
+
+. module: transportassurance
+: model:ir.model.fields,fielddescription:transportassurance.fieldtransportassurancebuscurrencyid
+: model:ir.model.fields,fielddescription:transportassurance.fieldtransportassurancechauffeurcurrencyid
+: model:ir.model.fields,fielddescription:transportassurance.fieldtransportassurancesinistrecurrencyid
+: model:ir.model.fields,fielddescription:transportassurance.fieldtransportassurancewizardrenouvellementcurrencyid
+msgid "Currency"
+msgstr "Currency"
+
+. module: transportassurance
+: model:ir.model.fields,fielddescription:transportassurance.fieldtransportassurancesinistredatepv
+msgid "Date PV"
+msgstr "PV Date"
+
+. module: transportassurance
+: model:ir.model.fields,fielddescription:transportassurance.fieldtransportassurancebusdatealerte
+: model:ir.model.fields,fielddescription:transportassurance.fieldtransportassurancechauffeurdatealerte
+msgid "Date d'alerte"
+msgstr "Alert date"
+
+. module: transportassurance
+: model:ir.model.fields,fielddescription:transportassurance.fieldtransportassurancesinistredateexpertise
+msgid "Date d'expertise"
+msgstr "Expertise date"
+
+. module: transportassurance
+: model:ir.model.fields,fielddescription:transportassurance.fieldtransportassurancesinistredatecloture
+msgid "Date de clôture"
+msgstr "Closure date"
+
+. module: transportassurance
+: model:ir.model.fields,fielddescription:transportassurance.fieldtransportassurancebusdatedebut
+: model:ir.model.fields,fielddescription:transportassurance.fieldtransportassurancechauffeurdatedebut
+msgid "Date de début"
+msgstr "Start date"
+
+. module: transportassurance
+: model:ir.model.fields,fielddescription:transportassurance.fieldtransportassurancesinistredatedeclaration
+msgid "Date de déclaration"
+msgstr "Declaration date"
+
+. module: transportassurance
+: model:ir.model.fields,fielddescription:transportassurance.fieldtransportassurancebusdatefin
+: model:ir.model.fields,fielddescription:transportassurance.fieldtransportassurancechauffeurdatefin
+msgid "Date de fin / Expiration"
+msgstr "End date / Expiration"
+
+. module: transportassurance
+: model:ir.model.fields,fielddescription:transportassurance.fieldtransportassurancesinistredatesinistre
+msgid "Date du sinistre"
+msgstr "Date of claim"
+
+. module: transportassurance
+: modelterms:ir.ui.view,archdb:transportassurance.reportsinistres
+msgid "Date sinistre"
+msgstr "Claim date"
+
+. module: transportassurance
+: model:ir.model.fields,fielddescription:transportassurance.fieldtransportassurancebusdatevisitetechnique
+: model:ir.model.fields,fielddescription:transportassurance.fieldtransportassurancewizardrenouvellementdatevisitetechnique
+msgid "Date visite technique"
+msgstr "Technical inspection date"
+
+. module: transportassurance
+: modelterms:ir.ui.view,archdb:transportassurance.reportbusnonassures
+msgid "Dernière police connue"
+msgstr "Last known policy"
+
+. module: transportassurance
+: model:ir.model.fields,fielddescription:transportassurance.fieldtransportassurancetypedescription
+msgid "Description"
+msgstr "Description"
+
+. module: transportassurance
+: model:ir.model.fields,fielddescription:transportassurance.fieldtransportassurancesinistredescription
+: modelterms:ir.ui.view,archdb:transportassurance.reportsinistres
+: modelterms:ir.ui.view,archdb:transportassurance.viewassurancesinistreform
+msgid "Description des faits"
+msgstr "Description of facts"
+
+. module: transportassurance
+: modelterms:ir.ui.view,archdb:transportassurance.viewassurancetypeform
+msgid "Description du type de police…"
+msgstr "Description of policy type…"
+
+. module: transportassurance
+: model:ir.model.fields,fielddescription:transportassurance.fieldtransportassurancebusdisplayname
+: model:ir.model.fields,fielddescription:transportassurance.fieldtransportassurancechauffeurdisplayname
+: model:ir.model.fields,fielddescription:transportassurance.fieldtransportassurancecompagniedisplayname
+: model:ir.model.fields,fielddescription:transportassurance.fieldtransportassurancecrondisplayname
+: model:ir.model.fields,fielddescription:transportassurance.fieldtransportassurancesinistredisplayname
+: model:ir.model.fields,fielddescription:transportassurance.fieldtransportassurancetypedisplayname
+: model:ir.model.fields,fielddescription:transportassurance.fieldtransportassurancewizardrapportdisplayname
+: model:ir.model.fields,fielddescription:transportassurance.fieldtransportassurancewizardrenouvellementdisplayname
+msgid "Display Name"
+msgstr "Display Name"
+
+. module: transportassurance
+: modelterms:ir.ui.view,archdb:transportassurance.viewassurancesinistreform
+msgid "Documents & Expertise"
+msgstr "Documents & Expertise"
+
+. module: transportassurance
+: model:ir.model.fields,fielddescription:transportassurance.fieldtransportassurancewizardrapportdatedebut
+msgid "Du"
+msgstr "From"
+
+. module: transportassurance
+: modelterms:ir.ui.view,archdb:transportassurance.reportpolicesactives
+msgid "Début"
+msgstr "Start"
+
+. module: transportassurance
+: modelterms:ir.ui.view,archdb:transportassurance.viewassurancesinistreform
+msgid "Déclarer"
+msgstr "Declare"
+
+. module: transportassurance
+: model:ir.model.fields.selection,name:transportassurance.selectiontransportassurancesinistrestatedeclare
+msgid "Déclaré"
+msgstr "Declared"
+
+. module: transportassurance
+: modelterms:ir.ui.view,archdb:transportassurance.viewassurancesinistreform
+msgid "Décrivez les circonstances du sinistre…"
+msgstr "Describe the circumstances of the claim…"
+
+. module: transportassurance
+: model:ir.model.fields.selection,name:transportassurance.selectiontransportassurancesinistrenaturesinistredeces
+msgid "Décès"
+msgstr "Death"
+
+. module: transportassurance
+: model:ir.model.fields,fielddescription:transportassurance.fieldtransportassurancechauffeurdepartmentid
+: modelterms:ir.ui.view,archdb:transportassurance.viewassurancechauffeursearch
+msgid "Département"
+msgstr "Department"
+
+. module: transportassurance
+: model:ir.model.fields,fielddescription:transportassurance.fieldtransportassurancecompagnieemail
+msgid "Email"
+msgstr "Email"
+
+. module: transportassurance
+: model:ir.model.fields,fielddescription:transportassurance.fieldtransportassurancecompagniecontactemail
+msgid "Email contact"
+msgstr "Contact email"
+
+. module: transportassurance
+: modelterms:ir.ui.view,archdb:transportassurance.reportecheancier
+: modelterms:ir.ui.view,archdb:transportassurance.reportpolicesactives
+: modelterms:ir.ui.view,archdb:transportassurance.reportsinistres
+msgid "Employé"
+msgstr "Employee"
+
+. module: transportassurance
+: modelterms:ir.ui.view,archdb:transportassurance.viewassurancechauffeurform
+msgid "Employé / Bénéficiaire"
+msgstr "Employee / Beneficiary"
+
+. module: transportassurance
+: model:ir.model.fields,fielddescription:transportassurance.fieldtransportassurancesinistreemployeid
+msgid "Employé / Chauffeur impliqué"
+msgstr "Employee / Driver involved"
+
+. module: transportassurance
+: modelterms:ir.ui.view,archdb:transportassurance.viewassurancebussearch
+: modelterms:ir.ui.view,archdb:transportassurance.viewassurancechauffeursearch
+msgid "En alerte"
+msgstr "On alert"
+
+. module: transportassurance
+: modelterms:ir.ui.view,archdb:transportassurance.viewassurancesinistresearch
+msgid "En cours"
+msgstr "In progress"
+
+. module: transportassurance
+: model:ir.model.fields.selection,name:transportassurance.selectiontransportassurancesinistrestateinstruction
+msgid "En instruction"
+msgstr "Under instruction"
+
+. module: transportassurance
+: model:ir.model.fields,help:transportassurance.fieldtransportassurancechauffeurlienbeneficiaire
+msgid "Ex : conjoint, enfant, parent…"
+msgstr "Eg: spouse, child, parent…"
+
+. module: transportassurance
+: model:ir.model.fields,fielddescription:transportassurance.fieldtransportassurancesinistreexpertnom
+msgid "Expert mandaté"
+msgstr "Appointed expert"
+
+. module: transportassurance
+: modelterms:ir.ui.view,archdb:transportassurance.viewassurancesinistreform
+msgid "Expertise"
+msgstr "Expertise"
+
+. module: transportassurance
+: model:ir.model.fields,fielddescription:transportassurance.fieldtransportassurancesinistreexpertisedemandee
+msgid "Expertise demandée"
+msgstr "Expertise requested"
+
+. module: transportassurance
+: modelterms:ir.ui.view,archdb:transportassurance.reportecheancier
+: modelterms:ir.ui.view,archdb:transportassurance.viewassurancebuslist
+msgid "Expiration"
+msgstr "Expiration"
+
+. module: transportassurance
+: model:ir.model.fields.selection,name:transportassurance.selectiontransportassurancebusstateexpirée
+: model:ir.model.fields.selection,name:transportassurance.selectiontransportassurancechauffeurstateexpirée
+msgid "Expirée"
+msgstr "Expired"
+
+. module: transportassurance
+: modelterms:ir.ui.view,archdb:transportassurance.reportbusnonassures
+msgid "Expirée le"
+msgstr "Expired on"
+
+. module: transportassurance
+: modelterms:ir.ui.view,archdb:transportassurance.viewassurancebussearch
+: modelterms:ir.ui.view,archdb:transportassurance.viewassurancechauffeursearch
+msgid "Expirées"
+msgstr "Expired"
+
+. module: transportassurance
+: modelterms:ir.ui.view,archdb:transportassurance.viewassurancesinistreform
+msgid "Fait générateur"
+msgstr "Generating event"
+
+. module: transportassurance
+: model:ir.model.fields,fielddescription:transportassurance.fieldtransportassurancecompagniefax
+msgid "Fax"
+msgstr "Fax"
+
+. module: transportassurance
+: modelterms:ir.ui.view,archdb:transportassurance.reportsinistres
+msgid "Fiche sinistre —"
+msgstr "Claim form —"
+
+. module: transportassurance
+: modelterms:ir.ui.view,archdb:transportassurance.viewwizardrapportassuranceform
+msgid "Filtres"
+msgstr "Filters"
+
+. module: transportassurance
+: modelterms:ir.ui.view,archdb:transportassurance.reportpolicesactives
+msgid "Fin"
+msgstr "End"
+
+. module: transportassurance
+: model:ir.model.fields,fielddescription:transportassurance.fieldtransportassurancebusmessagefollowerids
+: model:ir.model.fields,fielddescription:transportassurance.fieldtransportassurancechauffeurmessagefollowerids
+: model:ir.model.fields,fielddescription:transportassurance.fieldtransportassurancecompagniemessagefollowerids
+: model:ir.model.fields,fielddescription:transportassurance.fieldtransportassurancesinistremessagefollowerids
+msgid "Followers"
+msgstr "Followers"
+
+. module: transportassurance
+: model:ir.model.fields,fielddescription:transportassurance.fieldtransportassurancebusmessagepartnerids
+: model:ir.model.fields,fielddescription:transportassurance.fieldtransportassurancechauffeurmessagepartnerids
+: model:ir.model.fields,fielddescription:transportassurance.fieldtransportassurancecompagniemessagepartnerids
+: model:ir.model.fields,fielddescription:transportassurance.fieldtransportassurancesinistremessagepartnerids
+msgid "Followers (Partners)"
+msgstr "Followers (Partners)"
+
+. module: transportassurance
+: model:ir.model.fields,help:transportassurance.fieldtransportassurancebusactivitytypeicon
+: model:ir.model.fields,help:transportassurance.fieldtransportassurancechauffeuractivitytypeicon
+: model:ir.model.fields,help:transportassurance.fieldtransportassurancecompagnieactivitytypeicon
+: model:ir.model.fields,help:transportassurance.fieldtransportassurancesinistreactivitytypeicon
+msgid "Font awesome icon e.g. fa-tasks"
+msgstr "Font awesome icon e.g. fa-tasks"
+
+. module: transportassurance
+: model:ir.model.fields,fielddescription:transportassurance.fieldtransportassurancebusfranchise
+: model:ir.model.fields,fielddescription:transportassurance.fieldtransportassurancechauffeurfranchise
+: model:ir.model.

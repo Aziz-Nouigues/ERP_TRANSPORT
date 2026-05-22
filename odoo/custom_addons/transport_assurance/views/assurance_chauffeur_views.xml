@@ -21,8 +21,12 @@
 
                 <div class="alert alert-warning" role="alert"
                      invisible="state != 'alerte'">
-                    <strong>⚠ Échéance proche</strong> — Cette police expire dans
-                    <field name="jours_restants" readonly="1"/> jours. Procédez au renouvellement.
+                    <p>
+                        <strong translate="True">⚠ Échéance proche</strong> —
+                        <span translate="True">Cette police expire dans</span>
+                        <field name="jours_restants" readonly="1"/>
+                        <span translate="True">jours. Procédez au renouvellement.</span>
+                    </p>
                 </div>
 
                 <sheet>

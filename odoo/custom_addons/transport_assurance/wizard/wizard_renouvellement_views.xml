@@ -25,7 +25,7 @@
                 <group>
                     <group string="Nouvelle période">
                         <field name="date_debut" required="1"/>
-                        <field name="date_fin" required="1"/>
+                        <field name="date_fin"   required="1"/>
                     </group>
                     <group string="Nouvelles conditions">
                         <field name="prime_annuelle"/>

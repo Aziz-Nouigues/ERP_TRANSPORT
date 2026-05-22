@@ -10,79 +10,77 @@ FASTAPI_URL = "http://localhost:8000/chat"
 FASTAPI_SYNC_URL = "http://localhost:8000/sync"
 
 PERMISSIONS = {
-    'base': {
-        'tables': [
-            'transport_exploitation_tournee',
-            'transport_exploitation_ligne',
-            'transport_fuel_voucher',
-            'transport_fuel_cuve',
-            'transport_fuel_station',
-            'transport_boc_arrivee',
-            'transport_boc_depart',
-            'fleet_vehicle',
-            'fleet_etat_bus_historique',
-            'transport_assurance_bus',
-            'transport_assurance_chauffeur',
-            'transport_assurance_sinistre',
-        ],
+    "base": {
+        "tables": ["fleet_vehicle","fleet_vehicle_state","transport_exploitation_tournee","transport_exploitation_ligne","transport_exploitation_agence"],
+        "rapports": [],
+        "stats": [],
     },
-    'transport_patrimoine.group_patrimoine_user': {
-        'tables': ['transport_patrimoine_immobilisation'],
+    "transport_exploitation.group_exploitation_user": {
+        "tables": ["transport_exploitation_tournee","transport_exploitation_ligne","transport_exploitation_agence","transport_exploitation_feuille_route","transport_exploitation_motif","fleet_vehicle","hr_employee"],
+        "rapports": ["rapport_journalier","rapport_hebdomadaire","rapport_mensuel"],
+        "stats": ["tournees","bus","chauffeurs"],
     },
-    'transport_energy.group_agent_pompiste': {
-        'tables': [
-            'transport_fuel_cuve',
-            'transport_fuel_voucher',
-            'transport_fuel_station',
-            'transport_fuel_voucher_line',
-            'transport_bon_lubrifiant',
-            'transport_jaugeage',
-            'transport_stock_lubrifiant',
-        ],
+    "transport_exploitation.group_exploitation_manager": {
+        "tables": ["transport_exploitation_tournee","transport_exploitation_ligne","transport_exploitation_agence","transport_exploitation_feuille_route","transport_exploitation_motif","fleet_vehicle","fleet_vehicle_state","hr_employee","transport_assurance_bus"],
+        "rapports": ["rapport_journalier","rapport_hebdomadaire","rapport_mensuel","bilan_parc"],
+        "stats": ["tournees","bus","chauffeurs","parc"],
     },
-    'transport_energy.group_responsable_energie': {
-        'tables': [
-            'transport_fuel_cuve',
-            'transport_fuel_voucher',
-            'transport_fuel_station',
-            'transport_fuel_voucher_line',
-            'transport_bon_lubrifiant',
-            'transport_jaugeage',
-            'transport_stock_lubrifiant',
-            'transport_agilis_carte',
-            'transport_agilis_recharge',
-            'transport_agilis_utilisation',
-            'transport_facture_energie',
-            'transport_reception_lubrifiant',
-        ],
+    "fleet.fleet_group_user": {
+        "tables": ["fleet_vehicle","fleet_vehicle_state","fleet_vehicle_odometer","transport_assurance_bus"],
+        "rapports": ["bilan_parc"],
+        "stats": ["bus","parc"],
     },
-    'transport_energy.group_directeur_energie': {
-        'tables': [
-            'transport_fuel_cuve',
-            'transport_fuel_voucher',
-            'transport_fuel_station',
-            'transport_fuel_voucher_line',
-            'transport_bon_lubrifiant',
-            'transport_jaugeage',
-            'transport_stock_lubrifiant',
-            'transport_agilis_carte',
-            'transport_agilis_recharge',
-            'transport_agilis_utilisation',
-            'transport_facture_energie',
-            'transport_reception_lubrifiant',
-        ],
+    "fleet.fleet_group_manager": {
+        "tables": ["fleet_vehicle","fleet_vehicle_state","fleet_vehicle_odometer","transport_assurance_bus","transport_assurance_sinistre","transport_assurance_compagnie","transport_assurance_type"],
+        "rapports": ["bilan_parc","bilan_assurance"],
+        "stats": ["bus","parc","assurances"],
     },
-    'account.group_account_user': {
-        'tables': ['account_move', 'account_move_line'],
+    "transport_assurance.group_assurance_user": {
+        "tables": ["transport_assurance_bus","transport_assurance_chauffeur","transport_assurance_sinistre","transport_assurance_compagnie","transport_assurance_type","fleet_vehicle"],
+        "rapports": ["bilan_assurance"],
+        "stats": ["assurances"],
     },
-    'hr.group_hr_user': {
-        'tables': ['hr_employee', 'hr_department'],
+    "transport_energy.group_agent_pompiste": {
+        "tables": ["transport_fuel_cuve","transport_fuel_voucher","transport_fuel_station","transport_fuel_voucher_line","transport_bon_lubrifiant","transport_jaugeage","transport_stock_lubrifiant"],
+        "rapports": [],
+        "stats": ["carburant"],
     },
-    'base.group_system': {
-        'tables': ['ALL'],
+    "transport_energy.group_responsable_energie": {
+        "tables": ["transport_fuel_cuve","transport_fuel_voucher","transport_fuel_station","transport_fuel_voucher_line","transport_bon_lubrifiant","transport_jaugeage","transport_stock_lubrifiant","transport_agilis_carte","transport_agilis_recharge","transport_agilis_utilisation","transport_facture_energie","transport_reception_lubrifiant"],
+        "rapports": ["bilan_carburant"],
+        "stats": ["carburant"],
+    },
+    "transport_energy.group_directeur_energie": {
+        "tables": ["transport_fuel_cuve","transport_fuel_voucher","transport_fuel_station","transport_fuel_voucher_line","transport_bon_lubrifiant","transport_jaugeage","transport_stock_lubrifiant","transport_agilis_carte","transport_agilis_recharge","transport_agilis_utilisation","transport_facture_energie","transport_reception_lubrifiant","fleet_vehicle"],
+        "rapports": ["bilan_carburant"],
+        "stats": ["carburant","bus"],
+    },
+    "transport_boc.group_boc_user": {
+        "tables": ["boc_courrier_arrivee","boc_courrier_depart","boc_organisme","boc_type_courrier"],
+        "rapports": ["bilan_boc"],
+        "stats": ["boc"],
+    },
+    "transport_patrimoine.group_patrimoine_user": {
+        "tables": ["patrimoine_immobilisation","patrimoine_categorie","patrimoine_affectation","patrimoine_amortissement_ligne"],
+        "rapports": [],
+        "stats": ["patrimoine"],
+    },
+    "hr.group_hr_user": {
+        "tables": ["hr_employee","hr_department"],
+        "rapports": [],
+        "stats": ["chauffeurs"],
+    },
+    "account.group_account_user": {
+        "tables": ["account_move","account_move_line"],
+        "rapports": [],
+        "stats": [],
+    },
+    "base.group_system": {
+        "tables": ["ALL"],
+        "rapports": ["ALL"],
+        "stats": ["ALL"],
     },
 }
-
 MOTS_CLES_PROTEGES = {
     'hr': ['employe', 'employee', 'salarie', 'staff', 'personnel'],
     'account': ['facture', 'invoice', 'paiement', 'payment', 'avoir', 'journal', 'bilan'],
@@ -122,23 +120,76 @@ class AiConversation(models.Model):
                     if len(parts) >= 2 else name[:2].upper())
         return {"id": user.id, "name": name, "initials": initials, "login": user.login}
 
-    def _get_user_allowed_tables(self):
+    def _get_user_permissions(self):
         user = self.env.user
-        allowed = set()
-        allowed.update(PERMISSIONS['base']['tables'])
-        for group_xml_id, perms in PERMISSIONS.items():
-            if group_xml_id == 'base':
+        allowed_tables   = set(PERMISSIONS["base"]["tables"])
+        allowed_rapports = set(PERMISSIONS["base"].get("rapports", []))
+        allowed_stats    = set(PERMISSIONS["base"].get("stats", []))
+        for gid, perms in PERMISSIONS.items():
+            if gid == "base":
                 continue
             try:
-                if user.has_group(group_xml_id):
-                    tables = perms.get('tables', [])
-                    if 'ALL' in tables:
-                        return None
-                    allowed.update(tables)
+                if user.has_group(gid):
+                    if "ALL" in perms.get("tables", []):
+                        _logger.info("Acces admin total pour %s", user.name)
+                        return None, {"ALL"}, {"ALL"}, True
+                    allowed_tables.update(perms.get("tables", []))
+                    rp = perms.get("rapports", [])
+                    if "ALL" in rp:
+                        allowed_rapports = {"ALL"}
+                    else:
+                        allowed_rapports.update(rp)
+                    st = perms.get("stats", [])
+                    if "ALL" in st:
+                        allowed_stats = {"ALL"}
+                    else:
+                        allowed_stats.update(st)
             except Exception:
                 continue
-        _logger.info(f"Tables autorisees pour {user.name} : {sorted(list(allowed))}")
-        return allowed
+        _logger.info("Acces %s : tables=%d rapports=%s stats=%s",
+                     user.name, len(allowed_tables),
+                     sorted(allowed_rapports), sorted(allowed_stats))
+        return allowed_tables, allowed_rapports, allowed_stats, False
+
+    def _get_user_allowed_tables(self):
+        tables, _, _, _ = self._get_user_permissions()
+        return tables
+
+    def _verifier_acces_rapport(self, type_rapport, allowed_rapports):
+        if "ALL" in allowed_rapports:
+            return True
+        return type_rapport in allowed_rapports
+
+    def _verifier_acces_stats(self, question, allowed_stats):
+        if "ALL" in allowed_stats:
+            return True
+        if not allowed_stats:
+            _logger.info("Stats refusees : aucun module autorise pour %s", question)
+            return False
+        q = question.lower()
+        modules_question = []
+        mapping = {
+            "tournees":   ["tournee", "tournée", "exploitation", "taux realisation", "taux de realisation"],
+            "bus":        ["bus", "vehicule", "vehicul", "parc", "flotte", "etat bus", "etat du parc"],
+            "assurances": ["assurance", "police", "sinistre"],
+            "carburant":  ["carburant", "fuel", "bgi", "bge", "litre", "cuve", "consommation"],
+            "boc":        ["courrier", "boc", "arrivee", "depart"],
+            "chauffeurs": ["chauffeur", "conducteur", "employe"],
+            "patrimoine": ["patrimoine", "immobilisation", "amortissement"],
+        }
+        for module, mots in mapping.items():
+            if any(m in q for m in mots):
+                modules_question.append(module)
+
+        if not modules_question:
+            # Question générique — autoriser seulement si l'utilisateur a des stats
+            _logger.info("Stats question generique '%s' : autorise (modules=%s)", question, sorted(allowed_stats))
+            return len(allowed_stats) > 0
+
+        acces_ok = all(m in allowed_stats for m in modules_question)
+        _logger.info("Verification stats: user question='%s' modules_detectes=%s allowed=%s ok=%s",
+                     question, modules_question, sorted(allowed_stats), acces_ok)
+        return acces_ok
 
     def _parse_pdf_url(self, reponse_text):
         """
@@ -153,7 +204,7 @@ class AiConversation(models.Model):
             return texte_propre, pdf_url
         return reponse_text, None
 
-    def ask_question(self, question=False, mode_rapport=False, **kwargs):
+    def ask_question(self, question=False, mode_rapport=False, mode_stats=False, **kwargs):
         self.ensure_one()
 
         if not question:
@@ -177,7 +228,39 @@ class AiConversation(models.Model):
             return "Vous ne pouvez pas acceder a la conversation d'un autre utilisateur."
 
         user = self.env.user
-        allowed_tables = self._get_user_allowed_tables()
+        allowed_tables, allowed_rapports, allowed_stats, is_admin_user = self._get_user_permissions()
+
+        _mode_rapport = mode_rapport or kwargs.get("mode_rapport", False)
+        _mode_stats   = mode_stats   or kwargs.get("mode_stats",   False)
+
+        if _mode_rapport:
+            if "ALL" not in allowed_rapports:
+                # Aucun rapport autorisé du tout
+                if not allowed_rapports:
+                    return "Acces refuse : vous n'etes pas autorise a generer des rapports. Contactez votre administrateur."
+                # Rapport prédéfini détecté → vérifier accès
+                try:
+                    from agent.agent_core import _detecter_rapport
+                    type_r = _detecter_rapport(question)
+                    if type_r:
+                        acces_ok = self._verifier_acces_rapport(type_r, allowed_rapports)
+                        _logger.info("Verification rapport: user=%s type=%s allowed=%s ok=%s",
+                                     user.name, type_r, sorted(allowed_rapports), acces_ok)
+                        if not acces_ok:
+                            return ("Acces refuse : le rapport [" + type_r + "] "
+                                    "n'est pas autorise pour votre profil. "
+                                    "Contactez votre administrateur.")
+                    else:
+                        # Rapport libre — autorisé si l'utilisateur a au moins un rapport
+                        _logger.info("Rapport libre demande par %s (rapports autorises: %s)",
+                                     user.name, sorted(allowed_rapports))
+                except Exception as e:
+                    _logger.error("Erreur verification acces rapport: %s", e)
+                    # En cas d'erreur de vérification, bloquer par sécurité
+                    return "Acces refuse : impossible de verifier vos droits. Contactez votre administrateur."
+
+        if _mode_stats and not self._verifier_acces_stats(question, allowed_stats):
+            return "Acces refuse : statistiques non autorisees pour votre profil. Contactez votre administrateur."
         session_id = f"odoo_user_{user.id}_conv_{conv_id}"
 
         # Sauvegarde message utilisateur
@@ -203,8 +286,9 @@ class AiConversation(models.Model):
                 "user_id": user.id,
                 "user_name": user.name,
                 "allowed_tables": list(allowed_tables) if allowed_tables else ["ALL"],
-                "is_admin": allowed_tables is None,
-                "mode_rapport": mode_rapport or kwargs.get("mode_rapport", False),
+                "is_admin": is_admin_user,
+                "mode_rapport": _mode_rapport,
+                "mode_stats": _mode_stats,
             }
             response = requests.post(FASTAPI_URL, json=payload, timeout=120)
             response.raise_for_status()

@@ -25,6 +25,7 @@
         'web.assets_backend': [
             'transport_ai_agent/static/src/css/ai_chat.css',
             'transport_ai_agent/static/src/xml/ai_chat.xml',
+            'https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js',
             'transport_ai_agent/static/src/js/ai_chat.js',
         ],
     },
