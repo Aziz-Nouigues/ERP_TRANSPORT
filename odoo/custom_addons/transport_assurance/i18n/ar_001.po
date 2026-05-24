@@ -2214,6 +2214,7 @@ msgstr "تاريخ الطباعة:"
 #: model_terms:ir.ui.view,arch_db:transport_assurance.view_assurance_chauffeur_search
 #: model_terms:ir.ui.view,arch_db:transport_assurance.view_assurance_sinistre_search
 msgid "État"
+msgid "État"
 msgstr "الحالة"
 
 #. module: transport_assurance

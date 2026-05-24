@@ -6,15 +6,15 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Odoo Server 19.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-05-22 22:27+0000\n"
-"PO-Revision-Date: 2026-05-22 22:27+0000\n"
+"POT-Creation-Date: 2026-05-22 22:26+0000\n"
+"PO-Revision-Date: 2026-05-22 22:26+0000\n"
 "Last-Translator: \n"
 "Language-Team: \n"
-"Language: en\n"
+"Language: fr\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"Plural-Forms: nplurals=2; plural=(n > 1);\n"
 
 #. module: transport_assurance
 #: model:transport.assurance.type,description:transport_assurance.type_vie_groupe
@@ -25,8 +25,8 @@ msgid ""
 "            "
 msgstr ""
 "\n"
-"                Death / total permanent disability (TPD) coverage\n"
-"                for all staff. Capital paid out to the designated beneficiary.\n"
+"                Couverture décès / invalidité permanente totale (IPT)\n"
+"                pour l'ensemble du personnel. Versement du capital au bénéficiaire désigné.\n"
 "            "
 
 #. module: transport_assurance
@@ -38,8 +38,8 @@ msgid ""
 "            "
 msgstr ""
 "\n"
-"                Mandatory CNAM coverage for workplace accidents and occupational\n"
-"                diseases. Injuries sustained in the line of duty.\n"
+"                Couverture obligatoire CNAM des accidents de travail et maladies\n"
+"                professionnelles. Blessure survenue en service.\n"
 "            "
 
 #. module: transport_assurance
@@ -52,9 +52,9 @@ msgid ""
 "            "
 msgstr ""
 "\n"
-"                Mandatory coverage for damage caused to third parties\n"
-"                (persons and property) in a traffic accident.\n"
-"                Requires a valid annual technical inspection (Tunisia rule).\n"
+"                Couverture obligatoire des dommages causés aux tiers\n"
+"                (personnes et biens) lors d'un accident de circulation.\n"
+"                Exige une visite technique annuelle valide (règle Tunisie).\n"
 "            "
 
 #. module: transport_assurance
@@ -66,8 +66,8 @@ msgid ""
 "            "
 msgstr ""
 "\n"
-"                Mandatory coverage for passengers transported in the event of an accident.\n"
-"                Covers bodily injury to travellers on board.\n"
+"                Couverture obligatoire des passagers transportés en cas d'accident.\n"
+"                Couvre les préjudices corporels des voyageurs à bord.\n"
 "            "
 
 #. module: transport_assurance
@@ -79,8 +79,8 @@ msgid ""
 "            "
 msgstr ""
 "\n"
-"                Extended coverage for damage to the vehicle itself\n"
-"                (collision, material accident) regardless of cause.\n"
+"                Couverture étendue des dommages au véhicule lui-même\n"
+"                (collision, accident matériel) quelle qu'en soit la cause.\n"
 "            "
 
 #. module: transport_assurance
@@ -92,8 +92,8 @@ msgid ""
 "            "
 msgstr ""
 "\n"
-"                Specific protection against fire and vehicle theft\n"
-"                (including attempted theft and vandalism).\n"
+"                Protection spécifique contre l'incendie et le vol du véhicule\n"
+"                (y compris tentative de vol et vandalisme).\n"
 "            "
 
 #. module: transport_assurance
@@ -105,8 +105,8 @@ msgid ""
 "            "
 msgstr ""
 "\n"
-"                Third-party liability of the driver as a transport professional.\n"
-"                Covers damages caused in the exercise of their duties.\n"
+"                RC du chauffeur en tant que professionnel de transport.\n"
+"                Couvre les dommages causés dans l'exercice de ses fonctions.\n"
 "            "
 
 #. module: transport_assurance
@@ -118,24 +118,24 @@ msgid ""
 "            "
 msgstr ""
 "\n"
-"                Reimbursement of medical expenses beyond CNAM coverage.\n"
-"                Covers hospitalisation, outpatient care, and optical.\n"
+"                Remboursement des frais médicaux au-delà de la prise en charge\n"
+"                de la CNAM. Couverture hospitalisation, soins ambulatoires, optique.\n"
 "            "
 
 #. module: transport_assurance
 #: model:ir.model.fields.selection,name:transport_assurance.selection__transport_assurance_wizard_rapport__echeance_horizon__12
 msgid "12 months"
-msgstr "12 months"
+msgstr "12 mois"
 
 #. module: transport_assurance
 #: model:ir.model.fields.selection,name:transport_assurance.selection__transport_assurance_wizard_rapport__echeance_horizon__3
 msgid "3 months"
-msgstr "3 months"
+msgstr "3 mois"
 
 #. module: transport_assurance
 #: model:ir.model.fields.selection,name:transport_assurance.selection__transport_assurance_wizard_rapport__echeance_horizon__6
 msgid "6 months"
-msgstr "6 months"
+msgstr "6 mois"
 
 #. module: transport_assurance
 #: model_terms:ir.ui.view,arch_db:transport_assurance.view_assurance_bus_form
@@ -143,8 +143,8 @@ msgid ""
 "<strong>Mandatory policy expired</strong> — This bus can no longer\n"
 "                    be assigned to tours (Tunisia rule)."
 msgstr ""
-"<strong>Mandatory policy expired</strong> — This bus can no longer\n"
-"                    be assigned to tours (Tunisia rule)."
+"<strong>Police obligatoire expirée</strong> — Ce bus ne peut plus\n"
+"                    être affecté à des tournées (règle Tunisie)."
 
 #. module: transport_assurance
 #: model_terms:ir.ui.view,arch_db:transport_assurance.view_assurance_bus_form
@@ -152,20 +152,20 @@ msgid ""
 "<strong>Technical visit</strong> — Absent or expired.\n"
 "                    RC renewal will be blocked."
 msgstr ""
-"<strong>Technical visit</strong> — Absent or expired.\n"
-"                    RC renewal will be blocked."
+"<strong>Visite technique</strong> — Absente ou expirée.\n"
+"                    Le renouvellement RC sera bloqué."
 
 #. module: transport_assurance
 #: model_terms:ir.ui.view,arch_db:transport_assurance.report_bus_non_assures
 msgid ""
 "<strong>⚠ CRITICAL LEGAL ALERT — Bus without mandatory coverage</strong>"
 msgstr ""
-"<strong>⚠ CRITICAL LEGAL ALERT — Bus without mandatory coverage</strong>"
+"<strong>⚠ ALERTE JURIDIQUE CRITIQUE — Bus sans couverture obligatoire</strong>"
 
 #. module: transport_assurance
 #: model_terms:ir.ui.view,arch_db:transport_assurance.view_assurance_chauffeur_form
 msgid "<strong>⚠ Expiring soon</strong> — This policy expires in"
-msgstr "<strong>⚠ Expiring soon</strong> — This policy expires in"
+msgstr "<strong>⚠ Expiration imminente</strong> — Cette police expire dans"
 
 #. module: transport_assurance
 #: model_terms:ir.ui.view,arch_db:transport_assurance.view_assurance_chauffeur_search
@@ -175,7 +175,7 @@ msgstr "AT / CNAM"
 #. module: transport_assurance
 #: model:transport.assurance.type,name:transport_assurance.type_at_cnam
 msgid "Accident de travail (CNAM)"
-msgstr "Workplace Accident (CNAM)"
+msgstr "Accident de travail (CNAM)"
 
 #. module: transport_assurance
 #: model:ir.model.fields,field_description:transport_assurance.field_transport_assurance_bus__message_needaction
@@ -183,7 +183,7 @@ msgstr "Workplace Accident (CNAM)"
 #: model:ir.model.fields,field_description:transport_assurance.field_transport_assurance_compagnie__message_needaction
 #: model:ir.model.fields,field_description:transport_assurance.field_transport_assurance_sinistre__message_needaction
 msgid "Action Needed"
-msgstr "Action Needed"
+msgstr "Action requise"
 
 #. module: transport_assurance
 #: model:ir.model.fields,field_description:transport_assurance.field_transport_assurance_compagnie__active
@@ -196,28 +196,28 @@ msgstr "Active"
 #. module: transport_assurance
 #: model_terms:ir.ui.view,arch_db:transport_assurance.report_bus_non_assures
 msgid "Active buses without valid mandatory policy"
-msgstr "Active buses without valid mandatory policy"
+msgstr "Bus actifs sans police obligatoire valide"
 
 #. module: transport_assurance
 #: model:ir.model.fields,field_description:transport_assurance.field_transport_assurance_compagnie__nb_polices_chauffeur
 msgid "Active driver policies"
-msgstr "Active driver policies"
+msgstr "Polices chauffeur actives"
 
 #. module: transport_assurance
 #: model:ir.actions.report,name:transport_assurance.report_polices_actives_action
 msgid "Active fonts"
-msgstr "Active policies"
+msgstr "Polices actives"
 
 #. module: transport_assurance
 #: model_terms:ir.ui.view,arch_db:transport_assurance.report_polices_actives
 msgid "Active insurance policies"
-msgstr "Active insurance policies"
+msgstr "Polices d'assurance actives"
 
 #. module: transport_assurance
 #: model_terms:ir.ui.view,arch_db:transport_assurance.view_assurance_bus_search
 #: model_terms:ir.ui.view,arch_db:transport_assurance.view_assurance_chauffeur_search
 msgid "Actives"
-msgstr "Active"
+msgstr "Actives"
 
 #. module: transport_assurance
 #: model:ir.model.fields,field_description:transport_assurance.field_transport_assurance_bus__activity_ids
@@ -225,7 +225,7 @@ msgstr "Active"
 #: model:ir.model.fields,field_description:transport_assurance.field_transport_assurance_compagnie__activity_ids
 #: model:ir.model.fields,field_description:transport_assurance.field_transport_assurance_sinistre__activity_ids
 msgid "Activities"
-msgstr "Activities"
+msgstr "Activités"
 
 #. module: transport_assurance
 #: model:ir.model.fields,field_description:transport_assurance.field_transport_assurance_bus__activity_exception_decoration
@@ -233,7 +233,7 @@ msgstr "Activities"
 #: model:ir.model.fields,field_description:transport_assurance.field_transport_assurance_compagnie__activity_exception_decoration
 #: model:ir.model.fields,field_description:transport_assurance.field_transport_assurance_sinistre__activity_exception_decoration
 msgid "Activity Exception Decoration"
-msgstr "Activity Exception Decoration"
+msgstr "Décoration d'exception d'activité"
 
 #. module: transport_assurance
 #: model:ir.model.fields,field_description:transport_assurance.field_transport_assurance_bus__activity_state
@@ -241,7 +241,7 @@ msgstr "Activity Exception Decoration"
 #: model:ir.model.fields,field_description:transport_assurance.field_transport_assurance_compagnie__activity_state
 #: model:ir.model.fields,field_description:transport_assurance.field_transport_assurance_sinistre__activity_state
 msgid "Activity State"
-msgstr "Activity State"
+msgstr "État de l'activité"
 
 #. module: transport_assurance
 #: model:ir.model.fields,field_description:transport_assurance.field_transport_assurance_bus__activity_type_icon
@@ -249,70 +249,70 @@ msgstr "Activity State"
 #: model:ir.model.fields,field_description:transport_assurance.field_transport_assurance_compagnie__activity_type_icon
 #: model:ir.model.fields,field_description:transport_assurance.field_transport_assurance_sinistre__activity_type_icon
 msgid "Activity Type Icon"
-msgstr "Activity Type Icon"
+msgstr "Icône du type d'activité"
 
 #. module: transport_assurance
 #: model:ir.model.fields,field_description:transport_assurance.field_transport_assurance_compagnie__adresse
 msgid "Address"
-msgstr "Address"
+msgstr "Adresse"
 
 #. module: transport_assurance
 #: model:res.groups,name:transport_assurance.group_assurance_gestionnaire
 msgid "Administrator"
-msgstr "Administrator"
+msgstr "Gestionnaire"
 
 #. module: transport_assurance
 #: model:ir.model.fields,field_description:transport_assurance.field_transport_assurance_bus__date_alerte
 #: model:ir.model.fields,field_description:transport_assurance.field_transport_assurance_chauffeur__date_alerte
 msgid "Alert date"
-msgstr "Alert date"
+msgstr "Date d'alerte"
 
 #. module: transport_assurance
 #: model:ir.ui.menu,name:transport_assurance.menu_assurance_bus_list
 msgid "All bus fonts"
-msgstr "All bus policies"
+msgstr "Toutes les polices bus"
 
 #. module: transport_assurance
 #: model:ir.ui.menu,name:transport_assurance.menu_assurance_sinistres_list
 msgid "All disasters"
-msgstr "All claims"
+msgstr "Tous les sinistres"
 
 #. module: transport_assurance
 #: model:ir.ui.menu,name:transport_assurance.menu_assurance_chauffeur_list
 msgid "All driver policies"
-msgstr "All driver policies"
+msgstr "Toutes les polices chauffeur"
 
 #. module: transport_assurance
 #: model_terms:ir.ui.view,arch_db:transport_assurance.report_sinistres
 msgid "Amount awarded"
-msgstr "Amount awarded"
+msgstr "Montant accordé"
 
 #. module: transport_assurance
 #: model_terms:ir.ui.view,arch_db:transport_assurance.report_sinistres
 msgid "Amount claimed"
-msgstr "Amount claimed"
+msgstr "Montant réclamé"
 
 #. module: transport_assurance
 #: model:ir.model.fields,field_description:transport_assurance.field_transport_assurance_sinistre__montant_reclame
 msgid "Amount claimed (TND)"
-msgstr "Amount claimed (TND)"
+msgstr "Montant réclamé (TND)"
 
 #. module: transport_assurance
 #: model:ir.model.fields,field_description:transport_assurance.field_transport_assurance_sinistre__montant_accorde
 msgid "Amount granted (TND)"
-msgstr "Amount granted (TND)"
+msgstr "Montant accordé (TND)"
 
 #. module: transport_assurance
 #: model_terms:ir.ui.view,arch_db:transport_assurance.view_assurance_sinistre_form
 msgid "Amounts"
-msgstr "Amounts"
+msgstr "Montants"
 
 #. module: transport_assurance
 #: model:ir.model.fields,field_description:transport_assurance.field_transport_assurance_bus__prime_annuelle
 #: model:ir.model.fields,field_description:transport_assurance.field_transport_assurance_chauffeur__prime_annuelle
 #: model:ir.model.fields,field_description:transport_assurance.field_transport_assurance_wizard_renouvellement__prime_annuelle
 msgid "Annual bonus (TND)"
-msgstr "Annual premium (TND)"
+msgstr "Prime annuelle (TND)"
 
 #. module: transport_assurance
 #: model_terms:ir.ui.view,arch_db:transport_assurance.report_bus_non_assures
@@ -321,9 +321,9 @@ msgid ""
 "                        Valid <strong>Travel/passengers</strong>. Buses listed below\n"
 "                        <strong>cannot legally tour</strong>."
 msgstr ""
-"Any bus in service must have a valid <strong>Third-Party Liability (RC)</strong> policy and\n"
-"                        a valid <strong>Travel/Passengers</strong> policy. Buses listed below\n"
-"                        <strong>cannot legally operate tours</strong>."
+"Tout bus en service doit disposer d'une police <strong>RC</strong> et\n"
+"                        <strong>Voyage/passagers</strong> valide. Les bus listés ci-dessous\n"
+"                        <strong>ne peuvent pas légalement effectuer de tournées</strong>."
 
 #. module: transport_assurance
 #: model:ir.model.fields.selection,name:transport_assurance.selection__transport_assurance_sinistre__gouvernorat__ariana
@@ -333,32 +333,32 @@ msgstr "Ariana"
 #. module: transport_assurance
 #: model:ir.ui.menu,name:transport_assurance.menu_assurance_root
 msgid "Assurance"
-msgstr "Insurance"
+msgstr "Assurance"
 
 #. module: transport_assurance
 #: model:res.groups.privilege,name:transport_assurance.privilege_transport_assurance
 msgid "Assurance Transport"
-msgstr "Transport Insurance"
+msgstr "Assurance Transport"
 
 #. module: transport_assurance
 #: model:transport.assurance.type,name:transport_assurance.type_vie_groupe
 msgid "Assurance vie groupe"
-msgstr "Group Life Insurance"
+msgstr "Assurance vie groupe"
 
 #. module: transport_assurance
 #: model:ir.actions.server,name:transport_assurance.cron_assurance_alertes_ir_actions_server
 msgid "Assurance — Alertes échéances polices"
-msgstr "Insurance — Policy deadline alerts"
+msgstr "Assurance — Alertes échéances polices"
 
 #. module: transport_assurance
 #: model:ir.actions.server,name:transport_assurance.cron_assurance_update_states_ir_actions_server
 msgid "Assurance — Mise à jour états polices"
-msgstr "Insurance — Policy status update"
+msgstr "Assurance — Mise à jour états polices"
 
 #. module: transport_assurance
 #: model:ir.actions.server,name:transport_assurance.cron_assurance_bus_non_assures_ir_actions_server
 msgid "Assurance — Vérification bus non assurés"
-msgstr "Insurance — Uninsured bus check"
+msgstr "Assurance — Vérification bus non assurés"
 
 #. module: transport_assurance
 #: model:ir.model.fields,field_description:transport_assurance.field_transport_assurance_bus__message_attachment_count
@@ -366,17 +366,17 @@ msgstr "Insurance — Uninsured bus check"
 #: model:ir.model.fields,field_description:transport_assurance.field_transport_assurance_compagnie__message_attachment_count
 #: model:ir.model.fields,field_description:transport_assurance.field_transport_assurance_sinistre__message_attachment_count
 msgid "Attachment Count"
-msgstr "Attachment Count"
+msgstr "Nombre de pièces jointes"
 
 #. module: transport_assurance
 #: model:ir.model.fields,field_description:transport_assurance.field_transport_assurance_wizard_rapport__date_fin
 msgid "Au"
-msgstr "To"
+msgstr "Au"
 
 #. module: transport_assurance
 #: model_terms:ir.ui.view,arch_db:transport_assurance.report_polices_actives
 msgid "Beginning"
-msgstr "Start"
+msgstr "Début"
 
 #. module: transport_assurance
 #: model:ir.model.fields.selection,name:transport_assurance.selection__transport_assurance_sinistre__gouvernorat__ben_arous
@@ -391,7 +391,7 @@ msgstr "Bizerte"
 #. module: transport_assurance
 #: model:ir.model.fields.selection,name:transport_assurance.selection__transport_assurance_sinistre__nature_sinistre__bris_glace
 msgid "Broken glass"
-msgstr "Broken glass"
+msgstr "Bris de glace"
 
 #. module: transport_assurance
 #: model:ir.model.fields,field_description:transport_assurance.field_transport_assurance_wizard_renouvellement__vehicle_id
@@ -405,49 +405,49 @@ msgstr "Bus"
 #. module: transport_assurance
 #: model_terms:ir.ui.view,arch_db:transport_assurance.report_bus_non_assures
 msgid "Bus / Immatriculation"
-msgstr "Bus / Registration"
+msgstr "Bus / Immatriculation"
 
 #. module: transport_assurance
 #: model:ir.model.fields,field_description:transport_assurance.field_transport_assurance_bus__vehicle_id
 #: model:ir.model.fields.selection,name:transport_assurance.selection__transport_assurance_sinistre__objet_sinistre__bus
 #: model:ir.model.fields.selection,name:transport_assurance.selection__transport_assurance_type__categorie__bus
 msgid "Bus / Vehicle"
-msgstr "Bus / Vehicle"
+msgstr "Bus / Véhicule"
 
 #. module: transport_assurance
 #: model:ir.model.fields.selection,name:transport_assurance.selection__transport_assurance_type__categorie__both
 msgid "Bus and driver"
-msgstr "Bus and driver"
+msgstr "Bus et chauffeur"
 
 #. module: transport_assurance
 #: model_terms:ir.ui.view,arch_db:transport_assurance.report_echeancier
 msgid "Bus policies to be renewed"
-msgstr "Bus policies to be renewed"
+msgstr "Polices bus à renouveler"
 
 #. module: transport_assurance
 #: model:ir.model.fields,field_description:transport_assurance.field_transport_assurance_wizard_renouvellement__police_bus_id
 msgid "Bus policy to be renewed"
-msgstr "Bus policy to be renewed"
+msgstr "Police bus à renouveler"
 
 #. module: transport_assurance
 #: model_terms:ir.ui.view,arch_db:transport_assurance.view_assurance_bus_search
 msgid "By company"
-msgstr "By company"
+msgstr "Par compagnie"
 
 #. module: transport_assurance
 #: model_terms:ir.ui.view,arch_db:transport_assurance.view_assurance_bus_search
 msgid "By state"
-msgstr "By status"
+msgstr "Par état"
 
 #. module: transport_assurance
 #: model_terms:ir.ui.view,arch_db:transport_assurance.view_assurance_bus_search
 msgid "By type"
-msgstr "By type"
+msgstr "Par type"
 
 #. module: transport_assurance
 #: model:ir.model.fields,field_description:transport_assurance.field_transport_assurance_chauffeur__numero_cnam
 msgid "CNAM affiliate number"
-msgstr "CNAM affiliate number"
+msgstr "Numéro d'affilié CNAM"
 
 #. module: transport_assurance
 #: model:res.groups,comment:transport_assurance.group_assurance_gestionnaire
@@ -455,39 +455,39 @@ msgid ""
 "Can create and manage bus and driver insurance policies,\n"
 "                declare and investigate claims."
 msgstr ""
-"Can create and manage bus and driver insurance policies,\n"
-"                declare and investigate claims."
+"Peut créer et gérer les polices d'assurance bus et chauffeur,\n"
+"                déclarer et instruire les sinistres."
 
 #. module: transport_assurance
 #: model_terms:ir.ui.view,arch_db:transport_assurance.view_wizard_rapport_assurance_form
 #: model_terms:ir.ui.view,arch_db:transport_assurance.view_wizard_renouvellement_form
 msgid "Cancel"
-msgstr "Cancel"
+msgstr "Annuler"
 
 #. module: transport_assurance
 #: model:ir.model.fields,field_description:transport_assurance.field_transport_assurance_type__categorie
 msgid "Category"
-msgstr "Category"
+msgstr "Catégorie"
 
 #. module: transport_assurance
 #: model:ir.model.fields,field_description:transport_assurance.field_transport_assurance_bus__plafond_garantie
 msgid "Ceiling guarantee (TND)"
-msgstr "Coverage ceiling (TND)"
+msgstr "Plafond de garantie (TND)"
 
 #. module: transport_assurance
 #: model:ir.model.fields,field_description:transport_assurance.field_transport_assurance_wizard_renouvellement__plafond_garantie
 msgid "Ceiling warranty (TND)"
-msgstr "Coverage ceiling (TND)"
+msgstr "Plafond de garantie (TND)"
 
 #. module: transport_assurance
 #: model_terms:ir.ui.view,arch_db:transport_assurance.view_assurance_sinistre_search
 msgid "Chauffeurs"
-msgstr "Drivers"
+msgstr "Chauffeurs"
 
 #. module: transport_assurance
 #: model:ir.model.fields,field_description:transport_assurance.field_transport_assurance_sinistre__name
 msgid "Claim No."
-msgstr "Claim No."
+msgstr "N° sinistre"
 
 #. module: transport_assurance
 #: model:ir.actions.act_window,name:transport_assurance.action_assurance_sinistre
@@ -495,42 +495,42 @@ msgstr "Claim No."
 #: model_terms:ir.ui.view,arch_db:transport_assurance.view_assurance_chauffeur_form
 #: model_terms:ir.ui.view,arch_db:transport_assurance.view_assurance_sinistre_list
 msgid "Claims"
-msgstr "Claims"
+msgstr "Sinistres"
 
 #. module: transport_assurance
 #: model_terms:ir.ui.view,arch_db:transport_assurance.view_assurance_sinistre_pivot
 msgid "Claims analysis"
-msgstr "Claims analysis"
+msgstr "Analyse des sinistres"
 
 #. module: transport_assurance
 #: model:ir.model.fields.selection,name:transport_assurance.selection__transport_assurance_wizard_rapport__type_rapport__sinistres
 msgid "Claims per vehicle"
-msgstr "Claims per vehicle"
+msgstr "Sinistres par véhicule"
 
 #. module: transport_assurance
 #: model:ir.actions.report,name:transport_assurance.report_sinistres_action
 msgid "Claims report"
-msgstr "Claims report"
+msgstr "Rapport sinistres"
 
 #. module: transport_assurance
 #: model_terms:ir.ui.view,arch_db:transport_assurance.view_assurance_sinistre_search
 msgid "Claims research"
-msgstr "Claims search"
+msgstr "Recherche sinistres"
 
 #. module: transport_assurance
 #: model_terms:ir.ui.view,arch_db:transport_assurance.report_sinistres
 msgid "Claims sheet —"
-msgstr "Claims sheet —"
+msgstr "Fiche sinistres —"
 
 #. module: transport_assurance
 #: model_terms:ir.ui.view,arch_db:transport_assurance.view_assurance_sinistre_search
 msgid "Closed"
-msgstr "Closed"
+msgstr "Clôturé"
 
 #. module: transport_assurance
 #: model:ir.model.fields,field_description:transport_assurance.field_transport_assurance_sinistre__date_cloture
 msgid "Closing date"
-msgstr "Closing date"
+msgstr "Date de clôture"
 
 #. module: transport_assurance
 #: model:ir.model.fields,field_description:transport_assurance.field_transport_assurance_type__code
@@ -540,17 +540,17 @@ msgstr "Code"
 #. module: transport_assurance
 #: model:ir.model.fields,field_description:transport_assurance.field_transport_assurance_compagnie__code
 msgid "Code compagnie"
-msgstr "Company code"
+msgstr "Code compagnie"
 
 #. module: transport_assurance
 #: model_terms:ir.ui.view,arch_db:transport_assurance.view_assurance_compagnie_form
 msgid "Code court"
-msgstr "Short code"
+msgstr "Code court"
 
 #. module: transport_assurance
 #: model:ir.model.fields.selection,name:transport_assurance.selection__transport_assurance_sinistre__nature_sinistre__collision
 msgid "Collision / Accident circulation"
-msgstr "Collision / Traffic accident"
+msgstr "Collision / Accident de circulation"
 
 #. module: transport_assurance
 #: model:ir.model.fields,field_description:transport_assurance.field_transport_assurance_bus__compagnie_id
@@ -562,33 +562,33 @@ msgstr "Collision / Traffic accident"
 #: model_terms:ir.ui.view,arch_db:transport_assurance.view_assurance_chauffeur_search
 #: model_terms:ir.ui.view,arch_db:transport_assurance.view_assurance_sinistre_search
 msgid "Compagnie"
-msgstr "Insurer"
+msgstr "Compagnie"
 
 #. module: transport_assurance
 #: model:ir.model.fields,field_description:transport_assurance.field_transport_assurance_wizard_rapport__compagnie_id
 msgid "Company (filter)"
-msgstr "Company (filter)"
+msgstr "Compagnie (filtre)"
 
 #. module: transport_assurance
 #: model:ir.model.fields,field_description:transport_assurance.field_transport_assurance_chauffeur__compagnie_id
 msgid "Company / Organization"
-msgstr "Company / Organization"
+msgstr "Compagnie / Organisation"
 
 #. module: transport_assurance
 #: model:ir.model.fields,field_description:transport_assurance.field_transport_assurance_compagnie__name
 #: model_terms:ir.ui.view,arch_db:transport_assurance.view_assurance_compagnie_form
 msgid "Company name"
-msgstr "Company name"
+msgstr "Raison sociale"
 
 #. module: transport_assurance
 #: model_terms:ir.ui.view,arch_db:transport_assurance.view_assurance_sinistre_form
 msgid "Compensation"
-msgstr "Compensation"
+msgstr "Indemnisation"
 
 #. module: transport_assurance
 #: model:transport.assurance.type,name:transport_assurance.type_complementaire_sante
 msgid "Complémentaire santé"
-msgstr "Supplementary Health"
+msgstr "Complémentaire santé"
 
 #. module: transport_assurance
 #: model:ir.ui.menu,name:transport_assurance.menu_assurance_config
@@ -598,22 +598,22 @@ msgstr "Configuration"
 #. module: transport_assurance
 #: model_terms:ir.ui.view,arch_db:transport_assurance.view_wizard_renouvellement_form
 msgid "Confirm renewal"
-msgstr "Confirm renewal"
+msgstr "Confirmer le renouvellement"
 
 #. module: transport_assurance
 #: model_terms:ir.ui.view,arch_db:transport_assurance.view_assurance_compagnie_form
 msgid "Contact details"
-msgstr "Contact details"
+msgstr "Coordonnées"
 
 #. module: transport_assurance
 #: model:ir.model.fields,field_description:transport_assurance.field_transport_assurance_compagnie__contact_telephone
 msgid "Contact phone"
-msgstr "Contact phone"
+msgstr "Téléphone du contact"
 
 #. module: transport_assurance
 #: model:ir.model.fields.selection,name:transport_assurance.selection__transport_assurance_wizard_rapport__type_rapport__cout
 msgid "Cost of insurance (premiums)"
-msgstr "Cost of insurance (premiums)"
+msgstr "Coût de l'assurance (primes)"
 
 #. module: transport_assurance
 #: model:ir.model.fields,field_description:transport_assurance.field_transport_assurance_bus__create_uid
@@ -624,7 +624,7 @@ msgstr "Cost of insurance (premiums)"
 #: model:ir.model.fields,field_description:transport_assurance.field_transport_assurance_wizard_rapport__create_uid
 #: model:ir.model.fields,field_description:transport_assurance.field_transport_assurance_wizard_renouvellement__create_uid
 msgid "Created by"
-msgstr "Created by"
+msgstr "Créé par"
 
 #. module: transport_assurance
 #: model:ir.model.fields,field_description:transport_assurance.field_transport_assurance_bus__create_date
@@ -635,12 +635,12 @@ msgstr "Created by"
 #: model:ir.model.fields,field_description:transport_assurance.field_transport_assurance_wizard_rapport__create_date
 #: model:ir.model.fields,field_description:transport_assurance.field_transport_assurance_wizard_renouvellement__create_date
 msgid "Created on"
-msgstr "Created on"
+msgstr "Créé le"
 
 #. module: transport_assurance
 #: model:ir.model,name:transport_assurance.model_transport_assurance_cron
 msgid "Crons assurance transport"
-msgstr "Transport insurance scheduled tasks"
+msgstr "Tâches planifiées assurance transport"
 
 #. module: transport_assurance
 #: model:ir.model.fields,field_description:transport_assurance.field_transport_assurance_bus__currency_id
@@ -648,79 +648,79 @@ msgstr "Transport insurance scheduled tasks"
 #: model:ir.model.fields,field_description:transport_assurance.field_transport_assurance_sinistre__currency_id
 #: model:ir.model.fields,field_description:transport_assurance.field_transport_assurance_wizard_renouvellement__currency_id
 msgid "Currency"
-msgstr "Currency"
+msgstr "Devise"
 
 #. module: transport_assurance
 #: model:ir.model.fields,field_description:transport_assurance.field_transport_assurance_compagnie__nb_sinistres_ouverts
 msgid "Current claims"
-msgstr "Open claims"
+msgstr "Sinistres en cours"
 
 #. module: transport_assurance
 #: model:ir.model.fields,field_description:transport_assurance.field_transport_assurance_sinistre__tournee_id
 msgid "Current tour"
-msgstr "Related tour"
+msgstr "Tournée concernée"
 
 #. module: transport_assurance
 #: model:ir.model.fields,help:transport_assurance.field_transport_assurance_bus__date_alerte
 msgid "D-30 before end_date."
-msgstr "D-30 before the expiry date."
+msgstr "J-30 avant la date de fin."
 
 #. module: transport_assurance
 #: model:ir.model.fields,field_description:transport_assurance.field_transport_assurance_sinistre__date_pv
 msgid "Date PV"
-msgstr "Police/Gendarmerie report date"
+msgstr "Date du PV"
 
 #. module: transport_assurance
 #: model:ir.model.fields,field_description:transport_assurance.field_transport_assurance_sinistre__date_expertise
 msgid "Date d'expertise"
-msgstr "Expert assessment date"
+msgstr "Date d'expertise"
 
 #. module: transport_assurance
 #: model:ir.model.fields,field_description:transport_assurance.field_transport_assurance_sinistre__date_sinistre
 msgid "Date of loss"
-msgstr "Date of loss"
+msgstr "Date du sinistre"
 
 #. module: transport_assurance
 #: model:ir.model.fields.selection,name:transport_assurance.selection__transport_assurance_bus__state__alerte
 #: model:ir.model.fields.selection,name:transport_assurance.selection__transport_assurance_chauffeur__state__alerte
 msgid "Deadline alert"
-msgstr "Expiry alert"
+msgstr "Alerte échéance"
 
 #. module: transport_assurance
 #: model:ir.model.fields.selection,name:transport_assurance.selection__transport_assurance_sinistre__nature_sinistre__deces
 msgid "Death"
-msgstr "Death"
+msgstr "Décès"
 
 #. module: transport_assurance
 #: model:ir.model.fields,field_description:transport_assurance.field_transport_assurance_sinistre__date_declaration
 msgid "Declaration date"
-msgstr "Declaration date"
+msgstr "Date de déclaration"
 
 #. module: transport_assurance
 #: model:ir.model.fields.selection,name:transport_assurance.selection__transport_assurance_sinistre__state__declare
 msgid "Declared"
-msgstr "Declared"
+msgstr "Déclaré"
 
 #. module: transport_assurance
 #: model_terms:ir.ui.view,arch_db:transport_assurance.view_assurance_compagnie_form
 msgid "Dedicated contact"
-msgstr "Dedicated contact"
+msgstr "Contact dédié"
 
 #. module: transport_assurance
 #: model:ir.model.fields,field_description:transport_assurance.field_transport_assurance_compagnie__contact_nom
 msgid "Dedicated contact name"
-msgstr "Dedicated contact name"
+msgstr "Nom du contact dédié"
 
 #. module: transport_assurance
 #: model:ir.model.fields,field_description:transport_assurance.field_transport_assurance_chauffeur__department_id
 #: model_terms:ir.ui.view,arch_db:transport_assurance.view_assurance_chauffeur_search
 msgid "Department"
-msgstr "Department"
+msgstr "Département"
 
 #. module: transport_assurance
 #: model_terms:ir.ui.view,arch_db:transport_assurance.view_assurance_sinistre_form
 msgid "Describe the circumstances of the incident…"
-msgstr "Describe the circumstances of the incident…"
+msgstr "Décrire les circonstances de l'incident…"
 
 #. module: transport_assurance
 #: model:ir.model.fields,field_description:transport_assurance.field_transport_assurance_type__description
@@ -730,35 +730,35 @@ msgstr "Description"
 #. module: transport_assurance
 #: model_terms:ir.ui.view,arch_db:transport_assurance.view_assurance_type_form
 msgid "Description of font type…"
-msgstr "Description of policy type…"
+msgstr "Description du type de police…"
 
 #. module: transport_assurance
 #: model:ir.model.fields,field_description:transport_assurance.field_transport_assurance_sinistre__description
 #: model_terms:ir.ui.view,arch_db:transport_assurance.report_sinistres
 #: model_terms:ir.ui.view,arch_db:transport_assurance.view_assurance_sinistre_form
 msgid "Description of the facts"
-msgstr "Description of the facts"
+msgstr "Description des faits"
 
 #. module: transport_assurance
 #: model:ir.model.fields,field_description:transport_assurance.field_transport_assurance_chauffeur__beneficiaire
 #: model_terms:ir.ui.view,arch_db:transport_assurance.view_assurance_chauffeur_form
 msgid "Designated beneficiary"
-msgstr "Designated beneficiary"
+msgstr "Bénéficiaire désigné"
 
 #. module: transport_assurance
 #: model_terms:ir.ui.view,arch_db:transport_assurance.view_wizard_rapport_assurance_form
 msgid "Desired report"
-msgstr "Report type"
+msgstr "Rapport souhaité"
 
 #. module: transport_assurance
 #: model_terms:ir.ui.view,arch_db:transport_assurance.report_sinistres
 msgid "Disaster date"
-msgstr "Incident date"
+msgstr "Date du sinistre"
 
 #. module: transport_assurance
 #: model_terms:ir.ui.view,arch_db:transport_assurance.view_assurance_sinistre_form
 msgid "Dismiss"
-msgstr "Dismiss"
+msgstr "Ignorer"
 
 #. module: transport_assurance
 #: model:ir.model.fields,field_description:transport_assurance.field_transport_assurance_bus__display_name
@@ -770,125 +770,125 @@ msgstr "Dismiss"
 #: model:ir.model.fields,field_description:transport_assurance.field_transport_assurance_wizard_rapport__display_name
 #: model:ir.model.fields,field_description:transport_assurance.field_transport_assurance_wizard_renouvellement__display_name
 msgid "Display Name"
-msgstr "Display Name"
+msgstr "Nom affiché"
 
 #. module: transport_assurance
 #: model_terms:ir.ui.view,arch_db:transport_assurance.view_assurance_sinistre_form
 msgid "Documents & Expertise"
-msgstr "Documents & Expert Assessment"
+msgstr "Documents & Expertise"
 
 #. module: transport_assurance
 #: model:ir.model.fields.selection,name:transport_assurance.selection__transport_assurance_bus__state__brouillon
 #: model:ir.model.fields.selection,name:transport_assurance.selection__transport_assurance_chauffeur__state__brouillon
 #: model:ir.model.fields.selection,name:transport_assurance.selection__transport_assurance_sinistre__state__brouillon
 msgid "Draft"
-msgstr "Draft"
+msgstr "Brouillon"
 
 #. module: transport_assurance
 #: model:ir.model.fields,field_description:transport_assurance.field_transport_assurance_chauffeur__employe_id
 #: model:ir.model.fields,field_description:transport_assurance.field_transport_assurance_wizard_renouvellement__employe_id
 msgid "Driver / Employee"
-msgstr "Driver / Employee"
+msgstr "Chauffeur / Employé"
 
 #. module: transport_assurance
 #: model:ir.model.fields.selection,name:transport_assurance.selection__transport_assurance_sinistre__objet_sinistre__chauffeur
 #: model:ir.model.fields.selection,name:transport_assurance.selection__transport_assurance_type__categorie__chauffeur
 msgid "Driver / Staff"
-msgstr "Driver / Staff"
+msgstr "Chauffeur / Personnel"
 
 #. module: transport_assurance
 #: model:ir.actions.act_window,name:transport_assurance.action_assurance_chauffeur
 #: model_terms:ir.ui.view,arch_db:transport_assurance.view_assurance_chauffeur_list
 msgid "Driver insurance policies"
-msgstr "Driver insurance policies"
+msgstr "Polices d'assurance chauffeur"
 
 #. module: transport_assurance
 #: model:ir.ui.menu,name:transport_assurance.menu_assurance_chauffeur_root
 #: model_terms:ir.ui.view,arch_db:transport_assurance.report_polices_actives
 msgid "Driver policies"
-msgstr "Driver policies"
+msgstr "Polices chauffeur"
 
 #. module: transport_assurance
 #: model_terms:ir.ui.view,arch_db:transport_assurance.report_echeancier
 msgid "Driver policies to be renewed"
-msgstr "Driver policies to be renewed"
+msgstr "Polices chauffeur à renouveler"
 
 #. module: transport_assurance
 #: model:ir.model.fields,field_description:transport_assurance.field_transport_assurance_wizard_renouvellement__police_chauffeur_id
 msgid "Driver policy to be renewed"
-msgstr "Driver policy to be renewed"
+msgstr "Police chauffeur à renouveler"
 
 #. module: transport_assurance
 #: model:ir.model,name:transport_assurance.model_transport_assurance_chauffeur
 msgid "Driver/staff insurance policy"
-msgstr "Driver/staff insurance policy"
+msgstr "Police d'assurance chauffeur/personnel"
 
 #. module: transport_assurance
 #: model_terms:ir.ui.view,arch_db:transport_assurance.report_bus_non_assures
 #: model_terms:ir.ui.view,arch_db:transport_assurance.report_echeancier
 #: model_terms:ir.ui.view,arch_db:transport_assurance.report_polices_actives
 msgid "Edited on:"
-msgstr "Printed on:"
+msgstr "Imprimé le :"
 
 #. module: transport_assurance
 #: model:ir.model.fields,field_description:transport_assurance.field_transport_assurance_compagnie__email
 msgid "Email"
-msgstr "Email"
+msgstr "E-mail"
 
 #. module: transport_assurance
 #: model:ir.model.fields,field_description:transport_assurance.field_transport_assurance_compagnie__contact_email
 msgid "Email contact"
-msgstr "Contact email"
+msgstr "E-mail du contact"
 
 #. module: transport_assurance
 #: model_terms:ir.ui.view,arch_db:transport_assurance.report_echeancier
 #: model_terms:ir.ui.view,arch_db:transport_assurance.report_polices_actives
 #: model_terms:ir.ui.view,arch_db:transport_assurance.report_sinistres
 msgid "Employee"
-msgstr "Employee"
+msgstr "Employé"
 
 #. module: transport_assurance
 #: model_terms:ir.ui.view,arch_db:transport_assurance.view_assurance_chauffeur_form
 msgid "Employee / Beneficiary"
-msgstr "Employee / Beneficiary"
+msgstr "Employé / Bénéficiaire"
 
 #. module: transport_assurance
 #: model:ir.model.fields,field_description:transport_assurance.field_transport_assurance_sinistre__employe_id
 msgid "Employee/Driver involved"
-msgstr "Employee/Driver involved"
+msgstr "Employé/Chauffeur impliqué"
 
 #. module: transport_assurance
 #: model_terms:ir.ui.view,arch_db:transport_assurance.view_assurance_bus_form
 #: model_terms:ir.ui.view,arch_db:transport_assurance.view_assurance_chauffeur_form
 msgid "Enable"
-msgstr "Activate"
+msgstr "Activer"
 
 #. module: transport_assurance
 #: model:ir.model.fields,field_description:transport_assurance.field_transport_assurance_bus__date_fin
 #: model:ir.model.fields,field_description:transport_assurance.field_transport_assurance_chauffeur__date_fin
 msgid "End date / Expiration"
-msgstr "End date / Expiration"
+msgstr "Date de fin / Expiration"
 
 #. module: transport_assurance
 #: model:ir.model.fields,help:transport_assurance.field_transport_assurance_chauffeur__lien_beneficiaire
 msgid "Ex: spouse, child, parent…"
-msgstr "E.g.: spouse, child, parent…"
+msgstr "Ex. : conjoint, enfant, parent…"
 
 #. module: transport_assurance
 #: model:ir.model.fields,field_description:transport_assurance.field_transport_assurance_sinistre__franchise_appliquee
 #: model_terms:ir.ui.view,arch_db:transport_assurance.report_sinistres
 msgid "Excess deducted"
-msgstr "Excess deducted"
+msgstr "Franchise déduite"
 
 #. module: transport_assurance
 #: model_terms:ir.ui.view,arch_db:transport_assurance.view_assurance_sinistre_form
 msgid "Expertise"
-msgstr "Expert assessment"
+msgstr "Expertise"
 
 #. module: transport_assurance
 #: model:ir.model.fields,field_description:transport_assurance.field_transport_assurance_sinistre__expertise_demandee
 msgid "Expertise requested"
-msgstr "Expert assessment requested"
+msgstr "Expertise demandée"
 
 #. module: transport_assurance
 #: model_terms:ir.ui.view,arch_db:transport_assurance.report_echeancier
@@ -902,12 +902,12 @@ msgstr "Expiration"
 #: model_terms:ir.ui.view,arch_db:transport_assurance.view_assurance_bus_search
 #: model_terms:ir.ui.view,arch_db:transport_assurance.view_assurance_chauffeur_search
 msgid "Expired"
-msgstr "Expired"
+msgstr "Expirée"
 
 #. module: transport_assurance
 #: model_terms:ir.ui.view,arch_db:transport_assurance.report_bus_non_assures
 msgid "Expired on"
-msgstr "Expired on"
+msgstr "Expirée le"
 
 #. module: transport_assurance
 #: model:ir.model.fields,field_description:transport_assurance.field_transport_assurance_compagnie__fax
@@ -917,23 +917,23 @@ msgstr "Fax"
 #. module: transport_assurance
 #: model:ir.model.fields.selection,name:transport_assurance.selection__transport_assurance_sinistre__state__cloture
 msgid "Fence"
-msgstr "Closed"
+msgstr "Clôturé"
 
 #. module: transport_assurance
 #: model_terms:ir.ui.view,arch_db:transport_assurance.view_wizard_rapport_assurance_form
 msgid "Filters"
-msgstr "Filters"
+msgstr "Filtres"
 
 #. module: transport_assurance
 #: model_terms:ir.ui.view,arch_db:transport_assurance.report_polices_actives
 msgid "Fin"
-msgstr "End"
+msgstr "Fin"
 
 #. module: transport_assurance
 #: model_terms:ir.ui.view,arch_db:transport_assurance.view_assurance_bus_form
 #: model_terms:ir.ui.view,arch_db:transport_assurance.view_assurance_chauffeur_form
 msgid "Financial conditions"
-msgstr "Financial conditions"
+msgstr "Conditions financières"
 
 #. module: transport_assurance
 #: model:ir.model.fields,help:transport_assurance.field_transport_assurance_sinistre__tournee_id
@@ -941,18 +941,18 @@ msgid ""
 "Find out if the incident occurred during a tour. Requires the "
 "transport_exploitation module."
 msgstr ""
-"Indicates whether the incident occurred during a tour. Requires the "
-"transport_exploitation module."
+"Indique si l'incident s'est produit durant une tournée. Nécessite le module "
+"transport_exploitation."
 
 #. module: transport_assurance
 #: model:ir.model.fields.selection,name:transport_assurance.selection__transport_assurance_sinistre__nature_sinistre__incendie
 msgid "Fire"
-msgstr "Fire"
+msgstr "Incendie"
 
 #. module: transport_assurance
 #: model_terms:ir.ui.view,arch_db:transport_assurance.view_assurance_sinistre_form
 msgid "Follow up"
-msgstr "Follow-up"
+msgstr "Suivi"
 
 #. module: transport_assurance
 #: model:ir.model.fields,field_description:transport_assurance.field_transport_assurance_bus__message_follower_ids
@@ -960,7 +960,7 @@ msgstr "Follow-up"
 #: model:ir.model.fields,field_description:transport_assurance.field_transport_assurance_compagnie__message_follower_ids
 #: model:ir.model.fields,field_description:transport_assurance.field_transport_assurance_sinistre__message_follower_ids
 msgid "Followers"
-msgstr "Followers"
+msgstr "Abonnés"
 
 #. module: transport_assurance
 #: model:ir.model.fields,field_description:transport_assurance.field_transport_assurance_bus__message_partner_ids
@@ -968,7 +968,7 @@ msgstr "Followers"
 #: model:ir.model.fields,field_description:transport_assurance.field_transport_assurance_compagnie__message_partner_ids
 #: model:ir.model.fields,field_description:transport_assurance.field_transport_assurance_sinistre__message_partner_ids
 msgid "Followers (Partners)"
-msgstr "Followers (Partners)"
+msgstr "Abonnés (Partenaires)"
 
 #. module: transport_assurance
 #: model:ir.model.fields,help:transport_assurance.field_transport_assurance_bus__activity_type_icon
@@ -976,34 +976,34 @@ msgstr "Followers (Partners)"
 #: model:ir.model.fields,help:transport_assurance.field_transport_assurance_compagnie__activity_type_icon
 #: model:ir.model.fields,help:transport_assurance.field_transport_assurance_sinistre__activity_type_icon
 msgid "Font awesome icon e.g. fa-tasks"
-msgstr "Font Awesome icon e.g. fa-tasks"
+msgstr "Icône Font Awesome, ex. fa-tasks"
 
 #. module: transport_assurance
 #: model:ir.model.fields,field_description:transport_assurance.field_transport_assurance_wizard_rapport__type_police_id
 msgid "Font type (filter)"
-msgstr "Policy type (filter)"
+msgstr "Type de police (filtre)"
 
 #. module: transport_assurance
 #: model:ir.model.fields,help:transport_assurance.field_transport_assurance_chauffeur__compagnie_id
 msgid "For AT/CNAM, enter CNAM as the company."
-msgstr "For workplace accident (AT/CNAM) policies, set CNAM as the insurer."
+msgstr "Pour les polices AT/CNAM, saisir CNAM comme compagnie."
 
 #. module: transport_assurance
 #: model:ir.model.fields,help:transport_assurance.field_transport_assurance_chauffeur__beneficiaire
 msgid "For group life insurance: name of beneficiary in the event of death."
-msgstr "For group life insurance: name of the beneficiary in the event of death."
+msgstr "Pour l'assurance vie groupe : nom du bénéficiaire en cas de décès."
 
 #. module: transport_assurance
 #: model:ir.model.fields,field_description:transport_assurance.field_transport_assurance_bus__franchise
 #: model:ir.model.fields,field_description:transport_assurance.field_transport_assurance_chauffeur__franchise
 #: model:ir.model.fields,field_description:transport_assurance.field_transport_assurance_wizard_renouvellement__franchise
 msgid "Franchise (TND)"
-msgstr "Excess / Deductible (TND)"
+msgstr "Franchise (TND)"
 
 #. module: transport_assurance
 #: model:ir.model.fields,field_description:transport_assurance.field_transport_assurance_sinistre__franchise
 msgid "Franchise applicable"
-msgstr "Applicable excess"
+msgstr "Franchise applicable"
 
 #. module: transport_assurance
 #: model:res.groups,comment:transport_assurance.group_assurance_manager
@@ -1011,13 +1011,13 @@ msgid ""
 "Full access to the Insurance module, including configuration,\n"
 "                claims closure, validation of compensation and comprehensive reporting."
 msgstr ""
-"Full access to the Insurance module, including configuration,\n"
-"                claims closure, compensation validation and comprehensive reporting."
+"Accès complet au module Assurance, y compris la configuration,\n"
+"                la clôture des sinistres, la validation des indemnisations et les rapports complets."
 
 #. module: transport_assurance
 #: model:ir.model.fields.selection,name:transport_assurance.selection__transport_assurance_sinistre__gouvernorat__gabes
 msgid "Gabes"
-msgstr "Gabes"
+msgstr "Gabès"
 
 #. module: transport_assurance
 #: model:ir.model.fields.selection,name:transport_assurance.selection__transport_assurance_sinistre__gouvernorat__gafsa
@@ -1027,27 +1027,27 @@ msgstr "Gafsa"
 #. module: transport_assurance
 #: model:ir.ui.menu,name:transport_assurance.menu_assurance_wizard_rapport
 msgid "Generate a report"
-msgstr "Generate a report"
+msgstr "Générer un rapport"
 
 #. module: transport_assurance
 #: model_terms:ir.ui.view,arch_db:transport_assurance.view_wizard_rapport_assurance_form
 msgid "Generate the report"
-msgstr "Generate report"
+msgstr "Générer le rapport"
 
 #. module: transport_assurance
 #: model_terms:ir.ui.view,arch_db:transport_assurance.view_assurance_sinistre_form
 msgid "Generating fact"
-msgstr "Cause of loss"
+msgstr "Fait générateur"
 
 #. module: transport_assurance
 #: model:ir.model.fields,field_description:transport_assurance.field_transport_assurance_sinistre__gouvernorat
 msgid "Governorate"
-msgstr "Governorate"
+msgstr "Gouvernorat"
 
 #. module: transport_assurance
 #: model_terms:ir.ui.view,arch_db:transport_assurance.view_assurance_chauffeur_search
 msgid "Group life"
-msgstr "Group life"
+msgstr "Vie groupe"
 
 #. module: transport_assurance
 #: model:ir.model.fields,field_description:transport_assurance.field_transport_assurance_bus__has_message
@@ -1055,7 +1055,7 @@ msgstr "Group life"
 #: model:ir.model.fields,field_description:transport_assurance.field_transport_assurance_compagnie__has_message
 #: model:ir.model.fields,field_description:transport_assurance.field_transport_assurance_sinistre__has_message
 msgid "Has Message"
-msgstr "Has Message"
+msgstr "A un message"
 
 #. module: transport_assurance
 #: model:ir.model.fields,field_description:transport_assurance.field_transport_assurance_bus__id
@@ -1075,7 +1075,7 @@ msgstr "ID"
 #: model:ir.model.fields,field_description:transport_assurance.field_transport_assurance_compagnie__activity_exception_icon
 #: model:ir.model.fields,field_description:transport_assurance.field_transport_assurance_sinistre__activity_exception_icon
 msgid "Icon"
-msgstr "Icon"
+msgstr "Icône"
 
 #. module: transport_assurance
 #: model:ir.model.fields,help:transport_assurance.field_transport_assurance_bus__activity_exception_icon
@@ -1083,7 +1083,7 @@ msgstr "Icon"
 #: model:ir.model.fields,help:transport_assurance.field_transport_assurance_compagnie__activity_exception_icon
 #: model:ir.model.fields,help:transport_assurance.field_transport_assurance_sinistre__activity_exception_icon
 msgid "Icon to indicate an exception activity."
-msgstr "Icon to indicate an exception activity."
+msgstr "Icône pour signaler une activité d'exception."
 
 #. module: transport_assurance
 #: model_terms:ir.ui.view,arch_db:transport_assurance.view_assurance_compagnie_form
@@ -1093,7 +1093,7 @@ msgstr "Identification"
 #. module: transport_assurance
 #: model_terms:ir.ui.view,arch_db:transport_assurance.view_assurance_bus_form
 msgid "Identification police"
-msgstr "Policy identification"
+msgstr "Identification de la police"
 
 #. module: transport_assurance
 #: model:ir.model.fields,help:transport_assurance.field_transport_assurance_bus__message_needaction
@@ -1101,7 +1101,7 @@ msgstr "Policy identification"
 #: model:ir.model.fields,help:transport_assurance.field_transport_assurance_compagnie__message_needaction
 #: model:ir.model.fields,help:transport_assurance.field_transport_assurance_sinistre__message_needaction
 msgid "If checked, new messages require your attention."
-msgstr "If checked, new messages require your attention."
+msgstr "Si coché, de nouveaux messages nécessitent votre attention."
 
 #. module: transport_assurance
 #: model:ir.model.fields,help:transport_assurance.field_transport_assurance_bus__message_has_error
@@ -1113,7 +1113,7 @@ msgstr "If checked, new messages require your attention."
 #: model:ir.model.fields,help:transport_assurance.field_transport_assurance_sinistre__message_has_error
 #: model:ir.model.fields,help:transport_assurance.field_transport_assurance_sinistre__message_has_sms_error
 msgid "If checked, some messages have a delivery error."
-msgstr "If checked, some messages have a delivery error."
+msgstr "Si coché, certains messages ont une erreur de livraison."
 
 #. module: transport_assurance
 #: model:ir.model.fields,help:transport_assurance.field_transport_assurance_bus__is_obligatoire
@@ -1123,75 +1123,75 @@ msgid ""
 "If checked, the expiration of this policy without renewal blocks the bus in "
 "the Operations module (Tunisia rule)."
 msgstr ""
-"If checked, the expiration of this policy without renewal blocks the bus in "
-"the Operations module (Tunisia rule)."
+"Si coché, l'expiration de cette police sans renouvellement bloque le bus dans "
+"le module Exploitation (règle Tunisie)."
 
 #. module: transport_assurance
 #: model_terms:ir.ui.view,arch_db:transport_assurance.view_assurance_sinistre_search
 msgid "In progress"
-msgstr "In progress"
+msgstr "En cours"
 
 #. module: transport_assurance
 #: model:transport.assurance.type,name:transport_assurance.type_incendie_vol
 msgid "Incendie / Vol"
-msgstr "Fire / Theft"
+msgstr "Incendie / Vol"
 
 #. module: transport_assurance
 #: model:ir.model.fields,field_description:transport_assurance.field_transport_assurance_wizard_rapport__inclure_bus
 msgid "Include bus fonts"
-msgstr "Include bus policies"
+msgstr "Inclure les polices bus"
 
 #. module: transport_assurance
 #: model:ir.model.fields,field_description:transport_assurance.field_transport_assurance_wizard_rapport__inclure_chauffeurs
 msgid "Include driver fonts"
-msgstr "Include driver policies"
+msgstr "Inclure les polices chauffeur"
 
 #. module: transport_assurance
 #: model:ir.model,name:transport_assurance.model_transport_assurance_sinistre
 #: model_terms:ir.ui.view,arch_db:transport_assurance.view_assurance_sinistre_form
 msgid "Insurance claim"
-msgstr "Insurance claim"
+msgstr "Sinistre"
 
 #. module: transport_assurance
 #: model:ir.actions.act_window,name:transport_assurance.action_assurance_compagnie
 #: model:ir.ui.menu,name:transport_assurance.menu_assurance_compagnies
 #: model_terms:ir.ui.view,arch_db:transport_assurance.view_assurance_compagnie_list
 msgid "Insurance companies"
-msgstr "Insurance companies"
+msgstr "Compagnies d'assurance"
 
 #. module: transport_assurance
 #: model:ir.model,name:transport_assurance.model_transport_assurance_compagnie
 #: model_terms:ir.ui.view,arch_db:transport_assurance.view_assurance_compagnie_form
 msgid "Insurance company"
-msgstr "Insurance company"
+msgstr "Compagnie d'assurance"
 
 #. module: transport_assurance
 #: model:ir.actions.report,name:transport_assurance.report_echeancier_action
 msgid "Insurance deadline"
-msgstr "Insurance renewal schedule"
+msgstr "Échéancier assurance"
 
 #. module: transport_assurance
 #: model:ir.actions.act_window,name:transport_assurance.action_wizard_rapport_assurance
 #: model_terms:ir.ui.view,arch_db:transport_assurance.view_wizard_rapport_assurance_form
 msgid "Insurance reports"
-msgstr "Insurance reports"
+msgstr "Rapports assurance"
 
 #. module: transport_assurance
 #: model:ir.model.fields,field_description:transport_assurance.field_transport_assurance_chauffeur__capital_assure
 msgid "Insured capital / Ceiling"
-msgstr "Insured capital / Ceiling"
+msgstr "Capital assuré / Plafond"
 
 #. module: transport_assurance
 #: model:ir.model.fields,field_description:transport_assurance.field_transport_assurance_compagnie__notes
 #: model:ir.model.fields,field_description:transport_assurance.field_transport_assurance_type__notes
 msgid "Internal notes"
-msgstr "Internal notes"
+msgstr "Notes internes"
 
 #. module: transport_assurance
 #: model_terms:ir.ui.view,arch_db:transport_assurance.view_assurance_compagnie_form
 #: model_terms:ir.ui.view,arch_db:transport_assurance.view_assurance_type_form
 msgid "Internal notes…"
-msgstr "Internal notes…"
+msgstr "Notes internes…"
 
 #. module: transport_assurance
 #: model:ir.model.fields,field_description:transport_assurance.field_transport_assurance_bus__message_is_follower
@@ -1199,7 +1199,7 @@ msgstr "Internal notes…"
 #: model:ir.model.fields,field_description:transport_assurance.field_transport_assurance_compagnie__message_is_follower
 #: model:ir.model.fields,field_description:transport_assurance.field_transport_assurance_sinistre__message_is_follower
 msgid "Is Follower"
-msgstr "Is Follower"
+msgstr "Est abonné"
 
 #. module: transport_assurance
 #: model:ir.model.fields.selection,name:transport_assurance.selection__transport_assurance_sinistre__gouvernorat__jendouba
@@ -1219,7 +1219,7 @@ msgstr "Kasserine"
 #. module: transport_assurance
 #: model:ir.model.fields.selection,name:transport_assurance.selection__transport_assurance_sinistre__gouvernorat__kebili
 msgid "Kebili"
-msgstr "Kebili"
+msgstr "Kébili"
 
 #. module: transport_assurance
 #: model:ir.model.fields,field_description:transport_assurance.field_transport_assurance_bus__write_uid
@@ -1230,7 +1230,7 @@ msgstr "Kebili"
 #: model:ir.model.fields,field_description:transport_assurance.field_transport_assurance_wizard_rapport__write_uid
 #: model:ir.model.fields,field_description:transport_assurance.field_transport_assurance_wizard_renouvellement__write_uid
 msgid "Last Updated by"
-msgstr "Last Updated by"
+msgstr "Dernière modification par"
 
 #. module: transport_assurance
 #: model:ir.model.fields,field_description:transport_assurance.field_transport_assurance_bus__write_date
@@ -1241,49 +1241,49 @@ msgstr "Last Updated by"
 #: model:ir.model.fields,field_description:transport_assurance.field_transport_assurance_wizard_rapport__write_date
 #: model:ir.model.fields,field_description:transport_assurance.field_transport_assurance_wizard_renouvellement__write_date
 msgid "Last Updated on"
-msgstr "Last Updated on"
+msgstr "Dernière modification le"
 
 #. module: transport_assurance
 #: model_terms:ir.ui.view,arch_db:transport_assurance.report_bus_non_assures
 msgid "Last known font"
-msgstr "Last known policy"
+msgstr "Dernière police connue"
 
 #. module: transport_assurance
 #: model:ir.model.fields,field_description:transport_assurance.field_transport_assurance_chauffeur__job_id
 msgid "Later"
-msgstr "Job position"
+msgstr "Poste"
 
 #. module: transport_assurance
 #: model:ir.model.fields,field_description:transport_assurance.field_transport_assurance_type__base_legale
 msgid "Legal basis"
-msgstr "Legal basis"
+msgstr "Base légale"
 
 #. module: transport_assurance
 #: model:ir.model.fields,field_description:transport_assurance.field_transport_assurance_bus__is_obligatoire
 #: model:ir.model.fields,field_description:transport_assurance.field_transport_assurance_chauffeur__is_obligatoire
 #: model:ir.model.fields,field_description:transport_assurance.field_transport_assurance_type__is_obligatoire
 msgid "Legally required"
-msgstr "Legally required"
+msgstr "Obligatoire légalement"
 
 #. module: transport_assurance
 #: model_terms:ir.ui.view,arch_db:transport_assurance.report_sinistres
 msgid "Lieu"
-msgstr "Location"
+msgstr "Lieu"
 
 #. module: transport_assurance
 #: model:ir.model.fields,field_description:transport_assurance.field_transport_assurance_sinistre__lieu
 msgid "Location of the disaster"
-msgstr "Location of the incident"
+msgstr "Lieu du sinistre"
 
 #. module: transport_assurance
 #: model_terms:ir.ui.view,arch_db:transport_assurance.view_assurance_bus_form
 msgid "Loss experience"
-msgstr "Claims history"
+msgstr "Historique des sinistres"
 
 #. module: transport_assurance
 #: model:ir.model.fields.selection,name:transport_assurance.selection__transport_assurance_wizard_rapport__type_rapport__sinistralite
 msgid "Loss rate"
-msgstr "Loss ratio"
+msgstr "Taux de sinistralité"
 
 #. module: transport_assurance
 #: model:ir.model.fields.selection,name:transport_assurance.selection__transport_assurance_sinistre__gouvernorat__mahdia
@@ -1293,33 +1293,33 @@ msgstr "Mahdia"
 #. module: transport_assurance
 #: model:ir.model.fields,field_description:transport_assurance.field_transport_assurance_sinistre__expert_nom
 msgid "Mandated expert"
-msgstr "Appointed expert"
+msgstr "Expert mandaté"
 
 #. module: transport_assurance
 #: model_terms:ir.ui.view,arch_db:transport_assurance.view_assurance_bus_search
 #: model_terms:ir.ui.view,arch_db:transport_assurance.view_assurance_chauffeur_search
 msgid "Mandatory"
-msgstr "Mandatory"
+msgstr "Obligatoire"
 
 #. module: transport_assurance
 #: model:ir.model.fields,help:transport_assurance.field_transport_assurance_bus__date_visite_technique
 msgid "Mandatory before RC renewal in Tunisia."
-msgstr "Required before RC (third-party liability) renewal in Tunisia."
+msgstr "Obligatoire avant le renouvellement RC en Tunisie."
 
 #. module: transport_assurance
 #: model:ir.model.fields,help:transport_assurance.field_transport_assurance_wizard_renouvellement__date_visite_technique
 msgid "Mandatory for RC renewal (Tunisia rule)."
-msgstr "Required for RC renewal (Tunisia rule)."
+msgstr "Obligatoire pour le renouvellement RC (règle Tunisie)."
 
 #. module: transport_assurance
 #: model:ir.model.fields,help:transport_assurance.field_transport_assurance_chauffeur__capital_assure
 msgid "Maximum amount covered (e.g. life capital, health ceiling)."
-msgstr "Maximum amount covered (e.g. life insurance capital, health ceiling)."
+msgstr "Montant maximum couvert (ex. capital vie, plafond santé)."
 
 #. module: transport_assurance
 #: model:ir.model.fields.selection,name:transport_assurance.selection__transport_assurance_sinistre__gouvernorat__medenine
 msgid "Medenine"
-msgstr "Medenine"
+msgstr "Médenine"
 
 #. module: transport_assurance
 #: model:ir.model.fields,field_description:transport_assurance.field_transport_assurance_bus__message_has_error
@@ -1327,7 +1327,7 @@ msgstr "Medenine"
 #: model:ir.model.fields,field_description:transport_assurance.field_transport_assurance_compagnie__message_has_error
 #: model:ir.model.fields,field_description:transport_assurance.field_transport_assurance_sinistre__message_has_error
 msgid "Message Delivery error"
-msgstr "Message Delivery Error"
+msgstr "Erreur de livraison du message"
 
 #. module: transport_assurance
 #: model:ir.model.fields,field_description:transport_assurance.field_transport_assurance_bus__message_ids
@@ -1340,12 +1340,12 @@ msgstr "Messages"
 #. module: transport_assurance
 #: model:ir.model.fields,field_description:transport_assurance.field_transport_assurance_compagnie__numero_agrement
 msgid "Ministerial approval number"
-msgstr "Ministerial approval number"
+msgstr "Numéro d'agrément ministériel"
 
 #. module: transport_assurance
 #: model_terms:ir.ui.view,arch_db:transport_assurance.report_bus_non_assures
 msgid "Missing font type"
-msgstr "Missing policy type"
+msgstr "Type de police manquant"
 
 #. module: transport_assurance
 #: model:ir.model.fields.selection,name:transport_assurance.selection__transport_assurance_sinistre__gouvernorat__monastir
@@ -1355,18 +1355,18 @@ msgstr "Monastir"
 #. module: transport_assurance
 #: model:ir.model.fields,field_description:transport_assurance.field_transport_assurance_sinistre__responsable_id
 msgid "Monitoring manager"
-msgstr "Case manager"
+msgstr "Responsable du suivi"
 
 #. module: transport_assurance
 #: model_terms:ir.ui.view,arch_db:transport_assurance.view_assurance_sinistre_search
 msgid "Month"
-msgstr "Month"
+msgstr "Mois"
 
 #. module: transport_assurance
 #: model:ir.model.fields,field_description:transport_assurance.field_transport_assurance_bus__prime_mensuelle
 #: model:ir.model.fields,field_description:transport_assurance.field_transport_assurance_chauffeur__prime_mensuelle
 msgid "Monthly bonus"
-msgstr "Monthly premium"
+msgstr "Prime mensuelle"
 
 #. module: transport_assurance
 #: model:ir.model.fields,field_description:transport_assurance.field_transport_assurance_bus__my_activity_date_deadline
@@ -1374,7 +1374,7 @@ msgstr "Monthly premium"
 #: model:ir.model.fields,field_description:transport_assurance.field_transport_assurance_compagnie__my_activity_date_deadline
 #: model:ir.model.fields,field_description:transport_assurance.field_transport_assurance_sinistre__my_activity_date_deadline
 msgid "My Activity Deadline"
-msgstr "My Activity Deadline"
+msgstr "Échéance de mon activité"
 
 #. module: transport_assurance
 #: model:ir.model.fields.selection,name:transport_assurance.selection__transport_assurance_sinistre__gouvernorat__nabeul
@@ -1384,12 +1384,12 @@ msgstr "Nabeul"
 #. module: transport_assurance
 #: model:ir.model.fields,field_description:transport_assurance.field_transport_assurance_sinistre__tiers_nom
 msgid "Name of third party"
-msgstr "Third party name"
+msgstr "Nom du tiers"
 
 #. module: transport_assurance
 #: model:ir.model.fields.selection,name:transport_assurance.selection__transport_assurance_sinistre__nature_sinistre__catastrophe
 msgid "Natural disaster"
-msgstr "Natural disaster"
+msgstr "Catastrophe naturelle"
 
 #. module: transport_assurance
 #: model_terms:ir.ui.view,arch_db:transport_assurance.report_sinistres
@@ -1400,49 +1400,49 @@ msgstr "Nature"
 #. module: transport_assurance
 #: model:ir.model.fields,field_description:transport_assurance.field_transport_assurance_sinistre__nature_sinistre
 msgid "Nature of the disaster"
-msgstr "Nature of the incident"
+msgstr "Nature du sinistre"
 
 #. module: transport_assurance
 #: model:ir.model.fields,field_description:transport_assurance.field_transport_assurance_bus__nb_sinistres
 #: model:ir.model.fields,field_description:transport_assurance.field_transport_assurance_chauffeur__nb_sinistres
 msgid "Nb sinistres"
-msgstr "No. of claims"
+msgstr "Nb sinistres"
 
 #. module: transport_assurance
 #: model:ir.model.fields,field_description:transport_assurance.field_transport_assurance_sinistre__montant_net_verse
 #: model_terms:ir.ui.view,arch_db:transport_assurance.report_sinistres
 msgid "Net amount paid"
-msgstr "Net amount paid"
+msgstr "Montant net versé"
 
 #. module: transport_assurance
 #: model_terms:ir.ui.view,arch_db:transport_assurance.report_bus_non_assures
 msgid "Never assured"
-msgstr "Never insured"
+msgstr "Jamais assuré"
 
 #. module: transport_assurance
 #: model_terms:ir.ui.view,arch_db:transport_assurance.view_wizard_renouvellement_form
 msgid "New company"
-msgstr "New insurer"
+msgstr "Nouvelle compagnie"
 
 #. module: transport_assurance
 #: model_terms:ir.ui.view,arch_db:transport_assurance.view_wizard_renouvellement_form
 msgid "New conditions"
-msgstr "New conditions"
+msgstr "Nouvelles conditions"
 
 #. module: transport_assurance
 #: model:ir.model.fields,field_description:transport_assurance.field_transport_assurance_wizard_renouvellement__date_fin
 msgid "New end date"
-msgstr "New end date"
+msgstr "Nouvelle date de fin"
 
 #. module: transport_assurance
 #: model_terms:ir.ui.view,arch_db:transport_assurance.view_wizard_renouvellement_form
 msgid "New period"
-msgstr "New period"
+msgstr "Nouvelle période"
 
 #. module: transport_assurance
 #: model:ir.model.fields,field_description:transport_assurance.field_transport_assurance_wizard_renouvellement__date_debut
 msgid "New start date"
-msgstr "New start date"
+msgstr "Nouvelle date de début"
 
 #. module: transport_assurance
 #: model:ir.model.fields,field_description:transport_assurance.field_transport_assurance_bus__activity_date_deadline
@@ -1450,7 +1450,7 @@ msgstr "New start date"
 #: model:ir.model.fields,field_description:transport_assurance.field_transport_assurance_compagnie__activity_date_deadline
 #: model:ir.model.fields,field_description:transport_assurance.field_transport_assurance_sinistre__activity_date_deadline
 msgid "Next Activity Deadline"
-msgstr "Next Activity Deadline"
+msgstr "Échéance prochaine activité"
 
 #. module: transport_assurance
 #: model:ir.model.fields,field_description:transport_assurance.field_transport_assurance_bus__activity_summary
@@ -1458,7 +1458,7 @@ msgstr "Next Activity Deadline"
 #: model:ir.model.fields,field_description:transport_assurance.field_transport_assurance_compagnie__activity_summary
 #: model:ir.model.fields,field_description:transport_assurance.field_transport_assurance_sinistre__activity_summary
 msgid "Next Activity Summary"
-msgstr "Next Activity Summary"
+msgstr "Résumé prochaine activité"
 
 #. module: transport_assurance
 #: model:ir.model.fields,field_description:transport_assurance.field_transport_assurance_bus__activity_type_id
@@ -1466,12 +1466,12 @@ msgstr "Next Activity Summary"
 #: model:ir.model.fields,field_description:transport_assurance.field_transport_assurance_compagnie__activity_type_id
 #: model:ir.model.fields,field_description:transport_assurance.field_transport_assurance_sinistre__activity_type_id
 msgid "Next Activity Type"
-msgstr "Next Activity Type"
+msgstr "Type prochaine activité"
 
 #. module: transport_assurance
 #: model:ir.model.fields,field_description:transport_assurance.field_transport_assurance_bus__police_suivante_id
 msgid "Next font"
-msgstr "Next policy"
+msgstr "Police suivante"
 
 #. module: transport_assurance
 #: model_terms:ir.ui.view,arch_db:transport_assurance.view_assurance_bus_form
@@ -1484,7 +1484,7 @@ msgstr "Notes"
 #: model:ir.model.fields,field_description:transport_assurance.field_transport_assurance_chauffeur__notes
 #: model:ir.model.fields,field_description:transport_assurance.field_transport_assurance_wizard_renouvellement__notes
 msgid "Notes / Special conditions"
-msgstr "Notes / Special conditions"
+msgstr "Notes / Conditions particulières"
 
 #. module: transport_assurance
 #: model:ir.model.fields,field_description:transport_assurance.field_transport_assurance_bus__message_needaction_counter
@@ -1492,12 +1492,12 @@ msgstr "Notes / Special conditions"
 #: model:ir.model.fields,field_description:transport_assurance.field_transport_assurance_compagnie__message_needaction_counter
 #: model:ir.model.fields,field_description:transport_assurance.field_transport_assurance_sinistre__message_needaction_counter
 msgid "Number of Actions"
-msgstr "Number of Actions"
+msgstr "Nombre d'actions"
 
 #. module: transport_assurance
 #: model:ir.model.fields,field_description:transport_assurance.field_transport_assurance_sinistre__nb_deces
 msgid "Number of deaths"
-msgstr "Number of fatalities"
+msgstr "Nombre de décès"
 
 #. module: transport_assurance
 #: model:ir.model.fields,field_description:transport_assurance.field_transport_assurance_bus__message_has_error_counter
@@ -1505,12 +1505,12 @@ msgstr "Number of fatalities"
 #: model:ir.model.fields,field_description:transport_assurance.field_transport_assurance_compagnie__message_has_error_counter
 #: model:ir.model.fields,field_description:transport_assurance.field_transport_assurance_sinistre__message_has_error_counter
 msgid "Number of errors"
-msgstr "Number of errors"
+msgstr "Nombre d'erreurs"
 
 #. module: transport_assurance
 #: model:ir.model.fields,field_description:transport_assurance.field_transport_assurance_sinistre__nb_blesses
 msgid "Number of injured"
-msgstr "Number of injured"
+msgstr "Nombre de blessés"
 
 #. module: transport_assurance
 #: model:ir.model.fields,help:transport_assurance.field_transport_assurance_bus__message_needaction_counter
@@ -1518,7 +1518,7 @@ msgstr "Number of injured"
 #: model:ir.model.fields,help:transport_assurance.field_transport_assurance_compagnie__message_needaction_counter
 #: model:ir.model.fields,help:transport_assurance.field_transport_assurance_sinistre__message_needaction_counter
 msgid "Number of messages requiring action"
-msgstr "Number of messages requiring action"
+msgstr "Nombre de messages nécessitant une action"
 
 #. module: transport_assurance
 #: model:ir.model.fields,help:transport_assurance.field_transport_assurance_bus__message_has_error_counter
@@ -1526,60 +1526,60 @@ msgstr "Number of messages requiring action"
 #: model:ir.model.fields,help:transport_assurance.field_transport_assurance_compagnie__message_has_error_counter
 #: model:ir.model.fields,help:transport_assurance.field_transport_assurance_sinistre__message_has_error_counter
 msgid "Number of messages with delivery error"
-msgstr "Number of messages with delivery error"
+msgstr "Nombre de messages avec erreur de livraison"
 
 #. module: transport_assurance
 #: model:ir.model.fields,help:transport_assurance.field_transport_assurance_sinistre__nb_passagers
 msgid "Number of passengers on board at the time of the incident."
-msgstr "Number of passengers on board at the time of the incident."
+msgstr "Nombre de passagers à bord au moment de l'incident."
 
 #. module: transport_assurance
 #: model_terms:ir.ui.view,arch_db:transport_assurance.report_sinistres
 msgid "N° PV Police"
-msgstr "Police Report No."
+msgstr "N° PV Police"
 
 #. module: transport_assurance
 #: model:ir.model.fields,field_description:transport_assurance.field_transport_assurance_sinistre__numero_pv_police
 msgid "N° PV Police / Gendarmerie"
-msgstr "Police / Gendarmerie Report No."
+msgstr "N° PV Police / Gendarmerie"
 
 #. module: transport_assurance
 #: model:ir.model.fields,field_description:transport_assurance.field_transport_assurance_chauffeur__numero_police
 #: model_terms:ir.ui.view,arch_db:transport_assurance.report_echeancier
 #: model_terms:ir.ui.view,arch_db:transport_assurance.report_polices_actives
 msgid "N° Police"
-msgstr "Policy No."
+msgstr "N° Police"
 
 #. module: transport_assurance
 #: model:ir.model.fields,field_description:transport_assurance.field_transport_assurance_bus__numero_police
 msgid "N° Police assurance"
-msgstr "Insurance policy No."
+msgstr "N° Police assurance"
 
 #. module: transport_assurance
 #: model_terms:ir.ui.view,arch_db:transport_assurance.report_sinistres
 msgid "Objet"
-msgstr "Subject"
+msgstr "Objet"
 
 #. module: transport_assurance
 #: model_terms:ir.ui.view,arch_db:transport_assurance.report_echeancier
 msgid "Obligation."
-msgstr "Mandatory."
+msgstr "Obligation."
 
 #. module: transport_assurance
 #: model:ir.model.fields.selection,name:transport_assurance.selection__transport_assurance_sinistre__nature_sinistre__maladie
 msgid "Occupational illness"
-msgstr "Occupational illness"
+msgstr "Maladie professionnelle"
 
 #. module: transport_assurance
 #: model:ir.model.fields,field_description:transport_assurance.field_transport_assurance_wizard_rapport__date_debut
 msgid "Of"
-msgstr "From"
+msgstr "Du"
 
 #. module: transport_assurance
 #: model_terms:ir.ui.view,arch_db:transport_assurance.view_assurance_bus_search
 #: model_terms:ir.ui.view,arch_db:transport_assurance.view_assurance_chauffeur_search
 msgid "On alert"
-msgstr "On alert"
+msgstr "En alerte"
 
 #. module: transport_assurance
 #: model_terms:ir.ui.view,arch_db:transport_assurance.view_wizard_rapport_assurance_form
@@ -1589,215 +1589,215 @@ msgstr "Options"
 #. module: transport_assurance
 #: model:ir.model.fields.selection,name:transport_assurance.selection__transport_assurance_sinistre__nature_sinistre__autre
 msgid "Other"
-msgstr "Other"
+msgstr "Autre"
 
 #. module: transport_assurance
 #: model_terms:ir.ui.view,arch_db:transport_assurance.view_assurance_sinistre_form
 msgid "PV Police / Gendarmerie"
-msgstr "Police / Gendarmerie Report"
+msgstr "PV Police / Gendarmerie"
 
 #. module: transport_assurance
 #: model:ir.model.fields,field_description:transport_assurance.field_transport_assurance_sinistre__nb_passagers
 msgid "Passengers carried"
-msgstr "Passengers on board"
+msgstr "Passagers transportés"
 
 #. module: transport_assurance
 #: model_terms:ir.ui.view,arch_db:transport_assurance.view_wizard_rapport_assurance_form
 msgid "Period"
-msgstr "Period"
+msgstr "Période"
 
 #. module: transport_assurance
 #: model:ir.model.fields,field_description:transport_assurance.field_transport_assurance_compagnie__telephone
 msgid "Phone"
-msgstr "Phone"
+msgstr "Téléphone"
 
 #. module: transport_assurance
 #: model_terms:ir.ui.view,arch_db:transport_assurance.view_assurance_chauffeur_form
 msgid "Police"
-msgstr "Policy"
+msgstr "Police"
 
 #. module: transport_assurance
 #: model:ir.model,name:transport_assurance.model_transport_assurance_bus
 #: model_terms:ir.ui.view,arch_db:transport_assurance.view_assurance_bus_form
 msgid "Police assurance bus"
-msgstr "Bus insurance policy"
+msgstr "Police assurance bus"
 
 #. module: transport_assurance
 #: model_terms:ir.ui.view,arch_db:transport_assurance.view_assurance_chauffeur_form
 msgid "Police assurance chauffeur"
-msgstr "Driver insurance policy"
+msgstr "Police assurance chauffeur"
 
 #. module: transport_assurance
 #: model:ir.model.fields,field_description:transport_assurance.field_transport_assurance_sinistre__police_bus_id
 #: model:ir.model.fields.selection,name:transport_assurance.selection__transport_assurance_wizard_renouvellement__type_renouvellement__bus
 msgid "Police bus"
-msgstr "Bus policy"
+msgstr "Police bus"
 
 #. module: transport_assurance
 #: model:ir.model.fields,field_description:transport_assurance.field_transport_assurance_sinistre__police_chauffeur_id
 #: model:ir.model.fields.selection,name:transport_assurance.selection__transport_assurance_wizard_renouvellement__type_renouvellement__chauffeur
 msgid "Police chauffeur"
-msgstr "Driver policy"
+msgstr "Police chauffeur"
 
 #. module: transport_assurance
 #: model:ir.model.fields.selection,name:transport_assurance.selection__transport_assurance_wizard_rapport__type_rapport__polices_actives
 msgid "Polices actives (bus + chauffeurs)"
-msgstr "Active policies (bus + drivers)"
+msgstr "Polices actives (bus + chauffeurs)"
 
 #. module: transport_assurance
 #: model:ir.actions.act_window,name:transport_assurance.action_assurance_bus
 #: model_terms:ir.ui.view,arch_db:transport_assurance.view_assurance_bus_list
 msgid "Polices assurance bus"
-msgstr "Bus insurance policies"
+msgstr "Polices assurance bus"
 
 #. module: transport_assurance
 #: model:ir.ui.menu,name:transport_assurance.menu_assurance_bus_root
 #: model_terms:ir.ui.view,arch_db:transport_assurance.report_polices_actives
 msgid "Polices bus"
-msgstr "Bus policies"
+msgstr "Polices bus"
 
 #. module: transport_assurance
 #: model:ir.model.fields,field_description:transport_assurance.field_transport_assurance_compagnie__nb_polices_bus
 msgid "Polices bus actives"
-msgstr "Active bus policies"
+msgstr "Polices bus actives"
 
 #. module: transport_assurance
 #: model_terms:ir.ui.view,arch_db:transport_assurance.view_wizard_renouvellement_form
 msgid "Policy to be renewed"
-msgstr "Policy to be renewed"
+msgstr "Police à renouveler"
 
 #. module: transport_assurance
 #: model:ir.model.fields,field_description:transport_assurance.field_transport_assurance_compagnie__contact_poste
 msgid "Position / Function"
-msgstr "Position / Function"
+msgstr "Poste / Fonction"
 
 #. module: transport_assurance
 #: model:ir.model.fields,field_description:transport_assurance.field_transport_assurance_bus__police_precedente_id
 msgid "Previous font"
-msgstr "Previous policy"
+msgstr "Police précédente"
 
 #. module: transport_assurance
 #: model_terms:ir.ui.view,arch_db:transport_assurance.report_echeancier
 #: model_terms:ir.ui.view,arch_db:transport_assurance.report_polices_actives
 msgid "Prime/an"
-msgstr "Premium/year"
+msgstr "Prime/an"
 
 #. module: transport_assurance
 #: model:ir.model.fields,help:transport_assurance.field_transport_assurance_chauffeur__numero_cnam
 msgid "Provide information for AT policies linked to the CNAM."
-msgstr "Required for workplace accident (AT) policies linked to the CNAM."
+msgstr "Renseigner pour les polices AT liées à la CNAM."
 
 #. module: transport_assurance
 #: model:ir.model.fields,field_description:transport_assurance.field_transport_assurance_sinistre__objet_sinistre
 #: model_terms:ir.ui.view,arch_db:transport_assurance.view_assurance_sinistre_form
 msgid "Purpose of the claim"
-msgstr "Claim subject"
+msgstr "Objet du sinistre"
 
 #. module: transport_assurance
 #: model_terms:ir.ui.view,arch_db:transport_assurance.view_assurance_bus_search
 msgid "RC"
-msgstr "Third-party liability (RC)"
+msgstr "RC"
 
 #. module: transport_assurance
 #: model:ir.model.fields,field_description:transport_assurance.field_transport_assurance_wizard_rapport__type_rapport
 msgid "Rapport"
-msgstr "Report type"
+msgstr "Rapport"
 
 #. module: transport_assurance
 #: model:res.groups,comment:transport_assurance.group_assurance_user
 msgid "Read only on policies and claims."
-msgstr "Read-only access to policies and claims."
+msgstr "Lecture seule sur les polices et les sinistres."
 
 #. module: transport_assurance
 #: model_terms:ir.ui.view,arch_db:transport_assurance.view_assurance_sinistre_form
 msgid "Reason for rejection or reduction of the amount…"
-msgstr "Reason for rejection or reduction of the amount…"
+msgstr "Motif de rejet ou de réduction du montant…"
 
 #. module: transport_assurance
 #: model:ir.model.fields,field_description:transport_assurance.field_transport_assurance_sinistre__motif_rejet
 #: model_terms:ir.ui.view,arch_db:transport_assurance.report_sinistres
 msgid "Reason for rejection/reduction"
-msgstr "Reason for rejection/reduction"
+msgstr "Motif de rejet / réduction"
 
 #. module: transport_assurance
 #: model_terms:ir.ui.view,arch_db:transport_assurance.report_echeancier
 msgid "Red = expires in ≤ 15 days | Orange = expires in ≤ 90 days"
-msgstr "Red = expires in ≤ 15 days | Orange = expires in ≤ 90 days"
+msgstr "Rouge = expire dans ≤ 15 jours | Orange = expire dans ≤ 90 jours"
 
 #. module: transport_assurance
 #: model:ir.model.fields,field_description:transport_assurance.field_transport_assurance_chauffeur__name
 msgid "Reference"
-msgstr "Reference"
+msgstr "Référence"
 
 #. module: transport_assurance
 #: model:ir.model.fields,help:transport_assurance.field_transport_assurance_type__base_legale
 msgid "Regulatory reference (e.g. Decree No. X of DD/MM/YYYY)"
-msgstr "Regulatory reference (e.g. Decree No. X of DD/MM/YYYY)"
+msgstr "Référence réglementaire (ex. Décret n° X du JJ/MM/AAAA)"
 
 #. module: transport_assurance
 #: model:ir.model.fields.selection,name:transport_assurance.selection__transport_assurance_sinistre__state__rejete
 #: model_terms:ir.ui.view,arch_db:transport_assurance.view_assurance_sinistre_search
 msgid "Rejected"
-msgstr "Rejected"
+msgstr "Rejeté"
 
 #. module: transport_assurance
 #: model:ir.model.fields,field_description:transport_assurance.field_transport_assurance_bus__sinistre_ids
 #: model:ir.model.fields,field_description:transport_assurance.field_transport_assurance_chauffeur__sinistre_ids
 #: model_terms:ir.ui.view,arch_db:transport_assurance.view_assurance_bus_form
 msgid "Related claims"
-msgstr "Related claims"
+msgstr "Sinistres associés"
 
 #. module: transport_assurance
 #: model:ir.model.fields,field_description:transport_assurance.field_transport_assurance_chauffeur__lien_beneficiaire
 msgid "Relationship with the insured"
-msgstr "Relationship to the insured"
+msgstr "Lien avec l'assuré"
 
 #. module: transport_assurance
 #: model:ir.model.fields,field_description:transport_assurance.field_transport_assurance_chauffeur__jours_restants
 msgid "Remaining days"
-msgstr "Days remaining"
+msgstr "Jours restants"
 
 #. module: transport_assurance
 #: model_terms:ir.ui.view,arch_db:transport_assurance.view_assurance_bus_form
 #: model_terms:ir.ui.view,arch_db:transport_assurance.view_assurance_chauffeur_form
 msgid "Renew"
-msgstr "Renew"
+msgstr "Renouveler"
 
 #. module: transport_assurance
 #: model_terms:ir.ui.view,arch_db:transport_assurance.view_wizard_renouvellement_form
 msgid "Renew the policy"
-msgstr "Renew the policy"
+msgstr "Renouveler la police"
 
 #. module: transport_assurance
 #: model:ir.model.fields,field_description:transport_assurance.field_transport_assurance_bus__est_renouvelable
 msgid "Renewal possible"
-msgstr "Renewable"
+msgstr "Renouvellement possible"
 
 #. module: transport_assurance
 #: model:ir.model.fields.selection,name:transport_assurance.selection__transport_assurance_wizard_rapport__type_rapport__echeancier
 #: model_terms:ir.ui.view,arch_db:transport_assurance.report_echeancier
 msgid "Renewal schedule"
-msgstr "Renewal schedule"
+msgstr "Échéancier de renouvellement"
 
 #. module: transport_assurance
 #: model:ir.ui.menu,name:transport_assurance.menu_assurance_rapports
 msgid "Reports"
-msgstr "Reports"
+msgstr "Rapports"
 
 #. module: transport_assurance
 #: model:transport.assurance.type,name:transport_assurance.type_rc
 msgid "Responsabilité civile (RC)"
-msgstr "Third-Party Liability (RC)"
+msgstr "Responsabilité civile (RC)"
 
 #. module: transport_assurance
 #: model:transport.assurance.type,name:transport_assurance.type_rc_pro
 msgid "Responsabilité civile professionnelle"
-msgstr "Professional Third-Party Liability"
+msgstr "Responsabilité civile professionnelle"
 
 #. module: transport_assurance
 #: model:res.groups,name:transport_assurance.group_assurance_manager
 msgid "Responsible"
-msgstr "Manager"
+msgstr "Responsable"
 
 #. module: transport_assurance
 #: model:ir.model.fields,field_description:transport_assurance.field_transport_assurance_bus__activity_user_id
@@ -1805,12 +1805,12 @@ msgstr "Manager"
 #: model:ir.model.fields,field_description:transport_assurance.field_transport_assurance_compagnie__activity_user_id
 #: model:ir.model.fields,field_description:transport_assurance.field_transport_assurance_sinistre__activity_user_id
 msgid "Responsible User"
-msgstr "Responsible User"
+msgstr "Utilisateur responsable"
 
 #. module: transport_assurance
 #: model_terms:ir.ui.view,arch_db:transport_assurance.view_assurance_sinistre_form
 msgid "Return to draft"
-msgstr "Reset to draft"
+msgstr "Remettre en brouillon"
 
 #. module: transport_assurance
 #: model:ir.model.fields,field_description:transport_assurance.field_transport_assurance_bus__message_has_sms_error
@@ -1818,27 +1818,27 @@ msgstr "Reset to draft"
 #: model:ir.model.fields,field_description:transport_assurance.field_transport_assurance_compagnie__message_has_sms_error
 #: model:ir.model.fields,field_description:transport_assurance.field_transport_assurance_sinistre__message_has_sms_error
 msgid "SMS Delivery error"
-msgstr "SMS Delivery Error"
+msgstr "Erreur de livraison SMS"
 
 #. module: transport_assurance
 #: model_terms:ir.ui.view,arch_db:transport_assurance.view_assurance_bus_search
 msgid "Search bus fonts"
-msgstr "Search bus policies"
+msgstr "Rechercher des polices bus"
 
 #. module: transport_assurance
 #: model_terms:ir.ui.view,arch_db:transport_assurance.view_assurance_chauffeur_search
 msgid "Search for driver policies"
-msgstr "Search driver policies"
+msgstr "Rechercher des polices chauffeur"
 
 #. module: transport_assurance
 #: model_terms:ir.ui.view,arch_db:transport_assurance.view_assurance_bus_form
 msgid "See claims"
-msgstr "View claims"
+msgstr "Voir les sinistres"
 
 #. module: transport_assurance
 #: model:ir.model.fields,field_description:transport_assurance.field_transport_assurance_type__sequence
 msgid "Sequence"
-msgstr "Sequence"
+msgstr "Séquence"
 
 #. module: transport_assurance
 #: model:ir.model.fields.selection,name:transport_assurance.selection__transport_assurance_sinistre__gouvernorat__sfax
@@ -1848,7 +1848,7 @@ msgstr "Sfax"
 #. module: transport_assurance
 #: model:ir.model.fields,help:transport_assurance.field_transport_assurance_compagnie__code
 msgid "Short identifier (e.g. STAR, GAT, COMAR, etc.)"
-msgstr "Short identifier (e.g. STAR, GAT, COMAR, etc.)"
+msgstr "Identifiant court (ex. STAR, GAT, COMAR, etc.)"
 
 #. module: transport_assurance
 #: model:ir.model.fields.selection,name:transport_assurance.selection__transport_assurance_sinistre__gouvernorat__sidi_bouzid
@@ -1863,7 +1863,7 @@ msgstr "Siliana"
 #. module: transport_assurance
 #: model:ir.model.fields,field_description:transport_assurance.field_transport_assurance_compagnie__site_web
 msgid "Site web"
-msgstr "Website"
+msgstr "Site web"
 
 #. module: transport_assurance
 #: model:ir.model.fields.selection,name:transport_assurance.selection__transport_assurance_sinistre__gouvernorat__sousse
@@ -1873,23 +1873,23 @@ msgstr "Sousse"
 #. module: transport_assurance
 #: model_terms:ir.ui.view,arch_db:transport_assurance.view_wizard_renouvellement_form
 msgid "Special conditions of the new contract…"
-msgstr "Special conditions of the new contract…"
+msgstr "Conditions particulières du nouveau contrat…"
 
 #. module: transport_assurance
 #: model_terms:ir.ui.view,arch_db:transport_assurance.view_assurance_chauffeur_form
 msgid "Special conditions…"
-msgstr "Special conditions…"
+msgstr "Conditions particulières…"
 
 #. module: transport_assurance
 #: model:ir.model.fields,field_description:transport_assurance.field_transport_assurance_bus__date_debut
 #: model:ir.model.fields,field_description:transport_assurance.field_transport_assurance_chauffeur__date_debut
 msgid "Start date"
-msgstr "Start date"
+msgstr "Date de début"
 
 #. module: transport_assurance
 #: model_terms:ir.ui.view,arch_db:transport_assurance.view_assurance_compagnie_form
 msgid "Statistics"
-msgstr "Statistics"
+msgstr "Statistiques"
 
 #. module: transport_assurance
 #: model:ir.model.fields,help:transport_assurance.field_transport_assurance_bus__activity_state
@@ -1902,10 +1902,10 @@ msgid ""
 "Today: Activity date is today\n"
 "Planned: Future activities."
 msgstr ""
-"Status based on activities\n"
-"Overdue: Due date is already passed\n"
-"Today: Activity date is today\n"
-"Planned: Future activities."
+"Statut basé sur les activités\n"
+"En retard : La date d'échéance est dépassée\n"
+"Aujourd'hui : L'activité est prévue aujourd'hui\n"
+"Planifié : Activités futures."
 
 #. module: transport_assurance
 #: model_terms:ir.ui.view,arch_db:transport_assurance.report_echeancier
@@ -1922,30 +1922,30 @@ msgstr "Tataouine"
 #. module: transport_assurance
 #: model_terms:ir.ui.view,arch_db:transport_assurance.view_wizard_renouvellement_form
 msgid "Technical visit (obligatory for RC)"
-msgstr "Technical inspection (mandatory for RC)"
+msgstr "Visite technique (obligatoire pour la RC)"
 
 #. module: transport_assurance
 #: model:ir.model.fields,field_description:transport_assurance.field_transport_assurance_bus__date_visite_technique
 #: model:ir.model.fields,field_description:transport_assurance.field_transport_assurance_wizard_renouvellement__date_visite_technique
 msgid "Technical visit date"
-msgstr "Technical inspection date"
+msgstr "Date de visite technique"
 
 #. module: transport_assurance
 #: model:ir.model.fields.selection,name:transport_assurance.selection__transport_assurance_sinistre__nature_sinistre__tentative_vol
 msgid "Tentative de vol"
-msgstr "Attempted theft"
+msgstr "Tentative de vol"
 
 #. module: transport_assurance
 #: model_terms:ir.ui.view,arch_db:transport_assurance.view_assurance_bus_form
 #: model_terms:ir.ui.view,arch_db:transport_assurance.view_assurance_chauffeur_form
 msgid "Terminate"
-msgstr "Terminate"
+msgstr "Résilier"
 
 #. module: transport_assurance
 #: model:ir.model.fields.selection,name:transport_assurance.selection__transport_assurance_bus__state__résiliée
 #: model:ir.model.fields.selection,name:transport_assurance.selection__transport_assurance_chauffeur__state__résiliée
 msgid "Terminated"
-msgstr "Terminated"
+msgstr "Résiliée"
 
 #. module: transport_assurance
 #: model:ir.model.fields.selection,name:transport_assurance.selection__transport_assurance_sinistre__gouvernorat__kef
@@ -1955,58 +1955,58 @@ msgstr "Le Kef"
 #. module: transport_assurance
 #: model:ir.model.fields.selection,name:transport_assurance.selection__transport_assurance_sinistre__gouvernorat__manouba
 msgid "The Manouba"
-msgstr "Manouba"
+msgstr "La Manouba"
 
 #. module: transport_assurance
 #: model_terms:ir.ui.view,arch_db:transport_assurance.view_assurance_sinistre_form
 msgid "Third parties & Victims"
-msgstr "Third parties & Victims"
+msgstr "Tiers & Victimes"
 
 #. module: transport_assurance
 #: model:ir.model.fields,field_description:transport_assurance.field_transport_assurance_sinistre__tiers_assurance
 msgid "Third party insurance"
-msgstr "Third party insurance"
+msgstr "Assurance du tiers"
 
 #. module: transport_assurance
 #: model:ir.model.fields,field_description:transport_assurance.field_transport_assurance_sinistre__tiers_implique
 #: model_terms:ir.ui.view,arch_db:transport_assurance.view_assurance_sinistre_form
 msgid "Third party involved"
-msgstr "Third party involved"
+msgstr "Tiers impliqué"
 
 #. module: transport_assurance
 #: model:ir.model.fields,field_description:transport_assurance.field_transport_assurance_sinistre__tiers_vehicule
 msgid "Third party vehicle registration"
-msgstr "Third party vehicle registration"
+msgstr "Immatriculation du véhicule du tiers"
 
 #. module: transport_assurance
 #: model:ir.model.fields,field_description:transport_assurance.field_transport_assurance_sinistre__heure_sinistre
 msgid "Time (h)"
-msgstr "Time (h)"
+msgstr "Heure (h)"
 
 #. module: transport_assurance
 #: model:ir.model.fields,field_description:transport_assurance.field_transport_assurance_wizard_rapport__echeance_horizon
 msgid "Time horizon"
-msgstr "Time horizon"
+msgstr "Horizon temporel"
 
 #. module: transport_assurance
 #: model_terms:ir.ui.view,arch_db:transport_assurance.view_assurance_sinistre_form
 msgid "To announce"
-msgstr "To notify"
+msgstr "À déclarer"
 
 #. module: transport_assurance
 #: model_terms:ir.ui.view,arch_db:transport_assurance.view_assurance_sinistre_form
 msgid "To enclose"
-msgstr "To enclose"
+msgstr "À joindre"
 
 #. module: transport_assurance
 #: model:ir.model.fields,field_description:transport_assurance.field_transport_assurance_bus__montant_total_indemnise
 msgid "Total compensated"
-msgstr "Total indemnified"
+msgstr "Total indemnisé"
 
 #. module: transport_assurance
 #: model:transport.assurance.type,name:transport_assurance.type_tous_risques
 msgid "Tous risques"
-msgstr "Comprehensive (All Risks)"
+msgstr "Tous risques"
 
 #. module: transport_assurance
 #: model:ir.model.fields.selection,name:transport_assurance.selection__transport_assurance_sinistre__gouvernorat__tozeur
@@ -2033,12 +2033,12 @@ msgstr "Type"
 #: model:ir.model.fields,field_description:transport_assurance.field_transport_assurance_wizard_renouvellement__type_police_id
 #: model_terms:ir.ui.view,arch_db:transport_assurance.view_assurance_type_form
 msgid "Type de police"
-msgstr "Policy type"
+msgstr "Type de police"
 
 #. module: transport_assurance
 #: model:ir.model,name:transport_assurance.model_transport_assurance_type
 msgid "Type of insurance policy"
-msgstr "Insurance policy type"
+msgstr "Type de police d'assurance"
 
 #. module: transport_assurance
 #: model:ir.model.fields,help:transport_assurance.field_transport_assurance_bus__activity_exception_decoration
@@ -2046,85 +2046,85 @@ msgstr "Insurance policy type"
 #: model:ir.model.fields,help:transport_assurance.field_transport_assurance_compagnie__activity_exception_decoration
 #: model:ir.model.fields,help:transport_assurance.field_transport_assurance_sinistre__activity_exception_decoration
 msgid "Type of the exception activity on record."
-msgstr "Type of the exception activity on record."
+msgstr "Type de l'activité d'exception enregistrée."
 
 #. module: transport_assurance
 #: model:ir.actions.act_window,name:transport_assurance.action_assurance_type
 #: model:ir.ui.menu,name:transport_assurance.menu_assurance_types
 #: model_terms:ir.ui.view,arch_db:transport_assurance.view_assurance_type_list
 msgid "Types of fonts"
-msgstr "Policy types"
+msgstr "Types de polices"
 
 #. module: transport_assurance
 #: model:ir.model.fields.selection,name:transport_assurance.selection__transport_assurance_sinistre__state__instruction
 msgid "Under instruction"
-msgstr "Under review"
+msgstr "En instruction"
 
 #. module: transport_assurance
 #: model:ir.actions.report,name:transport_assurance.report_bus_non_assures_action
 msgid "Uninsured buses — Legal alert"
-msgstr "Uninsured buses — Legal alert"
+msgstr "Bus non assurés — Alerte juridique"
 
 #. module: transport_assurance
 #: model:ir.model.fields.selection,name:transport_assurance.selection__transport_assurance_wizard_rapport__type_rapport__bus_non_assures
 msgid "Uninsured buses — legal alert"
-msgstr "Uninsured buses — legal alert"
+msgstr "Bus non assurés — alerte juridique"
 
 #. module: transport_assurance
 #: model:res.groups,name:transport_assurance.group_assurance_user
 msgid "User"
-msgstr "User"
+msgstr "Utilisateur"
 
 #. module: transport_assurance
 #: model:ir.model.fields,field_description:transport_assurance.field_transport_assurance_bus__visite_technique_valide
 msgid "Valid technical visit"
-msgstr "Valid technical inspection"
+msgstr "Visite technique valide"
 
 #. module: transport_assurance
 #: model_terms:ir.ui.view,arch_db:transport_assurance.view_assurance_bus_form
 #: model_terms:ir.ui.view,arch_db:transport_assurance.view_assurance_chauffeur_form
 msgid "Validity"
-msgstr "Validity"
+msgstr "Validité"
 
 #. module: transport_assurance
 #: model:ir.model.fields.selection,name:transport_assurance.selection__transport_assurance_sinistre__nature_sinistre__vandalisme
 msgid "Vandalism / Damage"
-msgstr "Vandalism / Damage"
+msgstr "Vandalisme / Dégradation"
 
 #. module: transport_assurance
 #: model_terms:ir.ui.view,arch_db:transport_assurance.view_assurance_sinistre_search
 msgid "Vehicle"
-msgstr "Vehicle"
+msgstr "Véhicule"
 
 #. module: transport_assurance
 #: model:ir.model.fields,field_description:transport_assurance.field_transport_assurance_sinistre__vehicle_id
 msgid "Vehicle (Bus)"
-msgstr "Vehicle (Bus)"
+msgstr "Véhicule (Bus)"
 
 #. module: transport_assurance
 #: model:ir.model.fields.selection,name:transport_assurance.selection__transport_assurance_sinistre__nature_sinistre__vol
 msgid "Vehicle theft"
-msgstr "Vehicle theft"
+msgstr "Vol de véhicule"
 
 #. module: transport_assurance
 #: model_terms:ir.ui.view,arch_db:transport_assurance.view_assurance_sinistre_form
 msgid "Victims"
-msgstr "Victims"
+msgstr "Victimes"
 
 #. module: transport_assurance
 #: model:ir.model.fields,field_description:transport_assurance.field_transport_assurance_compagnie__ville
 msgid "Ville"
-msgstr "City"
+msgstr "Ville"
 
 #. module: transport_assurance
 #: model_terms:ir.ui.view,arch_db:transport_assurance.view_assurance_bus_search
 msgid "Voyage"
-msgstr "Travel / Passengers"
+msgstr "Voyage"
 
 #. module: transport_assurance
 #: model:transport.assurance.type,name:transport_assurance.type_voyage
 msgid "Voyage / Passagers"
-msgstr "Travel / Passengers"
+msgstr "Voyage / Passagers"
 
 #. module: transport_assurance
 #: model:ir.model.fields,field_description:transport_assurance.field_transport_assurance_bus__website_message_ids
@@ -2132,7 +2132,7 @@ msgstr "Travel / Passengers"
 #: model:ir.model.fields,field_description:transport_assurance.field_transport_assurance_compagnie__website_message_ids
 #: model:ir.model.fields,field_description:transport_assurance.field_transport_assurance_sinistre__website_message_ids
 msgid "Website Messages"
-msgstr "Website Messages"
+msgstr "Messages du site web"
 
 #. module: transport_assurance
 #: model:ir.model.fields,help:transport_assurance.field_transport_assurance_bus__website_message_ids
@@ -2140,27 +2140,27 @@ msgstr "Website Messages"
 #: model:ir.model.fields,help:transport_assurance.field_transport_assurance_compagnie__website_message_ids
 #: model:ir.model.fields,help:transport_assurance.field_transport_assurance_sinistre__website_message_ids
 msgid "Website communication history"
-msgstr "Website communication history"
+msgstr "Historique des communications du site web"
 
 #. module: transport_assurance
 #: model:ir.model,name:transport_assurance.model_transport_assurance_wizard_rapport
 msgid "Wizard Insurance Reports"
-msgstr "Insurance Report Wizard"
+msgstr "Assistant rapports assurance"
 
 #. module: transport_assurance
 #: model:ir.model,name:transport_assurance.model_transport_assurance_wizard_renouvellement
 msgid "Wizard insurance policy renewal"
-msgstr "Policy renewal wizard"
+msgstr "Assistant renouvellement de police"
 
 #. module: transport_assurance
 #: model:ir.model.fields,field_description:transport_assurance.field_transport_assurance_type__name
 msgid "Wording"
-msgstr "Label"
+msgstr "Libellé"
 
 #. module: transport_assurance
 #: model:ir.model.fields.selection,name:transport_assurance.selection__transport_assurance_sinistre__nature_sinistre__accident_travail
 msgid "Work accident"
-msgstr "Work accident"
+msgstr "Accident du travail"
 
 #. module: transport_assurance
 #: model:ir.model.fields.selection,name:transport_assurance.selection__transport_assurance_sinistre__gouvernorat__zaghouan
@@ -2170,17 +2170,17 @@ msgstr "Zaghouan"
 #. module: transport_assurance
 #: model_terms:ir.ui.view,arch_db:transport_assurance.view_assurance_chauffeur_form
 msgid "days. Proceed with renewal."
-msgstr "days. Please proceed with renewal."
+msgstr "jours. Procéder au renouvellement."
 
 #. module: transport_assurance
 #: model_terms:ir.ui.view,arch_db:transport_assurance.view_assurance_sinistre_form
 msgid "education"
-msgstr "training"
+msgstr "formation"
 
 #. module: transport_assurance
 #: model:ir.model.fields.selection,name:transport_assurance.selection__transport_assurance_sinistre__gouvernorat__beja
 msgid "vessel"
-msgstr "Beja"
+msgstr "Béja"
 
 #. module: transport_assurance
 #: model:ir.model.fields,field_description:transport_assurance.field_transport_assurance_bus__state
@@ -2191,9 +2191,9 @@ msgstr "Beja"
 #: model_terms:ir.ui.view,arch_db:transport_assurance.view_assurance_chauffeur_search
 #: model_terms:ir.ui.view,arch_db:transport_assurance.view_assurance_sinistre_search
 msgid "État"
-msgstr "Status"
+msgstr "État"
 
 #. module: transport_assurance
 #: model_terms:ir.ui.view,arch_db:transport_assurance.report_polices_actives
 msgid "★ Legally obligatory policy (Tunisia)"
-msgstr "★ Legally mandatory policy (Tunisia)"
+msgstr "★ Police légalement obligatoire (Tunisie)"

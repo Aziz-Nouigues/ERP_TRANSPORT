@@ -1,0 +1,472 @@
+# Translation of Odoo Server.
+# This file contains the translation of the following modules:
+# 	* fleet_etat_bus
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: Odoo Server 19.0\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2026-05-24 18:29+0000\n"
+"PO-Revision-Date: 2026-05-24 18:29+0000\n"
+"Last-Translator: \n"
+"Language-Team: \n"
+"Language: en_US\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: \n"
+"Plural-Forms: \n"
+
+#. module: fleet_etat_bus
+#: model_terms:ir.ui.view,arch_db:fleet_etat_bus.view_fleet_vehicle_form_etat_inherit
+msgid ""
+"<i class=\"fa fa-ban me-1\"/>\n"
+"                    Ce véhicule est <strong>indisponible</strong> — il ne peut pas être affecté à une tournée."
+msgstr ""
+"<i class=\"fa fa-ban me-1\"/>\n"
+"                    This vehicle is <strong>unavailable</strong> — it cannot be assigned to a route."
+
+#. module: fleet_etat_bus
+#: model_terms:ir.ui.view,arch_db:fleet_etat_bus.view_fleet_vehicle_form_etat_inherit
+msgid ""
+"<i class=\"fa fa-check-circle me-1\"/>\n"
+"                    Ce véhicule est <strong>en service</strong>."
+msgstr ""
+"<i class=\"fa fa-check-circle me-1\"/>\n"
+"                    This vehicle is <strong>in service</strong>."
+
+#. module: fleet_etat_bus
+#: model_terms:ir.ui.view,arch_db:fleet_etat_bus.view_fleet_vehicle_form_etat_inherit
+msgid ""
+"<i class=\"fa fa-tachometer me-1\"/>\n"
+"                        Compteur <strong>en panne</strong> — le kilométrage sera estimé\n"
+"                        automatiquement dans les tournées (Départ + Km prévus)."
+msgstr ""
+"<i class=\"fa fa-tachometer me-1\"/>\n"
+"                        Odometer <strong>faulty</strong> — mileage will be estimated\n"
+"                        automatically in routes (Departure + Planned km)."
+
+#. module: fleet_etat_bus
+#: model_terms:ir.ui.view,arch_db:fleet_etat_bus.view_fleet_vehicle_form_etat_inherit
+msgid ""
+"<i class=\"fa fa-wrench me-1\"/>\n"
+"                    Ce véhicule est <strong>en maintenance</strong>."
+msgstr ""
+"<i class=\"fa fa-wrench me-1\"/>\n"
+"                    This vehicle is <strong>under maintenance</strong>."
+
+#. module: fleet_etat_bus
+#: model_terms:ir.ui.view,arch_db:fleet_etat_bus.view_fleet_vehicle_parc_list
+msgid "Activité"
+msgstr "Activity"
+
+#. module: fleet_etat_bus
+#: model_terms:ir.ui.view,arch_db:fleet_etat_bus.view_fleet_vehicle_parc_search
+msgid "Activité interurbaine"
+msgstr "Intercity Activity"
+
+#. module: fleet_etat_bus
+#: model_terms:ir.ui.view,arch_db:fleet_etat_bus.view_fleet_vehicle_parc_search
+msgid "Activité urbaine"
+msgstr "Urban Activity"
+
+#. module: fleet_etat_bus
+#: model_terms:ir.ui.view,arch_db:fleet_etat_bus.view_fleet_vehicle_parc_list
+#: model_terms:ir.ui.view,arch_db:fleet_etat_bus.view_fleet_vehicle_parc_search
+msgid "Agence"
+msgstr "Agency"
+
+#. module: fleet_etat_bus
+#: model_terms:ir.ui.view,arch_db:fleet_etat_bus.view_fleet_vehicle_form_etat_inherit
+msgid "Ancienne valeur (km)"
+msgstr "Previous value (km)"
+
+#. module: fleet_etat_bus
+#: model_terms:ir.ui.view,arch_db:fleet_etat_bus.view_wizard_changement_etat_form
+msgid "Annuler"
+msgstr "Cancel"
+
+#. module: fleet_etat_bus
+#: model_terms:ir.ui.view,arch_db:fleet_etat_bus.view_fleet_vehicle_form_etat_inherit
+msgid ""
+"Aucun changement d'état enregistré.\n"
+"                        Utilisez le bouton <strong>\"Changer l'état\"</strong> pour commencer."
+msgstr ""
+"No status change recorded.\n"
+"                        Use the <strong>\"Change Status\"</strong> button to get started."
+
+#. module: fleet_etat_bus
+#: model_terms:ir.actions.act_window,help:fleet_etat_bus.action_fleet_parc_complet
+msgid "Aucun véhicule dans le parc."
+msgstr "No vehicles in the fleet."
+
+#. module: fleet_etat_bus
+#: model_terms:ir.ui.view,arch_db:fleet_etat_bus.view_fleet_vehicle_form_etat_inherit
+msgid "Aucune cause renseignée"
+msgstr "No reason provided"
+
+#. module: fleet_etat_bus
+#: model:ir.actions.act_window,name:fleet_etat_bus.action_fleet_en_panne
+msgid "Bus en panne"
+msgstr "Buses Out of Order"
+
+#. module: fleet_etat_bus
+#: model:ir.ui.menu,name:fleet_etat_bus.menu_parc_en_panne
+msgid "Bus indisponibles"
+msgstr "Unavailable Buses"
+
+#. module: fleet_etat_bus
+#: model_terms:ir.ui.view,arch_db:fleet_etat_bus.view_fleet_vehicle_parc_list
+msgid "Cause"
+msgstr "Reason"
+
+#. module: fleet_etat_bus
+#: model:ir.model.fields,field_description:fleet_etat_bus.field_fleet_vehicle_historique_etat__cause
+#: model:ir.model.fields,field_description:fleet_etat_bus.field_fleet_wizard_changement_etat__cause
+#: model_terms:ir.ui.view,arch_db:fleet_etat_bus.view_fleet_vehicle_form_etat_inherit
+msgid "Cause / Motif"
+msgstr "Cause / Reason"
+
+#. module: fleet_etat_bus
+#: model:ir.model.fields,field_description:fleet_etat_bus.field_fleet_wizard_changement_etat__state_cause_actuelle
+#: model_terms:ir.ui.view,arch_db:fleet_etat_bus.view_wizard_changement_etat_form
+msgid "Cause actuelle"
+msgstr "Current Reason"
+
+#. module: fleet_etat_bus
+#: model_terms:ir.ui.view,arch_db:fleet_etat_bus.view_fleet_vehicle_form_etat_inherit
+msgid "Changer l'état"
+msgstr "Change Status"
+
+#. module: fleet_etat_bus
+#: model_terms:ir.ui.view,arch_db:fleet_etat_bus.view_wizard_changement_etat_form
+msgid "Changer l'état du véhicule"
+msgstr "Change Vehicle Status"
+
+#. module: fleet_etat_bus
+#: model_terms:ir.ui.view,arch_db:fleet_etat_bus.view_fleet_vehicle_parc_list
+#: model_terms:ir.ui.view,arch_db:fleet_etat_bus.view_fleet_vehicle_parc_search
+msgid "Code interne"
+msgstr "Internal Code"
+
+#. module: fleet_etat_bus
+#: model_terms:ir.ui.view,arch_db:fleet_etat_bus.view_fleet_vehicle_parc_list
+msgid "Compteur"
+msgstr "Odometer"
+
+#. module: fleet_etat_bus
+#: model:ir.actions.act_window,name:fleet_etat_bus.action_fleet_compteur_panne
+#: model:ir.ui.menu,name:fleet_etat_bus.menu_parc_compteur_panne
+msgid "Compteur défaillant"
+msgstr "Faulty Odometer"
+
+#. module: fleet_etat_bus
+#: model_terms:ir.ui.view,arch_db:fleet_etat_bus.view_fleet_vehicle_parc_search
+msgid "Compteur en panne"
+msgstr "Odometer Out of Order"
+
+#. module: fleet_etat_bus
+#: model_terms:ir.ui.view,arch_db:fleet_etat_bus.view_fleet_vehicle_form_etat_inherit
+msgid "Compteur kilométrique"
+msgstr "Odometer"
+
+#. module: fleet_etat_bus
+#: model_terms:ir.ui.view,arch_db:fleet_etat_bus.view_fleet_vehicle_parc_search
+msgid "Compteur remplacé"
+msgstr "Odometer Replaced"
+
+#. module: fleet_etat_bus
+#: model_terms:ir.ui.view,arch_db:fleet_etat_bus.view_wizard_changement_etat_form
+msgid "Confirmer le changement"
+msgstr "Confirm Change"
+
+#. module: fleet_etat_bus
+#: model:ir.model.fields,field_description:fleet_etat_bus.field_fleet_vehicle_historique_etat__create_uid
+#: model:ir.model.fields,field_description:fleet_etat_bus.field_fleet_wizard_changement_etat__create_uid
+msgid "Created by"
+msgstr "Created by"
+
+#. module: fleet_etat_bus
+#: model:ir.model.fields,field_description:fleet_etat_bus.field_fleet_vehicle_historique_etat__create_date
+#: model:ir.model.fields,field_description:fleet_etat_bus.field_fleet_wizard_changement_etat__create_date
+msgid "Created on"
+msgstr "Created on"
+
+#. module: fleet_etat_bus
+#: model:ir.model.fields,help:fleet_etat_bus.field_fleet_wizard_changement_etat__state_actuel_id
+msgid "Current state of the vehicle"
+msgstr "Current state of the vehicle"
+
+#. module: fleet_etat_bus
+#: model_terms:ir.ui.view,arch_db:fleet_etat_bus.view_fleet_vehicle_form_etat_inherit
+msgid "Date remplacement"
+msgstr "Replacement Date"
+
+#. module: fleet_etat_bus
+#: model_terms:ir.ui.view,arch_db:fleet_etat_bus.view_fleet_vehicle_form_etat_inherit
+msgid "Depuis"
+msgstr "Since"
+
+#. module: fleet_etat_bus
+#: model:ir.model.fields,field_description:fleet_etat_bus.field_fleet_vehicle_historique_etat__date_debut
+#: model:ir.model.fields,field_description:fleet_etat_bus.field_fleet_wizard_changement_etat__date_debut
+#: model_terms:ir.ui.view,arch_db:fleet_etat_bus.view_wizard_changement_etat_form
+msgid "Depuis le"
+msgstr "From"
+
+#. module: fleet_etat_bus
+#: model:ir.model.fields,field_description:fleet_etat_bus.field_fleet_vehicle__display_name
+#: model:ir.model.fields,field_description:fleet_etat_bus.field_fleet_vehicle_historique_etat__display_name
+#: model:ir.model.fields,field_description:fleet_etat_bus.field_fleet_wizard_changement_etat__display_name
+msgid "Display Name"
+msgstr "Display Name"
+
+#. module: fleet_etat_bus
+#: model_terms:ir.ui.view,arch_db:fleet_etat_bus.view_fleet_historique_etat_list
+#: model_terms:ir.ui.view,arch_db:fleet_etat_bus.view_fleet_vehicle_form_etat_inherit
+msgid "Durée (j)"
+msgstr "Duration (d)"
+
+#. module: fleet_etat_bus
+#: model:ir.model.fields,field_description:fleet_etat_bus.field_fleet_vehicle_historique_etat__duree_jours
+#: model_terms:ir.ui.view,arch_db:fleet_etat_bus.view_fleet_vehicle_form_etat_inherit
+msgid "Durée (jours)"
+msgstr "Duration (days)"
+
+#. module: fleet_etat_bus
+#: model:ir.model.fields,help:fleet_etat_bus.field_fleet_wizard_changement_etat__cause
+msgid ""
+"Décrivez la raison du changement d'état.\n"
+"Ex: Panne moteur sur la ligne L12, Révision 50 000 km, Retour en service après réparation…"
+msgstr ""
+"Describe the reason for the status change.\n"
+"E.g.: Engine failure on line L12, 50,000 km service, Return to service after repair…"
+
+#. module: fleet_etat_bus
+#: model:ir.model.fields,field_description:fleet_etat_bus.field_fleet_wizard_changement_etat__state_date_debut_actuelle
+#: model_terms:ir.ui.view,arch_db:fleet_etat_bus.view_fleet_vehicle_form_etat_inherit
+#: model_terms:ir.ui.view,arch_db:fleet_etat_bus.view_fleet_vehicle_parc_list
+msgid "En cet état depuis"
+msgstr "In This Status Since"
+
+#. module: fleet_etat_bus
+#: model:fleet.vehicle.state,name:fleet_etat_bus.fleet_state_en_maintenance
+#: model_terms:ir.ui.view,arch_db:fleet_etat_bus.view_fleet_vehicle_parc_search
+msgid "En maintenance"
+msgstr "Under Maintenance"
+
+#. module: fleet_etat_bus
+#: model:fleet.vehicle.state,name:fleet_etat_bus.fleet_state_en_panne
+#: model_terms:ir.ui.view,arch_db:fleet_etat_bus.view_fleet_vehicle_parc_search
+msgid "En panne"
+msgstr "Out of Order"
+
+#. module: fleet_etat_bus
+#: model:fleet.vehicle.state,name:fleet_etat_bus.fleet_state_en_service
+#: model_terms:ir.ui.view,arch_db:fleet_etat_bus.view_fleet_vehicle_parc_search
+msgid "En service"
+msgstr "In Service"
+
+#. module: fleet_etat_bus
+#: model:ir.model.fields,field_description:fleet_etat_bus.field_fleet_vehicle_historique_etat__responsable_id
+msgid "Enregistré par"
+msgstr "Recorded by"
+
+#. module: fleet_etat_bus
+#: model_terms:ir.ui.view,arch_db:fleet_etat_bus.view_wizard_changement_etat_form
+msgid "Ex: Panne moteur sur ligne L12, retour atelier prévu le..."
+msgstr "E.g.: Engine failure on line L12, return to workshop expected on..."
+
+#. module: fleet_etat_bus
+#: model_terms:ir.ui.view,arch_db:fleet_etat_bus.view_fleet_vehicle_form_etat_inherit
+msgid "Historique"
+msgstr "History"
+
+#. module: fleet_etat_bus
+#: model:ir.actions.act_window,name:fleet_etat_bus.action_fleet_historique_global
+#: model:ir.ui.menu,name:fleet_etat_bus.menu_parc_historique_etats
+#: model_terms:ir.ui.view,arch_db:fleet_etat_bus.view_fleet_vehicle_form_etat_inherit
+msgid "Historique des états"
+msgstr "Status History"
+
+#. module: fleet_etat_bus
+#: model:ir.model,name:fleet_etat_bus.model_fleet_vehicle_historique_etat
+msgid "Historique des états du véhicule"
+msgstr "Vehicle Status History"
+
+#. module: fleet_etat_bus
+#: model_terms:ir.ui.view,arch_db:fleet_etat_bus.view_fleet_historique_etat_list
+msgid "Historique états"
+msgstr "Status History"
+
+#. module: fleet_etat_bus
+#: model:fleet.vehicle.state,name:fleet_etat_bus.fleet_state_hors_service
+msgid "Hors service"
+msgstr "Out of Service"
+
+#. module: fleet_etat_bus
+#: model_terms:ir.ui.view,arch_db:fleet_etat_bus.view_fleet_vehicle_parc_search
+msgid "Hors service / Réformé"
+msgstr "Out of Service / Decommissioned"
+
+#. module: fleet_etat_bus
+#: model:ir.model.fields,field_description:fleet_etat_bus.field_fleet_vehicle__id
+#: model:ir.model.fields,field_description:fleet_etat_bus.field_fleet_vehicle_historique_etat__id
+#: model:ir.model.fields,field_description:fleet_etat_bus.field_fleet_wizard_changement_etat__id
+msgid "ID"
+msgstr "ID"
+
+#. module: fleet_etat_bus
+#: model_terms:ir.ui.view,arch_db:fleet_etat_bus.view_fleet_vehicle_parc_list
+#: model_terms:ir.ui.view,arch_db:fleet_etat_bus.view_fleet_vehicle_parc_search
+msgid "Immatriculation"
+msgstr "License Plate"
+
+#. module: fleet_etat_bus
+#: model:ir.model.fields.selection,name:fleet_etat_bus.selection__fleet_vehicle__type_vehicule__interurbain
+msgid "Interurbain"
+msgstr "Intercity"
+
+#. module: fleet_etat_bus
+#: model_terms:ir.ui.view,arch_db:fleet_etat_bus.view_fleet_vehicle_parc_list
+msgid "Jours"
+msgstr "Days"
+
+#. module: fleet_etat_bus
+#: model:ir.model.fields,field_description:fleet_etat_bus.field_fleet_vehicle_historique_etat__date_fin
+#: model_terms:ir.ui.view,arch_db:fleet_etat_bus.view_fleet_vehicle_form_etat_inherit
+msgid "Jusqu'au"
+msgstr "Until"
+
+#. module: fleet_etat_bus
+#: model:ir.model.fields,field_description:fleet_etat_bus.field_fleet_vehicle_historique_etat__write_uid
+#: model:ir.model.fields,field_description:fleet_etat_bus.field_fleet_wizard_changement_etat__write_uid
+msgid "Last Updated by"
+msgstr "Last Updated by"
+
+#. module: fleet_etat_bus
+#: model:ir.model.fields,field_description:fleet_etat_bus.field_fleet_vehicle_historique_etat__write_date
+#: model:ir.model.fields,field_description:fleet_etat_bus.field_fleet_wizard_changement_etat__write_date
+msgid "Last Updated on"
+msgstr "Last Updated on"
+
+#. module: fleet_etat_bus
+#: model:ir.model.fields.selection,name:fleet_etat_bus.selection__fleet_vehicle__type_vehicule__mixte
+msgid "Mixte (Urbain + Interurbain)"
+msgstr "Mixed (Urban + Intercity)"
+
+#. module: fleet_etat_bus
+#: model_terms:ir.ui.view,arch_db:fleet_etat_bus.view_wizard_changement_etat_form
+msgid "Nouveau statut"
+msgstr "New Status"
+
+#. module: fleet_etat_bus
+#: model:ir.model.fields,field_description:fleet_etat_bus.field_fleet_wizard_changement_etat__new_state_id
+msgid "Nouvel état"
+msgstr "New State"
+
+#. module: fleet_etat_bus
+#: model:ir.model.fields,field_description:fleet_etat_bus.field_fleet_vehicle_historique_etat__notes
+msgid "Observations"
+msgstr "Observations"
+
+#. module: fleet_etat_bus
+#: model:ir.model.fields,field_description:fleet_etat_bus.field_fleet_wizard_changement_etat__notes
+msgid "Observations complémentaires"
+msgstr "Additional Notes"
+
+#. module: fleet_etat_bus
+#: model_terms:ir.ui.view,arch_db:fleet_etat_bus.view_wizard_changement_etat_form
+msgid "Observations complémentaires (optionnel)"
+msgstr "Additional Notes (optional)"
+
+#. module: fleet_etat_bus
+#: model_terms:ir.ui.view,arch_db:fleet_etat_bus.view_fleet_vehicle_form_etat_inherit
+msgid "Par"
+msgstr "By"
+
+#. module: fleet_etat_bus
+#: model:ir.ui.menu,name:fleet_etat_bus.menu_parc_bus_root
+msgid "Parc Bus"
+msgstr "Bus Fleet"
+
+#. module: fleet_etat_bus
+#: model:ir.actions.act_window,name:fleet_etat_bus.action_fleet_parc_complet
+#: model_terms:ir.ui.view,arch_db:fleet_etat_bus.view_fleet_vehicle_parc_list
+msgid "Parc Véhicules"
+msgstr "Vehicle Fleet"
+
+#. module: fleet_etat_bus
+#: model:ir.model.fields,help:fleet_etat_bus.field_fleet_wizard_changement_etat__state_cause_actuelle
+msgid ""
+"Raison du passage à l'état actuel (ex: panne moteur, révision périodique…)"
+msgstr ""
+"Reason for entering the current status (e.g.: engine failure, scheduled service…)"
+
+#. module: fleet_etat_bus
+#: model_terms:ir.ui.view,arch_db:fleet_etat_bus.view_fleet_vehicle_parc_search
+msgid "Rechercher un bus"
+msgstr "Search for a bus"
+
+#. module: fleet_etat_bus
+#: model:fleet.vehicle.state,name:fleet_etat_bus.fleet_state_reforme
+msgid "Réformé"
+msgstr "Decommissioned"
+
+#. module: fleet_etat_bus
+#: model:ir.ui.menu,name:fleet_etat_bus.menu_parc_tous
+msgid "Tous les véhicules"
+msgstr "All Vehicles"
+
+#. module: fleet_etat_bus
+#: model_terms:ir.ui.view,arch_db:fleet_etat_bus.view_fleet_vehicle_parc_list
+msgid "Type"
+msgstr "Type"
+
+#. module: fleet_etat_bus
+#: model_terms:ir.ui.view,arch_db:fleet_etat_bus.view_fleet_vehicle_parc_search
+msgid "Type de bus"
+msgstr "Bus Type"
+
+#. module: fleet_etat_bus
+#: model:ir.model.fields.selection,name:fleet_etat_bus.selection__fleet_vehicle__type_vehicule__urbain
+msgid "Urbain"
+msgstr "Urban"
+
+#. module: fleet_etat_bus
+#: model:ir.model,name:fleet_etat_bus.model_fleet_vehicle
+msgid "Vehicle"
+msgstr "Vehicle"
+
+#. module: fleet_etat_bus
+#: model:ir.model.fields,field_description:fleet_etat_bus.field_fleet_vehicle_historique_etat__vehicle_id
+#: model:ir.model.fields,field_description:fleet_etat_bus.field_fleet_wizard_changement_etat__vehicle_id
+msgid "Véhicule"
+msgstr "Vehicle"
+
+#. module: fleet_etat_bus
+#: model:ir.model,name:fleet_etat_bus.model_fleet_wizard_changement_etat
+msgid "Wizard — Changement état véhicule"
+msgstr "Wizard — Vehicle Status Change"
+
+#. module: fleet_etat_bus
+#: model:ir.model.fields,field_description:fleet_etat_bus.field_fleet_vehicle_historique_etat__state_id
+#: model_terms:ir.ui.view,arch_db:fleet_etat_bus.view_fleet_vehicle_parc_list
+#: model_terms:ir.ui.view,arch_db:fleet_etat_bus.view_fleet_vehicle_parc_search
+msgid "État"
+msgstr "Status"
+
+#. module: fleet_etat_bus
+#: model:ir.model.fields,field_description:fleet_etat_bus.field_fleet_wizard_changement_etat__state_actuel_id
+#: model_terms:ir.ui.view,arch_db:fleet_etat_bus.view_wizard_changement_etat_form
+msgid "État actuel"
+msgstr "Current Status"
+
+#. module: fleet_etat_bus
+#: model_terms:ir.ui.view,arch_db:fleet_etat_bus.view_fleet_vehicle_parc_search
+msgid "État compteur"
+msgstr "Odometer Status"
+
+#. module: fleet_etat_bus
+#: model_terms:ir.ui.view,arch_db:fleet_etat_bus.view_fleet_vehicle_form_etat_inherit
+msgid "État du compteur"
+msgstr "Odometer Status"

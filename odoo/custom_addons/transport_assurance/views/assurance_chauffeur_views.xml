@@ -12,7 +12,7 @@
                             invisible="state != 'brouillon'"/>
                     <button name="action_renouveler" string="Renouveler" type="object"
                             class="oe_highlight"
-                            invisible="state not in ('active','alerte','expirée')"/>
+                            invisible="state not in ('active','alerte','expiree')"/>
                     <button name="action_resilier" string="Résilier" type="object"
                             invisible="state not in ('active','alerte')"/>
                     <field name="state" widget="statusbar"
@@ -21,12 +21,8 @@
 
                 <div class="alert alert-warning" role="alert"
                      invisible="state != 'alerte'">
-                    <p>
-                        <strong translate="True">⚠ Échéance proche</strong> —
-                        <span translate="True">Cette police expire dans</span>
-                        <field name="jours_restants" readonly="1"/>
-                        <span translate="True">jours. Procédez au renouvellement.</span>
-                    </p>
+                    <strong>⚠ Échéance proche</strong> — Cette police expire dans
+                    <field name="jours_restants" readonly="1"/> jours. Procédez au renouvellement.
                 </div>
 
                 <sheet>
@@ -103,7 +99,7 @@
         <field name="model">transport.assurance.chauffeur</field>
         <field name="arch" type="xml">
             <list string="Polices assurance chauffeurs"
-                  decoration-danger="state in ('expirée','résiliée')"
+                  decoration-danger="state in ('expiree','resiliee')"
                   decoration-warning="state == 'alerte'"
                   decoration-success="state == 'active'">
                 <field name="numero_police"/>
@@ -120,7 +116,7 @@
                 <field name="state" widget="badge"
                        decoration-success="state == 'active'"
                        decoration-warning="state == 'alerte'"
-                       decoration-danger="state in ('expirée','résiliée')"/>
+                       decoration-danger="state in ('expiree','resiliee')"/>
             </list>
         </field>
     </record>
@@ -136,7 +132,7 @@
                 <field name="numero_police"/>
                 <filter string="Actives" name="actives" domain="[('state','=','active')]"/>
                 <filter string="En alerte" name="alerte" domain="[('state','=','alerte')]"/>
-                <filter string="Expirées" name="expirees" domain="[('state','=','expirée')]"/>
+                <filter string="Expirées" name="expirees" domain="[('state','=','expiree')]"/>
                 <filter string="Obligatoires" name="obligatoires" domain="[('is_obligatoire','=',True)]"/>
                 <separator/>
                 <filter string="AT / CNAM" name="at" domain="[('type_police_id.code','=','AT_CNAM')]"/>

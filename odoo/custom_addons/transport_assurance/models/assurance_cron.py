@@ -27,7 +27,7 @@ class AssuranceCron(models.AbstractModel):
             ('date_fin', '<', today),
         ])
         if polices_bus_exp:
-            polices_bus_exp.write({'state': 'expirée'})
+            polices_bus_exp.write({'state': 'expiree'})
             _logger.info('ASSURANCE — %d polices bus passées en expirée', len(polices_bus_exp))
 
         polices_bus_alerte = self.env['transport.assurance.bus'].search([
@@ -45,7 +45,7 @@ class AssuranceCron(models.AbstractModel):
             ('date_fin', '<', today),
         ])
         if polices_chf_exp:
-            polices_chf_exp.write({'state': 'expirée'})
+            polices_chf_exp.write({'state': 'expiree'})
             _logger.info('ASSURANCE — %d polices chauffeur passées en expirée', len(polices_chf_exp))
 
         polices_chf_alerte = self.env['transport.assurance.chauffeur'].search([

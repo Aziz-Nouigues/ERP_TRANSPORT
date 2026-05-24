@@ -135,8 +135,8 @@ class AssuranceChauffeur(models.Model):
         ('brouillon',  'Brouillon'),
         ('active',     'Active'),
         ('alerte',     'Alerte échéance'),
-        ('expirée',    'Expirée'),
-        ('résiliée',   'Résiliée'),
+        ('expiree',    'Expirée'),
+        ('resiliee',   'Résiliée'),
     ], string='État', default='brouillon', tracking=True, required=True)
 
     # ── ALERTES ──────────────────────────────────────────────────
@@ -228,9 +228,9 @@ class AssuranceChauffeur(models.Model):
 
     def action_resilier(self):
         for rec in self:
-            if rec.state not in ('active', 'alerte', 'expirée'):
+            if rec.state not in ('active', 'alerte', 'expiree'):
                 raise UserError('Impossible de résilier une police dans cet état.')
-            rec.state = 'résiliée'
+            rec.state = 'resiliee'
 
     def action_renouveler(self):
         self.ensure_one()

@@ -1,0 +1,4189 @@
+# Translation of Odoo Server.
+# This file contains the translation of the following modules:
+# 	* transport_energy
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: Odoo Server 19.0\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2026-05-24 11:11+0000\n"
+"PO-Revision-Date: 2026-05-24 11:11+0000\n"
+"Last-Translator: \n"
+"Language-Team: Arabic\n"
+"Language: ar_001\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=6; plural=n==0 ? 0 : n==1 ? 1 : n==2 ? 2 : n%100>=3 && n%100<=10 ? 3 : n%100>=11 && n%100<=99 ? 4 : 5;\n"
+
+#. module: transport_energy
+#: model:ir.model.fields.selection,name:transport_energy.selection__transport_wizard_rapport__langue__ar
+msgid " عربي"
+msgstr "عربي"
+
+#. module: transport_energy
+#: model_terms:ir.ui.view,arch_db:transport_energy.rapport_stats_agence_template
+msgid "100 %"
+msgstr "100 %"
+
+#. module: transport_energy
+#: model_terms:ir.ui.view,arch_db:transport_energy.report_bge_template
+msgid ""
+"<br/>\n"
+"                                <strong>Mode paiement :</strong>"
+msgstr ""
+"<br/>\n"
+"                                <strong>طريقة الدفع :</strong>"
+
+#. module: transport_energy
+#: model_terms:ir.ui.view,arch_db:transport_energy.report_bge_template
+msgid ""
+"<br/>\n"
+"                                <strong>Station externe :</strong>"
+msgstr ""
+"<br/>\n"
+"                                <strong>المحطة الخارجية :</strong>"
+
+#. module: transport_energy
+#: model_terms:ir.ui.view,arch_db:transport_energy.report_bge_template
+msgid ""
+"<br/>\n"
+"                                <strong>Statut :</strong>"
+msgstr ""
+"<br/>\n"
+"                                <strong>الحالة :</strong>"
+
+#. module: transport_energy
+#: model_terms:ir.ui.view,arch_db:transport_energy.report_bge_template
+msgid ""
+"<br/>\n"
+"                                <strong>Ville :</strong>"
+msgstr ""
+"<br/>\n"
+"                                <strong>المدينة :</strong>"
+
+#. module: transport_energy
+#: model_terms:ir.ui.view,arch_db:transport_energy.rapport_lubrifiant_template
+#: model_terms:ir.ui.view,arch_db:transport_energy.rapport_par_vehicule_template
+#: model_terms:ir.ui.view,arch_db:transport_energy.rapport_rotation_chauffeurs_template
+#: model_terms:ir.ui.view,arch_db:transport_energy.rapport_stats_agence_template
+#: model_terms:ir.ui.view,arch_db:transport_energy.rapport_vehicules_admin_template
+#: model_terms:ir.ui.view,arch_db:transport_energy.template_bge
+#: model_terms:ir.ui.view,arch_db:transport_energy.template_bgi
+#: model_terms:ir.ui.view,arch_db:transport_energy.template_excessif
+#: model_terms:ir.ui.view,arch_db:transport_energy.template_recap
+msgid "<br/><br/><br/>___________________"
+msgstr "<br/><br/><br/>___________________"
+
+#. module: transport_energy
+#: model_terms:ir.ui.view,arch_db:transport_energy.report_bge_template
+msgid "<br/><br/>___________________________"
+msgstr "<br/><br/>___________________________"
+
+#. module: transport_energy
+#: model_terms:ir.ui.view,arch_db:transport_energy.rapport_energie_template
+msgid "<strong>Annee :</strong>"
+msgstr "<strong>السنة :</strong>"
+
+#. module: transport_energy
+#: model_terms:ir.ui.view,arch_db:transport_energy.report_bge_template
+msgid "<strong>Carte AGILIS :</strong>"
+msgstr "<strong>بطاقة أجيليس :</strong>"
+
+#. module: transport_energy
+#: model_terms:ir.ui.view,arch_db:transport_energy.report_bge_template
+msgid "<strong>Date :</strong>"
+msgstr "<strong>التاريخ :</strong>"
+
+#. module: transport_energy
+#: model_terms:ir.ui.view,arch_db:transport_energy.report_bge_template
+msgid "<strong>N Ticket :</strong>"
+msgstr "<strong>رقم التذكرة :</strong>"
+
+#. module: transport_energy
+#: model_terms:ir.ui.view,arch_db:transport_energy.rapport_energie_template
+msgid ""
+"<strong>Résumé :</strong>\n"
+"                                Total N :"
+msgstr ""
+"<strong>ملخص :</strong>\n"
+"                                الإجمالي ن :"
+
+#. module: transport_energy
+#: model_terms:ir.ui.view,arch_db:transport_energy.rapport_energie_template
+msgid ""
+"<strong>Résumé financier :</strong>\n"
+"                                STEG N :"
+msgstr ""
+"<strong>الملخص المالي :</strong>\n"
+"                                STEG ن :"
+
+#. module: transport_energy
+#: model_terms:ir.ui.view,arch_db:transport_energy.report_bge_template
+msgid "<strong>Total</strong>"
+msgstr "<strong>الإجمالي</strong>"
+
+#. module: transport_energy
+#: model_terms:ir.ui.view,arch_db:transport_energy.report_bge_template
+msgid "<strong>Type carburant :</strong>"
+msgstr "<strong>نوع الوقود :</strong>"
+
+#. module: transport_energy
+#: model_terms:ir.ui.view,arch_db:transport_energy.view_wizard_init_stock_lubrifiant_form
+msgid "= Quantité en litres"
+msgstr "= الكمية بالليتر"
+
+#. module: transport_energy
+#: model_terms:ir.ui.view,arch_db:transport_energy.view_jaugeage_lubrifiant_search
+msgid "A approuver"
+msgstr "في انتظار الموافقة"
+
+#. module: transport_energy
+#: model_terms:ir.ui.view,arch_db:transport_energy.view_jaugeage_lubrifiant_form
+msgid ""
+"A l'approbation, le stock du magasin sera mis a jour\n"
+"                            avec le niveau mesure.\n"
+"                            Cette operation est irreversible."
+msgstr ""
+"عند الموافقة، سيتم تحديث مخزون المستودع\n"
+"                            بالمستوى المقيس.\n"
+"                            هذه العملية لا يمكن التراجع عنها."
+
+#. module: transport_energy
+#: model_terms:ir.ui.view,arch_db:transport_energy.view_fuel_voucher_search
+msgid "A valider"
+msgstr "في انتظار التحقق"
+
+#. module: transport_energy
+#: model:res.groups,comment:transport_energy.group_directeur_energie
+msgid "Acces total : approbation jaugeage critique, tous les rapports."
+msgstr "وصول كامل: الموافقة على القياس الحرج، جميع التقارير."
+
+#. module: transport_energy
+#: model:ir.model.fields,field_description:transport_energy.field_transport_agilis_carte__message_needaction
+#: model:ir.model.fields,field_description:transport_energy.field_transport_bon_lubrifiant__message_needaction
+#: model:ir.model.fields,field_description:transport_energy.field_transport_facture_energie__message_needaction
+#: model:ir.model.fields,field_description:transport_energy.field_transport_fuel_voucher__message_needaction
+#: model:ir.model.fields,field_description:transport_energy.field_transport_jaugeage__message_needaction
+#: model:ir.model.fields,field_description:transport_energy.field_transport_jaugeage_lubrifiant__message_needaction
+#: model:ir.model.fields,field_description:transport_energy.field_transport_reception_lubrifiant__message_needaction
+#: model:ir.model.fields,field_description:transport_energy.field_transport_supply_order__message_needaction
+msgid "Action Needed"
+msgstr "إجراء مطلوب"
+
+#. module: transport_energy
+#: model:ir.model.fields,field_description:transport_energy.field_transport_energy_type__active
+#: model:ir.model.fields,field_description:transport_energy.field_transport_fuel_cuve__active
+#: model:ir.model.fields,field_description:transport_energy.field_transport_fuel_station__active
+#: model:ir.model.fields,field_description:transport_energy.field_transport_stock_lubrifiant__active
+#: model:ir.model.fields.selection,name:transport_energy.selection__transport_agilis_carte__statut__active
+msgid "Active"
+msgstr "✅ نشطة"
+
+#. module: transport_energy
+#: model_terms:ir.ui.view,arch_db:transport_energy.view_agilis_carte_form
+msgid "Activer"
+msgstr "تفعيل"
+
+#. module: transport_energy
+#: model_terms:ir.ui.view,arch_db:transport_energy.view_agilis_carte_search
+msgid "Actives"
+msgstr "النشطة"
+
+#. module: transport_energy
+#: model:ir.model.fields,field_description:transport_energy.field_fleet_vehicle__activity_type
+msgid "Activite"
+msgstr "النشاط"
+
+#. module: transport_energy
+#: model:ir.model.fields,field_description:transport_energy.field_transport_wizard_rapport__activite_filtre
+msgid "Activite (optionnel)"
+msgstr "النشاط (اختياري)"
+
+#. module: transport_energy
+#: model:ir.model.fields,field_description:transport_energy.field_transport_agilis_carte__activity_ids
+#: model:ir.model.fields,field_description:transport_energy.field_transport_bon_lubrifiant__activity_ids
+#: model:ir.model.fields,field_description:transport_energy.field_transport_facture_energie__activity_ids
+#: model:ir.model.fields,field_description:transport_energy.field_transport_fuel_voucher__activity_ids
+#: model:ir.model.fields,field_description:transport_energy.field_transport_jaugeage__activity_ids
+#: model:ir.model.fields,field_description:transport_energy.field_transport_jaugeage_lubrifiant__activity_ids
+#: model:ir.model.fields,field_description:transport_energy.field_transport_reception_lubrifiant__activity_ids
+#: model:ir.model.fields,field_description:transport_energy.field_transport_supply_order__activity_ids
+msgid "Activities"
+msgstr "الأنشطة"
+
+#. module: transport_energy
+#: model:ir.model.fields,field_description:transport_energy.field_transport_agilis_carte__activity_exception_decoration
+#: model:ir.model.fields,field_description:transport_energy.field_transport_bon_lubrifiant__activity_exception_decoration
+#: model:ir.model.fields,field_description:transport_energy.field_transport_facture_energie__activity_exception_decoration
+#: model:ir.model.fields,field_description:transport_energy.field_transport_fuel_voucher__activity_exception_decoration
+#: model:ir.model.fields,field_description:transport_energy.field_transport_jaugeage__activity_exception_decoration
+#: model:ir.model.fields,field_description:transport_energy.field_transport_jaugeage_lubrifiant__activity_exception_decoration
+#: model:ir.model.fields,field_description:transport_energy.field_transport_reception_lubrifiant__activity_exception_decoration
+#: model:ir.model.fields,field_description:transport_energy.field_transport_supply_order__activity_exception_decoration
+msgid "Activity Exception Decoration"
+msgstr "تزيين استثناء النشاط"
+
+#. module: transport_energy
+#: model:ir.model.fields,field_description:transport_energy.field_transport_agilis_carte__activity_state
+#: model:ir.model.fields,field_description:transport_energy.field_transport_bon_lubrifiant__activity_state
+#: model:ir.model.fields,field_description:transport_energy.field_transport_facture_energie__activity_state
+#: model:ir.model.fields,field_description:transport_energy.field_transport_fuel_voucher__activity_state
+#: model:ir.model.fields,field_description:transport_energy.field_transport_jaugeage__activity_state
+#: model:ir.model.fields,field_description:transport_energy.field_transport_jaugeage_lubrifiant__activity_state
+#: model:ir.model.fields,field_description:transport_energy.field_transport_reception_lubrifiant__activity_state
+#: model:ir.model.fields,field_description:transport_energy.field_transport_supply_order__activity_state
+msgid "Activity State"
+msgstr "حالة النشاط"
+
+#. module: transport_energy
+#: model:ir.model.fields,field_description:transport_energy.field_transport_agilis_carte__activity_type_icon
+#: model:ir.model.fields,field_description:transport_energy.field_transport_bon_lubrifiant__activity_type_icon
+#: model:ir.model.fields,field_description:transport_energy.field_transport_facture_energie__activity_type_icon
+#: model:ir.model.fields,field_description:transport_energy.field_transport_fuel_voucher__activity_type_icon
+#: model:ir.model.fields,field_description:transport_energy.field_transport_jaugeage__activity_type_icon
+#: model:ir.model.fields,field_description:transport_energy.field_transport_jaugeage_lubrifiant__activity_type_icon
+#: model:ir.model.fields,field_description:transport_energy.field_transport_reception_lubrifiant__activity_type_icon
+#: model:ir.model.fields,field_description:transport_energy.field_transport_supply_order__activity_type_icon
+msgid "Activity Type Icon"
+msgstr "أيقونة نوع النشاط"
+
+#. module: transport_energy
+#: model:ir.model.fields.selection,name:transport_energy.selection__transport_bon_lubrifiant_ligne__type_operation__addition
+msgid "Addition (appoint)"
+msgstr "➕ إضافة (تكملة)"
+
+#. module: transport_energy
+#: model:ir.model.fields.selection,name:transport_energy.selection__fleet_vehicle__activity_type__admin
+#: model:ir.model.fields.selection,name:transport_energy.selection__transport_wizard_rapport__activite_filtre__admin
+msgid "Administratif"
+msgstr "إداري"
+
+#. module: transport_energy
+#: model:ir.model.fields,field_description:transport_energy.field_transport_fuel_station__address
+msgid "Adresse"
+msgstr "العنوان"
+
+#. module: transport_energy
+#: model:ir.model.fields,field_description:transport_energy.field_transport_facture_energie__adresse
+msgid "Adresse du compteur"
+msgstr "عنوان العداد"
+
+#. module: transport_energy
+#: model_terms:ir.ui.view,arch_db:transport_energy.view_fleet_vehicle_transport_form
+#: model_terms:ir.ui.view,arch_db:transport_energy.view_fuel_station_search
+#: model_terms:ir.ui.view,arch_db:transport_energy.view_jaugeage_lubrifiant_search
+#: model_terms:ir.ui.view,arch_db:transport_energy.view_stock_lubrifiant_search
+msgid "Agence"
+msgstr "الوكالة"
+
+#. module: transport_energy
+#: model:ir.model.fields,field_description:transport_energy.field_fleet_vehicle__transport_agency
+#: model:ir.model.fields,field_description:transport_energy.field_transport_bon_lubrifiant__agence
+#: model:ir.model.fields,field_description:transport_energy.field_transport_fuel_station__agency_id
+#: model:ir.model.fields,field_description:transport_energy.field_transport_jaugeage_lubrifiant__agence
+#: model:ir.model.fields,field_description:transport_energy.field_transport_reception_lubrifiant__agence
+#: model:ir.model.fields,field_description:transport_energy.field_transport_stock_lubrifiant__agence
+msgid "Agence / Depot"
+msgstr "الوكالة / المستودع"
+
+#. module: transport_energy
+#: model:ir.model.fields,field_description:transport_energy.field_transport_wizard_rapport__agence_filtre
+msgid "Agence / Depot (optionnel)"
+msgstr "الوكالة / المستودع (اختياري)"
+
+#. module: transport_energy
+#: model_terms:ir.ui.view,arch_db:transport_energy.template_bgi
+msgid "Agent Distributeur"
+msgstr "العون الموزع"
+
+#. module: transport_energy
+#: model_terms:ir.ui.view,arch_db:transport_energy.template_bgi
+msgid "Agent Distributeur :"
+msgstr "العون الموزع :"
+
+#. module: transport_energy
+#: model:res.groups,name:transport_energy.group_agent_pompiste
+msgid "Agent Pompiste"
+msgstr "عون المضخة"
+
+#. module: transport_energy
+#: model_terms:ir.ui.view,arch_db:transport_energy.view_fuel_voucher_bgi_form
+msgid "Agent distributeur"
+msgstr "العون الموزع"
+
+#. module: transport_energy
+#: model_terms:ir.ui.view,arch_db:transport_energy.view_jaugeage_form
+#: model_terms:ir.ui.view,arch_db:transport_energy.view_jaugeage_lubrifiant_form
+msgid "Ajustement et justification"
+msgstr "التعديل والتبرير"
+
+#. module: transport_energy
+#: model:ir.model.fields,field_description:transport_energy.field_transport_jaugeage__ajustement_stock
+#: model:ir.model.fields,field_description:transport_energy.field_transport_jaugeage_lubrifiant__ajustement_stock
+msgid "Ajuster le stock ?"
+msgstr "تعديل المخزون؟"
+
+#. module: transport_energy
+#: model:ir.model.fields,field_description:transport_energy.field_transport_agilis_carte__alerte_solde
+msgid "Alerte solde bas"
+msgstr "تنبيه رصيد منخفض"
+
+#. module: transport_energy
+#: model:ir.ui.menu,name:transport_energy.menu_agilis_alerte
+msgid "Alertes solde bas"
+msgstr "تنبيهات الرصيد المنخفض"
+
+#. module: transport_energy
+#: model:ir.model.fields,field_description:transport_energy.field_fleet_vehicle__odometer_old_value
+msgid "Ancienne valeur compteur (km)"
+msgstr "القراءة السابقة للعداد (كم)"
+
+#. module: transport_energy
+#: model:ir.model.fields,field_description:transport_energy.field_transport_wizard_rapport_energie__annee
+msgid "Annee"
+msgstr "السنة"
+
+#. module: transport_energy
+#: model:ir.model.fields.selection,name:transport_energy.selection__transport_bon_lubrifiant__statut__annule
+#: model:ir.model.fields.selection,name:transport_energy.selection__transport_fuel_voucher__state__cancelled
+#: model:ir.model.fields.selection,name:transport_energy.selection__transport_jaugeage__statut__annule
+#: model:ir.model.fields.selection,name:transport_energy.selection__transport_jaugeage_lubrifiant__statut__annule
+#: model:ir.model.fields.selection,name:transport_energy.selection__transport_reception_lubrifiant__state__cancelled
+#: model:ir.model.fields.selection,name:transport_energy.selection__transport_supply_order__state__cancelled
+msgid "Annule"
+msgstr "ملغى"
+
+#. module: transport_energy
+#: model:ir.model.fields.selection,name:transport_energy.selection__transport_facture_energie__statut__annulee
+msgid "Annulee"
+msgstr "ملغاة"
+
+#. module: transport_energy
+#: model_terms:ir.ui.view,arch_db:transport_energy.view_bon_lubrifiant_form
+#: model_terms:ir.ui.view,arch_db:transport_energy.view_facture_energie_form
+#: model_terms:ir.ui.view,arch_db:transport_energy.view_fuel_voucher_bge_form
+#: model_terms:ir.ui.view,arch_db:transport_energy.view_fuel_voucher_bgi_form
+#: model_terms:ir.ui.view,arch_db:transport_energy.view_jaugeage_form
+#: model_terms:ir.ui.view,arch_db:transport_energy.view_jaugeage_lubrifiant_form
+#: model_terms:ir.ui.view,arch_db:transport_energy.view_reception_lubrifiant_form
+#: model_terms:ir.ui.view,arch_db:transport_energy.view_supply_order_form
+#: model_terms:ir.ui.view,arch_db:transport_energy.view_wizard_init_stock_lubrifiant_form
+#: model_terms:ir.ui.view,arch_db:transport_energy.view_wizard_rapport_carburant_form
+#: model_terms:ir.ui.view,arch_db:transport_energy.view_wizard_rapport_energie_form
+#: model_terms:ir.ui.view,arch_db:transport_energy.view_wizard_rapport_lubrifiant_form
+msgid "Annuler"
+msgstr "إلغاء"
+
+#. module: transport_energy
+#: model_terms:ir.ui.view,arch_db:transport_energy.view_bon_lubrifiant_form
+#: model_terms:ir.ui.view,arch_db:transport_energy.view_fuel_voucher_bge_form
+#: model_terms:ir.ui.view,arch_db:transport_energy.view_fuel_voucher_bgi_form
+msgid "Annuler bon valide (directeur)"
+msgstr "إلغاء البون المعتمد (المدير)"
+
+#. module: transport_energy
+#: model_terms:ir.ui.view,arch_db:transport_energy.view_fuel_voucher_bge_form
+#: model_terms:ir.ui.view,arch_db:transport_energy.view_fuel_voucher_bgi_form
+msgid "Annuler ce bon VALIDE restituera le stock cuve. Continuer ?"
+msgstr "إلغاء هذا البون المعتمد سيُعيد مخزون الخزان. هل تريد المتابعة؟"
+
+#. module: transport_energy
+#: model_terms:ir.ui.view,arch_db:transport_energy.view_bon_lubrifiant_form
+msgid "Annuler ce bon VALIDE restituera le stock lubrifiant. Continuer ?"
+msgstr "إلغاء هذا البون المعتمد سيُعيد مخزون المزيت. هل تريد المتابعة؟"
+
+#. module: transport_energy
+#: model_terms:ir.ui.view,arch_db:transport_energy.template_bgi
+msgid "Année :"
+msgstr "السنة :"
+
+#. module: transport_energy
+#: model:ir.model.fields.selection,name:transport_energy.selection__transport_jaugeage__statut__approuve
+#: model:ir.model.fields.selection,name:transport_energy.selection__transport_jaugeage_lubrifiant__statut__approuve
+msgid "Approuve"
+msgstr "معتمد"
+
+#. module: transport_energy
+#: model_terms:ir.ui.view,arch_db:transport_energy.view_jaugeage_form
+msgid "Approuver"
+msgstr "اعتماد"
+
+#. module: transport_energy
+#: model_terms:ir.ui.view,arch_db:transport_energy.view_jaugeage_lubrifiant_form
+msgid "Approuver et ajuster"
+msgstr "اعتماد وتعديل"
+
+#. module: transport_energy
+#: model_terms:ir.ui.view,arch_db:transport_energy.view_jaugeage_lubrifiant_search
+#: model_terms:ir.ui.view,arch_db:transport_energy.view_jaugeage_search
+msgid "Approuves"
+msgstr "المعتمدة"
+
+#. module: transport_energy
+#: model:ir.ui.menu,name:transport_energy.menu_approvisionnement
+msgid "Approvisionnement"
+msgstr "التموين"
+
+#. module: transport_energy
+#: model_terms:ir.ui.view,arch_db:transport_energy.view_supply_order_form
+msgid "Approvisionnement citerne"
+msgstr "تموين الصهريج"
+
+#. module: transport_energy
+#: model:ir.model,name:transport_energy.model_transport_supply_order
+msgid "Approvisionnement citerne — cuve interne"
+msgstr "تموين الصهريج — الخزان الداخلي"
+
+#. module: transport_energy
+#: model:ir.actions.act_window,name:transport_energy.action_supply_order
+#: model_terms:ir.ui.view,arch_db:transport_energy.view_supply_order_list
+#: model_terms:ir.ui.view,arch_db:transport_energy.view_supply_order_pivot
+msgid "Approvisionnements citerne"
+msgstr "تموينات الصهريج"
+
+#. module: transport_energy
+#: model:ir.model,name:transport_energy.model_transport_wizard_rapport
+msgid "Assistant Rapport Consommation"
+msgstr "مساعد تقرير الاستهلاك"
+
+#. module: transport_energy
+#: model:ir.model.fields,field_description:transport_energy.field_transport_wizard_init_stock_lubrifiant__atelier
+#: model_terms:ir.ui.view,arch_db:transport_energy.view_bon_lubrifiant_search
+#: model_terms:ir.ui.view,arch_db:transport_energy.view_jaugeage_lubrifiant_search
+#: model_terms:ir.ui.view,arch_db:transport_energy.view_stock_lubrifiant_search
+msgid "Atelier"
+msgstr "الورشة"
+
+#. module: transport_energy
+#: model:ir.model.fields,field_description:transport_energy.field_transport_bon_lubrifiant__atelier
+#: model:ir.model.fields,field_description:transport_energy.field_transport_jaugeage_lubrifiant__atelier
+#: model:ir.model.fields,field_description:transport_energy.field_transport_reception_lubrifiant__atelier
+#: model:ir.model.fields,field_description:transport_energy.field_transport_stock_lubrifiant__atelier
+msgid "Atelier / Magasin"
+msgstr "الورشة / المخزن"
+
+#. module: transport_energy
+#: model:ir.model.fields,field_description:transport_energy.field_transport_wizard_rapport__atelier_filtre
+msgid "Atelier / Magasin (optionnel)"
+msgstr "الورشة / المخزن (اختياري)"
+
+#. module: transport_energy
+#: model:ir.model.fields,field_description:transport_energy.field_transport_agilis_carte__message_attachment_count
+#: model:ir.model.fields,field_description:transport_energy.field_transport_bon_lubrifiant__message_attachment_count
+#: model:ir.model.fields,field_description:transport_energy.field_transport_facture_energie__message_attachment_count
+#: model:ir.model.fields,field_description:transport_energy.field_transport_fuel_voucher__message_attachment_count
+#: model:ir.model.fields,field_description:transport_energy.field_transport_jaugeage__message_attachment_count
+#: model:ir.model.fields,field_description:transport_energy.field_transport_jaugeage_lubrifiant__message_attachment_count
+#: model:ir.model.fields,field_description:transport_energy.field_transport_reception_lubrifiant__message_attachment_count
+#: model:ir.model.fields,field_description:transport_energy.field_transport_supply_order__message_attachment_count
+msgid "Attachment Count"
+msgstr "عدد المرفقات"
+
+#. module: transport_energy
+#: model_terms:ir.ui.view,arch_db:transport_energy.view_jaugeage_search
+msgid "Attention"
+msgstr "تنبيه"
+
+#. module: transport_energy
+#: model:ir.model.fields.selection,name:transport_energy.selection__transport_jaugeage__niveau_alerte__attention
+#: model:ir.model.fields.selection,name:transport_energy.selection__transport_jaugeage_lubrifiant__niveau_alerte__attention
+msgid "Attention (1 a 3%)"
+msgstr "⚠️ تنبيه (1-3%)"
+
+#. module: transport_energy
+#: model_terms:ir.ui.view,arch_db:transport_energy.view_wizard_init_stock_lubrifiant_form
+msgid ""
+"Aucun conditionnement défini sur ce lubrifiant.\n"
+"                        La valeur saisie sera interprétée directement en litres.\n"
+"                        Pour gérer en bidons, configurez le conditionnement dans\n"
+"                        Configuration &gt; Types d'énergie."
+msgstr ""
+"لم يتم تحديد تغليف لهذا المزيت.\n"
+"                        ستُفسَّر القيمة المُدخلة مباشرةً بالليتر.\n"
+"                        لإدارة الكميات بالبيدونات، قم بتهيئة التغليف في\n"
+"                        الإعدادات &gt; أنواع الطاقة."
+
+#. module: transport_energy
+#: model_terms:ir.ui.view,arch_db:transport_energy.view_fuel_voucher_search
+#: model_terms:ir.ui.view,arch_db:transport_energy.view_jaugeage_lubrifiant_search
+msgid "Aujourd hui"
+msgstr "اليوم"
+
+#. module: transport_energy
+#: model:ir.model.fields.selection,name:transport_energy.selection__fleet_vehicle__bus_type__double
+#: model:ir.model.fields.selection,name:transport_energy.selection__transport_wizard_rapport__type_bus_filtre__double
+msgid "Autobus articule urbain"
+msgstr "حافلة مفصلية حضرية"
+
+#. module: transport_energy
+#: model:ir.model.fields.selection,name:transport_energy.selection__fleet_vehicle__bus_type__ac_53
+#: model:ir.model.fields.selection,name:transport_energy.selection__transport_wizard_rapport__type_bus_filtre__ac_53
+msgid "Autobus climatise 53 places"
+msgstr "حافلة مكيفة 53 مقعداً"
+
+#. module: transport_energy
+#: model:ir.model.fields.selection,name:transport_energy.selection__fleet_vehicle__bus_type__ac_regional
+#: model:ir.model.fields.selection,name:transport_energy.selection__transport_wizard_rapport__type_bus_filtre__ac_regional
+msgid "Autobus climatise regional"
+msgstr "حافلة مكيفة جهوية"
+
+#. module: transport_energy
+#: model:ir.model.fields.selection,name:transport_energy.selection__fleet_vehicle__bus_type__standard
+#: model:ir.model.fields.selection,name:transport_energy.selection__transport_wizard_rapport__type_bus_filtre__standard
+msgid "Autobus standard urbain"
+msgstr "حافلة حضرية قياسية"
+
+#. module: transport_energy
+#: model:ir.model.fields.selection,name:transport_energy.selection__fleet_vehicle__bus_type__other
+#: model:ir.model.fields.selection,name:transport_energy.selection__transport_energy_type__category__autre
+#: model:ir.model.fields.selection,name:transport_energy.selection__transport_wizard_rapport__type_bus_filtre__other
+msgid "Autre"
+msgstr "أخرى"
+
+#. module: transport_energy
+#: model:ir.model.fields,field_description:transport_energy.field_transport_agilis_utilisation__voucher_id
+msgid "BGE source"
+msgstr "BGE المصدر"
+
+#. module: transport_energy
+#: model:ir.model.fields.selection,name:transport_energy.selection__transport_fuel_cuve__stock_status__low
+#: model:ir.model.fields.selection,name:transport_energy.selection__transport_stock_lubrifiant__stock_status__low
+msgid "Bas"
+msgstr "منخفض"
+
+#. module: transport_energy
+#: model:ir.model.fields.selection,name:transport_energy.selection__transport_agilis_carte__statut__bloquee
+msgid "Bloquee"
+msgstr "🔴 محظورة"
+
+#. module: transport_energy
+#: model_terms:ir.ui.view,arch_db:transport_energy.view_agilis_carte_search
+msgid "Bloquees"
+msgstr "المحظورة"
+
+#. module: transport_energy
+#: model_terms:ir.ui.view,arch_db:transport_energy.view_agilis_carte_form
+msgid "Bloquer"
+msgstr "حظر"
+
+#. module: transport_energy
+#: model:ir.actions.report,name:transport_energy.action_rapport_bge_pdf
+#: model_terms:ir.ui.view,arch_db:transport_energy.template_bge
+#: model_terms:ir.ui.view,arch_db:transport_energy.view_fuel_voucher_bge_form
+msgid "Bon de Gasoil Externe (BGE)"
+msgstr "بون الغازوال الخارجي (BGE)"
+
+#. module: transport_energy
+#: model_terms:ir.ui.view,arch_db:transport_energy.report_bge_template
+msgid "Bon de Gasoil Externe (BGE) —"
+msgstr "بون الغازوال الخارجي (BGE) —"
+
+#. module: transport_energy
+#: model_terms:ir.ui.view,arch_db:transport_energy.view_fuel_voucher_bgi_form
+msgid "Bon de Gasoil Interne (BGI)"
+msgstr "بون الغازوال الداخلي (BGI)"
+
+#. module: transport_energy
+#: model_terms:ir.ui.view,arch_db:transport_energy.template_bge
+msgid "Bon de Ravitaillement Externe"
+msgstr "بون التزود الخارجي"
+
+#. module: transport_energy
+#: model:ir.actions.report,name:transport_energy.action_rapport_bge
+msgid "Bon de Ravitaillement Externe (BGE)"
+msgstr "بون تزود خارجي (BGE)"
+
+#. module: transport_energy
+#: model:ir.actions.report,name:transport_energy.action_rapport_bgi
+#: model_terms:ir.ui.view,arch_db:transport_energy.template_bgi
+msgid "Bon de Ravitaillement Interne (BGI)"
+msgstr "بون تزود داخلي (BGI)"
+
+#. module: transport_energy
+#: model:ir.model.fields,field_description:transport_energy.field_transport_fuel_voucher_line__voucher_id
+msgid "Bon de carburant"
+msgstr "بون الوقود"
+
+#. module: transport_energy
+#: model:ir.model.fields,help:transport_energy.field_transport_agilis_utilisation__voucher_id
+msgid "Bon de gasoil externe qui a genere cette utilisation."
+msgstr "بون الغازوال الخارجي الذي أنشأ هذا الاستخدام."
+
+#. module: transport_energy
+#: model:ir.model,name:transport_energy.model_transport_fuel_voucher
+msgid "Bon de ravitaillement carburant (BGI / BGE)"
+msgstr "بون وقود داخلي/خارجي"
+
+#. module: transport_energy
+#: model:ir.model,name:transport_energy.model_transport_bon_lubrifiant
+#: model_terms:ir.ui.view,arch_db:transport_energy.view_bon_lubrifiant_form
+msgid "Bon de ravitaillement lubrifiant"
+msgstr "بون تزود بالمزيت"
+
+#. module: transport_energy
+#: model:ir.model.fields,field_description:transport_energy.field_transport_bon_lubrifiant_ligne__bon_id
+msgid "Bon lubrifiant"
+msgstr "بون المزيت"
+
+#. module: transport_energy
+#: model:ir.ui.menu,name:transport_energy.menu_fuel_voucher_external
+msgid "Bons carburant externes (BGE)"
+msgstr "البونات الخارجية (BGE)"
+
+#. module: transport_energy
+#: model:ir.ui.menu,name:transport_energy.menu_fuel_voucher_internal
+msgid "Bons carburant internes (BGI)"
+msgstr "البونات الداخلية (BGI)"
+
+#. module: transport_energy
+#: model_terms:ir.ui.view,arch_db:transport_energy.view_fuel_voucher_list
+msgid "Bons de carburant"
+msgstr "بونات الوقود"
+
+#. module: transport_energy
+#: model:ir.actions.act_window,name:transport_energy.action_fuel_voucher_external
+msgid "Bons externes (BGE)"
+msgstr "البونات الخارجية (BGE)"
+
+#. module: transport_energy
+#: model:ir.actions.act_window,name:transport_energy.action_fuel_voucher_internal
+msgid "Bons internes (BGI)"
+msgstr "البونات الداخلية (BGI)"
+
+#. module: transport_energy
+#: model:ir.actions.act_window,name:transport_energy.action_bon_lubrifiant
+#: model:ir.ui.menu,name:transport_energy.menu_bon_lubrifiant
+#: model_terms:ir.ui.view,arch_db:transport_energy.view_bon_lubrifiant_list
+msgid "Bons lubrifiants"
+msgstr "بونات المزيتات"
+
+#. module: transport_energy
+#: model:ir.model.fields.selection,name:transport_energy.selection__transport_bon_lubrifiant__statut__brouillon
+#: model:ir.model.fields.selection,name:transport_energy.selection__transport_fuel_voucher__state__draft
+#: model:ir.model.fields.selection,name:transport_energy.selection__transport_jaugeage__statut__brouillon
+#: model:ir.model.fields.selection,name:transport_energy.selection__transport_jaugeage_lubrifiant__statut__brouillon
+#: model:ir.model.fields.selection,name:transport_energy.selection__transport_reception_lubrifiant__state__draft
+#: model:ir.model.fields.selection,name:transport_energy.selection__transport_supply_order__state__draft
+msgid "Brouillon"
+msgstr "مسودة"
+
+#. module: transport_energy
+#: model_terms:ir.ui.view,arch_db:transport_energy.view_bon_lubrifiant_search
+#: model_terms:ir.ui.view,arch_db:transport_energy.view_fuel_voucher_search
+#: model_terms:ir.ui.view,arch_db:transport_energy.view_jaugeage_lubrifiant_search
+msgid "Brouillons"
+msgstr "المسودات"
+
+#. module: transport_energy
+#: model_terms:ir.ui.view,arch_db:transport_energy.report_bge_template
+msgid "Bus"
+msgstr "الحافلة"
+
+#. module: transport_energy
+#: model:ir.model.fields,field_description:transport_energy.field_transport_bon_lubrifiant__vehicule_id
+#: model:ir.model.fields,field_description:transport_energy.field_transport_fuel_voucher_line__vehicle_id
+msgid "Bus / Vehicule"
+msgstr "العربة / المركبة"
+
+#. module: transport_energy
+#: model_terms:ir.ui.view,arch_db:transport_energy.template_bge
+#: model_terms:ir.ui.view,arch_db:transport_energy.template_bgi
+msgid "Bus N°"
+msgstr "رقم الحافلة"
+
+#. module: transport_energy
+#: model:ir.model.fields.selection,name:transport_energy.selection__transport_wizard_rapport__type_rapport__excessif
+#: model:ir.model.fields.selection,name:transport_energy.selection__transport_wizard_rapport__type_rapport_carburant__excessif
+msgid "Bus a consommation excessive"
+msgstr "الحافلات ذات الاستهلاك المفرط"
+
+#. module: transport_energy
+#: model:ir.actions.report,name:transport_energy.action_rapport_excessif
+msgid "Bus à Consommation Excessive"
+msgstr "الحافلات ذات الاستهلاك المفرط"
+
+#. module: transport_energy
+#: model:ir.model.fields,help:transport_energy.field_transport_fuel_voucher_line__quantite_suggeree
+msgid "Calculee depuis la distance estimee et la conso theorique du vehicule."
+msgstr "محسوبة من المسافة التقديرية والاستهلاك النظري للمركبة."
+
+#. module: transport_energy
+#: model:ir.model.fields,field_description:transport_energy.field_transport_fuel_cuve__capacity
+msgid "Capacite (L)"
+msgstr "السعة (لتر)"
+
+#. module: transport_energy
+#: model:ir.model.fields,field_description:transport_energy.field_fleet_vehicle__fuel_tank_capacity
+msgid "Capacite reservoir (L)"
+msgstr "سعة خزان الوقود (لتر)"
+
+#. module: transport_energy
+#: model:ir.model.fields.selection,name:transport_energy.selection__transport_energy_type__category__fuel
+msgid "Carburant"
+msgstr "وقود"
+
+#. module: transport_energy
+#: model_terms:ir.ui.view,arch_db:transport_energy.view_agilis_recharge_search
+msgid "Carte"
+msgstr "البطاقة"
+
+#. module: transport_energy
+#: model:ir.model.fields,field_description:transport_energy.field_transport_agilis_recharge__carte_id
+#: model:ir.model.fields,field_description:transport_energy.field_transport_agilis_utilisation__carte_id
+#: model:ir.model.fields,field_description:transport_energy.field_transport_fuel_voucher__agilis_card_id
+#: model:ir.model.fields.selection,name:transport_energy.selection__transport_fuel_voucher__payment_mode__agilis
+#: model_terms:ir.ui.view,arch_db:transport_energy.view_agilis_carte_form
+msgid "Carte AGILIS"
+msgstr "بطاقة أجيليس"
+
+#. module: transport_energy
+#: model:ir.model,name:transport_energy.model_transport_agilis_carte
+msgid "Carte AGILIS ravitaillement externe"
+msgstr "بطاقة أجيليس"
+
+#. module: transport_energy
+#: model_terms:ir.ui.view,arch_db:transport_energy.view_agilis_recharge_form
+msgid "Carte et date"
+msgstr "البطاقة والتاريخ"
+
+#. module: transport_energy
+#: model:ir.actions.act_window,name:transport_energy.action_agilis_carte
+#: model:ir.ui.menu,name:transport_energy.menu_agilis_cartes
+#: model:ir.ui.menu,name:transport_energy.menu_agilis_root
+#: model_terms:ir.ui.view,arch_db:transport_energy.view_agilis_carte_list
+msgid "Cartes AGILIS"
+msgstr "بطاقات أجيليس"
+
+#. module: transport_energy
+#: model:ir.actions.act_window,name:transport_energy.action_agilis_alerte
+msgid "Cartes — solde bas"
+msgstr "البطاقات — رصيد منخفض"
+
+#. module: transport_energy
+#: model:ir.model.fields,field_description:transport_energy.field_transport_energy_type__category
+msgid "Categorie"
+msgstr "الفئة"
+
+#. module: transport_energy
+#: model:ir.model.fields,field_description:transport_energy.field_transport_agilis_utilisation__chauffeur
+#: model_terms:ir.ui.view,arch_db:transport_energy.report_bge_template
+#: model_terms:ir.ui.view,arch_db:transport_energy.template_bge
+#: model_terms:ir.ui.view,arch_db:transport_energy.template_bgi
+msgid "Chauffeur"
+msgstr "السائق"
+
+#. module: transport_energy
+#: model:ir.model.fields,field_description:transport_energy.field_transport_agilis_carte__chauffeur_principal
+msgid "Chauffeur principal"
+msgstr "السائق الرئيسي"
+
+#. module: transport_energy
+#: model_terms:ir.ui.view,arch_db:transport_energy.template_bgi
+msgid "Chef de Dépôt"
+msgstr "رئيس المستودع"
+
+#. module: transport_energy
+#: model_terms:ir.ui.view,arch_db:transport_energy.view_facture_energie_form
+msgid "Chercher N-1 automatique"
+msgstr "البحث التلقائي عن N-1"
+
+#. module: transport_energy
+#: model:ir.model.fields.selection,name:transport_energy.selection__transport_supply_order__state__received
+msgid "Citerne recue"
+msgstr "تم استلام الصهريج"
+
+#. module: transport_energy
+#: model_terms:ir.ui.view,arch_db:transport_energy.view_fleet_vehicle_transport_form
+msgid "Classification"
+msgstr "التصنيف"
+
+#. module: transport_energy
+#: model_terms:ir.ui.view,arch_db:transport_energy.template_bgi
+msgid "Code"
+msgstr "الرمز"
+
+#. module: transport_energy
+#: model_terms:ir.ui.view,arch_db:transport_energy.template_bgi
+msgid "Code Principal :"
+msgstr "الرمز الرئيسي :"
+
+#. module: transport_energy
+#: model_terms:ir.ui.view,arch_db:transport_energy.template_bgi
+msgid "Code Secondaire :"
+msgstr "الرمز الثانوي :"
+
+#. module: transport_energy
+#: model:ir.model.fields,field_description:transport_energy.field_fleet_vehicle__agency_code
+msgid "Code agence"
+msgstr "رمز الوكالة"
+
+#. module: transport_energy
+#: model:ir.model.fields,field_description:transport_energy.field_transport_fuel_voucher__distributor_code
+msgid "Code agent distributeur"
+msgstr "رمز العون الموزع"
+
+#. module: transport_energy
+#: model:ir.model.fields,field_description:transport_energy.field_transport_bon_lubrifiant__code_chauffeur
+#: model:ir.model.fields,field_description:transport_energy.field_transport_fuel_voucher_line__driver_code
+msgid "Code chauffeur"
+msgstr "رمز السائق"
+
+#. module: transport_energy
+#: model:ir.model.fields,field_description:transport_energy.field_fleet_vehicle__internal_code
+msgid "Code interne"
+msgstr "الرمز الداخلي"
+
+#. module: transport_energy
+#: model:ir.model.fields,field_description:transport_energy.field_transport_fuel_voucher__agency_main_code
+msgid "Code principal agence"
+msgstr "التدرج الرئيسي"
+
+#. module: transport_energy
+#: model:ir.model.fields,field_description:transport_energy.field_transport_fuel_voucher__agency_sub_code
+msgid "Code secondaire agence"
+msgstr "الفرعي"
+
+#. module: transport_energy
+#: model:ir.model.fields,field_description:transport_energy.field_fleet_vehicle__service_code
+#: model:ir.model.fields,field_description:transport_energy.field_transport_bon_lubrifiant__code_service
+#: model:ir.model.fields,field_description:transport_energy.field_transport_fuel_voucher_line__service_code
+msgid "Code service"
+msgstr "رمز المصلحة"
+
+#. module: transport_energy
+#: model:ir.model.fields,field_description:transport_energy.field_transport_fuel_station__code
+msgid "Code station"
+msgstr "رمز المحطة"
+
+#. module: transport_energy
+#: model_terms:ir.ui.view,arch_db:transport_energy.view_supply_order_form
+msgid "Commande"
+msgstr "الطلبية"
+
+#. module: transport_energy
+#: model:ir.model.fields.selection,name:transport_energy.selection__transport_supply_order__state__confirmed
+msgid "Commande confirmee"
+msgstr "طلبية مؤكدة"
+
+#. module: transport_energy
+#: model:ir.ui.menu,name:transport_energy.menu_supply_order
+msgid "Commandes et receptions citerne"
+msgstr "طلبيات واستلام الصهاريج"
+
+#. module: transport_energy
+#: model_terms:ir.ui.view,arch_db:transport_energy.view_facture_energie_form
+msgid "Comparaison avec N-1"
+msgstr "مقارنة مع N-1"
+
+#. module: transport_energy
+#: model_terms:ir.ui.view,arch_db:transport_energy.rapport_energie_template
+msgid "Comparaison par site"
+msgstr "المقارنة حسب الموقع"
+
+#. module: transport_energy
+#: model_terms:ir.ui.view,arch_db:transport_energy.template_bge
+#: model_terms:ir.ui.view,arch_db:transport_energy.template_bgi
+msgid "Compteur"
+msgstr "العداد"
+
+#. module: transport_energy
+#: model_terms:ir.ui.view,arch_db:transport_energy.report_bge_template
+msgid "Compteur (km)"
+msgstr "العداد (كم)"
+
+#. module: transport_energy
+#: model:ir.model.fields,field_description:transport_energy.field_transport_fuel_cuve__pump_counter_current
+msgid "Compteur actuel"
+msgstr "العداد الحالي"
+
+#. module: transport_energy
+#: model:ir.model.fields,field_description:transport_energy.field_transport_fuel_voucher_line__odometer_value
+msgid "Compteur bus (km)"
+msgstr "عداد العربة"
+
+#. module: transport_energy
+#: model_terms:ir.ui.view,arch_db:transport_energy.template_bgi
+msgid "Compteur début :"
+msgstr "العداد في البداية :"
+
+#. module: transport_energy
+#: model_terms:ir.ui.view,arch_db:transport_energy.template_bgi
+msgid "Compteur fin :"
+msgstr "العداد في النهاية :"
+
+#. module: transport_energy
+#: model:ir.model.fields,field_description:transport_energy.field_transport_fuel_cuve__pump_counter_start
+msgid "Compteur initial"
+msgstr "العداد الابتدائي"
+
+#. module: transport_energy
+#: model_terms:ir.ui.view,arch_db:transport_energy.view_fleet_vehicle_transport_form
+msgid "Compteur kilometrique"
+msgstr "عداد الكيلومترات"
+
+#. module: transport_energy
+#: model:ir.model.fields.selection,name:transport_energy.selection__transport_fuel_voucher_line__source_distance__odometer
+msgid "Compteur km (periodes)"
+msgstr "عداد كم (الفترات)"
+
+#. module: transport_energy
+#: model_terms:ir.ui.view,arch_db:transport_energy.view_fuel_voucher_bgi_form
+msgid "Compteur pompe"
+msgstr "عداد المضخة"
+
+#. module: transport_energy
+#: model:ir.model.fields,field_description:transport_energy.field_transport_fuel_voucher__pump_counter_start
+msgid "Compteur pompe debut"
+msgstr "بداية عداد المضخة"
+
+#. module: transport_energy
+#: model:ir.model.fields,field_description:transport_energy.field_transport_fuel_voucher__pump_counter_end
+msgid "Compteur pompe fin"
+msgstr "نهاية عداد المضخة"
+
+#. module: transport_energy
+#: model:ir.model.fields,field_description:transport_energy.field_transport_bon_lubrifiant_ligne__conditionnement
+#: model:ir.model.fields,field_description:transport_energy.field_transport_energy_type__conditionnement
+#: model:ir.model.fields,field_description:transport_energy.field_transport_reception_lubrifiant_ligne__conditionnement
+msgid "Conditionnement"
+msgstr "التغليف"
+
+#. module: transport_energy
+#: model_terms:ir.ui.view,arch_db:transport_energy.view_energy_type_form
+msgid "Conditionnement (optionnel)"
+msgstr "التغليف (اختياري)"
+
+#. module: transport_energy
+#: model:ir.ui.menu,name:transport_energy.menu_energy_config
+msgid "Configuration"
+msgstr "الإعدادات"
+
+#. module: transport_energy
+#: model:ir.model.fields.selection,name:transport_energy.selection__transport_bon_lubrifiant__statut__confirme
+#: model:ir.model.fields.selection,name:transport_energy.selection__transport_fuel_voucher__state__confirmed
+#: model:ir.model.fields.selection,name:transport_energy.selection__transport_jaugeage__statut__confirme
+#: model:ir.model.fields.selection,name:transport_energy.selection__transport_jaugeage_lubrifiant__statut__confirme
+#: model:ir.model.fields.selection,name:transport_energy.selection__transport_reception_lubrifiant__state__confirmed
+msgid "Confirme"
+msgstr "مؤكد"
+
+#. module: transport_energy
+#: model_terms:ir.ui.view,arch_db:transport_energy.view_bon_lubrifiant_form
+#: model_terms:ir.ui.view,arch_db:transport_energy.view_fuel_voucher_bge_form
+#: model_terms:ir.ui.view,arch_db:transport_energy.view_fuel_voucher_bgi_form
+#: model_terms:ir.ui.view,arch_db:transport_energy.view_jaugeage_form
+#: model_terms:ir.ui.view,arch_db:transport_energy.view_jaugeage_lubrifiant_form
+#: model_terms:ir.ui.view,arch_db:transport_energy.view_reception_lubrifiant_form
+msgid "Confirmer"
+msgstr "تأكيد"
+
+#. module: transport_energy
+#: model_terms:ir.ui.view,arch_db:transport_energy.view_supply_order_form
+msgid "Confirmer commande"
+msgstr "تأكيد الطلبية"
+
+#. module: transport_energy
+#: model_terms:ir.ui.view,arch_db:transport_energy.view_bon_lubrifiant_search
+msgid "Confirmes"
+msgstr "المؤكدة"
+
+#. module: transport_energy
+#: model_terms:ir.ui.view,arch_db:transport_energy.rapport_energie_template
+msgid "Conso N ("
+msgstr "استهلاك ن ("
+
+#. module: transport_energy
+#: model_terms:ir.ui.view,arch_db:transport_energy.rapport_energie_template
+msgid "Conso N-1 ("
+msgstr "استهلاك ن-1 ("
+
+#. module: transport_energy
+#: model:ir.model.fields,field_description:transport_energy.field_fleet_vehicle__theoretical_fuel_consumption
+msgid "Conso. theorique carburant (L/100km)"
+msgstr "الاستهلاك النظري للوقود (لتر/100كم)"
+
+#. module: transport_energy
+#: model:ir.model.fields,field_description:transport_energy.field_fleet_vehicle__theoretical_oil_consumption
+msgid "Conso. theorique lubrifiant (L/1000km)"
+msgstr "الاستهلاك النظري للمزيت (لتر/1000كم)"
+
+#. module: transport_energy
+#: model_terms:ir.ui.view,arch_db:transport_energy.view_facture_energie_form
+msgid "Consommation"
+msgstr "الاستهلاك"
+
+#. module: transport_energy
+#: model:ir.model.fields,field_description:transport_energy.field_transport_facture_energie__consommation_n1
+msgid "Consommation N-1"
+msgstr "استهلاك N-1"
+
+#. module: transport_energy
+#: model:ir.actions.report,name:transport_energy.action_rapport_vehicules_admin
+msgid "Consommation Vehicules Administratifs"
+msgstr "استهلاك المركبات الإدارية"
+
+#. module: transport_energy
+#: model_terms:ir.ui.view,arch_db:transport_energy.view_fuel_voucher_graph
+#: model_terms:ir.ui.view,arch_db:transport_energy.view_fuel_voucher_pivot
+msgid "Consommation carburant"
+msgstr "استهلاك الوقود"
+
+#. module: transport_energy
+#: model_terms:ir.ui.view,arch_db:transport_energy.view_fleet_vehicle_transport_form
+msgid "Consommation theorique"
+msgstr "الاستهلاك النظري"
+
+#. module: transport_energy
+#: model:ir.ui.menu,name:transport_energy.menu_controles
+msgid "Controles"
+msgstr "المراقبة"
+
+#. module: transport_energy
+#: model:ir.model.fields,field_description:transport_energy.field_transport_facture_energie__boc_arrivee_id
+msgid "Courrier BOC associe"
+msgstr "مراسلة BOC المرتبطة"
+
+#. module: transport_energy
+#: model:ir.model.fields,field_description:transport_energy.field_transport_fuel_voucher__total_cost
+#: model:ir.model.fields,field_description:transport_energy.field_transport_reception_lubrifiant__total_cout
+#: model:ir.model.fields,field_description:transport_energy.field_transport_supply_order__total_cost
+#: model_terms:ir.ui.view,arch_db:transport_energy.view_fuel_voucher_bge_form
+#: model_terms:ir.ui.view,arch_db:transport_energy.view_fuel_voucher_bgi_form
+msgid "Cout total (TND)"
+msgstr "التكلفة الإجمالية (دينار)"
+
+#. module: transport_energy
+#: model_terms:ir.ui.view,arch_db:transport_energy.view_reception_lubrifiant_form
+msgid "Coût total (TND)"
+msgstr "التكلفة الإجمالية (دينار)"
+
+#. module: transport_energy
+#: model:ir.model.fields,field_description:transport_energy.field_transport_agilis_carte__create_uid
+#: model:ir.model.fields,field_description:transport_energy.field_transport_agilis_recharge__create_uid
+#: model:ir.model.fields,field_description:transport_energy.field_transport_agilis_utilisation__create_uid
+#: model:ir.model.fields,field_description:transport_energy.field_transport_bon_lubrifiant__create_uid
+#: model:ir.model.fields,field_description:transport_energy.field_transport_bon_lubrifiant_ligne__create_uid
+#: model:ir.model.fields,field_description:transport_energy.field_transport_energy_type__create_uid
+#: model:ir.model.fields,field_description:transport_energy.field_transport_facture_energie__create_uid
+#: model:ir.model.fields,field_description:transport_energy.field_transport_fuel_cuve__create_uid
+#: model:ir.model.fields,field_description:transport_energy.field_transport_fuel_station__create_uid
+#: model:ir.model.fields,field_description:transport_energy.field_transport_fuel_voucher__create_uid
+#: model:ir.model.fields,field_description:transport_energy.field_transport_fuel_voucher_line__create_uid
+#: model:ir.model.fields,field_description:transport_energy.field_transport_jaugeage__create_uid
+#: model:ir.model.fields,field_description:transport_energy.field_transport_jaugeage_lubrifiant__create_uid
+#: model:ir.model.fields,field_description:transport_energy.field_transport_reception_lubrifiant__create_uid
+#: model:ir.model.fields,field_description:transport_energy.field_transport_reception_lubrifiant_ligne__create_uid
+#: model:ir.model.fields,field_description:transport_energy.field_transport_stock_lubrifiant__create_uid
+#: model:ir.model.fields,field_description:transport_energy.field_transport_supply_order__create_uid
+#: model:ir.model.fields,field_description:transport_energy.field_transport_wizard_init_stock_lubrifiant__create_uid
+#: model:ir.model.fields,field_description:transport_energy.field_transport_wizard_rapport__create_uid
+#: model:ir.model.fields,field_description:transport_energy.field_transport_wizard_rapport_energie__create_uid
+msgid "Created by"
+msgstr "أُنشئ بواسطة"
+
+#. module: transport_energy
+#: model:ir.model.fields,field_description:transport_energy.field_transport_agilis_carte__create_date
+#: model:ir.model.fields,field_description:transport_energy.field_transport_agilis_recharge__create_date
+#: model:ir.model.fields,field_description:transport_energy.field_transport_agilis_utilisation__create_date
+#: model:ir.model.fields,field_description:transport_energy.field_transport_bon_lubrifiant__create_date
+#: model:ir.model.fields,field_description:transport_energy.field_transport_bon_lubrifiant_ligne__create_date
+#: model:ir.model.fields,field_description:transport_energy.field_transport_energy_type__create_date
+#: model:ir.model.fields,field_description:transport_energy.field_transport_facture_energie__create_date
+#: model:ir.model.fields,field_description:transport_energy.field_transport_fuel_cuve__create_date
+#: model:ir.model.fields,field_description:transport_energy.field_transport_fuel_station__create_date
+#: model:ir.model.fields,field_description:transport_energy.field_transport_fuel_voucher__create_date
+#: model:ir.model.fields,field_description:transport_energy.field_transport_fuel_voucher_line__create_date
+#: model:ir.model.fields,field_description:transport_energy.field_transport_jaugeage__create_date
+#: model:ir.model.fields,field_description:transport_energy.field_transport_jaugeage_lubrifiant__create_date
+#: model:ir.model.fields,field_description:transport_energy.field_transport_reception_lubrifiant__create_date
+#: model:ir.model.fields,field_description:transport_energy.field_transport_reception_lubrifiant_ligne__create_date
+#: model:ir.model.fields,field_description:transport_energy.field_transport_stock_lubrifiant__create_date
+#: model:ir.model.fields,field_description:transport_energy.field_transport_supply_order__create_date
+#: model:ir.model.fields,field_description:transport_energy.field_transport_wizard_init_stock_lubrifiant__create_date
+#: model:ir.model.fields,field_description:transport_energy.field_transport_wizard_rapport__create_date
+#: model:ir.model.fields,field_description:transport_energy.field_transport_wizard_rapport_energie__create_date
+msgid "Created on"
+msgstr "تاريخ الإنشاء"
+
+#. module: transport_energy
+#: model:ir.model.fields.selection,name:transport_energy.selection__transport_fuel_voucher__payment_mode__credit
+msgid "Credit fournisseur"
+msgstr "دين المورد"
+
+#. module: transport_energy
+#: model:ir.model.fields,help:transport_energy.field_transport_agilis_carte__utilisation_ids
+msgid ""
+"Creees automatiquement par la validation du BGE. Ne pas saisir manuellement."
+msgstr "تُنشأ تلقائياً عند التحقق من BGE. لا تُدخل يدوياً."
+
+#. module: transport_energy
+#: model:ir.model.fields.selection,name:transport_energy.selection__transport_fuel_cuve__stock_status__critical
+#: model:ir.model.fields.selection,name:transport_energy.selection__transport_stock_lubrifiant__stock_status__critical
+#: model_terms:ir.ui.view,arch_db:transport_energy.view_jaugeage_search
+msgid "Critique"
+msgstr "حرج"
+
+#. module: transport_energy
+#: model:ir.model.fields.selection,name:transport_energy.selection__transport_jaugeage__niveau_alerte__critique
+#: model:ir.model.fields.selection,name:transport_energy.selection__transport_jaugeage_lubrifiant__niveau_alerte__critique
+msgid "Critique (> 3%)"
+msgstr "🔴 حرج (> 3%)"
+
+#. module: transport_energy
+#: model:ir.model.fields,field_description:transport_energy.field_transport_jaugeage__cuve_id
+#: model:ir.model.fields,field_description:transport_energy.field_transport_supply_order__cuve_id
+#: model_terms:ir.ui.view,arch_db:transport_energy.view_jaugeage_search
+msgid "Cuve"
+msgstr "الخزان"
+
+#. module: transport_energy
+#: model:ir.model.fields,field_description:transport_energy.field_transport_fuel_voucher__cuve_id
+msgid "Cuve / Pompe"
+msgstr "الخزان / المضخة"
+
+#. module: transport_energy
+#: model:ir.model,name:transport_energy.model_transport_fuel_cuve
+msgid "Cuve carburant (station de pompage)"
+msgstr "خزان الوقود (محطة الضخ)"
+
+#. module: transport_energy
+#: model_terms:ir.ui.view,arch_db:transport_energy.view_supply_order_form
+msgid "Cuve cible"
+msgstr "الخزان المستهدف"
+
+#. module: transport_energy
+#: model:ir.model.fields,field_description:transport_energy.field_transport_fuel_station__cuve_ids
+#: model_terms:ir.ui.view,arch_db:transport_energy.view_fuel_station_form
+msgid "Cuves"
+msgstr "الخزانات"
+
+#. module: transport_energy
+#: model:ir.model.fields,field_description:transport_energy.field_transport_bon_lubrifiant__date
+#: model:ir.model.fields,field_description:transport_energy.field_transport_fuel_voucher__date
+msgid "Date"
+msgstr "التاريخ"
+
+#. module: transport_energy
+#: model_terms:ir.ui.view,arch_db:transport_energy.template_bge
+#: model_terms:ir.ui.view,arch_db:transport_energy.template_bgi
+msgid "Date :"
+msgstr "التاريخ :"
+
+#. module: transport_energy
+#: model:ir.model.fields,field_description:transport_energy.field_transport_supply_order__date
+msgid "Date commande"
+msgstr "تاريخ الطلبية"
+
+#. module: transport_energy
+#: model:ir.model.fields,field_description:transport_energy.field_transport_wizard_rapport__date_debut
+msgid "Date debut"
+msgstr "تاريخ البداية"
+
+#. module: transport_energy
+#: model:ir.model.fields,field_description:transport_energy.field_transport_agilis_carte__date_emission
+msgid "Date emission"
+msgstr "تاريخ الإصدار"
+
+#. module: transport_energy
+#: model:ir.model.fields,field_description:transport_energy.field_transport_agilis_utilisation__date
+#: model:ir.model.fields,field_description:transport_energy.field_transport_jaugeage__date
+#: model:ir.model.fields,field_description:transport_energy.field_transport_jaugeage_lubrifiant__date
+msgid "Date et heure"
+msgstr "التاريخ والساعة"
+
+#. module: transport_energy
+#: model:ir.model.fields,field_description:transport_energy.field_transport_agilis_carte__date_expiration
+msgid "Date expiration"
+msgstr "تاريخ الانتهاء"
+
+#. module: transport_energy
+#: model:ir.model.fields,field_description:transport_energy.field_transport_wizard_rapport__date_fin
+msgid "Date fin"
+msgstr "تاريخ النهاية"
+
+#. module: transport_energy
+#: model:ir.model.fields,field_description:transport_energy.field_transport_facture_energie__date_reception
+#: model:ir.model.fields,field_description:transport_energy.field_transport_reception_lubrifiant__date
+msgid "Date reception"
+msgstr "تاريخ الاستلام"
+
+#. module: transport_energy
+#: model:ir.model.fields,field_description:transport_energy.field_transport_supply_order__date_reception
+msgid "Date reception prevue"
+msgstr "تاريخ الاستلام المتوقع"
+
+#. module: transport_energy
+#: model:ir.model.fields,field_description:transport_energy.field_transport_supply_order__date_received
+msgid "Date reception reelle"
+msgstr "تاريخ الاستلام الفعلي"
+
+#. module: transport_energy
+#: model:ir.model.fields,field_description:transport_energy.field_transport_agilis_recharge__date
+msgid "Date rechargement"
+msgstr "تاريخ الشحن"
+
+#. module: transport_energy
+#: model:ir.model.fields,field_description:transport_energy.field_fleet_vehicle__odometer_replacement_date
+msgid "Date remplacement compteur"
+msgstr "تاريخ استبدال العداد"
+
+#. module: transport_energy
+#: model:ir.model.fields,field_description:transport_energy.field_transport_facture_energie__date_debut_periode
+msgid "Debut periode"
+msgstr "بداية الفترة"
+
+#. module: transport_energy
+#: model:ir.model.fields.selection,name:transport_energy.selection__transport_wizard_rapport__type_rapport_carburant__depenses
+msgid "Depenses energie par vehicule/centre/type"
+msgstr "نفقات الطاقة حسب المركبة/المركز/النوع"
+
+#. module: transport_energy
+#: model_terms:ir.ui.view,arch_db:transport_energy.template_bgi
+msgid "Depot Manager"
+msgstr "مدير المستودع"
+
+#. module: transport_energy
+#: model:ir.model.fields,field_description:transport_energy.field_transport_fuel_cuve__display_name
+#: model:ir.model.fields,field_description:transport_energy.field_transport_stock_lubrifiant__display_name
+msgid "Designation"
+msgstr "التسمية"
+
+#. module: transport_energy
+#: model:ir.model.fields.selection,name:transport_energy.selection__transport_wizard_rapport__type_rapport_carburant__detail_conso
+msgid "Detail consommation carburant + lubrifiant"
+msgstr "تفاصيل استهلاك الوقود والمزيت"
+
+#. module: transport_energy
+#: model:res.groups,name:transport_energy.group_directeur_energie
+msgid "Directeur"
+msgstr "المدير"
+
+#. module: transport_energy
+#: model:ir.model.fields,field_description:transport_energy.field_fleet_vehicle__display_name
+#: model:ir.model.fields,field_description:transport_energy.field_transport_agilis_carte__display_name
+#: model:ir.model.fields,field_description:transport_energy.field_transport_agilis_recharge__display_name
+#: model:ir.model.fields,field_description:transport_energy.field_transport_agilis_utilisation__display_name
+#: model:ir.model.fields,field_description:transport_energy.field_transport_bon_lubrifiant__display_name
+#: model:ir.model.fields,field_description:transport_energy.field_transport_bon_lubrifiant_ligne__display_name
+#: model:ir.model.fields,field_description:transport_energy.field_transport_energy_type__display_name
+#: model:ir.model.fields,field_description:transport_energy.field_transport_facture_energie__display_name
+#: model:ir.model.fields,field_description:transport_energy.field_transport_fuel_station__display_name
+#: model:ir.model.fields,field_description:transport_energy.field_transport_fuel_voucher__display_name
+#: model:ir.model.fields,field_description:transport_energy.field_transport_fuel_voucher_line__display_name
+#: model:ir.model.fields,field_description:transport_energy.field_transport_jaugeage__display_name
+#: model:ir.model.fields,field_description:transport_energy.field_transport_jaugeage_lubrifiant__display_name
+#: model:ir.model.fields,field_description:transport_energy.field_transport_reception_lubrifiant__display_name
+#: model:ir.model.fields,field_description:transport_energy.field_transport_reception_lubrifiant_ligne__display_name
+#: model:ir.model.fields,field_description:transport_energy.field_transport_supply_order__display_name
+#: model:ir.model.fields,field_description:transport_energy.field_transport_wizard_init_stock_lubrifiant__display_name
+#: model:ir.model.fields,field_description:transport_energy.field_transport_wizard_rapport__display_name
+#: model:ir.model.fields,field_description:transport_energy.field_transport_wizard_rapport_energie__display_name
+msgid "Display Name"
+msgstr "اسم العرض"
+
+#. module: transport_energy
+#: model:ir.model.fields,field_description:transport_energy.field_transport_fuel_voucher_line__distance_estimated
+msgid "Distance estimee (km)"
+msgstr "المسافة التقديرية (كم)"
+
+#. module: transport_energy
+#: model_terms:ir.ui.view,arch_db:transport_energy.template_bgi
+msgid "Distributed Qty (L)"
+msgstr "الكمية الموزعة (لتر)"
+
+#. module: transport_energy
+#: model_terms:ir.ui.view,arch_db:transport_energy.template_bge
+#: model_terms:ir.ui.view,arch_db:transport_energy.template_bgi
+msgid "Distributed Qty :"
+msgstr "الكمية الموزعة :"
+
+#. module: transport_energy
+#: model:ir.actions.report,name:transport_energy.action_rapport_par_station
+msgid "Distribution Carburant par Station"
+msgstr "توزيع الوقود حسب المحطة"
+
+#. module: transport_energy
+#: model:ir.actions.report,name:transport_energy.action_rapport_par_vehicule
+msgid "Distribution Carburant par Vehicule"
+msgstr "توزيع الوقود حسب العربة"
+
+#. module: transport_energy
+#: model_terms:ir.ui.view,arch_db:transport_energy.template_bgi
+msgid "Distribution Date :"
+msgstr "تاريخ التوزيع :"
+
+#. module: transport_energy
+#: model:ir.model.fields.selection,name:transport_energy.selection__transport_wizard_rapport__type_rapport__par_station
+msgid "Distribution par station"
+msgstr "التوزيع حسب المحطة"
+
+#. module: transport_energy
+#: model:ir.model.fields.selection,name:transport_energy.selection__transport_wizard_rapport__type_rapport__par_vehicule
+msgid "Distribution par vehicule"
+msgstr "التوزيع حسب العربة"
+
+#. module: transport_energy
+#: model_terms:ir.ui.view,arch_db:transport_energy.template_bgi
+msgid "Distributor Agent"
+msgstr "العون الموزع"
+
+#. module: transport_energy
+#: model_terms:ir.ui.view,arch_db:transport_energy.template_bgi
+msgid "Distributor Agent :"
+msgstr "العون الموزع :"
+
+#. module: transport_energy
+#: model_terms:ir.ui.view,arch_db:transport_energy.template_bge
+msgid "Driver"
+msgstr "السائق"
+
+#. module: transport_energy
+#: model_terms:ir.ui.view,arch_db:transport_energy.template_bgi
+msgid "Driver Code"
+msgstr "رمز السائق"
+
+#. module: transport_energy
+#: model_terms:ir.ui.view,arch_db:transport_energy.template_bge
+#: model_terms:ir.ui.view,arch_db:transport_energy.template_bgi
+msgid "Driver Name"
+msgstr "اسم السائق"
+
+#. module: transport_energy
+#: model_terms:ir.ui.view,arch_db:transport_energy.rapport_energie_template
+msgid "Ecart"
+msgstr "الفارق"
+
+#. module: transport_energy
+#: model_terms:ir.ui.view,arch_db:transport_energy.view_jaugeage_lubrifiant_list
+msgid "Ecart %"
+msgstr "الفارق %"
+
+#. module: transport_energy
+#: model:ir.model.fields,field_description:transport_energy.field_transport_facture_energie__ecart_pourcentage
+#: model:ir.model.fields,field_description:transport_energy.field_transport_jaugeage__ecart_pourcentage
+#: model:ir.model.fields,field_description:transport_energy.field_transport_jaugeage_lubrifiant__ecart_pourcentage
+#: model_terms:ir.ui.view,arch_db:transport_energy.view_jaugeage_lubrifiant_form
+msgid "Ecart (%)"
+msgstr "الفارق (%)"
+
+#. module: transport_energy
+#: model:ir.model.fields,field_description:transport_energy.field_transport_jaugeage__ecart
+#: model:ir.model.fields,field_description:transport_energy.field_transport_jaugeage_lubrifiant__ecart
+msgid "Ecart (L)"
+msgstr "الفارق (L)"
+
+#. module: transport_energy
+#: model_terms:ir.ui.view,arch_db:transport_energy.rapport_energie_template
+msgid "Ecart :"
+msgstr "الفارق :"
+
+#. module: transport_energy
+#: model_terms:ir.ui.view,arch_db:transport_energy.rapport_energie_template
+msgid "Ecart TND"
+msgstr "الفارق (دينار)"
+
+#. module: transport_energy
+#: model_terms:ir.ui.view,arch_db:transport_energy.view_jaugeage_lubrifiant_search
+msgid "Ecart attention"
+msgstr "فارق تنبيه"
+
+#. module: transport_energy
+#: model:ir.model.fields,field_description:transport_energy.field_transport_facture_energie__ecart_consommation
+msgid "Ecart consommation"
+msgstr "فارق الاستهلاك"
+
+#. module: transport_energy
+#: model_terms:ir.ui.view,arch_db:transport_energy.view_jaugeage_lubrifiant_search
+msgid "Ecart critique"
+msgstr "فارق حرج"
+
+#. module: transport_energy
+#: model_terms:ir.ui.view,arch_db:transport_energy.view_supply_order_search
+msgid "En cours"
+msgstr "قيد التنفيذ"
+
+#. module: transport_energy
+#: model:ir.model.fields.selection,name:transport_energy.selection__transport_wizard_init_stock_lubrifiant__mode_saisie__litres
+msgid "En litres"
+msgstr "بالليتر"
+
+#. module: transport_energy
+#: model:ir.model.fields.selection,name:transport_energy.selection__fleet_vehicle__odometer_status__broken
+msgid "En panne"
+msgstr "معطل"
+
+#. module: transport_energy
+#: model:ir.model.fields.selection,name:transport_energy.selection__transport_wizard_init_stock_lubrifiant__mode_saisie__unites
+msgid "En unités de conditionnement (bidons, fûts...)"
+msgstr "بوحدات التغليف (بيدونات، براميل...)"
+
+#. module: transport_energy
+#: model_terms:ir.ui.view,arch_db:transport_energy.template_bge
+msgid "End Time :"
+msgstr "وقت الانتهاء :"
+
+#. module: transport_energy
+#: model:ir.ui.menu,name:transport_energy.menu_energie_eau
+msgid "Energie STEG / SONEDE"
+msgstr "الفاتورة"
+
+#. module: transport_energy
+#: model:ir.ui.menu,name:transport_energy.menu_transport_energy_root
+#: model:res.groups.privilege,name:transport_energy.privilege_transport_energy
+msgid "Energie Transport"
+msgstr "طاقة النقل"
+
+#. module: transport_energy
+#: model:ir.model.fields.selection,name:transport_energy.selection__transport_wizard_rapport__langue__en
+msgid "English"
+msgstr "الإنجليزية"
+
+#. module: transport_energy
+#: model_terms:ir.ui.view,arch_db:transport_energy.view_supply_order_form
+msgid "Enregistrer reception"
+msgstr "تسجيل الاستلام"
+
+#. module: transport_energy
+#: model:ir.model.fields.selection,name:transport_energy.selection__transport_fuel_voucher__payment_mode__cash
+msgid "Especes"
+msgstr "نقداً"
+
+#. module: transport_energy
+#: model:ir.model.fields.selection,name:transport_energy.selection__transport_fuel_voucher_line__source_distance__estimation
+msgid "Estimation carburant"
+msgstr "تقدير الوقود"
+
+#. module: transport_energy
+#: model:ir.model.fields,field_description:transport_energy.field_transport_facture_energie__invoice_state
+msgid "Etat comptable"
+msgstr "الحالة المحاسبية"
+
+#. module: transport_energy
+#: model:ir.model.fields,field_description:transport_energy.field_transport_fuel_voucher_line__odometer_status
+msgid "Etat compteur"
+msgstr "حالة العداد"
+
+#. module: transport_energy
+#: model:ir.model.fields,field_description:transport_energy.field_fleet_vehicle__odometer_status
+msgid "Etat du compteur"
+msgstr "حالة العداد"
+
+#. module: transport_energy
+#: model:ir.model.fields,field_description:transport_energy.field_transport_fuel_cuve__stock_status
+#: model:ir.model.fields,field_description:transport_energy.field_transport_stock_lubrifiant__stock_status
+msgid "Etat stock"
+msgstr "حالة المخزون"
+
+#. module: transport_energy
+#: model_terms:ir.ui.view,arch_db:transport_energy.view_energy_type_form
+msgid "Ex: Bidon, Fut, Cartouche"
+msgstr "مثال: بيدون، برميل، خرطوشة"
+
+#. module: transport_energy
+#: model_terms:ir.ui.view,arch_db:transport_energy.view_wizard_init_stock_lubrifiant_form
+msgid "Ex: Stock initial migration, Correction inventaire physique..."
+msgstr "مثال: مخزون ترحيل أولي، تصحيح جرد فعلي..."
+
+#. module: transport_energy
+#: model:ir.model.fields.selection,name:transport_energy.selection__transport_agilis_carte__statut__expiree
+msgid "Expiree"
+msgstr "⚫ منتهية الصلاحية"
+
+#. module: transport_energy
+#: model_terms:ir.ui.view,arch_db:transport_energy.view_jaugeage_form
+msgid "Expliquer l ecart detecte..."
+msgstr "شرح الفارق المكتشف..."
+
+#. module: transport_energy
+#: model_terms:ir.ui.view,arch_db:transport_energy.view_jaugeage_lubrifiant_form
+msgid "Expliquer l'ecart detecte : perte, evaporation, erreur de saisie..."
+msgstr "شرح الفارق المكتشف: فقدان، تبخر، خطأ إدخال..."
+
+#. module: transport_energy
+#: model_terms:ir.ui.view,arch_db:transport_energy.view_wizard_rapport_carburant_form
+#: model_terms:ir.ui.view,arch_db:transport_energy.view_wizard_rapport_lubrifiant_form
+msgid "Exporter Excel"
+msgstr "تصدير إكسل"
+
+#. module: transport_energy
+#: model_terms:ir.ui.view,arch_db:transport_energy.template_bge
+msgid "External Fuel Supply Card"
+msgstr "بطاقة التزود بالوقود الخارجي"
+
+#. module: transport_energy
+#: model_terms:ir.ui.view,arch_db:transport_energy.template_bge
+msgid "External Supply Voucher (BGE)"
+msgstr "بون التزود الخارجي (BGE)"
+
+#. module: transport_energy
+#: model:ir.model.fields.selection,name:transport_energy.selection__transport_fuel_voucher__voucher_type__external
+msgid "Externe (BGE)"
+msgstr "خارجي (BGE)"
+
+#. module: transport_energy
+#: model:ir.model.fields,field_description:transport_energy.field_transport_facture_energie__invoice_id
+msgid "Facture comptable"
+msgstr "الفاتورة المحاسبية"
+
+#. module: transport_energy
+#: model_terms:ir.ui.view,arch_db:transport_energy.view_facture_energie_form
+msgid "Facture comptable Odoo"
+msgstr "الفاتورة المحاسبية في أودو"
+
+#. module: transport_energy
+#: model:ir.model,name:transport_energy.model_transport_facture_energie
+#: model_terms:ir.ui.view,arch_db:transport_energy.view_facture_energie_form
+msgid "Facture energie STEG / SONEDE"
+msgstr "فاتورة طاقة (STEG/SONEDE)"
+
+#. module: transport_energy
+#: model:ir.model.fields,help:transport_energy.field_transport_facture_energie__invoice_id
+msgid "Facture fournisseur generee automatiquement dans la comptabilite Odoo."
+msgstr "فاتورة المورد المُنشأة تلقائياً في محاسبة أودو."
+
+#. module: transport_energy
+#: model:ir.actions.act_window,name:transport_energy.action_facture_sonede
+msgid "Factures SONEDE"
+msgstr "فواتير SONEDE"
+
+#. module: transport_energy
+#: model:ir.ui.menu,name:transport_energy.menu_facture_sonede
+msgid "Factures SONEDE (eau)"
+msgstr "💧 فواتير SONEDE"
+
+#. module: transport_energy
+#: model:ir.actions.act_window,name:transport_energy.action_facture_steg
+msgid "Factures STEG"
+msgstr "فواتير STEG"
+
+#. module: transport_energy
+#: model:ir.ui.menu,name:transport_energy.menu_facture_steg
+msgid "Factures STEG (electricite)"
+msgstr "⚡ فواتير STEG"
+
+#. module: transport_energy
+#: model_terms:ir.ui.view,arch_db:transport_energy.view_facture_energie_list
+msgid "Factures energie"
+msgstr "فواتير الطاقة"
+
+#. module: transport_energy
+#: model:ir.model.fields,field_description:transport_energy.field_fleet_vehicle__immobilisation_id
+msgid "Fiche immobilisation"
+msgstr "بطاقة التثبيت"
+
+#. module: transport_energy
+#: model_terms:ir.ui.view,arch_db:transport_energy.view_fleet_vehicle_transport_form
+msgid "Fiche immobilisation liée à ce véhicule"
+msgstr "بطاقة التثبيت المرتبطة بهذه المركبة"
+
+#. module: transport_energy
+#: model:ir.model.fields,help:transport_energy.field_fleet_vehicle__immobilisation_id
+msgid ""
+"Fiche patrimoine de ce vehicule : VNC, amortissement, statut comptable."
+msgstr "بطاقة أصول هذه المركبة: القيمة الصافية، الاهتلاك، الحالة المحاسبية."
+
+#. module: transport_energy
+#: model_terms:ir.ui.view,arch_db:transport_energy.view_wizard_rapport_carburant_form
+#: model_terms:ir.ui.view,arch_db:transport_energy.view_wizard_rapport_energie_form
+#: model_terms:ir.ui.view,arch_db:transport_energy.view_wizard_rapport_lubrifiant_form
+msgid "Filtres"
+msgstr "المرشحات"
+
+#. module: transport_energy
+#: model:ir.model.fields,field_description:transport_energy.field_transport_facture_energie__date_fin_periode
+msgid "Fin periode"
+msgstr "نهاية الفترة"
+
+#. module: transport_energy
+#: model:ir.model.fields,field_description:transport_energy.field_transport_agilis_carte__message_follower_ids
+#: model:ir.model.fields,field_description:transport_energy.field_transport_bon_lubrifiant__message_follower_ids
+#: model:ir.model.fields,field_description:transport_energy.field_transport_facture_energie__message_follower_ids
+#: model:ir.model.fields,field_description:transport_energy.field_transport_fuel_voucher__message_follower_ids
+#: model:ir.model.fields,field_description:transport_energy.field_transport_jaugeage__message_follower_ids
+#: model:ir.model.fields,field_description:transport_energy.field_transport_jaugeage_lubrifiant__message_follower_ids
+#: model:ir.model.fields,field_description:transport_energy.field_transport_reception_lubrifiant__message_follower_ids
+#: model:ir.model.fields,field_description:transport_energy.field_transport_supply_order__message_follower_ids
+msgid "Followers"
+msgstr "المتابعون"
+
+#. module: transport_energy
+#: model:ir.model.fields,field_description:transport_energy.field_transport_agilis_carte__message_partner_ids
+#: model:ir.model.fields,field_description:transport_energy.field_transport_bon_lubrifiant__message_partner_ids
+#: model:ir.model.fields,field_description:transport_energy.field_transport_facture_energie__message_partner_ids
+#: model:ir.model.fields,field_description:transport_energy.field_transport_fuel_voucher__message_partner_ids
+#: model:ir.model.fields,field_description:transport_energy.field_transport_jaugeage__message_partner_ids
+#: model:ir.model.fields,field_description:transport_energy.field_transport_jaugeage_lubrifiant__message_partner_ids
+#: model:ir.model.fields,field_description:transport_energy.field_transport_reception_lubrifiant__message_partner_ids
+#: model:ir.model.fields,field_description:transport_energy.field_transport_supply_order__message_partner_ids
+msgid "Followers (Partners)"
+msgstr "المتابعون (الشركاء)"
+
+#. module: transport_energy
+#: model:ir.model.fields.selection,name:transport_energy.selection__fleet_vehicle__odometer_status__ok
+msgid "Fonctionnel"
+msgstr "يعمل بشكل سليم"
+
+#. module: transport_energy
+#: model:ir.model.fields,help:transport_energy.field_transport_agilis_carte__activity_type_icon
+#: model:ir.model.fields,help:transport_energy.field_transport_bon_lubrifiant__activity_type_icon
+#: model:ir.model.fields,help:transport_energy.field_transport_facture_energie__activity_type_icon
+#: model:ir.model.fields,help:transport_energy.field_transport_fuel_voucher__activity_type_icon
+#: model:ir.model.fields,help:transport_energy.field_transport_jaugeage__activity_type_icon
+#: model:ir.model.fields,help:transport_energy.field_transport_jaugeage_lubrifiant__activity_type_icon
+#: model:ir.model.fields,help:transport_energy.field_transport_reception_lubrifiant__activity_type_icon
+#: model:ir.model.fields,help:transport_energy.field_transport_supply_order__activity_type_icon
+msgid "Font awesome icon e.g. fa-tasks"
+msgstr "أيقونة Font Awesome مثال: fa-tasks"
+
+#. module: transport_energy
+#: model:ir.model.fields,field_description:transport_energy.field_transport_reception_lubrifiant__fournisseur_id
+#: model:ir.model.fields,field_description:transport_energy.field_transport_supply_order__supplier_id
+#: model_terms:ir.ui.view,arch_db:transport_energy.view_reception_lubrifiant_form
+msgid "Fournisseur"
+msgstr "المورد"
+
+#. module: transport_energy
+#: model:ir.model.fields.selection,name:transport_energy.selection__transport_wizard_rapport__langue__fr
+msgid "Français"
+msgstr "الفرنسية"
+
+#. module: transport_energy
+#: model_terms:ir.ui.view,arch_db:transport_energy.template_bgi
+msgid "Fuel Distribution Table"
+msgstr "جدول توزيع الوقود"
+
+#. module: transport_energy
+#: model_terms:ir.ui.view,arch_db:transport_energy.template_bge
+msgid "Fuel Type :"
+msgstr "نوع الوقود :"
+
+#. module: transport_energy
+#: model_terms:ir.ui.view,arch_db:transport_energy.view_wizard_rapport_carburant_form
+#: model_terms:ir.ui.view,arch_db:transport_energy.view_wizard_rapport_lubrifiant_form
+msgid "Generer PDF"
+msgstr "توليد PDF"
+
+#. module: transport_energy
+#: model_terms:ir.ui.view,arch_db:transport_energy.view_wizard_rapport_energie_form
+msgid "Generer rapport PDF"
+msgstr "توليد تقرير PDF"
+
+#. module: transport_energy
+#: model:ir.model.fields,help:transport_energy.field_fleet_vehicle__internal_code
+msgid "Grand numero interne ex: 15362773"
+msgstr "الرقم الداخلي الكبير مثال: 15362773"
+
+#. module: transport_energy
+#: model:ir.model.fields,field_description:transport_energy.field_transport_agilis_carte__has_message
+#: model:ir.model.fields,field_description:transport_energy.field_transport_bon_lubrifiant__has_message
+#: model:ir.model.fields,field_description:transport_energy.field_transport_facture_energie__has_message
+#: model:ir.model.fields,field_description:transport_energy.field_transport_fuel_voucher__has_message
+#: model:ir.model.fields,field_description:transport_energy.field_transport_jaugeage__has_message
+#: model:ir.model.fields,field_description:transport_energy.field_transport_jaugeage_lubrifiant__has_message
+#: model:ir.model.fields,field_description:transport_energy.field_transport_reception_lubrifiant__has_message
+#: model:ir.model.fields,field_description:transport_energy.field_transport_supply_order__has_message
+msgid "Has Message"
+msgstr "يوجد رسالة"
+
+#. module: transport_energy
+#: model:ir.model.fields,field_description:transport_energy.field_transport_fuel_voucher_line__time
+#: model_terms:ir.ui.view,arch_db:transport_energy.report_bge_template
+#: model_terms:ir.ui.view,arch_db:transport_energy.template_bge
+#: model_terms:ir.ui.view,arch_db:transport_energy.template_bgi
+msgid "Heure"
+msgstr "التوقيت"
+
+#. module: transport_energy
+#: model:ir.model.fields,field_description:transport_energy.field_transport_fuel_voucher__time_start
+msgid "Heure debut"
+msgstr "بداية العمل"
+
+#. module: transport_energy
+#: model_terms:ir.ui.view,arch_db:transport_energy.template_bge
+#: model_terms:ir.ui.view,arch_db:transport_energy.template_bgi
+msgid "Heure début :"
+msgstr "وقت البداية :"
+
+#. module: transport_energy
+#: model:ir.model.fields,field_description:transport_energy.field_transport_fuel_voucher__time_end
+msgid "Heure fin"
+msgstr "نهاية العمل"
+
+#. module: transport_energy
+#: model_terms:ir.ui.view,arch_db:transport_energy.template_bge
+#: model_terms:ir.ui.view,arch_db:transport_energy.template_bgi
+msgid "Heure fin :"
+msgstr "وقت النهاية :"
+
+#. module: transport_energy
+#: model_terms:ir.ui.view,arch_db:transport_energy.view_agilis_carte_form
+msgid "Historique utilisations"
+msgstr "سجل الاستخدامات"
+
+#. module: transport_energy
+#: model:ir.model.fields,field_description:transport_energy.field_fleet_vehicle__id
+#: model:ir.model.fields,field_description:transport_energy.field_transport_agilis_carte__id
+#: model:ir.model.fields,field_description:transport_energy.field_transport_agilis_recharge__id
+#: model:ir.model.fields,field_description:transport_energy.field_transport_agilis_utilisation__id
+#: model:ir.model.fields,field_description:transport_energy.field_transport_bon_lubrifiant__id
+#: model:ir.model.fields,field_description:transport_energy.field_transport_bon_lubrifiant_ligne__id
+#: model:ir.model.fields,field_description:transport_energy.field_transport_energy_type__id
+#: model:ir.model.fields,field_description:transport_energy.field_transport_facture_energie__id
+#: model:ir.model.fields,field_description:transport_energy.field_transport_fuel_cuve__id
+#: model:ir.model.fields,field_description:transport_energy.field_transport_fuel_station__id
+#: model:ir.model.fields,field_description:transport_energy.field_transport_fuel_voucher__id
+#: model:ir.model.fields,field_description:transport_energy.field_transport_fuel_voucher_line__id
+#: model:ir.model.fields,field_description:transport_energy.field_transport_jaugeage__id
+#: model:ir.model.fields,field_description:transport_energy.field_transport_jaugeage_lubrifiant__id
+#: model:ir.model.fields,field_description:transport_energy.field_transport_reception_lubrifiant__id
+#: model:ir.model.fields,field_description:transport_energy.field_transport_reception_lubrifiant_ligne__id
+#: model:ir.model.fields,field_description:transport_energy.field_transport_stock_lubrifiant__id
+#: model:ir.model.fields,field_description:transport_energy.field_transport_supply_order__id
+#: model:ir.model.fields,field_description:transport_energy.field_transport_wizard_init_stock_lubrifiant__id
+#: model:ir.model.fields,field_description:transport_energy.field_transport_wizard_rapport__id
+#: model:ir.model.fields,field_description:transport_energy.field_transport_wizard_rapport_energie__id
+msgid "ID"
+msgstr "المُعرف"
+
+#. module: transport_energy
+#: model:ir.model.fields,field_description:transport_energy.field_transport_agilis_carte__activity_exception_icon
+#: model:ir.model.fields,field_description:transport_energy.field_transport_bon_lubrifiant__activity_exception_icon
+#: model:ir.model.fields,field_description:transport_energy.field_transport_facture_energie__activity_exception_icon
+#: model:ir.model.fields,field_description:transport_energy.field_transport_fuel_voucher__activity_exception_icon
+#: model:ir.model.fields,field_description:transport_energy.field_transport_jaugeage__activity_exception_icon
+#: model:ir.model.fields,field_description:transport_energy.field_transport_jaugeage_lubrifiant__activity_exception_icon
+#: model:ir.model.fields,field_description:transport_energy.field_transport_reception_lubrifiant__activity_exception_icon
+#: model:ir.model.fields,field_description:transport_energy.field_transport_supply_order__activity_exception_icon
+msgid "Icon"
+msgstr "الأيقونة"
+
+#. module: transport_energy
+#: model:ir.model.fields,help:transport_energy.field_transport_agilis_carte__activity_exception_icon
+#: model:ir.model.fields,help:transport_energy.field_transport_bon_lubrifiant__activity_exception_icon
+#: model:ir.model.fields,help:transport_energy.field_transport_facture_energie__activity_exception_icon
+#: model:ir.model.fields,help:transport_energy.field_transport_fuel_voucher__activity_exception_icon
+#: model:ir.model.fields,help:transport_energy.field_transport_jaugeage__activity_exception_icon
+#: model:ir.model.fields,help:transport_energy.field_transport_jaugeage_lubrifiant__activity_exception_icon
+#: model:ir.model.fields,help:transport_energy.field_transport_reception_lubrifiant__activity_exception_icon
+#: model:ir.model.fields,help:transport_energy.field_transport_supply_order__activity_exception_icon
+msgid "Icon to indicate an exception activity."
+msgstr "أيقونة للإشارة إلى نشاط استثنائي."
+
+#. module: transport_energy
+#: model_terms:ir.ui.view,arch_db:transport_energy.view_energy_type_form
+#: model_terms:ir.ui.view,arch_db:transport_energy.view_fuel_station_form
+#: model_terms:ir.ui.view,arch_db:transport_energy.view_jaugeage_lubrifiant_form
+msgid "Identification"
+msgstr "التعريف"
+
+#. module: transport_energy
+#: model:ir.model.fields,help:transport_energy.field_transport_agilis_carte__message_needaction
+#: model:ir.model.fields,help:transport_energy.field_transport_bon_lubrifiant__message_needaction
+#: model:ir.model.fields,help:transport_energy.field_transport_facture_energie__message_needaction
+#: model:ir.model.fields,help:transport_energy.field_transport_fuel_voucher__message_needaction
+#: model:ir.model.fields,help:transport_energy.field_transport_jaugeage__message_needaction
+#: model:ir.model.fields,help:transport_energy.field_transport_jaugeage_lubrifiant__message_needaction
+#: model:ir.model.fields,help:transport_energy.field_transport_reception_lubrifiant__message_needaction
+#: model:ir.model.fields,help:transport_energy.field_transport_supply_order__message_needaction
+msgid "If checked, new messages require your attention."
+msgstr "إذا تم التحديد، فإن الرسائل الجديدة تستدعي انتباهك."
+
+#. module: transport_energy
+#: model:ir.model.fields,help:transport_energy.field_transport_agilis_carte__message_has_error
+#: model:ir.model.fields,help:transport_energy.field_transport_agilis_carte__message_has_sms_error
+#: model:ir.model.fields,help:transport_energy.field_transport_bon_lubrifiant__message_has_error
+#: model:ir.model.fields,help:transport_energy.field_transport_bon_lubrifiant__message_has_sms_error
+#: model:ir.model.fields,help:transport_energy.field_transport_facture_energie__message_has_error
+#: model:ir.model.fields,help:transport_energy.field_transport_facture_energie__message_has_sms_error
+#: model:ir.model.fields,help:transport_energy.field_transport_fuel_voucher__message_has_error
+#: model:ir.model.fields,help:transport_energy.field_transport_fuel_voucher__message_has_sms_error
+#: model:ir.model.fields,help:transport_energy.field_transport_jaugeage__message_has_error
+#: model:ir.model.fields,help:transport_energy.field_transport_jaugeage__message_has_sms_error
+#: model:ir.model.fields,help:transport_energy.field_transport_jaugeage_lubrifiant__message_has_error
+#: model:ir.model.fields,help:transport_energy.field_transport_jaugeage_lubrifiant__message_has_sms_error
+#: model:ir.model.fields,help:transport_energy.field_transport_reception_lubrifiant__message_has_error
+#: model:ir.model.fields,help:transport_energy.field_transport_reception_lubrifiant__message_has_sms_error
+#: model:ir.model.fields,help:transport_energy.field_transport_supply_order__message_has_error
+#: model:ir.model.fields,help:transport_energy.field_transport_supply_order__message_has_sms_error
+msgid "If checked, some messages have a delivery error."
+msgstr "إذا تم التحديد، فإن بعض الرسائل تحتوي على خطأ في التسليم."
+
+#. module: transport_energy
+#: model:ir.model.fields,help:transport_energy.field_transport_fuel_voucher_line__source_distance
+msgid "Indique quelle source a ete utilisee pour calculer la distance."
+msgstr "يُشير إلى المصدر المستخدم لحساب المسافة."
+
+#. module: transport_energy
+#: model_terms:ir.ui.view,arch_db:transport_energy.view_agilis_carte_form
+#: model_terms:ir.ui.view,arch_db:transport_energy.view_jaugeage_form
+msgid "Informations"
+msgstr "المعلومات"
+
+#. module: transport_energy
+#: model_terms:ir.ui.view,arch_db:transport_energy.view_facture_energie_form
+msgid "Informations facture"
+msgstr "بيانات الفاتورة"
+
+#. module: transport_energy
+#: model_terms:ir.ui.view,arch_db:transport_energy.view_bon_lubrifiant_form
+msgid "Informations generales"
+msgstr "المعلومات العامة"
+
+#. module: transport_energy
+#: model:ir.model,name:transport_energy.model_transport_wizard_init_stock_lubrifiant
+msgid "Initialisation stock lubrifiant"
+msgstr "تهيئة مخزون المزيت"
+
+#. module: transport_energy
+#: model_terms:ir.ui.view,arch_db:transport_energy.view_stock_lubrifiant_form
+msgid "Initialiser / Ajuster le stock"
+msgstr "تهيئة / تعديل المخزون"
+
+#. module: transport_energy
+#: model_terms:ir.ui.view,arch_db:transport_energy.view_wizard_init_stock_lubrifiant_form
+msgid "Initialiser / Ajuster le stock lubrifiant"
+msgstr "تهيئة / تعديل مخزون المزيت"
+
+#. module: transport_energy
+#: model_terms:ir.ui.view,arch_db:transport_energy.template_bgi
+msgid "Internal Supply Voucher (BGI)"
+msgstr "بون التزود الداخلي (BGI)"
+
+#. module: transport_energy
+#: model:ir.model.fields.selection,name:transport_energy.selection__transport_fuel_voucher__voucher_type__internal
+msgid "Interne (BGI)"
+msgstr "داخلي (BGI)"
+
+#. module: transport_energy
+#: model:ir.model.fields.selection,name:transport_energy.selection__fleet_vehicle__activity_type__interurban
+#: model:ir.model.fields.selection,name:transport_energy.selection__transport_wizard_rapport__activite_filtre__interurban
+msgid "Interurbain"
+msgstr "بين المدن"
+
+#. module: transport_energy
+#: model:ir.model.fields,field_description:transport_energy.field_transport_agilis_carte__message_is_follower
+#: model:ir.model.fields,field_description:transport_energy.field_transport_bon_lubrifiant__message_is_follower
+#: model:ir.model.fields,field_description:transport_energy.field_transport_facture_energie__message_is_follower
+#: model:ir.model.fields,field_description:transport_energy.field_transport_fuel_voucher__message_is_follower
+#: model:ir.model.fields,field_description:transport_energy.field_transport_jaugeage__message_is_follower
+#: model:ir.model.fields,field_description:transport_energy.field_transport_jaugeage_lubrifiant__message_is_follower
+#: model:ir.model.fields,field_description:transport_energy.field_transport_reception_lubrifiant__message_is_follower
+#: model:ir.model.fields,field_description:transport_energy.field_transport_supply_order__message_is_follower
+msgid "Is Follower"
+msgstr "متابع"
+
+#. module: transport_energy
+#: model_terms:ir.ui.view,arch_db:transport_energy.view_jaugeage_form
+msgid "Jaugeage des cuves"
+msgstr "قياس الخزانات"
+
+#. module: transport_energy
+#: model:ir.model,name:transport_energy.model_transport_jaugeage
+msgid "Jaugeage des cuves carburant"
+msgstr "قياس الخزانات"
+
+#. module: transport_energy
+#: model:ir.actions.act_window,name:transport_energy.action_jaugeage_pompiste
+#: model:ir.ui.menu,name:transport_energy.menu_jaugeage_lubrifiant_pompiste
+#: model:ir.ui.menu,name:transport_energy.menu_jaugeage_pompiste
+msgid "Jaugeage fin de journee"
+msgstr "قياس نهاية اليوم"
+
+#. module: transport_energy
+#: model:ir.actions.act_window,name:transport_energy.action_jaugeage_lubrifiant_pompiste
+msgid "Jaugeage lubrifiant fin de journee"
+msgstr "قياس المزيت نهاية اليوم"
+
+#. module: transport_energy
+#: model:ir.model,name:transport_energy.model_transport_jaugeage_lubrifiant
+#: model_terms:ir.ui.view,arch_db:transport_energy.view_jaugeage_lubrifiant_form
+msgid "Jaugeage lubrifiant magasin"
+msgstr "قياس مزيت المخزن"
+
+#. module: transport_energy
+#: model:ir.actions.act_window,name:transport_energy.action_jaugeage
+#: model_terms:ir.ui.view,arch_db:transport_energy.view_jaugeage_list
+msgid "Jaugeages"
+msgstr "عمليات القياس"
+
+#. module: transport_energy
+#: model:ir.ui.menu,name:transport_energy.menu_jaugeage
+msgid "Jaugeages des cuves"
+msgstr "عمليات القياس"
+
+#. module: transport_energy
+#: model:ir.actions.act_window,name:transport_energy.action_jaugeage_lubrifiant
+#: model:ir.ui.menu,name:transport_energy.menu_jaugeage_lubrifiant
+#: model_terms:ir.ui.view,arch_db:transport_energy.view_jaugeage_lubrifiant_list
+msgid "Jaugeages lubrifiants"
+msgstr "قياسات المزيتات"
+
+#. module: transport_energy
+#: model_terms:ir.ui.view,arch_db:transport_energy.view_fuel_voucher_search
+#: model_terms:ir.ui.view,arch_db:transport_energy.view_jaugeage_lubrifiant_search
+msgid "Jour"
+msgstr "اليوم"
+
+#. module: transport_energy
+#: model_terms:ir.ui.view,arch_db:transport_energy.view_fuel_voucher_bgi_form
+msgid "Journee de distribution"
+msgstr "يوم التوزيع"
+
+#. module: transport_energy
+#: model_terms:ir.ui.view,arch_db:transport_energy.view_wizard_init_stock_lubrifiant_form
+msgid "Justification"
+msgstr "التبرير"
+
+#. module: transport_energy
+#: model:ir.model.fields,field_description:transport_energy.field_transport_jaugeage__justification
+#: model:ir.model.fields,field_description:transport_energy.field_transport_jaugeage_lubrifiant__justification
+msgid "Justification de l ecart"
+msgstr "تبرير الفارق"
+
+#. module: transport_energy
+#: model:ir.model.fields,help:transport_energy.field_transport_wizard_init_stock_lubrifiant__motif
+msgid "Justification de la modification (stock initial, correction, ...)"
+msgstr "تبرير التعديل (مخزون ابتدائي، تصحيح، ...)"
+
+#. module: transport_energy
+#: model_terms:ir.ui.view,arch_db:transport_energy.view_bon_lubrifiant_form
+msgid "Kilometrage"
+msgstr "عداد الكيلومترات"
+
+#. module: transport_energy
+#: model:ir.model.fields,field_description:transport_energy.field_transport_bon_lubrifiant__kilometrage
+msgid "Kilometrage actuel (km)"
+msgstr "عداد الكيلومترات الحالي (كم)"
+
+#. module: transport_energy
+#: model:ir.model.fields,field_description:transport_energy.field_transport_bon_lubrifiant__dernier_vidange_km
+msgid "Km derniere vidange"
+msgstr "كم آخر تغيير زيت"
+
+#. module: transport_energy
+#: model:ir.model.fields,field_description:transport_energy.field_transport_bon_lubrifiant__prochain_vidange_km
+msgid "Km prochaine vidange"
+msgstr "كم تغيير الزيت القادم"
+
+#. module: transport_energy
+#: model_terms:ir.ui.view,arch_db:transport_energy.view_fuel_voucher_bge_form
+#: model_terms:ir.ui.view,arch_db:transport_energy.view_fuel_voucher_bgi_form
+msgid "Km tournees"
+msgstr "كم الجولات"
+
+#. module: transport_energy
+#: model:ir.model.fields,field_description:transport_energy.field_transport_fuel_voucher_line__km_tournees
+msgid "Km tournees (total)"
+msgstr "كم الجولات (الإجمالي)"
+
+#. module: transport_energy
+#: model_terms:ir.ui.view,arch_db:transport_energy.template_excessif
+msgid "L/100km"
+msgstr "لتر/100كم"
+
+#. module: transport_energy
+#: model_terms:ir.ui.view,arch_db:transport_energy.view_wizard_rapport_energie_form
+msgid "Laisser vide pour tous les sites"
+msgstr "اتركه فارغاً لجميع المواقع"
+
+#. module: transport_energy
+#: model:ir.model.fields,field_description:transport_energy.field_transport_wizard_rapport__langue
+msgid "Langue du rapport"
+msgstr "لغة التقرير"
+
+#. module: transport_energy
+#: model:ir.model.fields,field_description:transport_energy.field_transport_agilis_carte__write_uid
+#: model:ir.model.fields,field_description:transport_energy.field_transport_agilis_recharge__write_uid
+#: model:ir.model.fields,field_description:transport_energy.field_transport_agilis_utilisation__write_uid
+#: model:ir.model.fields,field_description:transport_energy.field_transport_bon_lubrifiant__write_uid
+#: model:ir.model.fields,field_description:transport_energy.field_transport_bon_lubrifiant_ligne__write_uid
+#: model:ir.model.fields,field_description:transport_energy.field_transport_energy_type__write_uid
+#: model:ir.model.fields,field_description:transport_energy.field_transport_facture_energie__write_uid
+#: model:ir.model.fields,field_description:transport_energy.field_transport_fuel_cuve__write_uid
+#: model:ir.model.fields,field_description:transport_energy.field_transport_fuel_station__write_uid
+#: model:ir.model.fields,field_description:transport_energy.field_transport_fuel_voucher__write_uid
+#: model:ir.model.fields,field_description:transport_energy.field_transport_fuel_voucher_line__write_uid
+#: model:ir.model.fields,field_description:transport_energy.field_transport_jaugeage__write_uid
+#: model:ir.model.fields,field_description:transport_energy.field_transport_jaugeage_lubrifiant__write_uid
+#: model:ir.model.fields,field_description:transport_energy.field_transport_reception_lubrifiant__write_uid
+#: model:ir.model.fields,field_description:transport_energy.field_transport_reception_lubrifiant_ligne__write_uid
+#: model:ir.model.fields,field_description:transport_energy.field_transport_stock_lubrifiant__write_uid
+#: model:ir.model.fields,field_description:transport_energy.field_transport_supply_order__write_uid
+#: model:ir.model.fields,field_description:transport_energy.field_transport_wizard_init_stock_lubrifiant__write_uid
+#: model:ir.model.fields,field_description:transport_energy.field_transport_wizard_rapport__write_uid
+#: model:ir.model.fields,field_description:transport_energy.field_transport_wizard_rapport_energie__write_uid
+msgid "Last Updated by"
+msgstr "آخر تحديث بواسطة"
+
+#. module: transport_energy
+#: model:ir.model.fields,field_description:transport_energy.field_transport_agilis_carte__write_date
+#: model:ir.model.fields,field_description:transport_energy.field_transport_agilis_recharge__write_date
+#: model:ir.model.fields,field_description:transport_energy.field_transport_agilis_utilisation__write_date
+#: model:ir.model.fields,field_description:transport_energy.field_transport_bon_lubrifiant__write_date
+#: model:ir.model.fields,field_description:transport_energy.field_transport_bon_lubrifiant_ligne__write_date
+#: model:ir.model.fields,field_description:transport_energy.field_transport_energy_type__write_date
+#: model:ir.model.fields,field_description:transport_energy.field_transport_facture_energie__write_date
+#: model:ir.model.fields,field_description:transport_energy.field_transport_fuel_cuve__write_date
+#: model:ir.model.fields,field_description:transport_energy.field_transport_fuel_station__write_date
+#: model:ir.model.fields,field_description:transport_energy.field_transport_fuel_voucher__write_date
+#: model:ir.model.fields,field_description:transport_energy.field_transport_fuel_voucher_line__write_date
+#: model:ir.model.fields,field_description:transport_energy.field_transport_jaugeage__write_date
+#: model:ir.model.fields,field_description:transport_energy.field_transport_jaugeage_lubrifiant__write_date
+#: model:ir.model.fields,field_description:transport_energy.field_transport_reception_lubrifiant__write_date
+#: model:ir.model.fields,field_description:transport_energy.field_transport_reception_lubrifiant_ligne__write_date
+#: model:ir.model.fields,field_description:transport_energy.field_transport_stock_lubrifiant__write_date
+#: model:ir.model.fields,field_description:transport_energy.field_transport_supply_order__write_date
+#: model:ir.model.fields,field_description:transport_energy.field_transport_wizard_init_stock_lubrifiant__write_date
+#: model:ir.model.fields,field_description:transport_energy.field_transport_wizard_rapport__write_date
+#: model:ir.model.fields,field_description:transport_energy.field_transport_wizard_rapport_energie__write_date
+msgid "Last Updated on"
+msgstr "تاريخ آخر تحديث"
+
+#. module: transport_energy
+#: model_terms:ir.ui.view,arch_db:transport_energy.view_agilis_carte_form
+msgid ""
+"Les utilisations sont creees automatiquement\n"
+"                                lors de la validation d un bon BGE avec paiement AGILIS."
+msgstr ""
+"تُنشأ الاستخدامات تلقائياً\n"
+"                                عند التحقق من بون BGE بالدفع عبر AGILIS."
+
+#. module: transport_energy
+#: model_terms:ir.ui.view,arch_db:transport_energy.view_facture_energie_form
+msgid "Lien bureau d ordre (optionnel)"
+msgstr "رابط مكتب الأمر (اختياري)"
+
+#. module: transport_energy
+#: model:ir.model,name:transport_energy.model_transport_fuel_voucher_line
+msgid "Ligne de bon de carburant"
+msgstr "سطر بون الوقود"
+
+#. module: transport_energy
+#: model:ir.model,name:transport_energy.model_transport_bon_lubrifiant_ligne
+msgid "Ligne de bon lubrifiant"
+msgstr "سطر بون المزيت"
+
+#. module: transport_energy
+#: model:ir.model,name:transport_energy.model_transport_reception_lubrifiant_ligne
+msgid "Ligne reception lubrifiant"
+msgstr "سطر استلام المزيت"
+
+#. module: transport_energy
+#: model:ir.model.fields,field_description:transport_energy.field_transport_fuel_voucher__line_ids
+#: model_terms:ir.ui.view,arch_db:transport_energy.view_fuel_voucher_bge_form
+#: model_terms:ir.ui.view,arch_db:transport_energy.view_fuel_voucher_bgi_form
+msgid "Lignes de ravitaillement"
+msgstr "أسطر التزود"
+
+#. module: transport_energy
+#: model:ir.model.fields,field_description:transport_energy.field_transport_bon_lubrifiant__ligne_ids
+#: model_terms:ir.ui.view,arch_db:transport_energy.view_bon_lubrifiant_form
+msgid "Lignes lubrifiants"
+msgstr "أسطر المزيتات"
+
+#. module: transport_energy
+#: model_terms:ir.ui.view,arch_db:transport_energy.view_jaugeage_lubrifiant_form
+#: model_terms:ir.ui.view,arch_db:transport_energy.view_reception_lubrifiant_form
+#: model_terms:ir.ui.view,arch_db:transport_energy.view_stock_lubrifiant_form
+msgid "Localisation"
+msgstr "الموقع"
+
+#. module: transport_energy
+#: model:ir.model.fields.selection,name:transport_energy.selection__transport_energy_type__category__lubrifiant
+#: model_terms:ir.ui.view,arch_db:transport_energy.view_jaugeage_lubrifiant_form
+#: model_terms:ir.ui.view,arch_db:transport_energy.view_jaugeage_lubrifiant_search
+#: model_terms:ir.ui.view,arch_db:transport_energy.view_stock_lubrifiant_form
+#: model_terms:ir.ui.view,arch_db:transport_energy.view_stock_lubrifiant_search
+msgid "Lubrifiant"
+msgstr "مزيت"
+
+#. module: transport_energy
+#: model:ir.ui.menu,name:transport_energy.menu_lubrifiants
+msgid "Lubrifiants"
+msgstr "المزيتات"
+
+#. module: transport_energy
+#: model:ir.model.fields,field_description:transport_energy.field_transport_reception_lubrifiant__ligne_ids
+#: model_terms:ir.ui.view,arch_db:transport_energy.view_reception_lubrifiant_form
+msgid "Lubrifiants recus"
+msgstr "المزيتات المستلمة"
+
+#. module: transport_energy
+#: model_terms:ir.ui.view,arch_db:transport_energy.template_bgi
+msgid "Main Grade :"
+msgstr "الدرجة الرئيسية :"
+
+#. module: transport_energy
+#: model_terms:ir.ui.view,arch_db:transport_energy.view_facture_energie_form
+msgid "Marquer payee"
+msgstr "تحديد كمدفوعة"
+
+#. module: transport_energy
+#: model_terms:ir.ui.view,arch_db:transport_energy.template_bgi
+msgid "Material :"
+msgstr "المادة :"
+
+#. module: transport_energy
+#: model_terms:ir.ui.view,arch_db:transport_energy.template_bgi
+msgid "Matière :"
+msgstr "المادة :"
+
+#. module: transport_energy
+#: model:ir.model.fields,field_description:transport_energy.field_transport_agilis_carte__message_has_error
+#: model:ir.model.fields,field_description:transport_energy.field_transport_bon_lubrifiant__message_has_error
+#: model:ir.model.fields,field_description:transport_energy.field_transport_facture_energie__message_has_error
+#: model:ir.model.fields,field_description:transport_energy.field_transport_fuel_voucher__message_has_error
+#: model:ir.model.fields,field_description:transport_energy.field_transport_jaugeage__message_has_error
+#: model:ir.model.fields,field_description:transport_energy.field_transport_jaugeage_lubrifiant__message_has_error
+#: model:ir.model.fields,field_description:transport_energy.field_transport_reception_lubrifiant__message_has_error
+#: model:ir.model.fields,field_description:transport_energy.field_transport_supply_order__message_has_error
+msgid "Message Delivery error"
+msgstr "خطأ في تسليم الرسالة"
+
+#. module: transport_energy
+#: model:ir.model.fields,field_description:transport_energy.field_transport_agilis_carte__message_ids
+#: model:ir.model.fields,field_description:transport_energy.field_transport_bon_lubrifiant__message_ids
+#: model:ir.model.fields,field_description:transport_energy.field_transport_facture_energie__message_ids
+#: model:ir.model.fields,field_description:transport_energy.field_transport_fuel_voucher__message_ids
+#: model:ir.model.fields,field_description:transport_energy.field_transport_jaugeage__message_ids
+#: model:ir.model.fields,field_description:transport_energy.field_transport_jaugeage_lubrifiant__message_ids
+#: model:ir.model.fields,field_description:transport_energy.field_transport_reception_lubrifiant__message_ids
+#: model:ir.model.fields,field_description:transport_energy.field_transport_supply_order__message_ids
+msgid "Messages"
+msgstr "الرسائل"
+
+#. module: transport_energy
+#: model:ir.model.fields,help:transport_energy.field_transport_fuel_cuve__current_stock
+msgid ""
+"Mis a jour par les receptions citerne et les jaugeages approuves uniquement."
+msgstr "يتم تحديثه عبر استقبالات الصهريج وقياسات الخزان المعتمدة فقط."
+
+#. module: transport_energy
+#: model:ir.model.fields,field_description:transport_energy.field_transport_fuel_voucher__payment_mode
+msgid "Mode de paiement"
+msgstr "طريقة الدفع"
+
+#. module: transport_energy
+#: model_terms:ir.ui.view,arch_db:transport_energy.view_agilis_recharge_search
+#: model_terms:ir.ui.view,arch_db:transport_energy.view_bon_lubrifiant_search
+#: model_terms:ir.ui.view,arch_db:transport_energy.view_fuel_voucher_search
+#: model_terms:ir.ui.view,arch_db:transport_energy.view_jaugeage_lubrifiant_search
+#: model_terms:ir.ui.view,arch_db:transport_energy.view_jaugeage_search
+#: model_terms:ir.ui.view,arch_db:transport_energy.view_supply_order_search
+msgid "Mois"
+msgstr "الشهر"
+
+#. module: transport_energy
+#: model:ir.model.fields,field_description:transport_energy.field_transport_agilis_utilisation__montant
+#: model:ir.model.fields,field_description:transport_energy.field_transport_facture_energie__montant
+#: model:ir.model.fields,field_description:transport_energy.field_transport_fuel_voucher_line__subtotal
+#: model_terms:ir.ui.view,arch_db:transport_energy.report_bge_template
+msgid "Montant (TND)"
+msgstr "المبلغ (د.ت)"
+
+#. module: transport_energy
+#: model_terms:ir.ui.view,arch_db:transport_energy.rapport_energie_template
+msgid "Montant N (TND)"
+msgstr "المبلغ N (د.ت)"
+
+#. module: transport_energy
+#: model:ir.model.fields,field_description:transport_energy.field_transport_facture_energie__montant_n1
+#: model_terms:ir.ui.view,arch_db:transport_energy.rapport_energie_template
+msgid "Montant N-1 (TND)"
+msgstr "مبلغ N-1 (د.ت)"
+
+#. module: transport_energy
+#: model_terms:ir.ui.view,arch_db:transport_energy.view_agilis_recharge_form
+msgid "Montant et reference"
+msgstr "المبلغ والمرجع"
+
+#. module: transport_energy
+#: model:ir.model.fields,field_description:transport_energy.field_transport_agilis_recharge__montant
+msgid "Montant recharge (TND)"
+msgstr "المبلغ المشحون (د.ت)"
+
+#. module: transport_energy
+#: model:ir.model.fields,field_description:transport_energy.field_transport_wizard_init_stock_lubrifiant__motif
+msgid "Motif"
+msgstr "السبب"
+
+#. module: transport_energy
+#: model:ir.model.fields,field_description:transport_energy.field_transport_agilis_carte__my_activity_date_deadline
+#: model:ir.model.fields,field_description:transport_energy.field_transport_bon_lubrifiant__my_activity_date_deadline
+#: model:ir.model.fields,field_description:transport_energy.field_transport_facture_energie__my_activity_date_deadline
+#: model:ir.model.fields,field_description:transport_energy.field_transport_fuel_voucher__my_activity_date_deadline
+#: model:ir.model.fields,field_description:transport_energy.field_transport_jaugeage__my_activity_date_deadline
+#: model:ir.model.fields,field_description:transport_energy.field_transport_jaugeage_lubrifiant__my_activity_date_deadline
+#: model:ir.model.fields,field_description:transport_energy.field_transport_reception_lubrifiant__my_activity_date_deadline
+#: model:ir.model.fields,field_description:transport_energy.field_transport_supply_order__my_activity_date_deadline
+msgid "My Activity Deadline"
+msgstr "موعد نشاطي النهائي"
+
+#. module: transport_energy
+#: model:ir.model.fields,field_description:transport_energy.field_transport_reception_lubrifiant__bon_livraison
+msgid "N Bon de livraison"
+msgstr "رقم وصل التسليم"
+
+#. module: transport_energy
+#: model:ir.model.fields,field_description:transport_energy.field_transport_facture_energie__numero_compteur
+msgid "N Compteur"
+msgstr "رقم العداد"
+
+#. module: transport_energy
+#: model:ir.model.fields,field_description:transport_energy.field_transport_facture_energie__name
+msgid "N Facture"
+msgstr "رقم الفاتورة"
+
+#. module: transport_energy
+#: model:ir.model.fields,field_description:transport_energy.field_transport_jaugeage__name
+#: model:ir.model.fields,field_description:transport_energy.field_transport_jaugeage_lubrifiant__name
+msgid "N Jaugeage"
+msgstr "رقم القياس"
+
+#. module: transport_energy
+#: model:ir.model.fields,field_description:transport_energy.field_transport_fuel_cuve__pump_number
+msgid "N Pompe"
+msgstr "رقم المضخة"
+
+#. module: transport_energy
+#: model:ir.model.fields,field_description:transport_energy.field_transport_reception_lubrifiant__name
+#: model:ir.model.fields,field_description:transport_energy.field_transport_supply_order__name
+msgid "N Reference"
+msgstr "رقم المرجع"
+
+#. module: transport_energy
+#: model:ir.model.fields,field_description:transport_energy.field_transport_supply_order__delivery_note
+msgid "N bon livraison"
+msgstr "رقم وصل التسليم"
+
+#. module: transport_energy
+#: model:ir.model.fields,field_description:transport_energy.field_transport_bon_lubrifiant__name
+#: model:ir.model.fields,field_description:transport_energy.field_transport_fuel_voucher__name
+msgid "N du Bon"
+msgstr "رقم البون"
+
+#. module: transport_energy
+#: model:ir.model.fields,field_description:transport_energy.field_transport_fuel_voucher__ticket_reference
+msgid "N ticket / recu externe"
+msgstr "رقم التذكرة / الوصل الخارجي"
+
+#. module: transport_energy
+#: model:ir.model.fields,field_description:transport_energy.field_transport_fuel_station__nb_cuves
+msgid "Nb cuves"
+msgstr "عدد الخزانات"
+
+#. module: transport_energy
+#: model:ir.model.fields,field_description:transport_energy.field_transport_fuel_voucher_line__nb_tournees
+#: model_terms:ir.ui.view,arch_db:transport_energy.view_fuel_voucher_bge_form
+#: model_terms:ir.ui.view,arch_db:transport_energy.view_fuel_voucher_bgi_form
+msgid "Nb tournees"
+msgstr "عدد الرحلات"
+
+#. module: transport_energy
+#: model:ir.model.fields,field_description:transport_energy.field_transport_bon_lubrifiant_ligne__nb_unites
+#: model_terms:ir.ui.view,arch_db:transport_energy.view_reception_lubrifiant_form
+msgid "Nb unites"
+msgstr "عدد الوحدات"
+
+#. module: transport_energy
+#: model_terms:ir.ui.view,arch_db:transport_energy.view_bon_lubrifiant_form
+msgid "Nb unites (bidons...)"
+msgstr "عدد الوحدات (عبوات...)"
+
+#. module: transport_energy
+#: model:ir.model.fields,field_description:transport_energy.field_transport_reception_lubrifiant_ligne__nb_unites
+msgid "Nb unites reçues"
+msgstr "عدد الوحدات المستلمة"
+
+#. module: transport_energy
+#: model:ir.model.fields,field_description:transport_energy.field_transport_agilis_carte__nb_utilisations
+msgid "Nb utilisations"
+msgstr "عدد الاستخدامات"
+
+#. module: transport_energy
+#: model:ir.model.fields,field_description:transport_energy.field_transport_agilis_carte__activity_calendar_event_id
+#: model:ir.model.fields,field_description:transport_energy.field_transport_bon_lubrifiant__activity_calendar_event_id
+#: model:ir.model.fields,field_description:transport_energy.field_transport_facture_energie__activity_calendar_event_id
+#: model:ir.model.fields,field_description:transport_energy.field_transport_fuel_voucher__activity_calendar_event_id
+#: model:ir.model.fields,field_description:transport_energy.field_transport_jaugeage__activity_calendar_event_id
+#: model:ir.model.fields,field_description:transport_energy.field_transport_jaugeage_lubrifiant__activity_calendar_event_id
+#: model:ir.model.fields,field_description:transport_energy.field_transport_reception_lubrifiant__activity_calendar_event_id
+#: model:ir.model.fields,field_description:transport_energy.field_transport_supply_order__activity_calendar_event_id
+msgid "Next Activity Calendar Event"
+msgstr "حدث التقويم للنشاط القادم"
+
+#. module: transport_energy
+#: model:ir.model.fields,field_description:transport_energy.field_transport_agilis_carte__activity_date_deadline
+#: model:ir.model.fields,field_description:transport_energy.field_transport_bon_lubrifiant__activity_date_deadline
+#: model:ir.model.fields,field_description:transport_energy.field_transport_facture_energie__activity_date_deadline
+#: model:ir.model.fields,field_description:transport_energy.field_transport_fuel_voucher__activity_date_deadline
+#: model:ir.model.fields,field_description:transport_energy.field_transport_jaugeage__activity_date_deadline
+#: model:ir.model.fields,field_description:transport_energy.field_transport_jaugeage_lubrifiant__activity_date_deadline
+#: model:ir.model.fields,field_description:transport_energy.field_transport_reception_lubrifiant__activity_date_deadline
+#: model:ir.model.fields,field_description:transport_energy.field_transport_supply_order__activity_date_deadline
+msgid "Next Activity Deadline"
+msgstr "الموعد النهائي للنشاط القادم"
+
+#. module: transport_energy
+#: model:ir.model.fields,field_description:transport_energy.field_transport_agilis_carte__activity_summary
+#: model:ir.model.fields,field_description:transport_energy.field_transport_bon_lubrifiant__activity_summary
+#: model:ir.model.fields,field_description:transport_energy.field_transport_facture_energie__activity_summary
+#: model:ir.model.fields,field_description:transport_energy.field_transport_fuel_voucher__activity_summary
+#: model:ir.model.fields,field_description:transport_energy.field_transport_jaugeage__activity_summary
+#: model:ir.model.fields,field_description:transport_energy.field_transport_jaugeage_lubrifiant__activity_summary
+#: model:ir.model.fields,field_description:transport_energy.field_transport_reception_lubrifiant__activity_summary
+#: model:ir.model.fields,field_description:transport_energy.field_transport_supply_order__activity_summary
+msgid "Next Activity Summary"
+msgstr "ملخص النشاط القادم"
+
+#. module: transport_energy
+#: model:ir.model.fields,field_description:transport_energy.field_transport_agilis_carte__activity_type_id
+#: model:ir.model.fields,field_description:transport_energy.field_transport_bon_lubrifiant__activity_type_id
+#: model:ir.model.fields,field_description:transport_energy.field_transport_facture_energie__activity_type_id
+#: model:ir.model.fields,field_description:transport_energy.field_transport_fuel_voucher__activity_type_id
+#: model:ir.model.fields,field_description:transport_energy.field_transport_jaugeage__activity_type_id
+#: model:ir.model.fields,field_description:transport_energy.field_transport_jaugeage_lubrifiant__activity_type_id
+#: model:ir.model.fields,field_description:transport_energy.field_transport_reception_lubrifiant__activity_type_id
+#: model:ir.model.fields,field_description:transport_energy.field_transport_supply_order__activity_type_id
+msgid "Next Activity Type"
+msgstr "نوع النشاط القادم"
+
+#. module: transport_energy
+#: model:ir.model.fields,field_description:transport_energy.field_transport_fuel_cuve__stock_percentage
+msgid "Niveau (%)"
+msgstr "المستوى (%)"
+
+#. module: transport_energy
+#: model:ir.model.fields,field_description:transport_energy.field_transport_jaugeage__niveau_alerte
+#: model:ir.model.fields,field_description:transport_energy.field_transport_jaugeage_lubrifiant__niveau_alerte
+#: model_terms:ir.ui.view,arch_db:transport_energy.view_jaugeage_search
+msgid "Niveau alerte"
+msgstr "مستوى التنبيه"
+
+#. module: transport_energy
+#: model:ir.model.fields,field_description:transport_energy.field_transport_jaugeage__niveau_mesure
+#: model:ir.model.fields,field_description:transport_energy.field_transport_jaugeage_lubrifiant__niveau_mesure
+msgid "Niveau mesure reel (L)"
+msgstr "المستوى المقيس الفعلي (L)"
+
+#. module: transport_energy
+#: model_terms:ir.ui.view,arch_db:transport_energy.view_jaugeage_form
+#: model_terms:ir.ui.view,arch_db:transport_energy.view_jaugeage_lubrifiant_form
+#: model_terms:ir.ui.view,arch_db:transport_energy.view_stock_lubrifiant_form
+msgid "Niveaux"
+msgstr "المستويات"
+
+#. module: transport_energy
+#: model_terms:ir.ui.view,arch_db:transport_energy.template_bge
+#: model_terms:ir.ui.view,arch_db:transport_energy.template_bgi
+msgid "No"
+msgstr "لا"
+
+#. module: transport_energy
+#: model:ir.model.fields,field_description:transport_energy.field_transport_energy_type__name
+msgid "Nom"
+msgstr "الاسم"
+
+#. module: transport_energy
+#: model:ir.model.fields,field_description:transport_energy.field_transport_fuel_voucher__distributor_name
+msgid "Nom agent distributeur"
+msgstr "اسم العون الموزع"
+
+#. module: transport_energy
+#: model:ir.model.fields,field_description:transport_energy.field_transport_bon_lubrifiant__nom_chauffeur
+#: model:ir.model.fields,field_description:transport_energy.field_transport_fuel_voucher_line__driver_name
+msgid "Nom chauffeur"
+msgstr "اسم السائق"
+
+#. module: transport_energy
+#: model:ir.model.fields,field_description:transport_energy.field_transport_fuel_station__name
+msgid "Nom de la station"
+msgstr "اسم المحطة"
+
+#. module: transport_energy
+#: model:ir.model.fields,field_description:transport_energy.field_transport_wizard_init_stock_lubrifiant__nb_unites
+msgid "Nombre d'unités"
+msgstr "عدد الوحدات"
+
+#. module: transport_energy
+#: model_terms:ir.ui.view,arch_db:transport_energy.view_wizard_init_stock_lubrifiant_form
+msgid "Nombre d'unités (ou litres si pas de conditionnement)"
+msgstr "عدد الوحدات (أو الليترات إذا لم يكن هناك تعبئة)"
+
+#. module: transport_energy
+#: model:ir.model.fields,help:transport_energy.field_transport_wizard_init_stock_lubrifiant__nb_unites
+msgid "Nombre de bidons, fûts, cartouches..."
+msgstr "عدد العبوات، البراميل، الخراطيش..."
+
+#. module: transport_energy
+#: model:ir.model.fields,help:transport_energy.field_transport_reception_lubrifiant_ligne__nb_unites
+msgid "Nombre de bidons/futs recus. Laisser 0 pour saisir en litres."
+msgstr "عدد العبوات/البراميل المستلمة. اتركه على 0 للإدخال بالليتر."
+
+#. module: transport_energy
+#: model_terms:ir.ui.view,arch_db:transport_energy.template_bge
+#: model_terms:ir.ui.view,arch_db:transport_energy.template_bgi
+msgid "Non"
+msgstr "لا"
+
+#. module: transport_energy
+#: model:ir.model.fields.selection,name:transport_energy.selection__transport_fuel_voucher_line__source_distance__aucune
+msgid "Non calculee"
+msgstr "غير محسوبة"
+
+#. module: transport_energy
+#: model_terms:ir.ui.view,arch_db:transport_energy.view_facture_energie_search
+msgid "Non payees"
+msgstr "غير مدفوعة"
+
+#. module: transport_energy
+#: model:ir.model.fields.selection,name:transport_energy.selection__transport_fuel_cuve__stock_status__ok
+#: model:ir.model.fields.selection,name:transport_energy.selection__transport_stock_lubrifiant__stock_status__ok
+#: model_terms:ir.ui.view,arch_db:transport_energy.view_jaugeage_search
+msgid "Normal"
+msgstr "عادي"
+
+#. module: transport_energy
+#: model:ir.model.fields.selection,name:transport_energy.selection__transport_jaugeage__niveau_alerte__normal
+#: model:ir.model.fields.selection,name:transport_energy.selection__transport_jaugeage_lubrifiant__niveau_alerte__normal
+msgid "Normal (< 1%)"
+msgstr "✅ عادي (< 1%)"
+
+#. module: transport_energy
+#: model_terms:ir.ui.view,arch_db:transport_energy.rapport_energie_template
+msgid ""
+"Note : Les quantités STEG (kWh) et SONEDE (m³) sont affichées à titre indicatif.\n"
+"                                Seuls les montants en TND sont comparables entre les deux types d'énergie."
+msgstr ""
+"ملاحظة: الكميات الخاصة بـ STEG (كيلوواط/ساعة) وSONEDE (م³) معروضة على سبيل الإشارة فقط.\n"
+"المبالغ بالدينار التونسي وحدها قابلة للمقارنة بين النوعين."
+
+#. module: transport_energy
+#: model:ir.model.fields,field_description:transport_energy.field_transport_agilis_carte__notes
+#: model:ir.model.fields,field_description:transport_energy.field_transport_agilis_recharge__notes
+#: model:ir.model.fields,field_description:transport_energy.field_transport_energy_type__notes
+#: model:ir.model.fields,field_description:transport_energy.field_transport_facture_energie__notes
+#: model:ir.model.fields,field_description:transport_energy.field_transport_fuel_cuve__notes
+#: model:ir.model.fields,field_description:transport_energy.field_transport_fuel_station__notes
+#: model:ir.model.fields,field_description:transport_energy.field_transport_fuel_voucher__notes
+#: model:ir.model.fields,field_description:transport_energy.field_transport_jaugeage__notes
+#: model:ir.model.fields,field_description:transport_energy.field_transport_jaugeage_lubrifiant__notes
+#: model:ir.model.fields,field_description:transport_energy.field_transport_reception_lubrifiant__notes
+#: model:ir.model.fields,field_description:transport_energy.field_transport_stock_lubrifiant__notes
+#: model:ir.model.fields,field_description:transport_energy.field_transport_supply_order__notes
+#: model_terms:ir.ui.view,arch_db:transport_energy.view_agilis_carte_form
+#: model_terms:ir.ui.view,arch_db:transport_energy.view_agilis_recharge_form
+#: model_terms:ir.ui.view,arch_db:transport_energy.view_bon_lubrifiant_form
+#: model_terms:ir.ui.view,arch_db:transport_energy.view_energy_type_form
+#: model_terms:ir.ui.view,arch_db:transport_energy.view_facture_energie_form
+#: model_terms:ir.ui.view,arch_db:transport_energy.view_fuel_station_form
+#: model_terms:ir.ui.view,arch_db:transport_energy.view_fuel_voucher_bge_form
+#: model_terms:ir.ui.view,arch_db:transport_energy.view_fuel_voucher_bgi_form
+#: model_terms:ir.ui.view,arch_db:transport_energy.view_jaugeage_form
+#: model_terms:ir.ui.view,arch_db:transport_energy.view_jaugeage_lubrifiant_form
+#: model_terms:ir.ui.view,arch_db:transport_energy.view_reception_lubrifiant_form
+#: model_terms:ir.ui.view,arch_db:transport_energy.view_stock_lubrifiant_form
+#: model_terms:ir.ui.view,arch_db:transport_energy.view_supply_order_form
+msgid "Notes"
+msgstr "الملاحظات"
+
+#. module: transport_energy
+#: model_terms:ir.ui.view,arch_db:transport_energy.view_wizard_init_stock_lubrifiant_form
+msgid "Nouvelle quantité"
+msgstr "الكمية الجديدة"
+
+#. module: transport_energy
+#: model:ir.model.fields,field_description:transport_energy.field_transport_agilis_carte__message_needaction_counter
+#: model:ir.model.fields,field_description:transport_energy.field_transport_bon_lubrifiant__message_needaction_counter
+#: model:ir.model.fields,field_description:transport_energy.field_transport_facture_energie__message_needaction_counter
+#: model:ir.model.fields,field_description:transport_energy.field_transport_fuel_voucher__message_needaction_counter
+#: model:ir.model.fields,field_description:transport_energy.field_transport_jaugeage__message_needaction_counter
+#: model:ir.model.fields,field_description:transport_energy.field_transport_jaugeage_lubrifiant__message_needaction_counter
+#: model:ir.model.fields,field_description:transport_energy.field_transport_reception_lubrifiant__message_needaction_counter
+#: model:ir.model.fields,field_description:transport_energy.field_transport_supply_order__message_needaction_counter
+msgid "Number of Actions"
+msgstr "عدد الإجراءات"
+
+#. module: transport_energy
+#: model:ir.model.fields,field_description:transport_energy.field_transport_agilis_carte__message_has_error_counter
+#: model:ir.model.fields,field_description:transport_energy.field_transport_bon_lubrifiant__message_has_error_counter
+#: model:ir.model.fields,field_description:transport_energy.field_transport_facture_energie__message_has_error_counter
+#: model:ir.model.fields,field_description:transport_energy.field_transport_fuel_voucher__message_has_error_counter
+#: model:ir.model.fields,field_description:transport_energy.field_transport_jaugeage__message_has_error_counter
+#: model:ir.model.fields,field_description:transport_energy.field_transport_jaugeage_lubrifiant__message_has_error_counter
+#: model:ir.model.fields,field_description:transport_energy.field_transport_reception_lubrifiant__message_has_error_counter
+#: model:ir.model.fields,field_description:transport_energy.field_transport_supply_order__message_has_error_counter
+msgid "Number of errors"
+msgstr "عدد الأخطاء"
+
+#. module: transport_energy
+#: model:ir.model.fields,help:transport_energy.field_transport_agilis_carte__message_needaction_counter
+#: model:ir.model.fields,help:transport_energy.field_transport_bon_lubrifiant__message_needaction_counter
+#: model:ir.model.fields,help:transport_energy.field_transport_facture_energie__message_needaction_counter
+#: model:ir.model.fields,help:transport_energy.field_transport_fuel_voucher__message_needaction_counter
+#: model:ir.model.fields,help:transport_energy.field_transport_jaugeage__message_needaction_counter
+#: model:ir.model.fields,help:transport_energy.field_transport_jaugeage_lubrifiant__message_needaction_counter
+#: model:ir.model.fields,help:transport_energy.field_transport_reception_lubrifiant__message_needaction_counter
+#: model:ir.model.fields,help:transport_energy.field_transport_supply_order__message_needaction_counter
+msgid "Number of messages requiring action"
+msgstr "عدد الرسائل التي تستلزم إجراءً"
+
+#. module: transport_energy
+#: model:ir.model.fields,help:transport_energy.field_transport_agilis_carte__message_has_error_counter
+#: model:ir.model.fields,help:transport_energy.field_transport_bon_lubrifiant__message_has_error_counter
+#: model:ir.model.fields,help:transport_energy.field_transport_facture_energie__message_has_error_counter
+#: model:ir.model.fields,help:transport_energy.field_transport_fuel_voucher__message_has_error_counter
+#: model:ir.model.fields,help:transport_energy.field_transport_jaugeage__message_has_error_counter
+#: model:ir.model.fields,help:transport_energy.field_transport_jaugeage_lubrifiant__message_has_error_counter
+#: model:ir.model.fields,help:transport_energy.field_transport_reception_lubrifiant__message_has_error_counter
+#: model:ir.model.fields,help:transport_energy.field_transport_supply_order__message_has_error_counter
+msgid "Number of messages with delivery error"
+msgstr "عدد الرسائل التي تعذّر تسليمها"
+
+#. module: transport_energy
+#: model:ir.model.fields,field_description:transport_energy.field_transport_agilis_carte__name
+msgid "Numero de carte"
+msgstr "رقم البطاقة"
+
+#. module: transport_energy
+#: model_terms:ir.ui.view,arch_db:transport_energy.view_agilis_carte_form
+msgid "Numero de carte..."
+msgstr "رقم البطاقة..."
+
+#. module: transport_energy
+#: model_terms:ir.ui.view,arch_db:transport_energy.template_bge
+#: model_terms:ir.ui.view,arch_db:transport_energy.template_bgi
+msgid "N° Bon :"
+msgstr "رقم البون :"
+
+#. module: transport_energy
+#: model_terms:ir.ui.view,arch_db:transport_energy.rapport_energie_template
+msgid "N° Compteur"
+msgstr "رقم العداد"
+
+#. module: transport_energy
+#: model_terms:ir.ui.view,arch_db:transport_energy.rapport_vehicules_admin_template
+msgid "N° immat."
+msgstr "رقم التسجيل"
+
+#. module: transport_energy
+#: model:ir.model.fields,field_description:transport_energy.field_transport_bon_lubrifiant__notes
+msgid "Observations"
+msgstr "الملاحظات"
+
+#. module: transport_energy
+#: model_terms:ir.ui.view,arch_db:transport_energy.template_bge
+#: model_terms:ir.ui.view,arch_db:transport_energy.template_bgi
+msgid "Odometer"
+msgstr "عداد المسافة"
+
+#. module: transport_energy
+#: model_terms:ir.ui.view,arch_db:transport_energy.template_bge
+#: model_terms:ir.ui.view,arch_db:transport_energy.template_bgi
+msgid "Oui"
+msgstr "نعم"
+
+#. module: transport_energy
+#: model_terms:ir.ui.view,arch_db:transport_energy.view_fuel_voucher_bge_form
+msgid "Paiement"
+msgstr "الدفع"
+
+#. module: transport_energy
+#: model_terms:ir.ui.view,arch_db:transport_energy.view_fleet_vehicle_transport_form
+msgid "Patrimoine"
+msgstr "الأصول"
+
+#. module: transport_energy
+#: model:ir.model.fields.selection,name:transport_energy.selection__transport_facture_energie__statut__payee
+msgid "Payee"
+msgstr "مدفوعة"
+
+#. module: transport_energy
+#: model_terms:ir.ui.view,arch_db:transport_energy.view_facture_energie_search
+msgid "Payees"
+msgstr "المدفوعة"
+
+#. module: transport_energy
+#: model_terms:ir.ui.view,arch_db:transport_energy.view_facture_energie_search
+msgid "Periode"
+msgstr "الفترة"
+
+#. module: transport_energy
+#: model_terms:ir.ui.view,arch_db:transport_energy.view_facture_energie_form
+msgid "Periode de consommation"
+msgstr "فترة الاستهلاك"
+
+#. module: transport_energy
+#: model:ir.model.fields,help:transport_energy.field_transport_jaugeage_lubrifiant__ecart
+msgid "Positif = surplus physique, Negatif = manque."
+msgstr "موجب = فائض مادي، سالب = عجز."
+
+#. module: transport_energy
+#: model_terms:ir.ui.view,arch_db:transport_energy.report_bge_template
+msgid "Prix unit."
+msgstr "السعر الوحدوي"
+
+#. module: transport_energy
+#: model:ir.model.fields,field_description:transport_energy.field_transport_agilis_utilisation__prix_unitaire
+#: model:ir.model.fields,field_description:transport_energy.field_transport_fuel_voucher_line__unit_price
+#: model:ir.model.fields,field_description:transport_energy.field_transport_reception_lubrifiant_ligne__prix_unitaire
+#: model:ir.model.fields,field_description:transport_energy.field_transport_supply_order__unit_price
+msgid "Prix unitaire (TND/L)"
+msgstr "السعر الوحدوي (د.ت/L)"
+
+#. module: transport_energy
+#: model_terms:ir.ui.view,arch_db:transport_energy.template_bgi
+msgid "Pump Counter End :"
+msgstr "نهاية عداد المضخة :"
+
+#. module: transport_energy
+#: model_terms:ir.ui.view,arch_db:transport_energy.template_bgi
+msgid "Pump Counter Start :"
+msgstr "بداية عداد المضخة :"
+
+#. module: transport_energy
+#: model_terms:ir.ui.view,arch_db:transport_energy.rapport_energie_template
+msgid "Période"
+msgstr "الفترة"
+
+#. module: transport_energy
+#: model:ir.model.fields,field_description:transport_energy.field_transport_agilis_utilisation__quantite
+#: model:ir.model.fields,field_description:transport_energy.field_transport_bon_lubrifiant_ligne__quantite
+#: model:ir.model.fields,field_description:transport_energy.field_transport_fuel_voucher_line__quantity
+#: model:ir.model.fields,field_description:transport_energy.field_transport_reception_lubrifiant_ligne__quantite_litres
+#: model_terms:ir.ui.view,arch_db:transport_energy.report_bge_template
+#: model_terms:ir.ui.view,arch_db:transport_energy.view_bon_lubrifiant_form
+#: model_terms:ir.ui.view,arch_db:transport_energy.view_reception_lubrifiant_form
+msgid "Quantite (L)"
+msgstr "الكمية (L)"
+
+#. module: transport_energy
+#: model:ir.model.fields,field_description:transport_energy.field_transport_supply_order__quantity_ordered
+msgid "Quantite commandee (L)"
+msgstr "الكمية المطلوبة (L)"
+
+#. module: transport_energy
+#: model:ir.model.fields,field_description:transport_energy.field_transport_facture_energie__quantite_consommee
+msgid "Quantite consommee"
+msgstr "الكمية المستهلكة"
+
+#. module: transport_energy
+#: model:ir.model.fields,help:transport_energy.field_transport_bon_lubrifiant_ligne__quantite
+#: model:ir.model.fields,help:transport_energy.field_transport_reception_lubrifiant_ligne__quantite_litres
+msgid "Quantite en litres. Calculee automatiquement si nb_unites > 0."
+msgstr "الكمية بالليتر. تُحسب تلقائياً إذا كان عدد الوحدات > 0."
+
+#. module: transport_energy
+#: model:ir.model.fields,field_description:transport_energy.field_transport_supply_order__quantity_received
+msgid "Quantite recue (L)"
+msgstr "الكمية المستلمة (L)"
+
+#. module: transport_energy
+#: model:ir.model.fields,field_description:transport_energy.field_transport_fuel_voucher_line__quantite_suggeree
+msgid "Quantite suggeree (L)"
+msgstr "الكمية المقترحة (L)"
+
+#. module: transport_energy
+#: model:ir.model.fields,field_description:transport_energy.field_transport_bon_lubrifiant__quantite_totale
+msgid "Quantite totale"
+msgstr "الكمية الإجمالية (L)"
+
+#. module: transport_energy
+#: model:ir.model.fields,field_description:transport_energy.field_transport_fuel_voucher__total_quantity
+msgid "Quantite totale (L)"
+msgstr "الكمية الإجمالية الموزعة (L)"
+
+#. module: transport_energy
+#: model:ir.model.fields,field_description:transport_energy.field_transport_bon_lubrifiant_ligne__quantite_videe
+msgid "Quantite videe"
+msgstr "الكمية المفرغة (L)"
+
+#. module: transport_energy
+#: model_terms:ir.ui.view,arch_db:transport_energy.template_bge
+msgid "Quantity (L)"
+msgstr "الكمية (L)"
+
+#. module: transport_energy
+#: model:ir.model.fields,field_description:transport_energy.field_transport_wizard_init_stock_lubrifiant__quantite_litres
+#: model_terms:ir.ui.view,arch_db:transport_energy.template_bge
+#: model_terms:ir.ui.view,arch_db:transport_energy.template_bgi
+#: model_terms:ir.ui.view,arch_db:transport_energy.view_wizard_init_stock_lubrifiant_form
+msgid "Quantité (L)"
+msgstr "الكمية (L)"
+
+#. module: transport_energy
+#: model:ir.model.fields,field_description:transport_energy.field_transport_wizard_init_stock_lubrifiant__quantite_calculee
+msgid "Quantité calculée (L)"
+msgstr "الكمية المحسوبة (L)"
+
+#. module: transport_energy
+#: model_terms:ir.ui.view,arch_db:transport_energy.template_bge
+#: model_terms:ir.ui.view,arch_db:transport_energy.template_bgi
+msgid "Quantité distribuée :"
+msgstr "الكمية الموزعة :"
+
+#. module: transport_energy
+#: model_terms:ir.ui.view,arch_db:transport_energy.rapport_energie_template
+msgid "Rapport Consommation Eau (SONEDE) — m³"
+msgstr "تقرير استهلاك الماء (SONEDE) — م³"
+
+#. module: transport_energy
+#: model_terms:ir.ui.view,arch_db:transport_energy.rapport_energie_template
+msgid "Rapport Consommation Electricite (STEG) — kWh"
+msgstr "تقرير استهلاك الكهرباء (STEG) — كيلوواط/ساعة"
+
+#. module: transport_energy
+#: model:ir.model.fields.selection,name:transport_energy.selection__transport_wizard_rapport__type_rapport__lubrifiant
+msgid "Rapport Lubrifiants"
+msgstr "تقرير المزيتات"
+
+#. module: transport_energy
+#: model:ir.actions.report,name:transport_energy.action_rapport_lubrifiant
+msgid "Rapport Lubrifiants par Vehicule"
+msgstr "تقرير المزيتات حسب العربة"
+
+#. module: transport_energy
+#: model:ir.actions.report,name:transport_energy.action_rapport_rotation_chauffeurs
+msgid "Rapport Rotation Chauffeurs"
+msgstr "تقرير دوران السائقين"
+
+#. module: transport_energy
+#: model:ir.model.fields.selection,name:transport_energy.selection__transport_wizard_rapport_energie__type_rapport__sonede
+msgid "Rapport SONEDE (Eau — m³)"
+msgstr "تقرير SONEDE (ماء — م³)"
+
+#. module: transport_energy
+#: model:ir.model.fields.selection,name:transport_energy.selection__transport_wizard_rapport_energie__type_rapport__steg
+msgid "Rapport STEG (Electricite — kWh)"
+msgstr "تقرير STEG (كهرباء — كيلوواط/ساعة)"
+
+#. module: transport_energy
+#: model:ir.actions.report,name:transport_energy.action_rapport_energie_pdf
+msgid "Rapport STEG/SONEDE N vs N-1"
+msgstr "تقرير STEG/SONEDE N مقابل N-1"
+
+#. module: transport_energy
+#: model:ir.actions.act_window,name:transport_energy.action_rapport_carburant
+#: model:ir.ui.menu,name:transport_energy.menu_rapport_carburant
+#: model_terms:ir.ui.view,arch_db:transport_energy.view_wizard_rapport_carburant_form
+msgid "Rapport carburant"
+msgstr "تقارير الوقود"
+
+#. module: transport_energy
+#: model_terms:ir.ui.view,arch_db:transport_energy.view_wizard_rapport_energie_form
+msgid ""
+"Rapport détaillé consommation eau (m³) par site et par période,\n"
+"                    avec comparaison année N vs N-1."
+msgstr ""
+"تقرير تفصيلي لاستهلاك الماء (م³) حسب الموقع والفترة،\n"
+"مع مقارنة السنة N مقابل N-1."
+
+#. module: transport_energy
+#: model_terms:ir.ui.view,arch_db:transport_energy.view_wizard_rapport_energie_form
+msgid ""
+"Rapport détaillé consommation électrique (kWh) par site et par\n"
+"                    période, avec comparaison année N vs N-1."
+msgstr ""
+"تقرير تفصيلي لاستهلاك الكهرباء (كيلوواط/ساعة) حسب الموقع والفترة،\n"
+"مع مقارنة السنة N مقابل N-1."
+
+#. module: transport_energy
+#: model:ir.actions.act_window,name:transport_energy.action_wizard_rapport_energie
+#: model:ir.ui.menu,name:transport_energy.menu_rapport_energie_steg
+#: model_terms:ir.ui.view,arch_db:transport_energy.view_wizard_rapport_energie_form
+msgid "Rapport energie STEG / SONEDE"
+msgstr "تقرير STEG/SONEDE"
+
+#. module: transport_energy
+#: model:ir.model.fields.selection,name:transport_energy.selection__transport_wizard_rapport__type_rapport_carburant__flotte
+msgid "Rapport flotte vehicules"
+msgstr "تقرير أسطول المركبات"
+
+#. module: transport_energy
+#: model:ir.actions.act_window,name:transport_energy.action_rapport_lubrifiant_wizard
+#: model:ir.ui.menu,name:transport_energy.menu_rapport_lubrifiant_menu
+#: model_terms:ir.ui.view,arch_db:transport_energy.view_wizard_rapport_lubrifiant_form
+msgid "Rapport lubrifiant"
+msgstr "تقارير المزيتات"
+
+#. module: transport_energy
+#: model:ir.ui.menu,name:transport_energy.menu_rapports_root
+msgid "Rapports et statistiques"
+msgstr "التقارير والإحصائيات"
+
+#. module: transport_energy
+#: model:ir.ui.menu,name:transport_energy.menu_ravitaillement
+msgid "Ravitaillement"
+msgstr "التزود بالوقود"
+
+#. module: transport_energy
+#: model:ir.model.fields.selection,name:transport_energy.selection__transport_wizard_rapport__type_rapport__recap
+msgid "Recapitulatif"
+msgstr "الملخص"
+
+#. module: transport_energy
+#: model:ir.model.fields,field_description:transport_energy.field_transport_reception_lubrifiant_ligne__reception_id
+#: model_terms:ir.ui.view,arch_db:transport_energy.view_supply_order_form
+msgid "Reception"
+msgstr "الاستلام"
+
+#. module: transport_energy
+#: model:ir.actions.act_window,name:transport_energy.action_supply_order_reception
+#: model:ir.ui.menu,name:transport_energy.menu_supply_order_reception
+msgid "Reception citerne"
+msgstr "استلام الصهريج"
+
+#. module: transport_energy
+#: model_terms:ir.ui.view,arch_db:transport_energy.view_reception_lubrifiant_form
+msgid "Reception lubrifiant"
+msgstr "استلام المزيت"
+
+#. module: transport_energy
+#: model:ir.model,name:transport_energy.model_transport_reception_lubrifiant
+msgid "Reception lubrifiant magasin"
+msgstr "استلام مزيت المستودع"
+
+#. module: transport_energy
+#: model:ir.actions.act_window,name:transport_energy.action_reception_lubrifiant
+#: model:ir.ui.menu,name:transport_energy.menu_reception_lubrifiant
+#: model_terms:ir.ui.view,arch_db:transport_energy.view_reception_lubrifiant_list
+msgid "Receptions lubrifiant"
+msgstr "استلامات المزيت"
+
+#. module: transport_energy
+#: model_terms:ir.ui.view,arch_db:transport_energy.view_agilis_recharge_form
+msgid "Rechargement AGILIS"
+msgstr "شحن بطاقة أجيليس"
+
+#. module: transport_energy
+#: model:ir.model,name:transport_energy.model_transport_agilis_recharge
+msgid "Rechargement carte AGILIS"
+msgstr "شحن بطاقة أجيليس"
+
+#. module: transport_energy
+#: model:ir.model.fields,field_description:transport_energy.field_transport_agilis_carte__recharge_ids
+#: model:ir.ui.menu,name:transport_energy.menu_agilis_recharges
+#: model_terms:ir.ui.view,arch_db:transport_energy.view_agilis_carte_form
+msgid "Rechargements"
+msgstr "عمليات الشحن"
+
+#. module: transport_energy
+#: model:ir.actions.act_window,name:transport_energy.action_agilis_recharges
+#: model_terms:ir.ui.view,arch_db:transport_energy.view_agilis_recharge_list
+msgid "Rechargements AGILIS"
+msgstr "عمليات الشحن أجيليس"
+
+#. module: transport_energy
+#: model:ir.model.fields,field_description:transport_energy.field_transport_facture_energie__boc_reference
+msgid "Ref BOC"
+msgstr "مرجع BOC"
+
+#. module: transport_energy
+#: model:ir.model.fields,field_description:transport_energy.field_transport_agilis_utilisation__name
+msgid "Reference"
+msgstr "المرجع"
+
+#. module: transport_energy
+#: model:ir.model.fields,field_description:transport_energy.field_transport_agilis_recharge__reference
+msgid "Reference virement"
+msgstr "مرجع التحويل"
+
+#. module: transport_energy
+#: model:ir.model.fields.selection,name:transport_energy.selection__fleet_vehicle__activity_type__regional
+#: model:ir.model.fields.selection,name:transport_energy.selection__transport_wizard_rapport__activite_filtre__regional
+msgid "Regional"
+msgstr "جهوي"
+
+#. module: transport_energy
+#: model_terms:ir.ui.view,arch_db:transport_energy.template_bge
+#: model_terms:ir.ui.view,arch_db:transport_energy.template_bgi
+msgid "Remaining Stock :"
+msgstr "المخزون المتبقي :"
+
+#. module: transport_energy
+#: model_terms:ir.ui.view,arch_db:transport_energy.view_bon_lubrifiant_form
+#: model_terms:ir.ui.view,arch_db:transport_energy.view_fuel_voucher_bge_form
+#: model_terms:ir.ui.view,arch_db:transport_energy.view_fuel_voucher_bgi_form
+#: model_terms:ir.ui.view,arch_db:transport_energy.view_jaugeage_form
+#: model_terms:ir.ui.view,arch_db:transport_energy.view_jaugeage_lubrifiant_form
+#: model_terms:ir.ui.view,arch_db:transport_energy.view_reception_lubrifiant_form
+#: model_terms:ir.ui.view,arch_db:transport_energy.view_supply_order_form
+msgid "Remettre en brouillon"
+msgstr "إعادة إلى المسودة"
+
+#. module: transport_energy
+#: model:ir.model.fields.selection,name:transport_energy.selection__fleet_vehicle__odometer_status__replaced
+msgid "Remplace / Repare"
+msgstr "مستبدل / مُصلَّح"
+
+#. module: transport_energy
+#: model:ir.model.fields,field_description:transport_energy.field_transport_jaugeage__responsable
+#: model:ir.model.fields,field_description:transport_energy.field_transport_jaugeage_lubrifiant__responsable
+#: model_terms:ir.ui.view,arch_db:transport_energy.template_bge
+msgid "Responsable"
+msgstr "المسؤول"
+
+#. module: transport_energy
+#: model:res.groups,name:transport_energy.group_responsable_energie
+msgid "Responsable Energie"
+msgstr "مسؤول الطاقة"
+
+#. module: transport_energy
+#: model_terms:ir.ui.view,arch_db:transport_energy.template_bgi
+msgid "Responsable Station"
+msgstr "مسؤول المحطة"
+
+#. module: transport_energy
+#: model_terms:ir.ui.view,arch_db:transport_energy.template_bge
+msgid "Responsible"
+msgstr "المسؤول"
+
+#. module: transport_energy
+#: model:ir.model.fields,field_description:transport_energy.field_transport_agilis_carte__activity_user_id
+#: model:ir.model.fields,field_description:transport_energy.field_transport_bon_lubrifiant__activity_user_id
+#: model:ir.model.fields,field_description:transport_energy.field_transport_facture_energie__activity_user_id
+#: model:ir.model.fields,field_description:transport_energy.field_transport_fuel_voucher__activity_user_id
+#: model:ir.model.fields,field_description:transport_energy.field_transport_jaugeage__activity_user_id
+#: model:ir.model.fields,field_description:transport_energy.field_transport_jaugeage_lubrifiant__activity_user_id
+#: model:ir.model.fields,field_description:transport_energy.field_transport_reception_lubrifiant__activity_user_id
+#: model:ir.model.fields,field_description:transport_energy.field_transport_supply_order__activity_user_id
+msgid "Responsible User"
+msgstr "المستخدم المسؤول"
+
+#. module: transport_energy
+#: model:ir.model.fields.selection,name:transport_energy.selection__transport_wizard_rapport__type_rapport__rotation
+msgid "Rotation Chauffeurs"
+msgstr "دوران السائقين"
+
+#. module: transport_energy
+#: model:ir.actions.report,name:transport_energy.action_rapport_recap
+msgid "Récapitulatif Consommation Carburant"
+msgstr "ملخص استهلاك الوقود"
+
+#. module: transport_energy
+#: model:ir.model.fields,field_description:transport_energy.field_transport_agilis_carte__message_has_sms_error
+#: model:ir.model.fields,field_description:transport_energy.field_transport_bon_lubrifiant__message_has_sms_error
+#: model:ir.model.fields,field_description:transport_energy.field_transport_facture_energie__message_has_sms_error
+#: model:ir.model.fields,field_description:transport_energy.field_transport_fuel_voucher__message_has_sms_error
+#: model:ir.model.fields,field_description:transport_energy.field_transport_jaugeage__message_has_sms_error
+#: model:ir.model.fields,field_description:transport_energy.field_transport_jaugeage_lubrifiant__message_has_sms_error
+#: model:ir.model.fields,field_description:transport_energy.field_transport_reception_lubrifiant__message_has_sms_error
+#: model:ir.model.fields,field_description:transport_energy.field_transport_supply_order__message_has_sms_error
+msgid "SMS Delivery error"
+msgstr "خطأ في تسليم الرسالة القصيرة"
+
+#. module: transport_energy
+#: model_terms:ir.ui.view,arch_db:transport_energy.view_facture_energie_search
+msgid "SONEDE"
+msgstr "SONEDE"
+
+#. module: transport_energy
+#: model:ir.model.fields.selection,name:transport_energy.selection__transport_facture_energie__type_facture__sonede
+msgid "SONEDE (Eau)"
+msgstr "💧 SONEDE (ماء)"
+
+#. module: transport_energy
+#: model_terms:ir.ui.view,arch_db:transport_energy.rapport_energie_template
+msgid "SONEDE N (TND)"
+msgstr "SONEDE N (د.ت)"
+
+#. module: transport_energy
+#: model_terms:ir.ui.view,arch_db:transport_energy.rapport_energie_template
+msgid "SONEDE N (m³)"
+msgstr "SONEDE N (م³)"
+
+#. module: transport_energy
+#: model_terms:ir.ui.view,arch_db:transport_energy.rapport_energie_template
+msgid "SONEDE N-1 (TND)"
+msgstr "SONEDE N-1 (د.ت)"
+
+#. module: transport_energy
+#: model_terms:ir.ui.view,arch_db:transport_energy.view_facture_energie_search
+msgid "STEG"
+msgstr "STEG"
+
+#. module: transport_energy
+#: model:ir.model.fields.selection,name:transport_energy.selection__transport_facture_energie__type_facture__steg
+msgid "STEG (Electricite)"
+msgstr "⚡ STEG (كهرباء)"
+
+#. module: transport_energy
+#: model:ir.model.fields,help:transport_energy.field_transport_wizard_rapport_energie__type_rapport
+msgid ""
+"STEG : rapport détaillé électricité en kWh.\n"
+"SONEDE : rapport détaillé eau en m³.\n"
+"Synthèse : vue financière globale en TND — les deux types sont présentés séparément, jamais additionnés."
+msgstr ""
+"STEG: تقرير تفصيلي للكهرباء بالكيلوواط/ساعة.\n"
+"SONEDE: تقرير تفصيلي للماء بالمتر المكعب.\n"
+"الملخص: نظرة مالية شاملة بالدينار التونسي — يُعرض النوعان بشكل منفصل ولا يُجمعان أبداً."
+
+#. module: transport_energy
+#: model_terms:ir.ui.view,arch_db:transport_energy.rapport_energie_template
+msgid "STEG N (TND)"
+msgstr "STEG N (د.ت)"
+
+#. module: transport_energy
+#: model_terms:ir.ui.view,arch_db:transport_energy.rapport_energie_template
+msgid "STEG N (kWh)"
+msgstr "STEG N (كيلوواط/ساعة)"
+
+#. module: transport_energy
+#: model_terms:ir.ui.view,arch_db:transport_energy.rapport_energie_template
+msgid "STEG N-1 (TND)"
+msgstr "STEG N-1 (د.ت)"
+
+#. module: transport_energy
+#: model:ir.model.fields.selection,name:transport_energy.selection__transport_facture_energie__statut__saisie
+msgid "Saisie"
+msgstr "مُدخلة"
+
+#. module: transport_energy
+#: model:res.groups,comment:transport_energy.group_agent_pompiste
+msgid "Saisie BGI, BGE, bons lubrifiants, jaugeage."
+msgstr "يمكنه إنشاء وتعديل بونات BGI/BGE وبونات المزيتات وقياسات الخزانات."
+
+#. module: transport_energy
+#: model_terms:ir.ui.view,arch_db:transport_energy.view_energy_type_form
+msgid ""
+"Saisie possible en litres OU en nombre d'unités\n"
+"                                dans les bons lubrifiant.\n"
+"                                Ex: 5 unités × volume_par_unite = quantité totale en litres."
+msgstr ""
+"يمكن الإدخال بالليتر أو بعدد الوحدات في بونات المزيت.\n"
+"مثال: 5 وحدات × الحجم لكل وحدة = الكمية الإجمالية بالليتر."
+
+#. module: transport_energy
+#: model:ir.model.fields,field_description:transport_energy.field_transport_wizard_init_stock_lubrifiant__mode_saisie
+msgid "Saisir en"
+msgstr "الإدخال بـ"
+
+#. module: transport_energy
+#: model_terms:ir.ui.view,arch_db:transport_energy.view_bon_lubrifiant_form
+#: model_terms:ir.ui.view,arch_db:transport_energy.view_reception_lubrifiant_form
+msgid ""
+"Saisir le nb de bidons/futs : la quantite en litres sera calculee auto."
+msgstr "أدخل عدد العبوات/البراميل: ستُحسب الكمية بالليتر تلقائياً."
+
+#. module: transport_energy
+#: model:ir.model.fields,help:transport_energy.field_transport_bon_lubrifiant_ligne__nb_unites
+msgid ""
+"Saisir le nombre de bidons/futs utilises. La quantite en litres sera "
+"calculee automatiquement. Laisser a 0 pour saisir directement en litres."
+msgstr "أدخل عدد العبوات/البراميل المستخدمة. ستُحسب الكمية بالليتر تلقائياً. اتركه على 0 للإدخال مباشرة بالليتر."
+
+#. module: transport_energy
+#: model_terms:ir.ui.view,arch_db:transport_energy.view_stock_lubrifiant_form
+msgid ""
+"Saisir le stock initial ou corriger manuellement. Reservé au directeur."
+msgstr "أدخل المخزون الأولي أو صحّحه يدوياً. مخصص للمدير فقط."
+
+#. module: transport_energy
+#: model_terms:ir.ui.view,arch_db:transport_energy.template_bgi
+msgid "Secondary :"
+msgstr "الفرعي :"
+
+#. module: transport_energy
+#: model:ir.model.fields,help:transport_energy.field_transport_jaugeage_lubrifiant__stock_lubrifiant_id
+msgid "Selectionnez le type de lubrifiant a jauger dans cet atelier."
+msgstr "اختر نوع المزيت المراد قياسه في هذه الورشة."
+
+#. module: transport_energy
+#: model_terms:ir.ui.view,arch_db:transport_energy.template_bge
+#: model_terms:ir.ui.view,arch_db:transport_energy.template_bgi
+msgid "Service"
+msgstr "المصلحة"
+
+#. module: transport_energy
+#: model:ir.model.fields,field_description:transport_energy.field_transport_fuel_cuve__min_stock_alert
+msgid "Seuil alerte (L)"
+msgstr "عتبة التنبيه (L)"
+
+#. module: transport_energy
+#: model:ir.model.fields,field_description:transport_energy.field_transport_stock_lubrifiant__stock_minimum
+msgid "Seuil alerte stock (L)"
+msgstr "عتبة تنبيه المخزون (L)"
+
+#. module: transport_energy
+#: model:ir.model.fields,field_description:transport_energy.field_transport_wizard_rapport__seuil_excessif
+msgid "Seuil consommation excessive (L/100km)"
+msgstr "عتبة الاستهلاك المفرط (L/100km)"
+
+#. module: transport_energy
+#: model:ir.model.fields,help:transport_energy.field_transport_jaugeage__ajustement_stock
+msgid ""
+"Si coche, le stock de la cuve sera mis a jour avec le niveau mesure a "
+"l'approbation."
+msgstr "إذا تم تحديده، سيتم تحديث مخزون الخزان بالمستوى المقيس عند الاعتماد."
+
+#. module: transport_energy
+#: model:ir.model.fields,help:transport_energy.field_transport_jaugeage_lubrifiant__ajustement_stock
+msgid ""
+"Si coche, le stock du magasin sera mis a jour avec le niveau mesure lors de "
+"l'approbation (directeur uniquement)."
+msgstr "إذا تم تحديده، سيتم تحديث مخزون المستودع بالمستوى المقيس عند الاعتماد (للمدير فقط)."
+
+#. module: transport_energy
+#: model_terms:ir.ui.view,arch_db:transport_energy.report_bge_template
+msgid "Signature agent :"
+msgstr "توقيع العون :"
+
+#. module: transport_energy
+#: model_terms:ir.ui.view,arch_db:transport_energy.rapport_energie_template
+#: model_terms:ir.ui.view,arch_db:transport_energy.view_facture_energie_form
+#: model_terms:ir.ui.view,arch_db:transport_energy.view_facture_energie_search
+msgid "Site"
+msgstr "الموقع"
+
+#. module: transport_energy
+#: model:ir.model.fields,field_description:transport_energy.field_transport_facture_energie__site
+msgid "Site / Agence"
+msgstr "الموقع / الوكالة"
+
+#. module: transport_energy
+#: model:ir.model.fields,field_description:transport_energy.field_transport_wizard_rapport_energie__site_filtre
+msgid "Site / Agence (optionnel)"
+msgstr "الموقع / الوكالة (اختياري)"
+
+#. module: transport_energy
+#: model:ir.model.fields,help:transport_energy.field_transport_jaugeage__stock_theorique
+#: model:ir.model.fields,help:transport_energy.field_transport_jaugeage_lubrifiant__stock_theorique
+msgid "Snapshot du stock ERP au moment de la confirmation du jaugeage."
+msgstr "لقطة من مخزون النظام ERP لحظة تأكيد القياس."
+
+#. module: transport_energy
+#: model_terms:ir.ui.view,arch_db:transport_energy.view_agilis_carte_form
+msgid "Solde"
+msgstr "الرصيد"
+
+#. module: transport_energy
+#: model:ir.model.fields,field_description:transport_energy.field_transport_agilis_carte__solde_actuel
+msgid "Solde actuel (TND)"
+msgstr "الرصيد الحالي (د.ت)"
+
+#. module: transport_energy
+#: model_terms:ir.ui.view,arch_db:transport_energy.view_agilis_carte_search
+msgid "Solde bas"
+msgstr "رصيد منخفض"
+
+#. module: transport_energy
+#: model_terms:ir.ui.view,arch_db:transport_energy.view_agilis_carte_form
+msgid "Solde bas — rechargement necessaire avant utilisation."
+msgstr "رصيد منخفض — يجب الشحن قبل الاستخدام."
+
+#. module: transport_energy
+#: model:ir.model.fields,field_description:transport_energy.field_transport_agilis_carte__solde_minimum
+msgid "Solde minimum alerte (TND)"
+msgstr "الرصيد الأدنى للتنبيه (د.ت)"
+
+#. module: transport_energy
+#: model:ir.model.fields,help:transport_energy.field_transport_fuel_voucher_line__km_tournees
+msgid ""
+"Somme des km realises sur les tournees apres le dernier ravitaillement."
+msgstr "مجموع الكيلومترات المقطوعة في الرحلات منذ آخر تزود بالوقود."
+
+#. module: transport_energy
+#: model:ir.model.fields,field_description:transport_energy.field_transport_fuel_voucher_line__source_distance
+msgid "Source distance"
+msgstr "مصدر المسافة"
+
+#. module: transport_energy
+#: model:ir.model.fields,field_description:transport_energy.field_transport_reception_lubrifiant_ligne__sous_total
+msgid "Sous-total (TND)"
+msgstr "المجموع الفرعي (د.ت)"
+
+#. module: transport_energy
+#: model_terms:ir.ui.view,arch_db:transport_energy.template_bge
+msgid "Start Time :"
+msgstr "وقت البداية :"
+
+#. module: transport_energy
+#: model:ir.model.fields,field_description:transport_energy.field_transport_fuel_cuve__station_id
+#: model:ir.model.fields,field_description:transport_energy.field_transport_fuel_voucher__station_id
+#: model:ir.model.fields,field_description:transport_energy.field_transport_jaugeage__station_id
+#: model:ir.model.fields,field_description:transport_energy.field_transport_supply_order__station_id
+#: model_terms:ir.ui.view,arch_db:transport_energy.view_fuel_voucher_search
+#: model_terms:ir.ui.view,arch_db:transport_energy.view_jaugeage_search
+#: model_terms:ir.ui.view,arch_db:transport_energy.view_supply_order_search
+msgid "Station"
+msgstr "المحطة / المضخة"
+
+#. module: transport_energy
+#: model:ir.model.fields,field_description:transport_energy.field_transport_wizard_rapport__station_id
+msgid "Station (optionnel)"
+msgstr "المحطة (اختياري)"
+
+#. module: transport_energy
+#: model_terms:ir.ui.view,arch_db:transport_energy.template_bge
+#: model_terms:ir.ui.view,arch_db:transport_energy.template_bgi
+msgid "Station :"
+msgstr "المحطة :"
+
+#. module: transport_energy
+#: model_terms:ir.ui.view,arch_db:transport_energy.template_bgi
+msgid "Station Manager"
+msgstr "رئيس المحطة"
+
+#. module: transport_energy
+#: model_terms:ir.ui.view,arch_db:transport_energy.view_fuel_station_form
+msgid "Station de pompage"
+msgstr "محطة الضخ"
+
+#. module: transport_energy
+#: model:ir.model,name:transport_energy.model_transport_fuel_station
+msgid "Station de pompage carburant"
+msgstr "محطة ضخ الوقود"
+
+#. module: transport_energy
+#: model:ir.model.fields,field_description:transport_energy.field_fleet_vehicle__fuel_station_id
+msgid "Station de rattachement"
+msgstr "المحطة المنتسبة إليها"
+
+#. module: transport_energy
+#: model:ir.model.fields,field_description:transport_energy.field_transport_agilis_utilisation__station_externe
+#: model_terms:ir.ui.view,arch_db:transport_energy.view_fuel_voucher_bge_form
+msgid "Station externe"
+msgstr "محطة خارجية"
+
+#. module: transport_energy
+#: model:ir.model.fields,field_description:transport_energy.field_transport_fuel_voucher__station_externe
+msgid "Station externe (nom)"
+msgstr "اسم المحطة الخارجية"
+
+#. module: transport_energy
+#: model_terms:ir.ui.view,arch_db:transport_energy.view_fuel_voucher_bgi_form
+msgid "Station interne"
+msgstr "المحطة الداخلية"
+
+#. module: transport_energy
+#: model:ir.actions.act_window,name:transport_energy.action_fuel_station
+#: model:ir.ui.menu,name:transport_energy.menu_fuel_station
+#: model_terms:ir.ui.view,arch_db:transport_energy.view_fuel_station_list
+msgid "Stations de pompage"
+msgstr "محطات الضخ"
+
+#. module: transport_energy
+#: model:ir.actions.report,name:transport_energy.action_rapport_stats_agence
+msgid "Statistiques Consommation par Agence"
+msgstr "إحصائيات الاستهلاك حسب الوكالة"
+
+#. module: transport_energy
+#: model:ir.model.fields.selection,name:transport_energy.selection__transport_wizard_rapport__type_rapport_carburant__par_activite
+msgid "Statistiques par activite (urbain/regional)"
+msgstr "إحصائيات حسب النشاط (حضري/جهوي)"
+
+#. module: transport_energy
+#: model:ir.model.fields.selection,name:transport_energy.selection__transport_wizard_rapport__type_rapport_carburant__par_type_bus
+msgid "Statistiques par type de bus"
+msgstr "إحصائيات حسب نوع الحافلة"
+
+#. module: transport_energy
+#: model:ir.model.fields.selection,name:transport_energy.selection__transport_wizard_rapport__type_rapport__stats
+msgid "Stats par Agence"
+msgstr "إحصائيات حسب الوكالة"
+
+#. module: transport_energy
+#: model:ir.model.fields,help:transport_energy.field_transport_agilis_carte__activity_state
+#: model:ir.model.fields,help:transport_energy.field_transport_bon_lubrifiant__activity_state
+#: model:ir.model.fields,help:transport_energy.field_transport_facture_energie__activity_state
+#: model:ir.model.fields,help:transport_energy.field_transport_fuel_voucher__activity_state
+#: model:ir.model.fields,help:transport_energy.field_transport_jaugeage__activity_state
+#: model:ir.model.fields,help:transport_energy.field_transport_jaugeage_lubrifiant__activity_state
+#: model:ir.model.fields,help:transport_energy.field_transport_reception_lubrifiant__activity_state
+#: model:ir.model.fields,help:transport_energy.field_transport_supply_order__activity_state
+msgid ""
+"Status based on activities\n"
+"Overdue: Due date is already passed\n"
+"Today: Activity date is today\n"
+"Planned: Future activities."
+msgstr ""
+"الحالة بناءً على الأنشطة\n"
+"متأخر: تجاوز الموعد النهائي\n"
+"اليوم: موعد النشاط هو اليوم\n"
+"مخطط: أنشطة مستقبلية."
+
+#. module: transport_energy
+#: model:ir.model.fields,field_description:transport_energy.field_transport_agilis_carte__statut
+#: model:ir.model.fields,field_description:transport_energy.field_transport_bon_lubrifiant__statut
+#: model:ir.model.fields,field_description:transport_energy.field_transport_facture_energie__statut
+#: model:ir.model.fields,field_description:transport_energy.field_transport_fuel_voucher__state
+#: model:ir.model.fields,field_description:transport_energy.field_transport_jaugeage__statut
+#: model:ir.model.fields,field_description:transport_energy.field_transport_jaugeage_lubrifiant__statut
+#: model:ir.model.fields,field_description:transport_energy.field_transport_reception_lubrifiant__state
+#: model:ir.model.fields,field_description:transport_energy.field_transport_supply_order__state
+#: model_terms:ir.ui.view,arch_db:transport_energy.view_agilis_carte_search
+msgid "Statut"
+msgstr "الحالة"
+
+#. module: transport_energy
+#: model:ir.model.fields,field_description:transport_energy.field_transport_fuel_cuve__current_stock
+#: model:ir.model.fields,field_description:transport_energy.field_transport_stock_lubrifiant__stock_actuel
+#: model:ir.model.fields,field_description:transport_energy.field_transport_wizard_init_stock_lubrifiant__stock_actuel
+#: model_terms:ir.ui.view,arch_db:transport_energy.view_wizard_init_stock_lubrifiant_form
+msgid "Stock actuel (L)"
+msgstr "المخزون الحالي (L)"
+
+#. module: transport_energy
+#: model:ir.model.fields,field_description:transport_energy.field_transport_stock_lubrifiant__nb_unites_actuel
+#: model_terms:ir.ui.view,arch_db:transport_energy.view_stock_lubrifiant_form
+msgid "Stock actuel (unites)"
+msgstr "المخزون الحالي (وحدات)"
+
+#. module: transport_energy
+#: model:ir.model.fields,field_description:transport_energy.field_transport_supply_order__stock_after
+msgid "Stock apres reception (L)"
+msgstr "المخزون بعد الاستلام (L)"
+
+#. module: transport_energy
+#: model:ir.model.fields,field_description:transport_energy.field_transport_supply_order__stock_before
+msgid "Stock avant reception (L)"
+msgstr "المخزون قبل الاستلام (L)"
+
+#. module: transport_energy
+#: model_terms:ir.ui.view,arch_db:transport_energy.view_fuel_station_search
+#: model_terms:ir.ui.view,arch_db:transport_energy.view_stock_lubrifiant_search
+msgid "Stock bas"
+msgstr "مخزون منخفض"
+
+#. module: transport_energy
+#: model_terms:ir.ui.view,arch_db:transport_energy.view_wizard_init_stock_lubrifiant_form
+msgid "Stock concerné"
+msgstr "المخزون المعني"
+
+#. module: transport_energy
+#: model_terms:ir.ui.view,arch_db:transport_energy.view_stock_lubrifiant_form
+msgid "Stock converti en bidons/futs selon le conditionnement du lubrifiant."
+msgstr "المخزون محوّل إلى عبوات/براميل وفق تغليف المزيت."
+
+#. module: transport_energy
+#: model:ir.model.fields,help:transport_energy.field_transport_stock_lubrifiant__nb_unites_actuel
+msgid ""
+"Stock converti en unites de conditionnement (bidons, futs...). Affiche 0 si "
+"pas de conditionnement defini sur le type de lubrifiant."
+msgstr "المخزون محوّل إلى وحدات التعبئة (عبوات، براميل...). يُعرض 0 إذا لم يُحدَّد تغليف لنوع المزيت."
+
+#. module: transport_energy
+#: model_terms:ir.ui.view,arch_db:transport_energy.view_stock_lubrifiant_search
+msgid "Stock critique"
+msgstr "مخزون حرج"
+
+#. module: transport_energy
+#: model:ir.model.fields,help:transport_energy.field_transport_stock_lubrifiant__stock_actuel
+#: model:ir.model.fields,help:transport_energy.field_transport_wizard_init_stock_lubrifiant__stock_actuel
+msgid ""
+"Stock en litres. Mis a jour par les bons lubrifiant et les jaugeages "
+"approuves."
+msgstr "المخزون بالليتر. يتم تحديثه عبر بونات المزيت والقياسات المعتمدة."
+
+#. module: transport_energy
+#: model:ir.model.fields,field_description:transport_energy.field_transport_wizard_init_stock_lubrifiant__stock_lubrifiant_id
+msgid "Stock lubrifiant"
+msgstr "مخزون المزيت"
+
+#. module: transport_energy
+#: model:ir.model.fields,field_description:transport_energy.field_transport_jaugeage_lubrifiant__stock_lubrifiant_id
+msgid "Stock lubrifiant (magasin)"
+msgstr "مخزون المزيت (المستودع)"
+
+#. module: transport_energy
+#: model:ir.model,name:transport_energy.model_transport_stock_lubrifiant
+#: model_terms:ir.ui.view,arch_db:transport_energy.view_stock_lubrifiant_form
+msgid "Stock lubrifiant magasin"
+msgstr "مخزون مزيت المستودع"
+
+#. module: transport_energy
+#: model_terms:ir.ui.view,arch_db:transport_energy.template_bge
+#: model_terms:ir.ui.view,arch_db:transport_energy.template_bgi
+msgid "Stock restant :"
+msgstr "المخزون المتبقي :"
+
+#. module: transport_energy
+#: model:ir.model.fields,field_description:transport_energy.field_transport_fuel_voucher__remaining_stock
+msgid "Stock restant estime (L)"
+msgstr "الكمية المتبقية"
+
+#. module: transport_energy
+#: model:ir.model.fields,field_description:transport_energy.field_transport_jaugeage__stock_theorique
+#: model:ir.model.fields,field_description:transport_energy.field_transport_jaugeage_lubrifiant__stock_theorique
+msgid "Stock theorique ERP (L)"
+msgstr "المخزون النظري ERP (L)"
+
+#. module: transport_energy
+#: model_terms:ir.ui.view,arch_db:transport_energy.view_stock_lubrifiant_list
+msgid "Stocks lubrifiants"
+msgstr "مخزونات المزيتات"
+
+#. module: transport_energy
+#: model:ir.actions.act_window,name:transport_energy.action_stock_lubrifiant
+#: model:ir.ui.menu,name:transport_energy.menu_stock_lubrifiant
+msgid "Stocks lubrifiants magasins"
+msgstr "مخزونات مزيتات المستودعات"
+
+#. module: transport_energy
+#: model_terms:ir.ui.view,arch_db:transport_energy.rapport_energie_template
+msgid "Synthese Financiere Energie STEG + SONEDE — TND"
+msgstr "الملخص المالي للطاقة STEG + SONEDE — د.ت"
+
+#. module: transport_energy
+#: model:ir.model.fields.selection,name:transport_energy.selection__transport_wizard_rapport_energie__type_rapport__synthese
+msgid "Synthese financiere STEG + SONEDE (TND)"
+msgstr "الملخص المالي STEG + SONEDE (د.ت)"
+
+#. module: transport_energy
+#: model_terms:ir.ui.view,arch_db:transport_energy.view_wizard_rapport_energie_form
+msgid ""
+"Synthèse financière globale en TND. STEG et SONEDE sont présentés\n"
+"                    dans des sections distinctes — les quantités (kWh et m³) ne sont\n"
+"                    jamais additionnées ensemble."
+msgstr ""
+"ملخص مالي شامل بالدينار التونسي. يُعرض STEG وSONEDE في أقسام منفصلة —\n"
+"ولا تُجمع الكميات (كيلوواط/ساعة و م³) أبداً."
+
+#. module: transport_energy
+#: model_terms:ir.ui.view,arch_db:transport_energy.rapport_energie_template
+msgid "Synthèse financière par site (TND)"
+msgstr "الملخص المالي حسب الموقع (د.ت)"
+
+#. module: transport_energy
+#: model_terms:ir.ui.view,arch_db:transport_energy.rapport_energie_template
+#: model_terms:ir.ui.view,arch_db:transport_energy.report_bge_template
+msgid "TND"
+msgstr "د.ت"
+
+#. module: transport_energy
+#: model_terms:ir.ui.view,arch_db:transport_energy.rapport_energie_template
+msgid ""
+"TND\n"
+"                                    ("
+msgstr ""
+"د.ت\n"
+"                                    ("
+
+#. module: transport_energy
+#: model_terms:ir.ui.view,arch_db:transport_energy.rapport_energie_template
+msgid "TOTAL"
+msgstr "الإجمالي"
+
+#. module: transport_energy
+#: model_terms:ir.ui.view,arch_db:transport_energy.template_bgi
+msgid "Tableau de Distribution du Carburant"
+msgstr "جدول توزيع الوقود"
+
+#. module: transport_energy
+#: model:ir.actions.act_window,name:transport_energy.action_tableau_bord_appro
+#: model:ir.ui.menu,name:transport_energy.menu_tableau_bord_appro
+msgid "Tableau de bord approvisionnements"
+msgstr "لوحة متابعة التموين"
+
+#. module: transport_energy
+#: model:ir.actions.act_window,name:transport_energy.action_tableau_bord_carburant
+#: model:ir.ui.menu,name:transport_energy.menu_tableau_bord_carburant
+msgid "Tableau de bord carburant"
+msgstr "لوحة متابعة الوقود"
+
+#. module: transport_energy
+#: model_terms:ir.ui.view,arch_db:transport_energy.template_bge
+#: model_terms:ir.ui.view,arch_db:transport_energy.template_bgi
+msgid "Time"
+msgstr "الوقت"
+
+#. module: transport_energy
+#: model_terms:ir.ui.view,arch_db:transport_energy.template_bge
+#: model_terms:ir.ui.view,arch_db:transport_energy.template_bgi
+msgid "Total :"
+msgstr "الجملة / Total :"
+
+#. module: transport_energy
+#: model_terms:ir.ui.view,arch_db:transport_energy.rapport_energie_template
+msgid "Total N (TND)"
+msgstr "الإجمالي N (د.ت)"
+
+#. module: transport_energy
+#: model_terms:ir.ui.view,arch_db:transport_energy.view_bon_lubrifiant_form
+msgid "Total ajoute"
+msgstr "الإجمالي المضاف"
+
+#. module: transport_energy
+#: model_terms:ir.ui.view,arch_db:transport_energy.view_fuel_voucher_bge_form
+#: model_terms:ir.ui.view,arch_db:transport_energy.view_fuel_voucher_bgi_form
+msgid "Total distribue (L)"
+msgstr "الإجمالي الموزع (L)"
+
+#. module: transport_energy
+#: model:ir.model.fields,field_description:transport_energy.field_transport_agilis_carte__total_recharge
+msgid "Total recharge (TND)"
+msgstr "إجمالي المشحون (د.ت)"
+
+#. module: transport_energy
+#: model:ir.model.fields,field_description:transport_energy.field_transport_agilis_carte__total_utilise
+msgid "Total utilise (TND)"
+msgstr "إجمالي المستخدم (د.ت)"
+
+#. module: transport_energy
+#: model:ir.model.fields.selection,name:transport_energy.selection__transport_fuel_voucher_line__source_distance__tournees
+msgid "Tournees exploitation"
+msgstr "رحلات الاستغلال"
+
+#. module: transport_energy
+#: model_terms:ir.ui.view,arch_db:transport_energy.view_fleet_vehicle_transport_form
+msgid "Transport"
+msgstr "🚌 النقل"
+
+#. module: transport_energy
+#: model:ir.model.fields,field_description:transport_energy.field_transport_facture_energie__type_facture
+#: model:ir.model.fields,field_description:transport_energy.field_transport_fuel_voucher__voucher_type
+#: model_terms:ir.ui.view,arch_db:transport_energy.view_facture_energie_search
+msgid "Type"
+msgstr "النوع"
+
+#. module: transport_energy
+#: model:ir.model.fields,field_description:transport_energy.field_transport_wizard_rapport__type_rapport
+msgid "Type Rapport"
+msgstr "نوع التقرير"
+
+#. module: transport_energy
+#: model:ir.model.fields,field_description:transport_energy.field_transport_agilis_utilisation__fuel_type_id
+#: model:ir.model.fields,field_description:transport_energy.field_transport_fuel_voucher__fuel_type_id
+#: model:ir.model.fields,field_description:transport_energy.field_transport_jaugeage__fuel_type_id
+#: model:ir.model.fields,field_description:transport_energy.field_transport_supply_order__fuel_type_id
+msgid "Type carburant"
+msgstr "نوع الوقود"
+
+#. module: transport_energy
+#: model:ir.model.fields,field_description:transport_energy.field_transport_fuel_voucher__fuel_type_bge_id
+msgid "Type carburant (BGE)"
+msgstr "نوع الوقود (BGE)"
+
+#. module: transport_energy
+#: model_terms:ir.ui.view,arch_db:transport_energy.template_bge
+msgid "Type carburant :"
+msgstr "نوع الوقود :"
+
+#. module: transport_energy
+#: model:ir.model.fields,field_description:transport_energy.field_transport_wizard_init_stock_lubrifiant__conditionnement
+msgid "Type conditionnement"
+msgstr "نوع التعبئة"
+
+#. module: transport_energy
+#: model_terms:ir.ui.view,arch_db:transport_energy.view_energy_type_form
+msgid "Type d energie"
+msgstr "نوع الطاقة"
+
+#. module: transport_energy
+#: model:ir.model.fields,field_description:transport_energy.field_fleet_vehicle__bus_type
+msgid "Type de bus"
+msgstr "نوع الحافلة"
+
+#. module: transport_energy
+#: model:ir.model.fields,field_description:transport_energy.field_transport_wizard_rapport__type_bus_filtre
+msgid "Type de bus (optionnel)"
+msgstr "نوع الحافلة (اختياري)"
+
+#. module: transport_energy
+#: model:ir.model.fields,field_description:transport_energy.field_transport_fuel_cuve__fuel_type_id
+msgid "Type de carburant"
+msgstr "نوع الوقود"
+
+#. module: transport_energy
+#: model:ir.model.fields,field_description:transport_energy.field_transport_bon_lubrifiant_ligne__type_lubrifiant_id
+#: model:ir.model.fields,field_description:transport_energy.field_transport_stock_lubrifiant__type_lubrifiant_id
+msgid "Type de lubrifiant"
+msgstr "نوع المزيت"
+
+#. module: transport_energy
+#: model:ir.model.fields,field_description:transport_energy.field_transport_wizard_rapport__type_rapport_carburant
+#: model:ir.model.fields,field_description:transport_energy.field_transport_wizard_rapport_energie__type_rapport
+#: model_terms:ir.ui.view,arch_db:transport_energy.view_wizard_rapport_carburant_form
+#: model_terms:ir.ui.view,arch_db:transport_energy.view_wizard_rapport_energie_form
+#: model_terms:ir.ui.view,arch_db:transport_energy.view_wizard_rapport_lubrifiant_form
+msgid "Type de rapport"
+msgstr "نوع التقرير"
+
+#. module: transport_energy
+#: model:ir.model.fields,field_description:transport_energy.field_transport_wizard_rapport__type_rapport_lubrifiant
+msgid "Type de rapport lubrifiant"
+msgstr "نوع تقرير المزيت"
+
+#. module: transport_energy
+#: model:ir.model,name:transport_energy.model_transport_energy_type
+msgid "Type energie (carburant, lubrifiant, autre)"
+msgstr "نوع الطاقة"
+
+#. module: transport_energy
+#: model:ir.model.fields,field_description:transport_energy.field_transport_jaugeage_lubrifiant__type_lubrifiant_id
+#: model:ir.model.fields,field_description:transport_energy.field_transport_reception_lubrifiant_ligne__type_lubrifiant_id
+#: model:ir.model.fields,field_description:transport_energy.field_transport_wizard_init_stock_lubrifiant__type_lubrifiant_id
+msgid "Type lubrifiant"
+msgstr "نوع المزيت"
+
+#. module: transport_energy
+#: model:ir.model.fields,help:transport_energy.field_transport_agilis_carte__activity_exception_decoration
+#: model:ir.model.fields,help:transport_energy.field_transport_bon_lubrifiant__activity_exception_decoration
+#: model:ir.model.fields,help:transport_energy.field_transport_facture_energie__activity_exception_decoration
+#: model:ir.model.fields,help:transport_energy.field_transport_fuel_voucher__activity_exception_decoration
+#: model:ir.model.fields,help:transport_energy.field_transport_jaugeage__activity_exception_decoration
+#: model:ir.model.fields,help:transport_energy.field_transport_jaugeage_lubrifiant__activity_exception_decoration
+#: model:ir.model.fields,help:transport_energy.field_transport_reception_lubrifiant__activity_exception_decoration
+#: model:ir.model.fields,help:transport_energy.field_transport_supply_order__activity_exception_decoration
+msgid "Type of the exception activity on record."
+msgstr "نوع نشاط الاستثناء المسجّل."
+
+#. module: transport_energy
+#: model:ir.model.fields,field_description:transport_energy.field_transport_bon_lubrifiant_ligne__type_operation
+msgid "Type operation"
+msgstr "نوع العملية"
+
+#. module: transport_energy
+#: model:ir.actions.act_window,name:transport_energy.action_energy_type
+#: model:ir.ui.menu,name:transport_energy.menu_energy_type
+#: model_terms:ir.ui.view,arch_db:transport_energy.view_energy_type_list
+msgid "Types d energie"
+msgstr "أنواع الطاقة"
+
+#. module: transport_energy
+#: model:ir.model.fields,help:transport_energy.field_transport_bon_lubrifiant_ligne__quantite_videe
+msgid "Uniquement pour les vidanges"
+msgstr "فقط لعمليات تغيير الزيت"
+
+#. module: transport_energy
+#: model:ir.model.fields,field_description:transport_energy.field_transport_bon_lubrifiant_ligne__unite
+#: model:ir.model.fields,field_description:transport_energy.field_transport_facture_energie__unite_mesure
+#: model:ir.model.fields,field_description:transport_energy.field_transport_jaugeage_lubrifiant__unite
+#: model:ir.model.fields,field_description:transport_energy.field_transport_reception_lubrifiant_ligne__unite
+#: model:ir.model.fields,field_description:transport_energy.field_transport_stock_lubrifiant__unite
+msgid "Unite"
+msgstr "الوحدة"
+
+#. module: transport_energy
+#: model:ir.model.fields,field_description:transport_energy.field_transport_energy_type__unite
+msgid "Unite de mesure (base)"
+msgstr "وحدة القياس (الأساسية)"
+
+#. module: transport_energy
+#: model:ir.model.fields,help:transport_energy.field_transport_bon_lubrifiant_ligne__unite
+#: model:ir.model.fields,help:transport_energy.field_transport_energy_type__unite
+#: model:ir.model.fields,help:transport_energy.field_transport_jaugeage_lubrifiant__unite
+#: model:ir.model.fields,help:transport_energy.field_transport_reception_lubrifiant_ligne__unite
+#: model:ir.model.fields,help:transport_energy.field_transport_stock_lubrifiant__unite
+msgid ""
+"Unite de stockage et de calcul. Toujours en Litre pour les lubrifiants."
+msgstr "وحدة التخزين والحساب. دائماً بالليتر للمزيتات."
+
+#. module: transport_energy
+#: model:ir.model.fields,help:transport_energy.field_transport_bon_lubrifiant_ligne__conditionnement
+#: model:ir.model.fields,help:transport_energy.field_transport_energy_type__conditionnement
+#: model:ir.model.fields,help:transport_energy.field_transport_reception_lubrifiant_ligne__conditionnement
+#: model:ir.model.fields,help:transport_energy.field_transport_wizard_init_stock_lubrifiant__conditionnement
+msgid ""
+"Unité physique de conditionnement. Ex: Bidon, Fut, Cartouche. Laisser vide "
+"si vendu au litre directement."
+msgstr "وحدة التعبئة الفيزيائية. مثال: عبوة، برميل، خرطوشة. اتركه فارغاً إذا كان البيع مباشرة بالليتر."
+
+#. module: transport_energy
+#: model:ir.model.fields.selection,name:transport_energy.selection__fleet_vehicle__activity_type__urban
+#: model:ir.model.fields.selection,name:transport_energy.selection__transport_wizard_rapport__activite_filtre__urban
+msgid "Urbain"
+msgstr "حضري"
+
+#. module: transport_energy
+#: model:ir.model,name:transport_energy.model_transport_agilis_utilisation
+msgid "Utilisation carte AGILIS (creee automatiquement par BGE)"
+msgstr "استخدام بطاقة أجيليس"
+
+#. module: transport_energy
+#: model:ir.model.fields,field_description:transport_energy.field_transport_agilis_carte__utilisation_ids
+msgid "Utilisations"
+msgstr "الاستخدامات"
+
+#. module: transport_energy
+#: model_terms:ir.ui.view,arch_db:transport_energy.template_bge
+#: model_terms:ir.ui.view,arch_db:transport_energy.template_bgi
+msgid "Validated :"
+msgstr "مصادق :"
+
+#. module: transport_energy
+#: model:res.groups,comment:transport_energy.group_responsable_energie
+msgid "Validation bons, approvisionnements, rapports, factures STEG/SONEDE."
+msgstr "وصول كامل: اعتماد البونات، التموين، التقارير، فواتير STEG/SONEDE."
+
+#. module: transport_energy
+#: model:ir.model.fields.selection,name:transport_energy.selection__transport_bon_lubrifiant__statut__valide
+#: model:ir.model.fields.selection,name:transport_energy.selection__transport_fuel_voucher__state__done
+#: model:ir.model.fields.selection,name:transport_energy.selection__transport_reception_lubrifiant__state__validated
+#: model:ir.model.fields.selection,name:transport_energy.selection__transport_supply_order__state__validated
+msgid "Valide"
+msgstr "معتمد"
+
+#. module: transport_energy
+#: model_terms:ir.ui.view,arch_db:transport_energy.view_bon_lubrifiant_form
+#: model_terms:ir.ui.view,arch_db:transport_energy.view_fuel_voucher_bge_form
+#: model_terms:ir.ui.view,arch_db:transport_energy.view_fuel_voucher_bgi_form
+#: model_terms:ir.ui.view,arch_db:transport_energy.view_reception_lubrifiant_form
+#: model_terms:ir.ui.view,arch_db:transport_energy.view_wizard_init_stock_lubrifiant_form
+msgid "Valider"
+msgstr "اعتماد"
+
+#. module: transport_energy
+#: model_terms:ir.ui.view,arch_db:transport_energy.view_supply_order_form
+msgid "Valider et crediter cuve"
+msgstr "اعتماد وإضافة إلى الخزان"
+
+#. module: transport_energy
+#: model_terms:ir.ui.view,arch_db:transport_energy.view_bon_lubrifiant_search
+#: model_terms:ir.ui.view,arch_db:transport_energy.view_fuel_voucher_search
+#: model_terms:ir.ui.view,arch_db:transport_energy.view_supply_order_search
+msgid "Valides"
+msgstr "المعتمدة"
+
+#. module: transport_energy
+#: model_terms:ir.ui.view,arch_db:transport_energy.template_bge
+#: model_terms:ir.ui.view,arch_db:transport_energy.template_bgi
+msgid "Validé :"
+msgstr "مصادق :"
+
+#. module: transport_energy
+#: model:ir.model,name:transport_energy.model_fleet_vehicle
+msgid "Vehicle"
+msgstr "المركبة"
+
+#. module: transport_energy
+#: model:ir.model.fields,field_description:transport_energy.field_transport_agilis_utilisation__vehicle_id
+#: model_terms:ir.ui.view,arch_db:transport_energy.view_agilis_carte_search
+#: model_terms:ir.ui.view,arch_db:transport_energy.view_bon_lubrifiant_form
+#: model_terms:ir.ui.view,arch_db:transport_energy.view_bon_lubrifiant_search
+msgid "Vehicule"
+msgstr "العربة"
+
+#. module: transport_energy
+#: model:ir.model.fields,field_description:transport_energy.field_transport_agilis_carte__vehicle_id
+msgid "Vehicule assigne"
+msgstr "العربة المعينة"
+
+#. module: transport_energy
+#: model:ir.model.fields.selection,name:transport_energy.selection__transport_wizard_rapport__type_rapport__admin
+msgid "Vehicules Administratifs"
+msgstr "المركبات الإدارية"
+
+#. module: transport_energy
+#: model_terms:ir.ui.view,arch_db:transport_energy.view_fuel_voucher_bge_form
+msgid "Verifier le solde de la carte AGILIS avant validation."
+msgstr "تحقق من رصيد بطاقة أجيليس قبل الاعتماد."
+
+#. module: transport_energy
+#: model:ir.model.fields.selection,name:transport_energy.selection__transport_bon_lubrifiant_ligne__type_operation__vidange
+msgid "Vidange (remplacement complet)"
+msgstr "🔄 فيدانج (استبدال كامل)"
+
+#. module: transport_energy
+#: model:ir.model.fields,field_description:transport_energy.field_transport_fuel_voucher__station_externe_ville
+msgid "Ville / Adresse"
+msgstr "المدينة / العنوان"
+
+#. module: transport_energy
+#: model_terms:ir.ui.view,arch_db:transport_energy.report_bge_template
+msgid "Visa responsable :"
+msgstr "تأشيرة المسؤول :"
+
+#. module: transport_energy
+#: model_terms:ir.ui.view,arch_db:transport_energy.view_facture_energie_form
+msgid "Voir facture comptable"
+msgstr "عرض الفاتورة المحاسبية"
+
+#. module: transport_energy
+#: model:ir.model.fields.selection,name:transport_energy.selection__fleet_vehicle__bus_type__service_car
+#: model:ir.model.fields.selection,name:transport_energy.selection__transport_wizard_rapport__type_bus_filtre__service_car
+msgid "Voiture de service"
+msgstr "سيارة المصلحة"
+
+#. module: transport_energy
+#: model:ir.model.fields,field_description:transport_energy.field_transport_bon_lubrifiant_ligne__volume_conditionnement
+msgid "Vol. par unite (L)"
+msgstr "الحجم لكل وحدة (L)"
+
+#. module: transport_energy
+#: model:ir.model.fields,field_description:transport_energy.field_transport_reception_lubrifiant_ligne__volume_conditionnement
+#: model_terms:ir.ui.view,arch_db:transport_energy.view_energy_type_list
+msgid "Vol/unite (L)"
+msgstr "الحجم/وحدة (L)"
+
+#. module: transport_energy
+#: model:ir.model.fields,help:transport_energy.field_transport_bon_lubrifiant_ligne__volume_conditionnement
+#: model:ir.model.fields,help:transport_energy.field_transport_energy_type__volume_conditionnement
+#: model:ir.model.fields,help:transport_energy.field_transport_reception_lubrifiant_ligne__volume_conditionnement
+#: model:ir.model.fields,help:transport_energy.field_transport_wizard_init_stock_lubrifiant__volume_unitaire
+msgid ""
+"Volume en litres contenu dans une unité de conditionnement. Ex: 1 Bidon = 10"
+" L → saisir 10. Si 0 ou vide, pas de conditionnement géré."
+msgstr "الحجم بالليتر في وحدة التعبئة. مثال: 1 عبوة = 10 L → أدخل 10. إذا كان 0 أو فارغاً، لا تُدار وحدات التعبئة."
+
+#. module: transport_energy
+#: model_terms:ir.ui.view,arch_db:transport_energy.view_energy_type_form
+msgid "Volume en litres dans 1 unite. Ex: 1 Bidon = 10 L"
+msgstr "الحجم بالليتر في وحدة واحدة. مثال: 1 عبوة = 10 L"
+
+#. module: transport_energy
+#: model_terms:ir.ui.view,arch_db:transport_energy.view_energy_type_form
+msgid "Volume par unite (L)"
+msgstr "الحجم لكل وحدة (L)"
+
+#. module: transport_energy
+#: model:ir.model.fields,field_description:transport_energy.field_transport_energy_type__volume_conditionnement
+#: model:ir.model.fields,field_description:transport_energy.field_transport_wizard_init_stock_lubrifiant__volume_unitaire
+#: model_terms:ir.ui.view,arch_db:transport_energy.view_wizard_init_stock_lubrifiant_form
+msgid "Volume par unité (L)"
+msgstr "الحجم لكل وحدة (L)"
+
+#. module: transport_energy
+#: model_terms:ir.ui.view,arch_db:transport_energy.template_bge
+#: model_terms:ir.ui.view,arch_db:transport_energy.template_bgi
+msgid "Voucher No. :"
+msgstr "رقم البون :"
+
+#. module: transport_energy
+#: model:ir.model.fields,field_description:transport_energy.field_transport_agilis_carte__website_message_ids
+#: model:ir.model.fields,field_description:transport_energy.field_transport_bon_lubrifiant__website_message_ids
+#: model:ir.model.fields,field_description:transport_energy.field_transport_facture_energie__website_message_ids
+#: model:ir.model.fields,field_description:transport_energy.field_transport_fuel_voucher__website_message_ids
+#: model:ir.model.fields,field_description:transport_energy.field_transport_jaugeage__website_message_ids
+#: model:ir.model.fields,field_description:transport_energy.field_transport_jaugeage_lubrifiant__website_message_ids
+#: model:ir.model.fields,field_description:transport_energy.field_transport_reception_lubrifiant__website_message_ids
+#: model:ir.model.fields,field_description:transport_energy.field_transport_supply_order__website_message_ids
+msgid "Website Messages"
+msgstr "رسائل الموقع الإلكتروني"
+
+#. module: transport_energy
+#: model:ir.model.fields,help:transport_energy.field_transport_agilis_carte__website_message_ids
+#: model:ir.model.fields,help:transport_energy.field_transport_bon_lubrifiant__website_message_ids
+#: model:ir.model.fields,help:transport_energy.field_transport_facture_energie__website_message_ids
+#: model:ir.model.fields,help:transport_energy.field_transport_fuel_voucher__website_message_ids
+#: model:ir.model.fields,help:transport_energy.field_transport_jaugeage__website_message_ids
+#: model:ir.model.fields,help:transport_energy.field_transport_jaugeage_lubrifiant__website_message_ids
+#: model:ir.model.fields,help:transport_energy.field_transport_reception_lubrifiant__website_message_ids
+#: model:ir.model.fields,help:transport_energy.field_transport_supply_order__website_message_ids
+msgid "Website communication history"
+msgstr "سجل التواصل عبر الموقع الإلكتروني"
+
+#. module: transport_energy
+#: model:ir.model,name:transport_energy.model_transport_wizard_rapport_energie
+msgid "Wizard Rapport Energie STEG/SONEDE"
+msgstr "مساعد تقرير الطاقة STEG/SONEDE"
+
+#. module: transport_energy
+#: model_terms:ir.ui.view,arch_db:transport_energy.template_bgi
+msgid "Work End :"
+msgstr "نهاية العمل :"
+
+#. module: transport_energy
+#: model_terms:ir.ui.view,arch_db:transport_energy.template_bgi
+msgid "Work Start :"
+msgstr "بداية العمل :"
+
+#. module: transport_energy
+#: model_terms:ir.ui.view,arch_db:transport_energy.template_bgi
+msgid "Year :"
+msgstr "السنة :"
+
+#. module: transport_energy
+#: model_terms:ir.ui.view,arch_db:transport_energy.template_bge
+#: model_terms:ir.ui.view,arch_db:transport_energy.template_bgi
+msgid "Yes"
+msgstr "نعم"
+
+#. module: transport_energy
+#: model:ir.model.fields,help:transport_energy.field_fleet_vehicle__service_code
+#: model:ir.model.fields,help:transport_energy.field_transport_bon_lubrifiant__code_service
+msgid "ex: 1250, 4050"
+msgstr "مثال: 1250, 4050, 4300..."
+
+#. module: transport_energy
+#: model_terms:ir.ui.view,arch_db:transport_energy.rapport_vehicules_admin_template
+msgid "km"
+msgstr "كم"
+
+#. module: transport_energy
+#: model_terms:ir.ui.view,arch_db:transport_energy.rapport_energie_template
+msgid "| <strong>Nb factures :</strong>"
+msgstr "| <strong>عدد الفواتير :</strong>"
+
+#. module: transport_energy
+#: model_terms:ir.ui.view,arch_db:transport_energy.rapport_energie_template
+msgid "| <strong>Site :</strong>"
+msgstr "| <strong>الموقع :</strong>"
+
+#. module: transport_energy
+#: model_terms:ir.ui.view,arch_db:transport_energy.rapport_energie_template
+msgid "| Ecart :"
+msgstr "| الفارق :"
+
+#. module: transport_energy
+#: model_terms:ir.ui.view,arch_db:transport_energy.rapport_energie_template
+msgid "| Montant N :"
+msgstr "| المبلغ N :"
+
+#. module: transport_energy
+#: model_terms:ir.ui.view,arch_db:transport_energy.rapport_energie_template
+msgid "| N-1 :"
+msgstr "| N-1:"
+
+#. module: transport_energy
+#: model_terms:ir.ui.view,arch_db:transport_energy.rapport_energie_template
+msgid "| SONEDE N :"
+msgstr "| SONEDE N :"
+
+#. module: transport_energy
+#: model_terms:ir.ui.view,arch_db:transport_energy.rapport_energie_template
+msgid "| Total N :"
+msgstr "| الإجمالي N :"
+
+#. module: transport_energy
+#: model_terms:ir.ui.view,arch_db:transport_energy.rapport_energie_template
+msgid "| Total N-1 :"
+msgstr "| الإجمالي N-1 :"
+
+#. module: transport_energy
+#: model_terms:ir.ui.view,arch_db:transport_energy.template_bge
+#: model_terms:ir.ui.view,arch_db:transport_energy.template_bgi
+msgid "إسم السائق"
+msgstr "اسم السائق"
+
+#. module: transport_energy
+#: model:ir.model.fields.selection,name:transport_energy.selection__transport_wizard_rapport__type_rapport_carburant__stats
+msgid "احصائيات حسب الوكالة - Stats par Agence"
+msgstr "احصائيات حسب الوكالة"
+
+#. module: transport_energy
+#: model_terms:ir.ui.view,arch_db:transport_energy.template_bge
+msgid "التاريخ :"
+msgstr "التاريخ :"
+
+#. module: transport_energy
+#: model_terms:ir.ui.view,arch_db:transport_energy.template_bgi
+msgid "التدرج الرئيسي :"
+msgstr "التدرج الرئيسي :"
+
+#. module: transport_energy
+#: model_terms:ir.ui.view,arch_db:transport_energy.template_bge
+#: model_terms:ir.ui.view,arch_db:transport_energy.template_bgi
+msgid "التوقيت"
+msgstr "التوقيت"
+
+#. module: transport_energy
+#: model_terms:ir.ui.view,arch_db:transport_energy.template_bge
+#: model_terms:ir.ui.view,arch_db:transport_energy.template_bgi
+msgid "الجملة :"
+msgstr "الجملة :"
+
+#. module: transport_energy
+#: model_terms:ir.ui.view,arch_db:transport_energy.template_bge
+msgid "السائق"
+msgstr "السائق"
+
+#. module: transport_energy
+#: model_terms:ir.ui.view,arch_db:transport_energy.template_bgi
+msgid "السنة :"
+msgstr "السنة :"
+
+#. module: transport_energy
+#: model_terms:ir.ui.view,arch_db:transport_energy.template_bge
+#: model_terms:ir.ui.view,arch_db:transport_energy.template_bgi
+msgid "العربة"
+msgstr "العربة"
+
+#. module: transport_energy
+#: model_terms:ir.ui.view,arch_db:transport_energy.template_bgi
+msgid "العون الموزع"
+msgstr "العون الموزع"
+
+#. module: transport_energy
+#: model_terms:ir.ui.view,arch_db:transport_energy.template_bgi
+msgid "العون الموزع :"
+msgstr "العون الموزع :"
+
+#. module: transport_energy
+#: model_terms:ir.ui.view,arch_db:transport_energy.template_bgi
+msgid "الفرعي :"
+msgstr "الفرعي :"
+
+#. module: transport_energy
+#: model_terms:ir.ui.view,arch_db:transport_energy.template_bge
+msgid "الكمية (L)"
+msgstr "الكمية (L)"
+
+#. module: transport_energy
+#: model_terms:ir.ui.view,arch_db:transport_energy.template_bge
+#: model_terms:ir.ui.view,arch_db:transport_energy.template_bgi
+msgid "الكمية المتبقية :"
+msgstr "الكمية المتبقية :"
+
+#. module: transport_energy
+#: model_terms:ir.ui.view,arch_db:transport_energy.template_bgi
+msgid "الكمية الموزعة (L)"
+msgstr "الكمية الموزعة (L)"
+
+#. module: transport_energy
+#: model_terms:ir.ui.view,arch_db:transport_energy.template_bge
+#: model_terms:ir.ui.view,arch_db:transport_energy.template_bgi
+msgid "الكمية الموزعة :"
+msgstr "الكمية الموزعة :"
+
+#. module: transport_energy
+#: model_terms:ir.ui.view,arch_db:transport_energy.template_bgi
+msgid "المادة :"
+msgstr "المادة :"
+
+#. module: transport_energy
+#: model_terms:ir.ui.view,arch_db:transport_energy.template_bge
+#: model_terms:ir.ui.view,arch_db:transport_energy.template_bgi
+msgid "المحطة :"
+msgstr "المحطة :"
+
+#. module: transport_energy
+#: model_terms:ir.ui.view,arch_db:transport_energy.template_bge
+msgid "المسؤول"
+msgstr "المسؤول"
+
+#. module: transport_energy
+#: model_terms:ir.ui.view,arch_db:transport_energy.template_bge
+#: model_terms:ir.ui.view,arch_db:transport_energy.template_bgi
+msgid "المصلحة"
+msgstr "المصلحة"
+
+#. module: transport_energy
+#: model_terms:ir.ui.view,arch_db:transport_energy.template_bgi
+msgid "المعرف"
+msgstr "المعرّف"
+
+#. module: transport_energy
+#: model_terms:ir.ui.view,arch_db:transport_energy.template_bgi
+msgid "بداية العمل :"
+msgstr "بداية العمل :"
+
+#. module: transport_energy
+#: model_terms:ir.ui.view,arch_db:transport_energy.template_bgi
+msgid "بداية عداد المضخة :"
+msgstr "بداية عداد المضخة :"
+
+#. module: transport_energy
+#: model_terms:ir.ui.view,arch_db:transport_energy.template_bge
+msgid "بطاقة التزود بالوقود الخارجي"
+msgstr "بطاقة التزود بالوقود الخارجي"
+
+#. module: transport_energy
+#: model_terms:ir.ui.view,arch_db:transport_energy.template_bge
+msgid "بون التزود الخارجي (BGE)"
+msgstr "بون التزود الخارجي (BGE)"
+
+#. module: transport_energy
+#: model_terms:ir.ui.view,arch_db:transport_energy.template_bgi
+msgid "بون التزود الداخلي (BGI)"
+msgstr "بون التزود الداخلي (BGI)"
+
+#. module: transport_energy
+#: model_terms:ir.ui.view,arch_db:transport_energy.template_bgi
+msgid "تاريخ التوزيع :"
+msgstr "تاريخ التوزيع :"
+
+#. module: transport_energy
+#: model:ir.model.fields.selection,name:transport_energy.selection__transport_wizard_rapport__type_rapport_carburant__rotation
+msgid "تقرير دوران السائقين - Rotation Chauffeurs"
+msgstr "تقرير دوران السائقين"
+
+#. module: transport_energy
+#: model_terms:ir.ui.view,arch_db:transport_energy.template_bgi
+msgid "جدول إخراج المحروقات"
+msgstr "جدول إخراج المحروقات"
+
+#. module: transport_energy
+#: model:ir.model.fields.selection,name:transport_energy.selection__transport_wizard_rapport__type_rapport_carburant__par_vehicule
+msgid "جدول توزيع السوائل حسب العربة - Distribution par vehicule"
+msgstr "جدول توزيع السوائل حسب العربة"
+
+#. module: transport_energy
+#: model:ir.model.fields.selection,name:transport_energy.selection__transport_wizard_rapport__type_rapport_carburant__par_station
+msgid "جدول توزيع السوائل حسب المغازة - Distribution par station"
+msgstr "جدول توزيع السوائل حسب المغازة"
+
+#. module: transport_energy
+#: model:ir.model.fields.selection,name:transport_energy.selection__transport_wizard_rapport__type_rapport_carburant__recap
+msgid "حوصلة للكمية المستهلكة - Recapitulatif"
+msgstr "حوصلة للكمية المستهلكة"
+
+#. module: transport_energy
+#: model_terms:ir.ui.view,arch_db:transport_energy.template_bgi
+msgid "رئيس المستودع"
+msgstr "رئيس المستودع"
+
+#. module: transport_energy
+#: model_terms:ir.ui.view,arch_db:transport_energy.template_bge
+msgid "رقم البون :"
+msgstr "رقم البون :"
+
+#. module: transport_energy
+#: model_terms:ir.ui.view,arch_db:transport_energy.template_bgi
+msgid "رقم الجدول :"
+msgstr "رقم الجدول :"
+
+#. module: transport_energy
+#: model_terms:ir.ui.view,arch_db:transport_energy.template_bge
+msgid "ساعة البداية :"
+msgstr "ساعة البداية :"
+
+#. module: transport_energy
+#: model_terms:ir.ui.view,arch_db:transport_energy.template_bge
+msgid "ساعة النهاية :"
+msgstr "ساعة النهاية :"
+
+#. module: transport_energy
+#: model:ir.model.fields.selection,name:transport_energy.selection__transport_wizard_rapport__type_rapport_carburant__admin
+msgid "سيارات ادارية - Vehicules Administratifs"
+msgstr "سيارات إدارية"
+
+#. module: transport_energy
+#: model_terms:ir.ui.view,arch_db:transport_energy.template_bge
+#: model_terms:ir.ui.view,arch_db:transport_energy.template_bgi
+msgid "عداد العربة"
+msgstr "عداد العربة"
+
+#. module: transport_energy
+#: model:ir.model.fields.selection,name:transport_energy.selection__transport_wizard_rapport__type_rapport_lubrifiant__lubrifiant
+msgid "كشف استهلاك المزيتات - Consommation par vehicule"
+msgstr "كشف استهلاك المزيتات"
+
+#. module: transport_energy
+#: model_terms:ir.ui.view,arch_db:transport_energy.template_bge
+#: model_terms:ir.ui.view,arch_db:transport_energy.template_bgi
+msgid "لا"
+msgstr "لا"
+
+#. module: transport_energy
+#: model_terms:ir.ui.view,arch_db:transport_energy.template_bgi
+msgid "مسؤول المحطة"
+msgstr "مسؤول المحطة"
+
+#. module: transport_energy
+#: model_terms:ir.ui.view,arch_db:transport_energy.template_bge
+#: model_terms:ir.ui.view,arch_db:transport_energy.template_bgi
+msgid "مصادق :"
+msgstr "مصادق :"
+
+#. module: transport_energy
+#: model_terms:ir.ui.view,arch_db:transport_energy.template_bge
+#: model_terms:ir.ui.view,arch_db:transport_energy.template_bgi
+msgid "نعم"
+msgstr "نعم"
+
+#. module: transport_energy
+#: model_terms:ir.ui.view,arch_db:transport_energy.template_bgi
+msgid "نهاية العمل :"
+msgstr "نهاية العمل :"
+
+#. module: transport_energy
+#: model_terms:ir.ui.view,arch_db:transport_energy.template_bgi
+msgid "نهاية عداد المضخة :"
+msgstr "نهاية عداد المضخة :"
+
+#. module: transport_energy
+#: model_terms:ir.ui.view,arch_db:transport_energy.template_bge
+msgid "نوع الوقود :"
+msgstr "نوع الوقود :"

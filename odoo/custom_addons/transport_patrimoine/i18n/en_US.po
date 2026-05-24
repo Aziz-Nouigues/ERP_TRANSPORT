@@ -6,51 +6,51 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Odoo Server 19.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-05-24 10:44+0000\n"
-"PO-Revision-Date: 2026-05-24 10:44+0000\n"
-"Last-Translator: \n"
+"POT-Creation-Date: 2026-05-24 10:42+0000\n"
+"PO-Revision-Date: 2026-05-24 10:42+0000\n"
+"Last-Translator: ERP Transport\n"
 "Language-Team: \n"
-"Language: ar_001\n"
+"Language: en_US\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
-"Content-Transfer-Encoding: \n"
-"Plural-Forms: \n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
 #. module: transport_patrimoine
 #: model_terms:ir.ui.view,arch_db:transport_patrimoine.view_patrimoine_immobilisation_kanban
 msgid "%/an —"
-msgstr "%/سنة —"
+msgstr "%/yr —"
 
 #. module: transport_patrimoine
 #: model_terms:ir.ui.view,arch_db:transport_patrimoine.rapport_amort_par_projet_template
 #: model_terms:ir.ui.view,arch_db:transport_patrimoine.rapport_amort_par_sous_categorie_template
 msgid "(DT)"
-msgstr "(د.ت)"
+msgstr "(TND)"
 
 #. module: transport_patrimoine
 #: model_terms:ir.ui.view,arch_db:transport_patrimoine.rapport_variation_template
 msgid "+ Acquisitions"
-msgstr "+ اقتناءات"
+msgstr "+ Acquisitions"
 
 #. module: transport_patrimoine
 #: model_terms:ir.ui.view,arch_db:transport_patrimoine.rapport_cessions_template
 msgid "+/- value"
-msgstr "+/- قيمة"
+msgstr "+/- Value"
 
 #. module: transport_patrimoine
 #: model_terms:ir.ui.view,arch_db:transport_patrimoine.rapport_variation_template
 msgid "- Cessions"
-msgstr "- تفويتات"
+msgstr "- Disposals"
 
 #. module: transport_patrimoine
 #: model:ir.model.fields,help:transport_patrimoine.field_patrimoine_sous_categorie__duree_amortissement
 msgid "0 = hériter de la catégorie"
-msgstr "0 = يرث من الصنف"
+msgstr "0 = inherit from category"
 
 #. module: transport_patrimoine
 #: model:ir.model.fields,help:transport_patrimoine.field_patrimoine_wizard_rapport__taux_filtre
 msgid "0 = tous les taux"
-msgstr "0 = جميع النسب"
+msgstr "0 = all rates"
 
 #. module: transport_patrimoine
 #: model_terms:ir.ui.view,arch_db:transport_patrimoine.rapport_entierement_amortis_template
@@ -60,67 +60,67 @@ msgstr "0.000"
 #. module: transport_patrimoine
 #: model_terms:ir.ui.view,arch_db:transport_patrimoine.view_patrimoine_immobilisation_kanban
 msgid "<i class=\"fa fa-map-marker me-1 text-muted\" title=\"Emplacement\"/>"
-msgstr "<i class=\"fa fa-map-marker me-1 text-muted\" title=\"الموقع\"/>"
+msgstr "<i class=\"fa fa-map-marker me-1 text-muted\" title=\"Location\"/>"
 
 #. module: transport_patrimoine
 #: model_terms:ir.ui.view,arch_db:transport_patrimoine.view_patrimoine_immobilisation_kanban
 msgid "<small class=\"text-muted\">Coût</small>"
-msgstr "<small class=\"text-muted\">التكلفة</small>"
+msgstr "<small class=\"text-muted\">Cost</small>"
 
 #. module: transport_patrimoine
 #: model_terms:ir.ui.view,arch_db:transport_patrimoine.view_patrimoine_immobilisation_kanban
 msgid "<small class=\"text-muted\">VNC</small>"
-msgstr "<small class=\"text-muted\">ق.د.ص</small>"
+msgstr "<small class=\"text-muted\">NBV</small>"
 
 #. module: transport_patrimoine
 #: model_terms:ir.ui.view,arch_db:transport_patrimoine.view_patrimoine_immobilisation_kanban
 msgid "<small><i class=\"fa fa-warning me-1\"/>Entièrement amorti</small>"
-msgstr "<small><i class=\"fa fa-warning me-1\"/>مستهلَك كلياً</small>"
+msgstr "<small><i class=\"fa fa-warning me-1\"/>Fully Depreciated</small>"
 
 #. module: transport_patrimoine
 #: model_terms:ir.ui.view,arch_db:transport_patrimoine.view_patrimoine_immobilisation_form
 msgid "<span class=\"o_stat_text\">Amort. cumulés</span>"
-msgstr "<span class=\"o_stat_text\">الاستهلاكات المتراكمة</span>"
+msgstr "<span class=\"o_stat_text\">Accum. Depreciation</span>"
 
 #. module: transport_patrimoine
 #: model_terms:ir.ui.view,arch_db:transport_patrimoine.view_patrimoine_immobilisation_form
 msgid "<span class=\"o_stat_text\">Distribuées</span>"
-msgstr "<span class=\"o_stat_text\">موزَّعة</span>"
+msgstr "<span class=\"o_stat_text\">Assigned</span>"
 
 #. module: transport_patrimoine
 #: model_terms:ir.ui.view,arch_db:transport_patrimoine.view_patrimoine_inventaire_form
 msgid "<span class=\"o_stat_text\">Manquantes</span>"
-msgstr "<span class=\"o_stat_text\">مفقودة</span>"
+msgstr "<span class=\"o_stat_text\">Missing</span>"
 
 #. module: transport_patrimoine
 #: model_terms:ir.ui.view,arch_db:transport_patrimoine.view_patrimoine_inventaire_form
 msgid "<span class=\"o_stat_text\">Retrouvées</span>"
-msgstr "<span class=\"o_stat_text\">تم العثور عليها</span>"
+msgstr "<span class=\"o_stat_text\">Found</span>"
 
 #. module: transport_patrimoine
 #: model_terms:ir.ui.view,arch_db:transport_patrimoine.view_patrimoine_inventaire_form
 msgid "<span class=\"o_stat_text\">Total</span>"
-msgstr "<span class=\"o_stat_text\">الإجمالي</span>"
+msgstr "<span class=\"o_stat_text\">Total</span>"
 
 #. module: transport_patrimoine
 #: model_terms:ir.ui.view,arch_db:transport_patrimoine.view_patrimoine_immobilisation_form
 msgid "<span class=\"o_stat_text\">VNC</span>"
-msgstr "<span class=\"o_stat_text\">ق.د.ص</span>"
+msgstr "<span class=\"o_stat_text\">NBV</span>"
 
 #. module: transport_patrimoine
 #: model_terms:ir.ui.view,arch_db:transport_patrimoine.view_patrimoine_inventaire_form
 msgid "<span class=\"o_stat_text\">Écarts</span>"
-msgstr "<span class=\"o_stat_text\">الفوارق</span>"
+msgstr "<span class=\"o_stat_text\">Discrepancies</span>"
 
 #. module: transport_patrimoine
 #: model_terms:ir.ui.view,arch_db:transport_patrimoine.rapport_cession_standalone_template
 msgid "<strong>Acquéreur :</strong>"
-msgstr "<strong>المشتري :</strong>"
+msgstr "<strong>Buyer:</strong>"
 
 #. module: transport_patrimoine
 #: model_terms:ir.ui.view,arch_db:transport_patrimoine.rapport_bon_sortie_affectation_template
 msgid "<strong>Bénéficiaire :</strong>"
-msgstr "<strong>المستفيد :</strong>"
+msgstr "<strong>Recipient:</strong>"
 
 #. module: transport_patrimoine
 #: model_terms:ir.ui.view,arch_db:transport_patrimoine.rapport_bon_sortie_affectation_template
@@ -129,45 +129,45 @@ msgstr "<strong>المستفيد :</strong>"
 #: model_terms:ir.ui.view,arch_db:transport_patrimoine.rapport_bordereau_inventaire_template
 #: model_terms:ir.ui.view,arch_db:transport_patrimoine.rapport_cession_standalone_template
 msgid "<strong>Date :</strong>"
-msgstr "<strong>التاريخ :</strong>"
+msgstr "<strong>Date:</strong>"
 
 #. module: transport_patrimoine
 #: model_terms:ir.ui.view,arch_db:transport_patrimoine.rapport_bon_sortie_affectation_template
 msgid "<strong>Département :</strong>"
-msgstr "<strong>الإدارة :</strong>"
+msgstr "<strong>Department:</strong>"
 
 #. module: transport_patrimoine
 #: model_terms:ir.ui.view,arch_db:transport_patrimoine.rapport_bon_sortie_affectation_template
 msgid "<strong>Emplacement :</strong>"
-msgstr "<strong>الموقع :</strong>"
+msgstr "<strong>Location:</strong>"
 
 #. module: transport_patrimoine
 #: model_terms:ir.ui.view,arch_db:transport_patrimoine.rapport_bon_sortie_template
 msgid "<strong>Emplacement destination :</strong>"
-msgstr "<strong>الموقع المقصود :</strong>"
+msgstr "<strong>Destination Location:</strong>"
 
 #. module: transport_patrimoine
 #: model_terms:ir.ui.view,arch_db:transport_patrimoine.rapport_bon_sortie_template
 msgid "<strong>Emplacement origine :</strong>"
-msgstr "<strong>الموقع الأصلي :</strong>"
+msgstr "<strong>Source Location:</strong>"
 
 #. module: transport_patrimoine
 #: model_terms:ir.ui.view,arch_db:transport_patrimoine.rapport_bon_sortie_affectation_template
 #: model_terms:ir.ui.view,arch_db:transport_patrimoine.rapport_bon_sortie_template
 #: model_terms:ir.ui.view,arch_db:transport_patrimoine.rapport_cession_standalone_template
 msgid "<strong>Immobilisation :</strong>"
-msgstr "<strong>الأصل الثابت :</strong>"
+msgstr "<strong>Fixed Asset:</strong>"
 
 #. module: transport_patrimoine
 #: model_terms:ir.ui.view,arch_db:transport_patrimoine.rapport_bon_sortie_template
 #: model_terms:ir.ui.view,arch_db:transport_patrimoine.rapport_cession_standalone_template
 msgid "<strong>Motif :</strong>"
-msgstr "<strong>السبب :</strong>"
+msgstr "<strong>Reason:</strong>"
 
 #. module: transport_patrimoine
 #: model_terms:ir.ui.view,arch_db:transport_patrimoine.rapport_bon_sortie_affectation_template
 msgid "<strong>N° Affectation :</strong>"
-msgstr "<strong>رقم التخصيص :</strong>"
+msgstr "<strong>Assignment No.:</strong>"
 
 #. module: transport_patrimoine
 #: model_terms:ir.ui.view,arch_db:transport_patrimoine.rapport_bon_sortie_affectation_template
@@ -176,47 +176,47 @@ msgstr "<strong>رقم التخصيص :</strong>"
 #: model_terms:ir.ui.view,arch_db:transport_patrimoine.rapport_bordereau_inventaire_template
 #: model_terms:ir.ui.view,arch_db:transport_patrimoine.rapport_cession_standalone_template
 msgid "<strong>N° Inventaire :</strong>"
-msgstr "<strong>رقم الجرد :</strong>"
+msgstr "<strong>Inventory No.:</strong>"
 
 #. module: transport_patrimoine
 #: model_terms:ir.ui.view,arch_db:transport_patrimoine.rapport_cession_standalone_template
 msgid "<strong>N° Sortie :</strong>"
-msgstr "<strong>رقم الإخراج :</strong>"
+msgstr "<strong>Disposal No.:</strong>"
 
 #. module: transport_patrimoine
 #: model_terms:ir.ui.view,arch_db:transport_patrimoine.rapport_bon_sortie_template
 msgid "<strong>N° Transfert :</strong>"
-msgstr "<strong>رقم التحويل :</strong>"
+msgstr "<strong>Transfer No.:</strong>"
 
 #. module: transport_patrimoine
 #: model_terms:ir.ui.view,arch_db:transport_patrimoine.rapport_bon_sortie_affectation_template
 msgid "<strong>Quantité :</strong>"
-msgstr "<strong>الكمية :</strong>"
+msgstr "<strong>Quantity:</strong>"
 
 #. module: transport_patrimoine
 #: model_terms:ir.ui.view,arch_db:transport_patrimoine.view_patrimoine_immobilisation_form
 msgid "<strong>Quantité non distribuée :</strong>"
-msgstr "<strong>الكمية غير الموزَّعة :</strong>"
+msgstr "<strong>Unassigned Quantity:</strong>"
 
 #. module: transport_patrimoine
 #: model_terms:ir.ui.view,arch_db:transport_patrimoine.rapport_bordereau_inventaire_template
 msgid "<strong>Responsable :</strong>"
-msgstr "<strong>المسؤول :</strong>"
+msgstr "<strong>Responsible:</strong>"
 
 #. module: transport_patrimoine
 #: model_terms:ir.ui.view,arch_db:transport_patrimoine.rapport_bon_sortie_template
 msgid "<strong>Responsable entrant :</strong>"
-msgstr "<strong>المسؤول الجديد :</strong>"
+msgstr "<strong>Incoming Responsible:</strong>"
 
 #. module: transport_patrimoine
 #: model_terms:ir.ui.view,arch_db:transport_patrimoine.rapport_bon_sortie_template
 msgid "<strong>Responsable sortant :</strong>"
-msgstr "<strong>المسؤول السابق :</strong>"
+msgstr "<strong>Outgoing Responsible:</strong>"
 
 #. module: transport_patrimoine
 #: model_terms:ir.ui.view,arch_db:transport_patrimoine.rapport_cession_standalone_template
 msgid "<strong>Type :</strong>"
-msgstr "<strong>النوع :</strong>"
+msgstr "<strong>Type:</strong>"
 
 #. module: transport_patrimoine
 #: model:res.groups,comment:transport_patrimoine.patrimoine_group_manager
@@ -224,24 +224,25 @@ msgid ""
 "Accès complet au module Patrimoine, y compris la configuration des "
 "catégories et des comptes."
 msgstr ""
-"وصول كامل إلى وحدة الأصول الثابتة، بما في ذلك إعداد الأصناف والحسابات."
+"Full access to the Assets module, including configuration of categories and "
+"accounts."
 
 #. module: transport_patrimoine
 #: model:ir.model.fields.selection,name:transport_patrimoine.selection__patrimoine_immobilisation__type_entree__acquisition
 msgid "Acquisition"
-msgstr "اقتناء"
+msgstr "Acquisition"
 
 #. module: transport_patrimoine
 #: model:ir.model.fields,field_description:transport_patrimoine.field_patrimoine_cession__acheteur_id
 msgid "Acquéreur / Repreneur"
-msgstr "المشتري / المستلم"
+msgstr "Buyer / Acquirer"
 
 #. module: transport_patrimoine
 #: model:ir.model.fields,field_description:transport_patrimoine.field_patrimoine_categorie__actif
 #: model:ir.model.fields,field_description:transport_patrimoine.field_patrimoine_emplacement__actif
 #: model:ir.model.fields,field_description:transport_patrimoine.field_patrimoine_sous_categorie__actif
 msgid "Actif"
-msgstr "نشط"
+msgstr "Active"
 
 #. module: transport_patrimoine
 #: model:ir.model.fields,field_description:transport_patrimoine.field_patrimoine_affectation__message_needaction
@@ -252,72 +253,72 @@ msgstr "نشط"
 #: model:ir.model.fields,field_description:transport_patrimoine.field_patrimoine_inventaire__message_needaction
 #: model:ir.model.fields,field_description:transport_patrimoine.field_patrimoine_mouvement__message_needaction
 msgid "Action Needed"
-msgstr "إجراء مطلوب"
+msgstr "Action Needed"
 
 #. module: transport_patrimoine
 #: model:ir.model.fields.selection,name:transport_patrimoine.selection__patrimoine_affectation__state__active
 msgid "Active"
-msgstr "نشط"
+msgstr "Active"
 
 #. module: transport_patrimoine
 #: model:ir.model.fields,field_description:transport_patrimoine.field_patrimoine_cession__activity_ids
 #: model:ir.model.fields,field_description:transport_patrimoine.field_patrimoine_immobilisation__activity_ids
 #: model:ir.model.fields,field_description:transport_patrimoine.field_patrimoine_inventaire__activity_ids
 msgid "Activities"
-msgstr "الأنشطة"
+msgstr "Activities"
 
 #. module: transport_patrimoine
 #: model:ir.model.fields,field_description:transport_patrimoine.field_patrimoine_cession__activity_exception_decoration
 #: model:ir.model.fields,field_description:transport_patrimoine.field_patrimoine_immobilisation__activity_exception_decoration
 #: model:ir.model.fields,field_description:transport_patrimoine.field_patrimoine_inventaire__activity_exception_decoration
 msgid "Activity Exception Decoration"
-msgstr "زخرفة استثناء النشاط"
+msgstr "Activity Exception Decoration"
 
 #. module: transport_patrimoine
 #: model:ir.model.fields,field_description:transport_patrimoine.field_patrimoine_cession__activity_state
 #: model:ir.model.fields,field_description:transport_patrimoine.field_patrimoine_immobilisation__activity_state
 #: model:ir.model.fields,field_description:transport_patrimoine.field_patrimoine_inventaire__activity_state
 msgid "Activity State"
-msgstr "حالة النشاط"
+msgstr "Activity State"
 
 #. module: transport_patrimoine
 #: model:ir.model.fields,field_description:transport_patrimoine.field_patrimoine_cession__activity_type_icon
 #: model:ir.model.fields,field_description:transport_patrimoine.field_patrimoine_immobilisation__activity_type_icon
 #: model:ir.model.fields,field_description:transport_patrimoine.field_patrimoine_inventaire__activity_type_icon
 msgid "Activity Type Icon"
-msgstr "أيقونة نوع النشاط"
+msgstr "Activity Type Icon"
 
 #. module: transport_patrimoine
 #: model_terms:ir.ui.view,arch_db:transport_patrimoine.view_patrimoine_affectation_form
 msgid "Affectataire"
-msgstr "المستفيد"
+msgstr "Assignee"
 
 #. module: transport_patrimoine
 #: model_terms:ir.ui.view,arch_db:transport_patrimoine.view_patrimoine_immobilisation_form
 msgid "Affectation"
-msgstr "التخصيص"
+msgstr "Assignment"
 
 #. module: transport_patrimoine
 #: model_terms:ir.ui.view,arch_db:transport_patrimoine.view_patrimoine_affectation_form
 msgid "Affectation / Distribution"
-msgstr "التخصيص / التوزيع"
+msgstr "Assignment / Distribution"
 
 #. module: transport_patrimoine
 #: model:ir.model,name:transport_patrimoine.model_patrimoine_affectation
 msgid "Affectation / Distribution d'immobilisation"
-msgstr "تخصيص / توزيع الأصل الثابت"
+msgstr "Fixed Asset Assignment / Distribution"
 
 #. module: transport_patrimoine
 #: model_terms:ir.ui.view,arch_db:transport_patrimoine.view_patrimoine_affectation_list
 #: model_terms:ir.ui.view,arch_db:transport_patrimoine.view_patrimoine_immobilisation_form
 msgid "Affectations"
-msgstr "التخصيصات"
+msgstr "Assignments"
 
 #. module: transport_patrimoine
 #: model:ir.actions.act_window,name:transport_patrimoine.action_patrimoine_affectation
 #: model:ir.model.fields,field_description:transport_patrimoine.field_patrimoine_immobilisation__affectation_ids
 msgid "Affectations / Distribution"
-msgstr "التخصيصات / التوزيع"
+msgstr "Assignments / Distribution"
 
 #. module: transport_patrimoine
 #: model_terms:ir.ui.view,arch_db:transport_patrimoine.rapport_cessions_template
@@ -327,7 +328,7 @@ msgstr "التخصيصات / التوزيع"
 #: model_terms:ir.ui.view,arch_db:transport_patrimoine.view_patrimoine_immobilisation_list
 #: model_terms:ir.ui.view,arch_db:transport_patrimoine.view_patrimoine_immobilisation_pivot
 msgid "Amort. cumulés"
-msgstr "الاستهلاكات المتراكمة"
+msgstr "Accum. Depreciation"
 
 #. module: transport_patrimoine
 #: model:ir.model.fields,field_description:transport_patrimoine.field_patrimoine_amortissement_ligne__amortissements_cumules
@@ -336,64 +337,64 @@ msgstr "الاستهلاكات المتراكمة"
 #: model_terms:ir.ui.view,arch_db:transport_patrimoine.rapport_rebuts_template
 #: model_terms:ir.ui.view,arch_db:transport_patrimoine.rapport_recap_ventile_template
 msgid "Amort. cumulés (DT)"
-msgstr "الاستهلاكات المتراكمة (د.ت)"
+msgstr "Accum. Depreciation (TND)"
 
 #. module: transport_patrimoine
 #: model:ir.model.fields,field_description:transport_patrimoine.field_patrimoine_cession__amortissements_cumules
 msgid "Amort. cumulés à la date (DT)"
-msgstr "الاستهلاكات المتراكمة إلى تاريخ الإخراج (د.ت)"
+msgstr "Accum. Depreciation at Date (TND)"
 
 #. module: transport_patrimoine
 #: model_terms:ir.ui.view,arch_db:transport_patrimoine.view_patrimoine_immobilisation_kanban
 msgid "Amorti :"
-msgstr "مستهلَك :"
+msgstr "Depreciated:"
 
 #. module: transport_patrimoine
 #: model_terms:ir.ui.view,arch_db:transport_patrimoine.view_patrimoine_immobilisation_form
 msgid "Amortissement"
-msgstr "الإهلاك"
+msgstr "Depreciation"
 
 #. module: transport_patrimoine
 #: model:ir.model.fields,field_description:transport_patrimoine.field_patrimoine_immobilisation__amortissement_en_cours
 msgid "Amortissement démarré"
-msgstr "الإهلاك بدأ"
+msgstr "Depreciation Started"
 
 #. module: transport_patrimoine
 #: model_terms:ir.ui.view,arch_db:transport_patrimoine.view_patrimoine_categorie_form
 msgid "Amortissement par défaut"
-msgstr "الإهلاك الافتراضي"
+msgstr "Default Depreciation"
 
 #. module: transport_patrimoine
 #: model:ir.ui.menu,name:transport_patrimoine.menu_patrimoine_amortissements
 msgid "Amortissements"
-msgstr "الاستهلاكات"
+msgstr "Depreciation"
 
 #. module: transport_patrimoine
 #: model_terms:ir.ui.view,arch_db:transport_patrimoine.rapport_cession_standalone_template
 msgid "Amortissements cumulés"
-msgstr "الاستهلاكات المتراكمة"
+msgstr "Accumulated Depreciation"
 
 #. module: transport_patrimoine
 #: model:ir.model.fields,field_description:transport_patrimoine.field_patrimoine_immobilisation__amortissements_cumules
 msgid "Amortissements cumulés (DT)"
-msgstr "الاستهلاكات المتراكمة (د.ت)"
+msgstr "Accumulated Depreciation (TND)"
 
 #. module: transport_patrimoine
 #: model:ir.model.fields.selection,name:transport_patrimoine.selection__patrimoine_depense_posterieure__nature__amelioration
 msgid "Amélioration / Extension"
-msgstr "تحسين / توسعة"
+msgstr "Improvement / Extension"
 
 #. module: transport_patrimoine
 #: model:ir.actions.act_window,name:transport_patrimoine.action_patrimoine_analyse
 #: model_terms:ir.ui.view,arch_db:transport_patrimoine.view_patrimoine_immobilisation_pivot
 msgid "Analyse Patrimoine"
-msgstr "تحليل الأصول الثابتة"
+msgstr "Asset Analysis"
 
 #. module: transport_patrimoine
 #: model_terms:ir.ui.view,arch_db:transport_patrimoine.view_patrimoine_cession_form
 #: model_terms:ir.ui.view,arch_db:transport_patrimoine.view_patrimoine_mouvement_form
 msgid "Annuler"
-msgstr "إلغاء"
+msgstr "Cancel"
 
 #. module: transport_patrimoine
 #: model:ir.model.fields.selection,name:transport_patrimoine.selection__patrimoine_amortissement_ligne__state__annule
@@ -401,28 +402,28 @@ msgstr "إلغاء"
 #: model:ir.model.fields.selection,name:transport_patrimoine.selection__patrimoine_depreciation__state__annule
 #: model:ir.model.fields.selection,name:transport_patrimoine.selection__patrimoine_mouvement__state__annule
 msgid "Annulé"
-msgstr "ملغى"
+msgstr "Cancelled"
 
 #. module: transport_patrimoine
 #: model:ir.model.fields.selection,name:transport_patrimoine.selection__patrimoine_affectation__state__annulee
 msgid "Annulée"
-msgstr "ملغاة"
+msgstr "Cancelled"
 
 #. module: transport_patrimoine
 #: model:ir.model.fields,field_description:transport_patrimoine.field_patrimoine_immobilisation__annee_budget
 msgid "Année budgétaire"
-msgstr "السنة الميزانياتية"
+msgstr "Budget Year"
 
 #. module: transport_patrimoine
 #: model:ir.model.fields.selection,name:transport_patrimoine.selection__patrimoine_wizard_rapport__grouper_par__annee_acq
 #: model_terms:ir.ui.view,arch_db:transport_patrimoine.view_patrimoine_immobilisation_search
 msgid "Année d'acquisition"
-msgstr "سنة الاقتناء"
+msgstr "Acquisition Year"
 
 #. module: transport_patrimoine
 #: model:ir.model.fields.selection,name:transport_patrimoine.selection__patrimoine_immobilisation__type_entree__apport
 msgid "Apport en nature"
-msgstr "حصة عينية"
+msgstr "Contribution in Kind"
 
 #. module: transport_patrimoine
 #: model:ir.model.fields,field_description:transport_patrimoine.field_patrimoine_affectation__message_attachment_count
@@ -433,109 +434,109 @@ msgstr "حصة عينية"
 #: model:ir.model.fields,field_description:transport_patrimoine.field_patrimoine_inventaire__message_attachment_count
 #: model:ir.model.fields,field_description:transport_patrimoine.field_patrimoine_mouvement__message_attachment_count
 msgid "Attachment Count"
-msgstr "عدد المرفقات"
+msgstr "Attachment Count"
 
 #. module: transport_patrimoine
 #: model_terms:ir.ui.view,arch_db:transport_patrimoine.rapport_bordereau_ecarts_template
 msgid "Aucun écart constaté — inventaire conforme."
-msgstr "لم يُلاحَظ أي فارق — الجرد مطابق."
+msgstr "No discrepancy found — inventory is compliant."
 
 #. module: transport_patrimoine
 #: model_terms:ir.ui.view,arch_db:transport_patrimoine.rapport_distribution_template
 msgid "Aucune affectation active trouvée."
-msgstr "لم يُعثَر على أي تخصيص نشط."
+msgstr "No active assignment found."
 
 #. module: transport_patrimoine
 #: model_terms:ir.ui.view,arch_db:transport_patrimoine.rapport_rebuts_template
 msgid "Aucune mise en rebut sur la période sélectionnée."
-msgstr "لا توجد إهمالات في الفترة المحددة."
+msgstr "No scrapping recorded for the selected period."
 
 #. module: transport_patrimoine
 #: model:patrimoine.sous.categorie,name:transport_patrimoine.sous_cat_autobus_urbain
 msgid "Autobus urbains"
-msgstr "حافلات حضرية"
+msgstr "Urban Buses"
 
 #. module: transport_patrimoine
 #: model:patrimoine.sous.categorie,name:transport_patrimoine.sous_cat_autobus_regional
 msgid "Autocars régionaux"
-msgstr "حافلات جهوية"
+msgstr "Regional Coaches"
 
 #. module: transport_patrimoine
 #: model:ir.model.fields.selection,name:transport_patrimoine.selection__patrimoine_depense_posterieure__nature__autre
 msgid "Autre"
-msgstr "أخرى"
+msgstr "Other"
 
 #. module: transport_patrimoine
 #: model:ir.model.fields,field_description:transport_patrimoine.field_patrimoine_inventaire__nb_ecarts
 msgid "Avec écart"
-msgstr "بفارق"
+msgstr "With Discrepancy"
 
 #. module: transport_patrimoine
 #: model_terms:ir.ui.view,arch_db:transport_patrimoine.rapport_bon_sortie_template
 msgid "BON DE SORTIE MAGASIN"
-msgstr "وصل خروج من المستودع"
+msgstr "WAREHOUSE ISSUE SLIP"
 
 #. module: transport_patrimoine
 #: model_terms:ir.ui.view,arch_db:transport_patrimoine.rapport_bon_sortie_affectation_template
 msgid "BON DE SORTIE — PREMIÈRE AFFECTATION"
-msgstr "وصل خروج — التخصيص الأول"
+msgstr "ISSUE SLIP — FIRST ASSIGNMENT"
 
 #. module: transport_patrimoine
 #: model_terms:ir.ui.view,arch_db:transport_patrimoine.rapport_bordereau_inventaire_template
 msgid "BORDEREAU D'INVENTAIRE DES IMMOBILISATIONS"
-msgstr "بيان جرد الأصول الثابتة"
+msgstr "FIXED ASSET INVENTORY SHEET"
 
 #. module: transport_patrimoine
 #: model_terms:ir.ui.view,arch_db:transport_patrimoine.rapport_bordereau_ecarts_template
 msgid "BORDEREAU DES ÉCARTS D'INVENTAIRE"
-msgstr "قائمة فوارق الجرد"
+msgstr "INVENTORY DISCREPANCY REPORT"
 
 #. module: transport_patrimoine
 #: model:ir.model.fields,field_description:transport_patrimoine.field_patrimoine_immobilisation__base_amortissable
 msgid "Base amortissable (DT)"
-msgstr "الأساس القابل للإهلاك (د.ت)"
+msgstr "Depreciable Basis (TND)"
 
 #. module: transport_patrimoine
 #: model_terms:ir.ui.view,arch_db:transport_patrimoine.view_patrimoine_mouvement_form
 msgid "Bon de sortie"
-msgstr "وصل الخروج"
+msgstr "Issue Slip"
 
 #. module: transport_patrimoine
 #: model:ir.model.fields,field_description:transport_patrimoine.field_patrimoine_affectation__bon_sortie_imprime
 msgid "Bon de sortie imprimé"
-msgstr "وصل الخروج مطبوع"
+msgstr "Issue Slip Printed"
 
 #. module: transport_patrimoine
 #: model_terms:ir.ui.view,arch_db:transport_patrimoine.view_patrimoine_affectation_form
 msgid "Bon de sortie magasin"
-msgstr "وصل خروج من المستودع"
+msgstr "Warehouse Issue Slip"
 
 #. module: transport_patrimoine
 #: model:ir.actions.report,name:transport_patrimoine.action_rapport_bon_sortie
 msgid "Bon de sortie magasin (Transfert)"
-msgstr "وصل خروج من المستودع (تحويل)"
+msgstr "Warehouse Issue Slip (Transfer)"
 
 #. module: transport_patrimoine
 #: model:ir.actions.report,name:transport_patrimoine.action_rapport_bon_sortie_affectation
 msgid "Bon de sortie — Affectation"
-msgstr "وصل خروج — تخصيص"
+msgstr "Issue Slip — Assignment"
 
 #. module: transport_patrimoine
 #: model_terms:ir.ui.view,arch_db:transport_patrimoine.view_patrimoine_immobilisation_form
 msgid "Bon sortie"
-msgstr "وصل الخروج"
+msgstr "Issue Slip"
 
 #. module: transport_patrimoine
 #: model:ir.actions.report,name:transport_patrimoine.action_rapport_bordereau_inventaire
 #: model_terms:ir.ui.view,arch_db:transport_patrimoine.view_patrimoine_inventaire_form
 msgid "Bordereau d'inventaire"
-msgstr "بيان الجرد"
+msgstr "Inventory Sheet"
 
 #. module: transport_patrimoine
 #: model:ir.actions.report,name:transport_patrimoine.action_rapport_bordereau_ecarts
 #: model_terms:ir.ui.view,arch_db:transport_patrimoine.view_patrimoine_inventaire_form
 msgid "Bordereau des écarts"
-msgstr "قائمة الفارق في الأصول"
+msgstr "Discrepancy Report"
 
 #. module: transport_patrimoine
 #: model:ir.model.fields.selection,name:transport_patrimoine.selection__patrimoine_cession__state__brouillon
@@ -543,49 +544,49 @@ msgstr "قائمة الفارق في الأصول"
 #: model:ir.model.fields.selection,name:transport_patrimoine.selection__patrimoine_depreciation__state__brouillon
 #: model:ir.model.fields.selection,name:transport_patrimoine.selection__patrimoine_mouvement__state__brouillon
 msgid "Brouillon"
-msgstr "مسودة"
+msgstr "Draft"
 
 #. module: transport_patrimoine
 #: model:ir.model.fields,field_description:transport_patrimoine.field_patrimoine_emplacement__bureau
 msgid "Bureau / Local"
-msgstr "مكتب / محل"
+msgstr "Office / Room"
 
 #. module: transport_patrimoine
 #: model:ir.model.fields,field_description:transport_patrimoine.field_patrimoine_emplacement__batiment
 msgid "Bâtiment / Bloc"
-msgstr "مبنى / جناح"
+msgstr "Building / Block"
 
 #. module: transport_patrimoine
 #: model:ir.model.fields,field_description:transport_patrimoine.field_patrimoine_affectation__beneficiaire_id
 #: model_terms:ir.ui.view,arch_db:transport_patrimoine.rapport_distribution_template
 msgid "Bénéficiaire"
-msgstr "المستفيد"
+msgstr "Recipient"
 
 #. module: transport_patrimoine
 #: model_terms:ir.ui.view,arch_db:transport_patrimoine.view_patrimoine_cession_form
 msgid "Calcul"
-msgstr "الحساب"
+msgstr "Calculation"
 
 #. module: transport_patrimoine
 #: model:ir.actions.act_window,name:transport_patrimoine.action_wizard_calcul_amortissement
 msgid "Calcul des amortissements"
-msgstr "حساب الاستهلاكات"
+msgstr "Depreciation Calculation"
 
 #. module: transport_patrimoine
 #: model:ir.ui.menu,name:transport_patrimoine.menu_patrimoine_calcul_amort
 msgid "Calcul des dotations"
-msgstr "حساب المخصصات"
+msgstr "Compute Depreciation"
 
 #. module: transport_patrimoine
 #: model:ir.model,name:transport_patrimoine.model_patrimoine_wizard_calcul_amortissement
 #: model_terms:ir.ui.view,arch_db:transport_patrimoine.view_wizard_calcul_amortissement_form
 msgid "Calcul des dotations aux amortissements"
-msgstr "حساب مخصصات الإهلاك"
+msgstr "Depreciation Charge Computation"
 
 #. module: transport_patrimoine
 #: model_terms:ir.ui.view,arch_db:transport_patrimoine.rapport_cession_standalone_template
 msgid "Calcul financier"
-msgstr "الحساب المالي"
+msgstr "Financial Calculation"
 
 #. module: transport_patrimoine
 #: model:ir.model.fields,field_description:transport_patrimoine.field_patrimoine_amortissement_ligne__categorie_id
@@ -607,68 +608,68 @@ msgstr "الحساب المالي"
 #: model_terms:ir.ui.view,arch_db:transport_patrimoine.view_patrimoine_amortissement_search
 #: model_terms:ir.ui.view,arch_db:transport_patrimoine.view_patrimoine_immobilisation_search
 msgid "Catégorie"
-msgstr "الصنف"
+msgstr "Category"
 
 #. module: transport_patrimoine
 #: model:ir.model.fields,field_description:transport_patrimoine.field_patrimoine_wizard_calcul_amortissement__categorie_id
 #: model:ir.model.fields,field_description:transport_patrimoine.field_patrimoine_wizard_rapport__categorie_id
 msgid "Catégorie (optionnel)"
-msgstr "الصنف (اختياري)"
+msgstr "Category (optional)"
 
 #. module: transport_patrimoine
 #: model:ir.model,name:transport_patrimoine.model_patrimoine_categorie
 #: model_terms:ir.ui.view,arch_db:transport_patrimoine.view_patrimoine_categorie_form
 msgid "Catégorie d'immobilisation"
-msgstr "صنف الأصل الثابت"
+msgstr "Asset Category"
 
 #. module: transport_patrimoine
 #: model:ir.model.fields,field_description:transport_patrimoine.field_patrimoine_inventaire__categorie_filtre_id
 msgid "Catégorie filtrée"
-msgstr "الصنف المصفَّى"
+msgstr "Filtered Category"
 
 #. module: transport_patrimoine
 #: model:ir.actions.act_window,name:transport_patrimoine.action_patrimoine_categorie
 #: model:ir.ui.menu,name:transport_patrimoine.menu_patrimoine_categories
 #: model_terms:ir.ui.view,arch_db:transport_patrimoine.view_patrimoine_categorie_list
 msgid "Catégories"
-msgstr "الأصناف"
+msgstr "Categories"
 
 #. module: transport_patrimoine
 #: model:ir.model.fields.selection,name:transport_patrimoine.selection__patrimoine_cession__type_sortie__cession
 msgid "Cession (vente)"
-msgstr "تفويت (بيع)"
+msgstr "Disposal (Sale)"
 
 #. module: transport_patrimoine
 #: model:ir.model,name:transport_patrimoine.model_patrimoine_cession
 msgid "Cession / Sortie d'immobilisation"
-msgstr "التفويت / الإخراج"
+msgstr "Asset Disposal / Write-off"
 
 #. module: transport_patrimoine
 #: model:ir.actions.act_window,name:transport_patrimoine.action_patrimoine_cession
 #: model:ir.ui.menu,name:transport_patrimoine.menu_patrimoine_cessions
 #: model_terms:ir.ui.view,arch_db:transport_patrimoine.view_patrimoine_cession_list
 msgid "Cessions / Sorties"
-msgstr "التفويتات / الإخراجات"
+msgstr "Disposals / Write-offs"
 
 #. module: transport_patrimoine
 #: model_terms:ir.ui.view,arch_db:transport_patrimoine.view_patrimoine_immobilisation_form
 msgid "Cette immobilisation est entièrement amortie mais encore en service."
-msgstr "هذا الأصل الثابت مستهلَك كلياً لكنه لا يزال في الخدمة."
+msgstr "This asset is fully depreciated but still in service."
 
 #. module: transport_patrimoine
 #: model_terms:ir.ui.view,arch_db:transport_patrimoine.view_patrimoine_inventaire_form
 msgid "Charger les immobilisations"
-msgstr "تحميل الأصول الثابتة"
+msgstr "Load Fixed Assets"
 
 #. module: transport_patrimoine
 #: model_terms:ir.ui.view,arch_db:transport_patrimoine.view_patrimoine_immobilisation_form
 msgid "Classification"
-msgstr "التصنيف"
+msgstr "Classification"
 
 #. module: transport_patrimoine
 #: model:ir.model.fields.selection,name:transport_patrimoine.selection__patrimoine_inventaire__state__cloture
 msgid "Clôturé"
-msgstr "مغلق"
+msgstr "Closed"
 
 #. module: transport_patrimoine
 #: model:ir.model.fields,field_description:transport_patrimoine.field_patrimoine_categorie__code
@@ -676,67 +677,67 @@ msgstr "مغلق"
 #: model_terms:ir.ui.view,arch_db:transport_patrimoine.rapport_resume_categorie_template
 #: model_terms:ir.ui.view,arch_db:transport_patrimoine.rapport_variation_template
 msgid "Code"
-msgstr "الرمز"
+msgstr "Code"
 
 #. module: transport_patrimoine
 #: model:ir.model.fields,field_description:transport_patrimoine.field_patrimoine_emplacement__code
 msgid "Code emplacement"
-msgstr "رمز الموقع"
+msgstr "Location Code"
 
 #. module: transport_patrimoine
 #: model:ir.model.fields,field_description:transport_patrimoine.field_patrimoine_categorie__taux_degressif
 #: model:ir.model.fields,field_description:transport_patrimoine.field_patrimoine_immobilisation__coefficient_degressif
 msgid "Coefficient dégressif"
-msgstr "معامل التناقص"
+msgstr "Declining Balance Coefficient"
 
 #. module: transport_patrimoine
 #: model:ir.model.fields,help:transport_patrimoine.field_patrimoine_categorie__taux_degressif
 msgid "Coefficient multiplicateur pour la méthode dégressive (ex: 1.5, 2.0)"
-msgstr "معامل الضرب لطريقة الإهلاك التنازلي (مثال: 1.5، 2.0)"
+msgstr "Multiplier coefficient for the declining balance method (e.g. 1.5, 2.0)"
 
 #. module: transport_patrimoine
 #: model_terms:ir.ui.view,arch_db:transport_patrimoine.view_patrimoine_amortissement_liste
 #: model_terms:ir.ui.view,arch_db:transport_patrimoine.view_patrimoine_cession_form
 #: model_terms:ir.ui.view,arch_db:transport_patrimoine.view_patrimoine_immobilisation_form
 msgid "Comptabiliser"
-msgstr "تسجيل محاسبي"
+msgstr "Post"
 
 #. module: transport_patrimoine
 #: model_terms:ir.ui.view,arch_db:transport_patrimoine.view_wizard_calcul_amortissement_form
 msgid "Comptabiliser les dotations"
-msgstr "تسجيل المخصصات محاسبياً"
+msgstr "Post Depreciation Charges"
 
 #. module: transport_patrimoine
 #: model:ir.model.fields.selection,name:transport_patrimoine.selection__patrimoine_amortissement_ligne__state__valide
 #: model:ir.model.fields.selection,name:transport_patrimoine.selection__patrimoine_cession__state__comptabilise
 msgid "Comptabilisé"
-msgstr "مُسجَّل محاسبياً"
+msgstr "Posted"
 
 #. module: transport_patrimoine
 #: model_terms:ir.ui.view,arch_db:transport_patrimoine.view_patrimoine_amortissement_search
 msgid "Comptabilisés"
-msgstr "مُسجَّلة محاسبياً"
+msgstr "Posted"
 
 #. module: transport_patrimoine
 #: model:ir.model.fields,field_description:transport_patrimoine.field_patrimoine_categorie__compte_amortissement_id
 msgid "Compte amortissements cumulés"
-msgstr "حساب الاستهلاكات المتراكمة"
+msgstr "Accumulated Depreciation Account"
 
 #. module: transport_patrimoine
 #: model:ir.model.fields,help:transport_patrimoine.field_patrimoine_categorie__compte_perte_id
 msgid "Compte charge de perte sur sortie"
-msgstr "حساب أعباء الخسارة عند الإخراج"
+msgstr "Loss on disposal expense account"
 
 #. module: transport_patrimoine
 #: model:ir.model.fields,field_description:transport_patrimoine.field_patrimoine_categorie__compte_depreciation_id
 #: model_terms:ir.ui.view,arch_db:transport_patrimoine.view_patrimoine_categorie_form
 msgid "Compte charge dépréciation (68xx)"
-msgstr "حساب أعباء انخفاض القيمة (68xx)"
+msgstr "Impairment Expense Account (68xx)"
 
 #. module: transport_patrimoine
 #: model:ir.model.fields,field_description:transport_patrimoine.field_patrimoine_categorie__compte_contrepartie_id
 msgid "Compte contrepartie entrée"
-msgstr "حساب المقابل عند الدخول"
+msgstr "Entry Counterpart Account"
 
 #. module: transport_patrimoine
 #: model:ir.model.fields,help:transport_patrimoine.field_patrimoine_categorie__compte_provision_depreciation_id
@@ -745,8 +746,9 @@ msgid ""
 "du compte amortissements cumulés (28xx) : la dépréciation est réversible, "
 "l'amortissement ne l'est pas."
 msgstr ""
-"الحساب يُدان عند انخفاض القيمة الاستثنائي (مثال: 2905). مختلف عن حساب "
-"الاستهلاكات المتراكمة (28xx): انخفاض القيمة قابل للعكس بخلاف الإهلاك."
+"Account credited upon exceptional impairment (e.g. 2905). Distinct from the "
+"accumulated depreciation account (28xx): impairment is reversible, "
+"depreciation is not."
 
 #. module: transport_patrimoine
 #: model_terms:ir.ui.view,arch_db:transport_patrimoine.view_patrimoine_categorie_form
@@ -754,7 +756,8 @@ msgid ""
 "Compte crédité lors d'une dépréciation exceptionnelle. Distinct du compte "
 "amortissements cumulés (28xx)."
 msgstr ""
-"الحساب يُدان عند انخفاض القيمة الاستثنائي. مختلف عن حساب الاستهلاكات المتراكمة (28xx)."
+"Account credited upon exceptional impairment. Distinct from the accumulated "
+"depreciation account (28xx)."
 
 #. module: transport_patrimoine
 #: model:ir.model.fields,help:transport_patrimoine.field_patrimoine_categorie__compte_contrepartie_id
@@ -763,8 +766,9 @@ msgid ""
 "d'immobilisations, 101 Capital, 131 Subventions d'équipement). Obligatoire "
 "si aucune facture d'achat n'est rattachée à l'immobilisation."
 msgstr ""
-"الحساب يُدان عند الإدراج في الخدمة (مثال: 404 موردو الأصول، 101 رأس المال، "
-"131 إعانات التجهيز). إلزامي إن لم تُربط أي فاتورة شراء بالأصل."
+"Account credited when put into service (e.g. 404 Asset Suppliers, 101 "
+"Capital, 131 Equipment Grants). Required if no purchase invoice is linked "
+"to the asset."
 
 #. module: transport_patrimoine
 #: model_terms:ir.ui.view,arch_db:transport_patrimoine.view_patrimoine_categorie_form
@@ -772,135 +776,136 @@ msgid ""
 "Compte crédité lors de la mise en service (ex: 404, 101, 131). Obligatoire "
 "si aucune facture d'achat n'est rattachée à l'immobilisation."
 msgstr ""
-"الحساب يُدان عند الإدراج في الخدمة (مثال: 404، 101، 131). إلزامي إن لم تُربط أي فاتورة شراء بالأصل."
+"Account credited when put into service (e.g. 404, 101, 131). Required if no "
+"purchase invoice is linked to the asset."
 
 #. module: transport_patrimoine
 #: model:ir.model.fields,help:transport_patrimoine.field_patrimoine_categorie__compte_immobilisation_id
 msgid "Compte d'actif immobilisé (ex: 2xx)"
-msgstr "حساب الأصل الثابت (مثال: 2xx)"
+msgstr "Fixed asset account (e.g. 2xx)"
 
 #. module: transport_patrimoine
 #: model:ir.model.fields,help:transport_patrimoine.field_patrimoine_categorie__compte_dotation_id
 msgid "Compte de charge (ex: 68xx)"
-msgstr "حساب الأعباء (مثال: 68xx)"
+msgstr "Expense account (e.g. 68xx)"
 
 #. module: transport_patrimoine
 #: model:ir.model.fields,help:transport_patrimoine.field_patrimoine_categorie__compte_depreciation_id
 msgid ""
 "Compte de charge débité lors d'une dépréciation exceptionnelle (ex: 6816)."
-msgstr "حساب الأعباء المُدان عند انخفاض قيمة استثنائي (مثال: 6816)."
+msgstr "Expense account debited upon exceptional impairment (e.g. 6816)."
 
 #. module: transport_patrimoine
 #: model:ir.model.fields,help:transport_patrimoine.field_patrimoine_categorie__compte_amortissement_id
 msgid "Compte de dépréciation (ex: 28xx)"
-msgstr "حساب الإهلاك (مثال: 28xx)"
+msgstr "Depreciation account (e.g. 28xx)"
 
 #. module: transport_patrimoine
 #: model:ir.model.fields,field_description:transport_patrimoine.field_patrimoine_categorie__compte_dotation_id
 msgid "Compte dotation amortissement"
-msgstr "حساب مخصص الإهلاك"
+msgstr "Depreciation Charge Account"
 
 #. module: transport_patrimoine
 #: model:ir.model.fields,field_description:transport_patrimoine.field_patrimoine_categorie__compte_immobilisation_id
 msgid "Compte immobilisation"
-msgstr "حساب الأصل الثابت"
+msgstr "Fixed Asset Account"
 
 #. module: transport_patrimoine
 #: model:ir.model.fields,field_description:transport_patrimoine.field_patrimoine_categorie__compte_perte_id
 msgid "Compte perte sur cession/rebut"
-msgstr "حساب الخسارة عند التفويت/الإهمال"
+msgstr "Loss on Disposal/Scrapping Account"
 
 #. module: transport_patrimoine
 #: model:ir.model.fields,help:transport_patrimoine.field_patrimoine_categorie__compte_cession_id
 msgid "Compte produit cession immobilisation"
-msgstr "حساب إيراد التفويت في الأصول الثابتة"
+msgstr "Asset disposal revenue account"
 
 #. module: transport_patrimoine
 #: model:ir.model.fields,field_description:transport_patrimoine.field_patrimoine_categorie__compte_cession_id
 msgid "Compte produit de cession"
-msgstr "حساب إيراد التفويت"
+msgstr "Disposal Revenue Account"
 
 #. module: transport_patrimoine
 #: model_terms:ir.ui.view,arch_db:transport_patrimoine.view_patrimoine_categorie_form
 msgid "Compte provision dépréciation (29xx)"
-msgstr "حساب مؤونة انخفاض القيمة (29xx)"
+msgstr "Impairment Provision Account (29xx)"
 
 #. module: transport_patrimoine
 #: model:ir.model.fields,field_description:transport_patrimoine.field_patrimoine_categorie__compte_provision_depreciation_id
 msgid "Compte provision pour dépréciation (29xx)"
-msgstr "حساب مؤونة انخفاض القيمة (29xx)"
+msgstr "Impairment Provision Account (29xx)"
 
 #. module: transport_patrimoine
 #: model_terms:ir.ui.view,arch_db:transport_patrimoine.view_patrimoine_categorie_form
 msgid "Comptes comptables"
-msgstr "الحسابات المحاسبية"
+msgstr "Accounting Accounts"
 
 #. module: transport_patrimoine
 #: model:ir.ui.menu,name:transport_patrimoine.menu_patrimoine_config
 msgid "Configuration"
-msgstr "الإعداد"
+msgstr "Configuration"
 
 #. module: transport_patrimoine
 #: model_terms:ir.ui.view,arch_db:transport_patrimoine.view_patrimoine_cession_form
 msgid "Confirmer"
-msgstr "تأكيد"
+msgstr "Confirm"
 
 #. module: transport_patrimoine
 #: model_terms:ir.ui.view,arch_db:transport_patrimoine.view_patrimoine_mouvement_form
 msgid "Confirmer le transfert"
-msgstr "تأكيد التحويل"
+msgstr "Confirm Transfer"
 
 #. module: transport_patrimoine
 #: model:ir.model.fields.selection,name:transport_patrimoine.selection__patrimoine_cession__state__confirme
 #: model:ir.model.fields.selection,name:transport_patrimoine.selection__patrimoine_mouvement__state__confirme
 msgid "Confirmé"
-msgstr "مؤكَّد"
+msgstr "Confirmed"
 
 #. module: transport_patrimoine
 #: model:patrimoine.categorie,name:transport_patrimoine.cat_constructions
 msgid "Constructions"
-msgstr "مبانٍ"
+msgstr "Buildings"
 
 #. module: transport_patrimoine
 #: model_terms:ir.ui.view,arch_db:transport_patrimoine.rapport_cessions_template
 msgid "Coût (DT)"
-msgstr "التكلفة (د.ت)"
+msgstr "Cost (TND)"
 
 #. module: transport_patrimoine
 #: model_terms:ir.ui.view,arch_db:transport_patrimoine.rapport_acquisitions_template
 msgid "Coût acq. (DT)"
-msgstr "تكلفة الاقتناء (د.ت)"
+msgstr "Acq. Cost (TND)"
 
 #. module: transport_patrimoine
 #: model_terms:ir.ui.view,arch_db:transport_patrimoine.view_patrimoine_immobilisation_graph
 msgid "Coût brut"
-msgstr "التكلفة الإجمالية"
+msgstr "Gross Cost"
 
 #. module: transport_patrimoine
 #: model_terms:ir.ui.view,arch_db:transport_patrimoine.rapport_entierement_amortis_template
 msgid "Coût brut (DT)"
-msgstr "التكلفة الإجمالية (د.ت)"
+msgstr "Gross Cost (TND)"
 
 #. module: transport_patrimoine
 #: model:ir.model.fields,field_description:transport_patrimoine.field_patrimoine_immobilisation__cout_acquisition
 msgid "Coût d'acquisition (DT)"
-msgstr "تكلفة الاقتناء (د.ت)"
+msgstr "Acquisition Cost (TND)"
 
 #. module: transport_patrimoine
 #: model_terms:ir.ui.view,arch_db:transport_patrimoine.rapport_cession_standalone_template
 #: model_terms:ir.ui.view,arch_db:transport_patrimoine.view_patrimoine_immobilisation_form
 msgid "Coût d'entrée"
-msgstr "تكلفة الدخول"
+msgstr "Entry Cost"
 
 #. module: transport_patrimoine
 #: model:ir.model.fields,field_description:transport_patrimoine.field_patrimoine_cession__cout_entree
 msgid "Coût d'entrée (DT)"
-msgstr "تكلفة الدخول (د.ت)"
+msgstr "Entry Cost (TND)"
 
 #. module: transport_patrimoine
 #: model:ir.model.fields,field_description:transport_patrimoine.field_patrimoine_immobilisation__cout_entree
 msgid "Coût d'entrée total (DT)"
-msgstr "إجمالي تكلفة الدخول (د.ت)"
+msgstr "Total Entry Cost (TND)"
 
 #. module: transport_patrimoine
 #: model_terms:ir.ui.view,arch_db:transport_patrimoine.rapport_amort_par_projet_template
@@ -909,23 +914,23 @@ msgstr "إجمالي تكلفة الدخول (د.ت)"
 #: model_terms:ir.ui.view,arch_db:transport_patrimoine.rapport_tableau_par_type_template
 #: model_terms:ir.ui.view,arch_db:transport_patrimoine.view_patrimoine_immobilisation_list
 msgid "Coût entrée"
-msgstr "تكلفة الدخول"
+msgstr "Entry Cost"
 
 #. module: transport_patrimoine
 #: model_terms:ir.ui.view,arch_db:transport_patrimoine.rapport_rebuts_template
 msgid "Coût entrée (DT)"
-msgstr "تكلفة الدخول (د.ت)"
+msgstr "Entry Cost (TND)"
 
 #. module: transport_patrimoine
 #: model_terms:ir.ui.view,arch_db:transport_patrimoine.rapport_resume_categorie_template
 #: model_terms:ir.ui.view,arch_db:transport_patrimoine.view_patrimoine_immobilisation_pivot
 msgid "Coût total"
-msgstr "التكلفة الإجمالية"
+msgstr "Total Cost"
 
 #. module: transport_patrimoine
 #: model_terms:ir.ui.view,arch_db:transport_patrimoine.rapport_acquisitions_template
 msgid "Coût total (DT)"
-msgstr "التكلفة الإجمالية (د.ت)"
+msgstr "Total Cost (TND)"
 
 #. module: transport_patrimoine
 #: model:ir.model.fields,field_description:transport_patrimoine.field_patrimoine_affectation__create_uid
@@ -943,7 +948,7 @@ msgstr "التكلفة الإجمالية (د.ت)"
 #: model:ir.model.fields,field_description:transport_patrimoine.field_patrimoine_wizard_calcul_amortissement__create_uid
 #: model:ir.model.fields,field_description:transport_patrimoine.field_patrimoine_wizard_rapport__create_uid
 msgid "Created by"
-msgstr "أنشئ بواسطة"
+msgstr "Created by"
 
 #. module: transport_patrimoine
 #: model:ir.model.fields,field_description:transport_patrimoine.field_patrimoine_affectation__create_date
@@ -961,41 +966,41 @@ msgstr "أنشئ بواسطة"
 #: model:ir.model.fields,field_description:transport_patrimoine.field_patrimoine_wizard_calcul_amortissement__create_date
 #: model:ir.model.fields,field_description:transport_patrimoine.field_patrimoine_wizard_rapport__create_date
 msgid "Created on"
-msgstr "تاريخ الإنشاء"
+msgstr "Created on"
 
 #. module: transport_patrimoine
 #: model_terms:ir.actions.act_window,help:transport_patrimoine.action_patrimoine_immobilisation
 msgid "Créer votre première fiche d'immobilisation"
-msgstr "أنشئ أول بطاقة أصل ثابت"
+msgstr "Create your first fixed asset record"
 
 #. module: transport_patrimoine
 #: model_terms:ir.ui.view,arch_db:transport_patrimoine.rapport_tableau_par_type_template
 #: model_terms:ir.ui.view,arch_db:transport_patrimoine.view_patrimoine_amortissement_pivot
 msgid "Cumulé"
-msgstr "متراكم"
+msgstr "Cumulative"
 
 #. module: transport_patrimoine
 #: model_terms:ir.ui.view,arch_db:transport_patrimoine.rapport_tableau_amortissement_template
 #: model_terms:ir.ui.view,arch_db:transport_patrimoine.view_patrimoine_amortissement_liste
 #: model_terms:ir.ui.view,arch_db:transport_patrimoine.view_patrimoine_immobilisation_form
 msgid "Cumulé (DT)"
-msgstr "متراكم (د.ت)"
+msgstr "Cumulative (TND)"
 
 #. module: transport_patrimoine
 #: model_terms:ir.ui.view,arch_db:transport_patrimoine.rapport_resume_categorie_template
 msgid "Cumulé total"
-msgstr "الإجمالي المتراكم"
+msgstr "Total Cumulative"
 
 #. module: transport_patrimoine
 #: model:ir.model.fields.selection,name:transport_patrimoine.selection__patrimoine_immobilisation__statut__cede
 #: model:ir.model.fields.selection,name:transport_patrimoine.selection__patrimoine_wizard_rapport__statut_filtre__cede
 msgid "Cédé"
-msgstr "مُفوَّت فيه"
+msgstr "Disposed"
 
 #. module: transport_patrimoine
 #: model_terms:ir.ui.view,arch_db:transport_patrimoine.view_patrimoine_immobilisation_search
 msgid "Cédés"
-msgstr "مُفوَّت فيها"
+msgstr "Disposed"
 
 #. module: transport_patrimoine
 #: model_terms:ir.ui.view,arch_db:transport_patrimoine.rapport_acquisitions_template
@@ -1007,148 +1012,148 @@ msgstr "مُفوَّت فيها"
 #: model_terms:ir.ui.view,arch_db:transport_patrimoine.rapport_tableau_par_type_template
 #: model_terms:ir.ui.view,arch_db:transport_patrimoine.view_patrimoine_cession_form
 msgid "DT"
-msgstr "د.ت"
+msgstr "TND"
 
 #. module: transport_patrimoine
 #: model:ir.model.fields,field_description:transport_patrimoine.field_patrimoine_depense_posterieure__date
 #: model_terms:ir.ui.view,arch_db:transport_patrimoine.rapport_cessions_template
 #: model_terms:ir.ui.view,arch_db:transport_patrimoine.rapport_transferts_template
 msgid "Date"
-msgstr "التاريخ"
+msgstr "Date"
 
 #. module: transport_patrimoine
 #: model_terms:ir.ui.view,arch_db:transport_patrimoine.rapport_hors_usage_template
 msgid "Date H.S."
-msgstr "تاريخ خروج الخدمة"
+msgstr "Out-of-Service Date"
 
 #. module: transport_patrimoine
 #: model_terms:ir.ui.view,arch_db:transport_patrimoine.rapport_acquisitions_template
 #: model_terms:ir.ui.view,arch_db:transport_patrimoine.rapport_entierement_amortis_template
 #: model_terms:ir.ui.view,arch_db:transport_patrimoine.rapport_tableau_amortissement_template
 msgid "Date M.E.S."
-msgstr "تاريخ الإدراج في الخدمة"
+msgstr "In-Service Date"
 
 #. module: transport_patrimoine
 #: model_terms:ir.ui.view,arch_db:transport_patrimoine.rapport_acquisitions_template
 msgid "Date acq."
-msgstr "تاريخ الاقتناء"
+msgstr "Acq. Date"
 
 #. module: transport_patrimoine
 #: model_terms:ir.ui.view,arch_db:transport_patrimoine.rapport_distribution_template
 msgid "Date aff."
-msgstr "تاريخ التخصيص"
+msgstr "Assign. Date"
 
 #. module: transport_patrimoine
 #: model:ir.model.fields,field_description:transport_patrimoine.field_patrimoine_immobilisation__date_acquisition
 msgid "Date d'acquisition"
-msgstr "تاريخ الاقتناء"
+msgstr "Acquisition Date"
 
 #. module: transport_patrimoine
 #: model:ir.model.fields,field_description:transport_patrimoine.field_patrimoine_affectation__date
 msgid "Date d'affectation"
-msgstr "تاريخ التخصيص"
+msgstr "Assignment Date"
 
 #. module: transport_patrimoine
 #: model:ir.model.fields,field_description:transport_patrimoine.field_patrimoine_wizard_calcul_amortissement__date_arrete
 msgid "Date d'arrêté"
-msgstr "تاريخ الإقفال"
+msgstr "Closing Date"
 
 #. module: transport_patrimoine
 #: model:ir.model.fields,field_description:transport_patrimoine.field_patrimoine_inventaire__date
 msgid "Date d'inventaire"
-msgstr "تاريخ الجرد"
+msgstr "Inventory Date"
 
 #. module: transport_patrimoine
 #: model:ir.model.fields,field_description:transport_patrimoine.field_patrimoine_immobilisation__date_cession
 msgid "Date de cession"
-msgstr "تاريخ التفويت"
+msgstr "Disposal Date"
 
 #. module: transport_patrimoine
 #: model:ir.model.fields,help:transport_patrimoine.field_patrimoine_wizard_calcul_amortissement__date_arrete
 msgid "Date de comptabilisation des dotations"
-msgstr "تاريخ التسجيل المحاسبي للمخصصات"
+msgstr "Depreciation charges posting date"
 
 #. module: transport_patrimoine
 #: model:ir.model.fields,field_description:transport_patrimoine.field_patrimoine_depreciation__date
 msgid "Date de dépréciation"
-msgstr "تاريخ انخفاض القيمة"
+msgstr "Impairment Date"
 
 #. module: transport_patrimoine
 #: model:ir.model.fields,field_description:transport_patrimoine.field_patrimoine_immobilisation__date_mise_en_service
 msgid "Date de mise en service"
-msgstr "تاريخ الإدراج في الخدمة"
+msgstr "In-Service Date"
 
 #. module: transport_patrimoine
 #: model:ir.model.fields,field_description:transport_patrimoine.field_patrimoine_immobilisation__date_hors_service
 msgid "Date de mise hors service"
-msgstr "تاريخ التوقف عن الخدمة"
+msgstr "Out-of-Service Date"
 
 #. module: transport_patrimoine
 #: model:ir.model.fields,field_description:transport_patrimoine.field_patrimoine_immobilisation__date_rebut
 msgid "Date de rebut"
-msgstr "تاريخ الإهمال"
+msgstr "Scrapping Date"
 
 #. module: transport_patrimoine
 #: model:ir.model.fields,field_description:transport_patrimoine.field_patrimoine_affectation__date_retour
 msgid "Date de retour / fin affectation"
-msgstr "تاريخ الإرجاع / انتهاء التخصيص"
+msgstr "Return Date / End of Assignment"
 
 #. module: transport_patrimoine
 #: model:ir.model.fields,field_description:transport_patrimoine.field_patrimoine_cession__date
 msgid "Date de sortie"
-msgstr "تاريخ الإخراج"
+msgstr "Disposal Date"
 
 #. module: transport_patrimoine
 #: model:ir.model.fields,field_description:transport_patrimoine.field_patrimoine_mouvement__date
 msgid "Date de transfert"
-msgstr "تاريخ التحويل"
+msgstr "Transfer Date"
 
 #. module: transport_patrimoine
 #: model:ir.model.fields,field_description:transport_patrimoine.field_patrimoine_wizard_rapport__date_debut
 msgid "Date début"
-msgstr "تاريخ البداية"
+msgstr "Start Date"
 
 #. module: transport_patrimoine
 #: model:ir.model.fields,field_description:transport_patrimoine.field_patrimoine_wizard_rapport__date_fin
 msgid "Date fin"
-msgstr "تاريخ النهاية"
+msgstr "End Date"
 
 #. module: transport_patrimoine
 #: model_terms:ir.ui.view,arch_db:transport_patrimoine.rapport_rebuts_template
 msgid "Date rebut"
-msgstr "تاريخ الإهمال"
+msgstr "Scrapping Date"
 
 #. module: transport_patrimoine
 #: model_terms:ir.ui.view,arch_db:transport_patrimoine.view_patrimoine_immobilisation_form
 msgid "Dates"
-msgstr "التواريخ"
+msgstr "Dates"
 
 #. module: transport_patrimoine
 #: model:ir.model.fields,field_description:transport_patrimoine.field_patrimoine_immobilisation__description
 msgid "Description complémentaire"
-msgstr "وصف إضافي"
+msgstr "Additional Description"
 
 #. module: transport_patrimoine
 #: model_terms:ir.ui.view,arch_db:transport_patrimoine.view_patrimoine_immobilisation_form
 msgid "Description complémentaire…"
-msgstr "وصف إضافي…"
+msgstr "Additional description…"
 
 #. module: transport_patrimoine
 #: model_terms:ir.ui.view,arch_db:transport_patrimoine.rapport_transferts_template
 #: model_terms:ir.ui.view,arch_db:transport_patrimoine.view_patrimoine_immobilisation_form
 #: model_terms:ir.ui.view,arch_db:transport_patrimoine.view_patrimoine_mouvement_list
 msgid "Destination"
-msgstr "الوجهة"
+msgstr "Destination"
 
 #. module: transport_patrimoine
 #: model_terms:ir.ui.view,arch_db:transport_patrimoine.rapport_bordereau_inventaire_template
 msgid "Directeur / Superviseur"
-msgstr "المدير / المشرف"
+msgstr "Director / Supervisor"
 
 #. module: transport_patrimoine
 #: model_terms:ir.ui.view,arch_db:transport_patrimoine.rapport_cession_standalone_template
 msgid "Direction générale"
-msgstr "الإدارة العامة"
+msgstr "General Management"
 
 #. module: transport_patrimoine
 #: model:ir.model.fields,field_description:transport_patrimoine.field_patrimoine_affectation__display_name
@@ -1165,28 +1170,28 @@ msgstr "الإدارة العامة"
 #: model:ir.model.fields,field_description:transport_patrimoine.field_patrimoine_wizard_calcul_amortissement__display_name
 #: model:ir.model.fields,field_description:transport_patrimoine.field_patrimoine_wizard_rapport__display_name
 msgid "Display Name"
-msgstr "الاسم المعروض"
+msgstr "Display Name"
 
 #. module: transport_patrimoine
 #: model:ir.ui.menu,name:transport_patrimoine.menu_patrimoine_affectation
 #: model_terms:ir.ui.view,arch_db:transport_patrimoine.view_patrimoine_immobilisation_form
 msgid "Distribution / Affectations"
-msgstr "التوزيع / التخصيصات"
+msgstr "Distribution / Assignments"
 
 #. module: transport_patrimoine
 #: model:ir.model.fields.selection,name:transport_patrimoine.selection__patrimoine_cession__type_sortie__don
 msgid "Don / Abandon"
-msgstr "هبة / تخلٍّ"
+msgstr "Donation / Abandonment"
 
 #. module: transport_patrimoine
 #: model:ir.model.fields.selection,name:transport_patrimoine.selection__patrimoine_immobilisation__type_entree__don
 msgid "Don / Subvention"
-msgstr "هبة / إعانة"
+msgstr "Donation / Grant"
 
 #. module: transport_patrimoine
 #: model_terms:ir.ui.view,arch_db:transport_patrimoine.rapport_rebuts_template
 msgid "Dot. complémentaire (DT)"
-msgstr "مخصص تكميلي (د.ت)"
+msgstr "Additional Charge (TND)"
 
 #. module: transport_patrimoine
 #: model_terms:ir.ui.view,arch_db:transport_patrimoine.rapport_amort_par_projet_template
@@ -1194,7 +1199,7 @@ msgstr "مخصص تكميلي (د.ت)"
 #: model_terms:ir.ui.view,arch_db:transport_patrimoine.rapport_tableau_par_type_template
 #: model_terms:ir.ui.view,arch_db:transport_patrimoine.view_patrimoine_amortissement_pivot
 msgid "Dotation"
-msgstr "المخصص"
+msgstr "Depreciation Charge"
 
 #. module: transport_patrimoine
 #: model:ir.model.fields,field_description:transport_patrimoine.field_patrimoine_amortissement_ligne__montant_amortissement
@@ -1203,33 +1208,33 @@ msgstr "المخصص"
 #: model_terms:ir.ui.view,arch_db:transport_patrimoine.view_patrimoine_amortissement_liste
 #: model_terms:ir.ui.view,arch_db:transport_patrimoine.view_patrimoine_immobilisation_form
 msgid "Dotation (DT)"
-msgstr "مخصص الإهلاك (د.ت)"
+msgstr "Depreciation Charge (TND)"
 
 #. module: transport_patrimoine
 #: model_terms:ir.ui.view,arch_db:transport_patrimoine.rapport_resume_categorie_template
 msgid "Dotation année"
-msgstr "مخصص الدورة"
+msgstr "Annual Charge"
 
 #. module: transport_patrimoine
 #: model_terms:ir.ui.view,arch_db:transport_patrimoine.rapport_cession_standalone_template
 msgid "Dotation complémentaire"
-msgstr "المخصص التكميلي"
+msgstr "Additional Depreciation Charge"
 
 #. module: transport_patrimoine
 #: model:ir.model.fields,field_description:transport_patrimoine.field_patrimoine_cession__dotation_complementaire
 msgid "Dotation complémentaire (DT)"
-msgstr "مخصص تكميلي (د.ت)"
+msgstr "Additional Depreciation Charge (TND)"
 
 #. module: transport_patrimoine
 #: model:ir.model.fields,help:transport_patrimoine.field_patrimoine_cession__dotation_complementaire
 msgid ""
 "Dotation pour la période entre le dernier amortissement et la date de sortie"
-msgstr "المخصص للفترة بين آخر إهلاك وتاريخ الإخراج"
+msgstr "Charge for the period between the last depreciation and the disposal date"
 
 #. module: transport_patrimoine
 #: model_terms:ir.ui.view,arch_db:transport_patrimoine.view_patrimoine_amortissement_graph
 msgid "Dotations par exercice"
-msgstr "المخصصات حسب الدورة"
+msgstr "Depreciation Charges by Fiscal Year"
 
 #. module: transport_patrimoine
 #: model_terms:ir.ui.view,arch_db:transport_patrimoine.rapport_acquisitions_template
@@ -1237,45 +1242,45 @@ msgstr "المخصصات حسب الدورة"
 #: model_terms:ir.ui.view,arch_db:transport_patrimoine.rapport_rebuts_template
 #: model_terms:ir.ui.view,arch_db:transport_patrimoine.rapport_transferts_template
 msgid "Du"
-msgstr "من"
+msgstr "From"
 
 #. module: transport_patrimoine
 #: model_terms:ir.ui.view,arch_db:transport_patrimoine.rapport_acquisitions_template
 #: model_terms:ir.ui.view,arch_db:transport_patrimoine.rapport_tableau_amortissement_template
 msgid "Durée"
-msgstr "المدة"
+msgstr "Duration"
 
 #. module: transport_patrimoine
 #: model:ir.model.fields,field_description:transport_patrimoine.field_patrimoine_sous_categorie__duree_amortissement
 msgid "Durée (surcharge, années)"
-msgstr "المدة (تجاوز، سنوات)"
+msgstr "Duration (override, years)"
 
 #. module: transport_patrimoine
 #: model:ir.model.fields,field_description:transport_patrimoine.field_patrimoine_immobilisation__duree_amortissement
 msgid "Durée d'amortissement (années)"
-msgstr "مدة الإهلاك (سنوات)"
+msgstr "Depreciation Duration (Years)"
 
 #. module: transport_patrimoine
 #: model:ir.model.fields,help:transport_patrimoine.field_patrimoine_categorie__duree_amortissement
 msgid ""
 "Durée d'amortissement en années appliquée par défaut aux immobilisations de "
 "cette catégorie"
-msgstr "مدة الإهلاك بالسنوات المطبَّقة افتراضياً على أصول هذا الصنف"
+msgstr "Default depreciation duration in years applied to assets in this category"
 
 #. module: transport_patrimoine
 #: model:ir.model.fields,field_description:transport_patrimoine.field_patrimoine_categorie__duree_amortissement
 msgid "Durée par défaut (années)"
-msgstr "المدة الافتراضية (سنوات)"
+msgstr "Default Duration (Years)"
 
 #. module: transport_patrimoine
 #: model:ir.model.fields,field_description:transport_patrimoine.field_patrimoine_inventaire__date_debut
 msgid "Début de la campagne"
-msgstr "بداية الحملة"
+msgstr "Campaign Start Date"
 
 #. module: transport_patrimoine
 #: model:ir.model.fields,field_description:transport_patrimoine.field_patrimoine_amortissement_ligne__date_debut
 msgid "Début période"
-msgstr "بداية الفترة"
+msgstr "Period Start"
 
 #. module: transport_patrimoine
 #: model:ir.model.fields.selection,name:transport_patrimoine.selection__patrimoine_categorie__methode_amortissement__degressif
@@ -1284,60 +1289,60 @@ msgstr "بداية الفترة"
 #: model:ir.model.fields.selection,name:transport_patrimoine.selection__patrimoine_wizard_rapport__methode_amort_filtre__degressif
 #: model_terms:ir.ui.view,arch_db:transport_patrimoine.view_patrimoine_immobilisation_search
 msgid "Dégressif"
-msgstr "تنازلي"
+msgstr "Declining Balance"
 
 #. module: transport_patrimoine
 #: model:ir.model.fields.selection,name:transport_patrimoine.selection__patrimoine_wizard_calcul_amortissement__methode_filtre__degressif
 msgid "Dégressif uniquement"
-msgstr "تنازلي فقط"
+msgstr "Declining Balance Only"
 
 #. module: transport_patrimoine
 #: model_terms:ir.ui.view,arch_db:transport_patrimoine.rapport_distribution_template
 msgid "Département"
-msgstr "الإدارة"
+msgstr "Department"
 
 #. module: transport_patrimoine
 #: model:ir.model.fields,field_description:transport_patrimoine.field_patrimoine_affectation__department_id
 #: model:ir.model.fields,field_description:transport_patrimoine.field_patrimoine_emplacement__department_id
 msgid "Département / Direction"
-msgstr "الإدارة / المديرية"
+msgstr "Department / Directorate"
 
 #. module: transport_patrimoine
 #: model:ir.model.fields,field_description:transport_patrimoine.field_patrimoine_immobilisation__department_id
 msgid "Département affectataire"
-msgstr "الإدارة المستفيدة"
+msgstr "Assigned Department"
 
 #. module: transport_patrimoine
 #: model:ir.model,name:transport_patrimoine.model_patrimoine_depense_posterieure
 msgid "Dépense postérieure activée"
-msgstr "نفقة لاحقة مُفعَّلة"
+msgstr "Capitalized Subsequent Expenditure"
 
 #. module: transport_patrimoine
 #: model:ir.model.fields,field_description:transport_patrimoine.field_patrimoine_immobilisation__depense_posterieure_ids
 #: model_terms:ir.ui.view,arch_db:transport_patrimoine.view_patrimoine_immobilisation_form
 msgid "Dépenses postérieures"
-msgstr "النفقات اللاحقة"
+msgstr "Subsequent Expenditures"
 
 #. module: transport_patrimoine
 #: model:ir.model.fields,field_description:transport_patrimoine.field_patrimoine_immobilisation__depenses_posterieures
 msgid "Dépenses postérieures (DT)"
-msgstr "النفقات اللاحقة (د.ت)"
+msgstr "Subsequent Expenditures (TND)"
 
 #. module: transport_patrimoine
 #: model:ir.model,name:transport_patrimoine.model_patrimoine_depreciation
 msgid "Dépréciation d'immobilisation"
-msgstr "انخفاض قيمة الأصل الثابت"
+msgstr "Fixed Asset Impairment"
 
 #. module: transport_patrimoine
 #: model:ir.model.fields,field_description:transport_patrimoine.field_patrimoine_immobilisation__depreciation_ids
 #: model_terms:ir.ui.view,arch_db:transport_patrimoine.view_patrimoine_immobilisation_form
 msgid "Dépréciations"
-msgstr "انخفاضات القيمة"
+msgstr "Impairments"
 
 #. module: transport_patrimoine
 #: model:ir.model.fields,field_description:transport_patrimoine.field_patrimoine_immobilisation__depreciation_cumule
 msgid "Dépréciations cumulées (DT)"
-msgstr "انخفاضات القيمة المتراكمة (د.ت)"
+msgstr "Accumulated Impairments (TND)"
 
 #. module: transport_patrimoine
 #: model:ir.model.fields,field_description:transport_patrimoine.field_patrimoine_categorie__name
@@ -1359,27 +1364,27 @@ msgstr "انخفاضات القيمة المتراكمة (د.ت)"
 #: model_terms:ir.ui.view,arch_db:transport_patrimoine.rapport_transferts_template
 #: model_terms:ir.ui.view,arch_db:transport_patrimoine.view_patrimoine_immobilisation_search
 msgid "Désignation"
-msgstr "التسمية"
+msgstr "Name"
 
 #. module: transport_patrimoine
 #: model:ir.model.fields,field_description:transport_patrimoine.field_patrimoine_emplacement__display_name
 msgid "Désignation complète"
-msgstr "التسمية الكاملة"
+msgstr "Full Name"
 
 #. module: transport_patrimoine
 #: model_terms:ir.ui.view,arch_db:transport_patrimoine.view_patrimoine_immobilisation_form
 msgid "Désignation de l'immobilisation"
-msgstr "تسمية الأصل الثابت"
+msgstr "Asset Name"
 
 #. module: transport_patrimoine
 #: model:ir.model.fields,field_description:transport_patrimoine.field_patrimoine_emplacement__name
 msgid "Désignation emplacement"
-msgstr "تسمية الموقع"
+msgstr "Location Name"
 
 #. module: transport_patrimoine
 #: model:ir.model.fields.selection,name:transport_patrimoine.selection__patrimoine_inventaire_ligne__etat_constate__deteriore
 msgid "Détérioré"
-msgstr "متهالك"
+msgstr "Damaged"
 
 #. module: transport_patrimoine
 #: model:ir.model.fields.selection,name:transport_patrimoine.selection__patrimoine_wizard_rapport__grouper_par__emplacement
@@ -1391,38 +1396,38 @@ msgstr "متهالك"
 #: model_terms:ir.ui.view,arch_db:transport_patrimoine.view_patrimoine_emplacement_form
 #: model_terms:ir.ui.view,arch_db:transport_patrimoine.view_patrimoine_immobilisation_search
 msgid "Emplacement"
-msgstr "الموقع"
+msgstr "Location"
 
 #. module: transport_patrimoine
 #: model:ir.model.fields,field_description:transport_patrimoine.field_patrimoine_wizard_rapport__emplacement_id
 msgid "Emplacement (optionnel)"
-msgstr "الموقع (اختياري)"
+msgstr "Location (optional)"
 
 #. module: transport_patrimoine
 #: model:ir.model,name:transport_patrimoine.model_patrimoine_emplacement
 msgid "Emplacement / Site"
-msgstr "الموقع / الفرع"
+msgstr "Location / Site"
 
 #. module: transport_patrimoine
 #: model:ir.model.fields,field_description:transport_patrimoine.field_patrimoine_immobilisation__emplacement_id
 #: model:ir.model.fields,field_description:transport_patrimoine.field_patrimoine_inventaire_ligne__emplacement_id
 msgid "Emplacement actuel"
-msgstr "الموقع الحالي"
+msgstr "Current Location"
 
 #. module: transport_patrimoine
 #: model:ir.model.fields,field_description:transport_patrimoine.field_patrimoine_affectation__emplacement_id
 msgid "Emplacement d'affectation"
-msgstr "موقع التخصيص"
+msgstr "Assignment Location"
 
 #. module: transport_patrimoine
 #: model:ir.model.fields,field_description:transport_patrimoine.field_patrimoine_mouvement__emplacement_origine_id
 msgid "Emplacement d'origine"
-msgstr "الموقع الأصلي"
+msgstr "Source Location"
 
 #. module: transport_patrimoine
 #: model:ir.model.fields,field_description:transport_patrimoine.field_patrimoine_mouvement__emplacement_destination_id
 msgid "Emplacement de destination"
-msgstr "الموقع المقصود"
+msgstr "Destination Location"
 
 #. module: transport_patrimoine
 #: model:ir.actions.act_window,name:transport_patrimoine.action_patrimoine_emplacement
@@ -1430,36 +1435,36 @@ msgstr "الموقع المقصود"
 #: model_terms:ir.ui.view,arch_db:transport_patrimoine.view_patrimoine_emplacement_list
 #: model_terms:ir.ui.view,arch_db:transport_patrimoine.view_patrimoine_mouvement_form
 msgid "Emplacements"
-msgstr "المواقع"
+msgstr "Locations"
 
 #. module: transport_patrimoine
 #: model:ir.model.fields.selection,name:transport_patrimoine.selection__patrimoine_immobilisation__statut__en_cours
 #: model:ir.model.fields.selection,name:transport_patrimoine.selection__patrimoine_inventaire__state__en_cours
 #: model_terms:ir.ui.view,arch_db:transport_patrimoine.view_patrimoine_immobilisation_search
 msgid "En cours"
-msgstr "قيد الإنجاز"
+msgstr "In Progress"
 
 #. module: transport_patrimoine
 #: model:ir.model.fields.selection,name:transport_patrimoine.selection__patrimoine_inventaire_ligne__etat_constate__excedent
 msgid "En excédent"
-msgstr "فائض"
+msgstr "Surplus"
 
 #. module: transport_patrimoine
 #: model:ir.model.fields.selection,name:transport_patrimoine.selection__patrimoine_immobilisation__statut__en_service
 #: model:ir.model.fields.selection,name:transport_patrimoine.selection__patrimoine_wizard_rapport__statut_filtre__en_service
 #: model_terms:ir.ui.view,arch_db:transport_patrimoine.view_patrimoine_immobilisation_search
 msgid "En service"
-msgstr "في الخدمة"
+msgstr "In Service"
 
 #. module: transport_patrimoine
 #: model:ir.model.fields,field_description:transport_patrimoine.field_patrimoine_immobilisation__entierement_amorti
 msgid "Entièrement amorti"
-msgstr "مستهلَك كلياً"
+msgstr "Fully Depreciated"
 
 #. module: transport_patrimoine
 #: model_terms:ir.ui.view,arch_db:transport_patrimoine.view_patrimoine_immobilisation_search
 msgid "Entièrement amortis"
-msgstr "مستهلَكة كلياً"
+msgstr "Fully Depreciated"
 
 #. module: transport_patrimoine
 #: model:ir.model.fields,field_description:transport_patrimoine.field_patrimoine_amortissement_ligne__annee
@@ -1469,75 +1474,75 @@ msgstr "مستهلَكة كلياً"
 #: model_terms:ir.ui.view,arch_db:transport_patrimoine.rapport_tableau_par_type_template
 #: model_terms:ir.ui.view,arch_db:transport_patrimoine.view_patrimoine_amortissement_search
 msgid "Exercice"
-msgstr "الدورة المحاسبية"
+msgstr "Fiscal Year"
 
 #. module: transport_patrimoine
 #: model_terms:ir.ui.view,arch_db:transport_patrimoine.rapport_amort_par_projet_template
 #: model_terms:ir.ui.view,arch_db:transport_patrimoine.rapport_amort_par_sous_categorie_template
 #: model_terms:ir.ui.view,arch_db:transport_patrimoine.rapport_tableau_amortissement_template
 msgid "Exercice :"
-msgstr "الدورة المحاسبية:"
+msgstr "Fiscal Year:"
 
 #. module: transport_patrimoine
 #: model:ir.model.fields,field_description:transport_patrimoine.field_patrimoine_wizard_calcul_amortissement__annee
 msgid "Exercice comptable"
-msgstr "الدورة المحاسبية"
+msgstr "Accounting Period"
 
 #. module: transport_patrimoine
 #: model_terms:ir.ui.view,arch_db:transport_patrimoine.rapport_cession_standalone_template
 msgid "FICHE DE CESSION / SORTIE"
-msgstr "بطاقة التفويت / الإخراج"
+msgstr "DISPOSAL / WRITE-OFF RECORD"
 
 #. module: transport_patrimoine
 #: model_terms:ir.ui.view,arch_db:transport_patrimoine.view_patrimoine_immobilisation_form
 msgid "Facture"
-msgstr "الفاتورة"
+msgstr "Invoice"
 
 #. module: transport_patrimoine
 #: model:ir.model.fields,field_description:transport_patrimoine.field_patrimoine_depense_posterieure__facture_id
 msgid "Facture rattachée"
-msgstr "فاتورة مرتبطة"
+msgstr "Linked Invoice"
 
 #. module: transport_patrimoine
 #: model:ir.model.fields,field_description:transport_patrimoine.field_patrimoine_immobilisation__facture_achat_ids
 msgid "Factures rattachées"
-msgstr "فواتير مرتبطة"
+msgstr "Linked Invoices"
 
 #. module: transport_patrimoine
 #: model_terms:ir.ui.view,arch_db:transport_patrimoine.view_wizard_calcul_amortissement_form
 #: model_terms:ir.ui.view,arch_db:transport_patrimoine.view_wizard_rapport_patrimoine_form
 msgid "Fermer"
-msgstr "إغلاق"
+msgstr "Close"
 
 #. module: transport_patrimoine
 #: model_terms:ir.ui.view,arch_db:transport_patrimoine.view_patrimoine_immobilisation_form
 msgid "Fiche Immobilisation"
-msgstr "بطاقة الأصل الثابت"
+msgstr "Asset Record"
 
 #. module: transport_patrimoine
 #: model:ir.actions.report,name:transport_patrimoine.action_rapport_cession_standalone
 msgid "Fiche de cession"
-msgstr "بطاقة التفويت"
+msgstr "Disposal Record"
 
 #. module: transport_patrimoine
 #: model_terms:ir.ui.view,arch_db:transport_patrimoine.view_patrimoine_inventaire_form
 msgid "Filtres"
-msgstr "المرشِّحات"
+msgstr "Filters"
 
 #. module: transport_patrimoine
 #: model:ir.model.fields,field_description:transport_patrimoine.field_patrimoine_immobilisation__fin_amortissement
 msgid "Fin d'amortissement prévue"
-msgstr "تاريخ انتهاء الإهلاك المتوقع"
+msgstr "Expected End of Depreciation"
 
 #. module: transport_patrimoine
 #: model:ir.model.fields,field_description:transport_patrimoine.field_patrimoine_inventaire__date_fin
 msgid "Fin de la campagne"
-msgstr "نهاية الحملة"
+msgstr "Campaign End Date"
 
 #. module: transport_patrimoine
 #: model:ir.model.fields,field_description:transport_patrimoine.field_patrimoine_amortissement_ligne__date_fin
 msgid "Fin période"
-msgstr "نهاية الفترة"
+msgstr "Period End"
 
 #. module: transport_patrimoine
 #: model:ir.model.fields,field_description:transport_patrimoine.field_patrimoine_affectation__message_follower_ids
@@ -1548,7 +1553,7 @@ msgstr "نهاية الفترة"
 #: model:ir.model.fields,field_description:transport_patrimoine.field_patrimoine_inventaire__message_follower_ids
 #: model:ir.model.fields,field_description:transport_patrimoine.field_patrimoine_mouvement__message_follower_ids
 msgid "Followers"
-msgstr "المتابعون"
+msgstr "Followers"
 
 #. module: transport_patrimoine
 #: model:ir.model.fields,field_description:transport_patrimoine.field_patrimoine_affectation__message_partner_ids
@@ -1559,80 +1564,80 @@ msgstr "المتابعون"
 #: model:ir.model.fields,field_description:transport_patrimoine.field_patrimoine_inventaire__message_partner_ids
 #: model:ir.model.fields,field_description:transport_patrimoine.field_patrimoine_mouvement__message_partner_ids
 msgid "Followers (Partners)"
-msgstr "المتابعون (الشركاء)"
+msgstr "Followers (Partners)"
 
 #. module: transport_patrimoine
 #: model:ir.model.fields,help:transport_patrimoine.field_patrimoine_cession__activity_type_icon
 #: model:ir.model.fields,help:transport_patrimoine.field_patrimoine_immobilisation__activity_type_icon
 #: model:ir.model.fields,help:transport_patrimoine.field_patrimoine_inventaire__activity_type_icon
 msgid "Font awesome icon e.g. fa-tasks"
-msgstr "أيقونة Font Awesome (مثال: fa-tasks)"
+msgstr "Font awesome icon e.g. fa-tasks"
 
 #. module: transport_patrimoine
 #: model:ir.model.fields,field_description:transport_patrimoine.field_patrimoine_immobilisation__fournisseur_id
 msgid "Fournisseur"
-msgstr "المورّد"
+msgstr "Supplier"
 
 #. module: transport_patrimoine
 #: model_terms:ir.ui.view,arch_db:transport_patrimoine.view_patrimoine_immobilisation_form
 msgid "Fournisseur et achat"
-msgstr "المورّد والشراء"
+msgstr "Supplier & Purchase"
 
 #. module: transport_patrimoine
 #: model_terms:ir.ui.view,arch_db:transport_patrimoine.rapport_acquisitions_template
 msgid "Frais acc. (DT)"
-msgstr "مصاريف إضافية (د.ت)"
+msgstr "Add. Costs (TND)"
 
 #. module: transport_patrimoine
 #: model:ir.model.fields,field_description:transport_patrimoine.field_patrimoine_immobilisation__frais_accessoires
 msgid "Frais accessoires (DT)"
-msgstr "المصاريف الإضافية (د.ت)"
+msgstr "Additional Costs (TND)"
 
 #. module: transport_patrimoine
 #: model:ir.model.fields,help:transport_patrimoine.field_patrimoine_immobilisation__frais_accessoires
 msgid "Frais de transport, installation, montage..."
-msgstr "مصاريف النقل والتركيب والتجميع..."
+msgstr "Freight, installation, assembly costs..."
 
 #. module: transport_patrimoine
 #: model:res.groups,name:transport_patrimoine.patrimoine_group_gestionnaire
 msgid "Gestionnaire"
-msgstr "المسيِّر"
+msgstr "Manager"
 
 #. module: transport_patrimoine
 #: model:ir.model.fields.selection,name:transport_patrimoine.selection__patrimoine_depense_posterieure__nature__grosse_reparation
 msgid "Grosse réparation"
-msgstr "إصلاح كبير"
+msgstr "Major Repair"
 
 #. module: transport_patrimoine
 #: model_terms:ir.ui.view,arch_db:transport_patrimoine.rapport_recap_ventile_template
 msgid "Groupe"
-msgstr "المجموعة"
+msgstr "Group"
 
 #. module: transport_patrimoine
 #: model:ir.model.fields,field_description:transport_patrimoine.field_patrimoine_wizard_rapport__grouper_par
 msgid "Grouper par"
-msgstr "تجميع حسب"
+msgstr "Group By"
 
 #. module: transport_patrimoine
 #: model_terms:ir.ui.view,arch_db:transport_patrimoine.view_wizard_rapport_patrimoine_form
 msgid "Générer le rapport"
-msgstr "توليد التقرير"
+msgstr "Generate Report"
 
 #. module: transport_patrimoine
 #: model_terms:ir.ui.view,arch_db:transport_patrimoine.view_patrimoine_immobilisation_form
 msgid "Générer tableau amort."
-msgstr "توليد جدول الإهلاك"
+msgstr "Generate Depreciation Schedule"
 
 #. module: transport_patrimoine
 #: model:ir.ui.menu,name:transport_patrimoine.menu_patrimoine_rapports_wizard
 msgid "Générer un rapport"
-msgstr "توليد تقرير"
+msgstr "Generate a Report"
 
 #. module: transport_patrimoine
 #: model_terms:ir.actions.act_window,help:transport_patrimoine.action_patrimoine_immobilisation
 msgid ""
 "Gérez votre patrimoine : acquisitions, amortissements, transferts, cessions."
-msgstr "أدِر أصولك الثابتة: الاقتناءات والاستهلاكات والتحويلات والتفويتات."
+msgstr "Manage your assets: acquisitions, depreciation, transfers, disposals."
 
 #. module: transport_patrimoine
 #: model:ir.model.fields,field_description:transport_patrimoine.field_patrimoine_affectation__has_message
@@ -1643,29 +1648,29 @@ msgstr "أدِر أصولك الثابتة: الاقتناءات والاسته�
 #: model:ir.model.fields,field_description:transport_patrimoine.field_patrimoine_inventaire__has_message
 #: model:ir.model.fields,field_description:transport_patrimoine.field_patrimoine_mouvement__has_message
 msgid "Has Message"
-msgstr "يحتوي على رسالة"
+msgstr "Has Message"
 
 #. module: transport_patrimoine
 #: model:ir.model.fields,field_description:transport_patrimoine.field_patrimoine_immobilisation__mouvement_ids
 msgid "Historique des transferts"
-msgstr "سجل التحويلات"
+msgstr "Transfer History"
 
 #. module: transport_patrimoine
 #: model_terms:ir.ui.view,arch_db:transport_patrimoine.view_patrimoine_immobilisation_form
 msgid "Historique transferts"
-msgstr "سجل التحويلات"
+msgstr "Transfer History"
 
 #. module: transport_patrimoine
 #: model:ir.model.fields.selection,name:transport_patrimoine.selection__patrimoine_immobilisation__statut__hors_service
 #: model:ir.model.fields.selection,name:transport_patrimoine.selection__patrimoine_wizard_rapport__statut_filtre__hors_service
 #: model_terms:ir.ui.view,arch_db:transport_patrimoine.view_patrimoine_immobilisation_search
 msgid "Hors service"
-msgstr "خارج الخدمة"
+msgstr "Out of Service"
 
 #. module: transport_patrimoine
 #: model:ir.model.fields.selection,name:transport_patrimoine.selection__patrimoine_sous_categorie__methode_amortissement__herite
 msgid "Hériter de la catégorie"
-msgstr "يرث من الصنف"
+msgstr "Inherit from Category"
 
 #. module: transport_patrimoine
 #: model:ir.model.fields,field_description:transport_patrimoine.field_patrimoine_affectation__id
@@ -1683,38 +1688,38 @@ msgstr "يرث من الصنف"
 #: model:ir.model.fields,field_description:transport_patrimoine.field_patrimoine_wizard_calcul_amortissement__id
 #: model:ir.model.fields,field_description:transport_patrimoine.field_patrimoine_wizard_rapport__id
 msgid "ID"
-msgstr "المعرّف"
+msgstr "ID"
 
 #. module: transport_patrimoine
 #: model_terms:ir.ui.view,arch_db:transport_patrimoine.rapport_entierement_amortis_template
 msgid "IMMOBILISATIONS ENTIÈREMENT AMORTIES ENCORE EN SERVICE"
-msgstr "أصول ثابتة مستهلَكة كلياً ولا تزال في الخدمة"
+msgstr "FULLY DEPRECIATED FIXED ASSETS STILL IN SERVICE"
 
 #. module: transport_patrimoine
 #: model_terms:ir.ui.view,arch_db:transport_patrimoine.rapport_hors_usage_template
 msgid "IMMOBILISATIONS HORS SERVICE / INUTILISÉES"
-msgstr "أصول ثابتة خارج الخدمة / غير مستعملة"
+msgstr "OUT-OF-SERVICE / UNUSED FIXED ASSETS"
 
 #. module: transport_patrimoine
 #: model:ir.model.fields,field_description:transport_patrimoine.field_patrimoine_cession__activity_exception_icon
 #: model:ir.model.fields,field_description:transport_patrimoine.field_patrimoine_immobilisation__activity_exception_icon
 #: model:ir.model.fields,field_description:transport_patrimoine.field_patrimoine_inventaire__activity_exception_icon
 msgid "Icon"
-msgstr "أيقونة"
+msgstr "Icon"
 
 #. module: transport_patrimoine
 #: model:ir.model.fields,help:transport_patrimoine.field_patrimoine_cession__activity_exception_icon
 #: model:ir.model.fields,help:transport_patrimoine.field_patrimoine_immobilisation__activity_exception_icon
 #: model:ir.model.fields,help:transport_patrimoine.field_patrimoine_inventaire__activity_exception_icon
 msgid "Icon to indicate an exception activity."
-msgstr "أيقونة للإشارة إلى نشاط استثنائي."
+msgstr "Icon to indicate an exception activity."
 
 #. module: transport_patrimoine
 #: model_terms:ir.ui.view,arch_db:transport_patrimoine.view_patrimoine_categorie_form
 #: model_terms:ir.ui.view,arch_db:transport_patrimoine.view_patrimoine_cession_form
 #: model_terms:ir.ui.view,arch_db:transport_patrimoine.view_patrimoine_immobilisation_form
 msgid "Identification"
-msgstr "التعريف"
+msgstr "Identification"
 
 #. module: transport_patrimoine
 #: model:ir.model.fields,help:transport_patrimoine.field_patrimoine_affectation__message_needaction
@@ -1725,7 +1730,7 @@ msgstr "التعريف"
 #: model:ir.model.fields,help:transport_patrimoine.field_patrimoine_inventaire__message_needaction
 #: model:ir.model.fields,help:transport_patrimoine.field_patrimoine_mouvement__message_needaction
 msgid "If checked, new messages require your attention."
-msgstr "إذا كان محدداً، تتطلب الرسائل الجديدة انتباهك."
+msgstr "If checked, new messages require your attention."
 
 #. module: transport_patrimoine
 #: model:ir.model.fields,help:transport_patrimoine.field_patrimoine_affectation__message_has_error
@@ -1743,7 +1748,7 @@ msgstr "إذا كان محدداً، تتطلب الرسائل الجديدة ا
 #: model:ir.model.fields,help:transport_patrimoine.field_patrimoine_mouvement__message_has_error
 #: model:ir.model.fields,help:transport_patrimoine.field_patrimoine_mouvement__message_has_sms_error
 msgid "If checked, some messages have a delivery error."
-msgstr "إذا كان محدداً، بعض الرسائل تحتوي على خطأ في الإرسال."
+msgstr "If checked, some messages have a delivery error."
 
 #. module: transport_patrimoine
 #: model:ir.model,name:transport_patrimoine.model_patrimoine_immobilisation
@@ -1758,7 +1763,7 @@ msgstr "إذا كان محدداً، بعض الرسائل تحتوي على خ�
 #: model_terms:ir.ui.view,arch_db:transport_patrimoine.view_patrimoine_amortissement_search
 #: model_terms:ir.ui.view,arch_db:transport_patrimoine.view_patrimoine_mouvement_form
 msgid "Immobilisation"
-msgstr "الأصل الثابت"
+msgstr "Fixed Asset"
 
 #. module: transport_patrimoine
 #: model:ir.actions.act_window,name:transport_patrimoine.action_patrimoine_immobilisation
@@ -1766,61 +1771,61 @@ msgstr "الأصل الثابت"
 #: model:ir.ui.menu,name:transport_patrimoine.menu_patrimoine_immo
 #: model_terms:ir.ui.view,arch_db:transport_patrimoine.view_patrimoine_immobilisation_list
 msgid "Immobilisations"
-msgstr "الأصول الثابتة"
+msgstr "Fixed Assets"
 
 #. module: transport_patrimoine
 #: model:ir.actions.report,name:transport_patrimoine.action_rapport_entierement_amortis
 msgid "Immobilisations entièrement amorties en service"
-msgstr "الأصول المستهلَكة كلياً في الخدمة"
+msgstr "Fully Depreciated Assets Still in Service"
 
 #. module: transport_patrimoine
 #: model:ir.model.fields.selection,name:transport_patrimoine.selection__patrimoine_wizard_rapport__type_rapport__entierement_amortis
 msgid "Immobilisations entièrement amorties encore en usage"
-msgstr "الأصول المستهلَكة كلياً ولا تزال مستخدَمة"
+msgstr "Fully Depreciated Assets Still in Use"
 
 #. module: transport_patrimoine
 #: model:ir.actions.report,name:transport_patrimoine.action_rapport_hors_usage
 msgid "Immobilisations hors service"
-msgstr "الأصول خارج الخدمة"
+msgstr "Out-of-Service Assets"
 
 #. module: transport_patrimoine
 #: model:ir.model.fields.selection,name:transport_patrimoine.selection__patrimoine_wizard_rapport__type_rapport__hors_usage
 msgid "Immobilisations hors service / inutilisées"
-msgstr "الأصول خارج الخدمة / غير المستعملة"
+msgstr "Out-of-Service / Unused Assets"
 
 #. module: transport_patrimoine
 #: model:ir.model.fields,field_description:transport_patrimoine.field_patrimoine_wizard_rapport__inclure_amortis
 msgid "Inclure entièrement amortis"
-msgstr "تضمين المستهلَكة كلياً"
+msgstr "Include Fully Depreciated"
 
 #. module: transport_patrimoine
 #: model:patrimoine.categorie,name:transport_patrimoine.cat_installations
 msgid "Installations et agencements"
-msgstr "تجهيزات ومنشآت"
+msgstr "Fixtures & Fittings"
 
 #. module: transport_patrimoine
 #: model:ir.model.fields,field_description:transport_patrimoine.field_patrimoine_inventaire_ligne__inventaire_id
 #: model:ir.ui.menu,name:transport_patrimoine.menu_patrimoine_inventaire_root
 #: model_terms:ir.ui.view,arch_db:transport_patrimoine.view_patrimoine_inventaire_form
 msgid "Inventaire"
-msgstr "الجرد"
+msgstr "Inventory"
 
 #. module: transport_patrimoine
 #: model:ir.model,name:transport_patrimoine.model_patrimoine_inventaire
 #: model_terms:ir.ui.view,arch_db:transport_patrimoine.view_patrimoine_inventaire_form
 msgid "Inventaire des immobilisations"
-msgstr "جرد الأصول الثابتة"
+msgstr "Fixed Asset Inventory"
 
 #. module: transport_patrimoine
 #: model:ir.actions.act_window,name:transport_patrimoine.action_patrimoine_inventaire
 #: model_terms:ir.ui.view,arch_db:transport_patrimoine.view_patrimoine_inventaire_list
 msgid "Inventaires"
-msgstr "الجرودات"
+msgstr "Inventories"
 
 #. module: transport_patrimoine
 #: model:ir.model.fields,field_description:transport_patrimoine.field_patrimoine_inventaire_ligne__inventorie
 msgid "Inventorié"
-msgstr "مجرود"
+msgstr "Inventoried"
 
 #. module: transport_patrimoine
 #: model:ir.model.fields,field_description:transport_patrimoine.field_patrimoine_affectation__message_is_follower
@@ -1831,27 +1836,27 @@ msgstr "مجرود"
 #: model:ir.model.fields,field_description:transport_patrimoine.field_patrimoine_inventaire__message_is_follower
 #: model:ir.model.fields,field_description:transport_patrimoine.field_patrimoine_mouvement__message_is_follower
 msgid "Is Follower"
-msgstr "متابع"
+msgstr "Is Follower"
 
 #. module: transport_patrimoine
 #: model:ir.model.fields,field_description:transport_patrimoine.field_patrimoine_immobilisation__journal_id
 msgid "Journal comptable"
-msgstr "اليومية المحاسبية"
+msgstr "Accounting Journal"
 
 #. module: transport_patrimoine
 #: model_terms:ir.ui.view,arch_db:transport_patrimoine.rapport_distribution_template
 msgid "LISTE DE DISTRIBUTION DES IMMOBILISATIONS"
-msgstr "قائمة توزيع الأصول الثابتة"
+msgstr "FIXED ASSET DISTRIBUTION LIST"
 
 #. module: transport_patrimoine
 #: model_terms:ir.ui.view,arch_db:transport_patrimoine.rapport_transferts_template
 msgid "LISTE DES TRANSFERTS D'IMMOBILISATIONS"
-msgstr "قائمة تحويلات الأصول الثابتة"
+msgstr "FIXED ASSET TRANSFER LIST"
 
 #. module: transport_patrimoine
 #: model:ir.model.fields,help:transport_patrimoine.field_patrimoine_wizard_calcul_amortissement__categorie_id
 msgid "Laisser vide pour traiter toutes les catégories"
-msgstr "اتركه فارغاً لمعالجة جميع الأصناف"
+msgstr "Leave blank to process all categories"
 
 #. module: transport_patrimoine
 #: model:ir.model.fields,field_description:transport_patrimoine.field_patrimoine_affectation__write_uid
@@ -1869,7 +1874,7 @@ msgstr "اتركه فارغاً لمعالجة جميع الأصناف"
 #: model:ir.model.fields,field_description:transport_patrimoine.field_patrimoine_wizard_calcul_amortissement__write_uid
 #: model:ir.model.fields,field_description:transport_patrimoine.field_patrimoine_wizard_rapport__write_uid
 msgid "Last Updated by"
-msgstr "آخر تحديث بواسطة"
+msgstr "Last Updated by"
 
 #. module: transport_patrimoine
 #: model:ir.model.fields,field_description:transport_patrimoine.field_patrimoine_affectation__write_date
@@ -1887,12 +1892,12 @@ msgstr "آخر تحديث بواسطة"
 #: model:ir.model.fields,field_description:transport_patrimoine.field_patrimoine_wizard_calcul_amortissement__write_date
 #: model:ir.model.fields,field_description:transport_patrimoine.field_patrimoine_wizard_rapport__write_date
 msgid "Last Updated on"
-msgstr "تاريخ آخر تحديث"
+msgstr "Last Updated on"
 
 #. module: transport_patrimoine
 #: model:res.groups,comment:transport_patrimoine.patrimoine_group_user
 msgid "Lecture seule sur les immobilisations et les rapports."
-msgstr "قراءة فقط على الأصول الثابتة والتقارير."
+msgstr "Read-only access to fixed assets and reports."
 
 #. module: transport_patrimoine
 #: model_terms:ir.ui.view,arch_db:transport_patrimoine.view_patrimoine_immobilisation_form
@@ -1901,8 +1906,8 @@ msgid ""
 "paramètres actuels. Les dotations déjà comptabilisées sont conservées. "
 "Continuer ?"
 msgstr ""
-"سيتم حذف السطور التقديرية وإعادة توليدها بالمعاملات الحالية. "
-"تُحفَظ المخصصات المُسجَّلة مسبقاً. متابعة؟"
+"Forecasted lines will be deleted and regenerated with the current settings. "
+"Already posted charges will be kept. Continue?"
 
 #. module: transport_patrimoine
 #: model:ir.model.fields,help:transport_patrimoine.field_patrimoine_immobilisation__vehicle_id
@@ -1910,28 +1915,28 @@ msgid ""
 "Lien vers la fiche fleet.vehicle : suivi carburant, kilométrage, carte "
 "AGILIS."
 msgstr ""
-"رابط إلى بطاقة fleet.vehicle: متابعة الوقود والكيلومتراج وبطاقة AGILIS."
+"Link to the fleet.vehicle record: fuel tracking, mileage, AGILIS card."
 
 #. module: transport_patrimoine
 #: model:ir.model,name:transport_patrimoine.model_patrimoine_amortissement_ligne
 msgid "Ligne d'amortissement"
-msgstr "سطر جدول الاستهلاك"
+msgstr "Depreciation Line"
 
 #. module: transport_patrimoine
 #: model:ir.model,name:transport_patrimoine.model_patrimoine_inventaire_ligne
 msgid "Ligne d'inventaire"
-msgstr "سطر الجرد"
+msgstr "Inventory Line"
 
 #. module: transport_patrimoine
 #: model:ir.model.fields,field_description:transport_patrimoine.field_patrimoine_inventaire__ligne_ids
 #: model_terms:ir.ui.view,arch_db:transport_patrimoine.view_patrimoine_inventaire_form
 msgid "Lignes d'inventaire"
-msgstr "سطور الجرد"
+msgstr "Inventory Lines"
 
 #. module: transport_patrimoine
 #: model:ir.model.fields,field_description:transport_patrimoine.field_patrimoine_wizard_calcul_amortissement__nb_lignes
 msgid "Lignes trouvées"
-msgstr "سطور وجدت"
+msgstr "Lines Found"
 
 #. module: transport_patrimoine
 #: model:ir.model.fields.selection,name:transport_patrimoine.selection__patrimoine_categorie__methode_amortissement__lineaire
@@ -1940,65 +1945,65 @@ msgstr "سطور وجدت"
 #: model:ir.model.fields.selection,name:transport_patrimoine.selection__patrimoine_wizard_rapport__methode_amort_filtre__lineaire
 #: model_terms:ir.ui.view,arch_db:transport_patrimoine.view_patrimoine_immobilisation_search
 msgid "Linéaire"
-msgstr "خطي"
+msgstr "Straight-Line"
 
 #. module: transport_patrimoine
 #: model:ir.model.fields.selection,name:transport_patrimoine.selection__patrimoine_wizard_calcul_amortissement__methode_filtre__lineaire
 msgid "Linéaire uniquement"
-msgstr "خطي فقط"
+msgstr "Straight-Line Only"
 
 #. module: transport_patrimoine
 #: model:ir.actions.report,name:transport_patrimoine.action_rapport_distribution
 #: model:ir.model.fields.selection,name:transport_patrimoine.selection__patrimoine_wizard_rapport__type_rapport__liste_distribution
 msgid "Liste de distribution des actifs"
-msgstr "قائمة توزيع الأصول"
+msgstr "Asset Distribution List"
 
 #. module: transport_patrimoine
 #: model:ir.actions.report,name:transport_patrimoine.action_rapport_transferts
 msgid "Liste des transferts"
-msgstr "قائمة تحويل الأصول"
+msgstr "Transfer List"
 
 #. module: transport_patrimoine
 #: model:ir.model.fields.selection,name:transport_patrimoine.selection__patrimoine_wizard_rapport__type_rapport__liste_transferts
 msgid "Liste des transferts d'immobilisations"
-msgstr "قائمة تحويل الأصول الثابتة"
+msgstr "Fixed Asset Transfer List"
 
 #. module: transport_patrimoine
 #: model:ir.actions.report,name:transport_patrimoine.action_rapport_ecarts
 #: model:ir.model.fields.selection,name:transport_patrimoine.selection__patrimoine_wizard_rapport__type_rapport__liste_ecarts
 msgid "Liste des écarts d'inventaire"
-msgstr "قائمة فوارق الجرد"
+msgstr "Inventory Discrepancy List"
 
 #. module: transport_patrimoine
 #: model:ir.model.fields.selection,name:transport_patrimoine.selection__patrimoine_immobilisation__type_entree__livraison_soi
 msgid "Livraison à soi-même"
-msgstr "تسليم لذاتها"
+msgstr "Self-Constructed Asset"
 
 #. module: transport_patrimoine
 #: model_terms:ir.ui.view,arch_db:transport_patrimoine.view_patrimoine_emplacement_form
 msgid "Localisation"
-msgstr "الموقع الجغرافي"
+msgstr "Location"
 
 #. module: transport_patrimoine
 #: model:patrimoine.categorie,name:transport_patrimoine.cat_logiciels
 msgid "Logiciels et licences"
-msgstr "برمجيات ورخص"
+msgstr "Software & Licenses"
 
 #. module: transport_patrimoine
 #: model_terms:ir.ui.view,arch_db:transport_patrimoine.rapport_amort_par_projet_template
 #: model_terms:ir.ui.view,arch_db:transport_patrimoine.rapport_amort_par_sous_categorie_template
 msgid "M.E.S."
-msgstr "ت.إ.خ"
+msgstr "In-Svc."
 
 #. module: transport_patrimoine
 #: model:ir.model.fields.selection,name:transport_patrimoine.selection__patrimoine_inventaire_ligne__etat_constate__manquant
 msgid "Manquant"
-msgstr "مفقود"
+msgstr "Missing"
 
 #. module: transport_patrimoine
 #: model:ir.model.fields,field_description:transport_patrimoine.field_patrimoine_inventaire__nb_manquantes
 msgid "Manquantes"
-msgstr "مفقودة"
+msgstr "Missing"
 
 #. module: transport_patrimoine
 #: model:ir.model.fields.selection,name:transport_patrimoine.selection__patrimoine_categorie__methode_amortissement__manuel
@@ -2006,32 +2011,32 @@ msgstr "مفقودة"
 #: model:ir.model.fields.selection,name:transport_patrimoine.selection__patrimoine_sous_categorie__methode_amortissement__manuel
 #: model:ir.model.fields.selection,name:transport_patrimoine.selection__patrimoine_wizard_rapport__methode_amort_filtre__manuel
 msgid "Manuel"
-msgstr "يدوي"
+msgstr "Manual"
 
 #. module: transport_patrimoine
 #: model:ir.model.fields.selection,name:transport_patrimoine.selection__patrimoine_wizard_calcul_amortissement__methode_filtre__manuel
 msgid "Manuel uniquement"
-msgstr "يدوي فقط"
+msgstr "Manual Only"
 
 #. module: transport_patrimoine
 #: model:ir.model.fields,field_description:transport_patrimoine.field_patrimoine_immobilisation__marque
 msgid "Marque / Modèle"
-msgstr "العلامة / الطراز"
+msgstr "Brand / Model"
 
 #. module: transport_patrimoine
 #: model:patrimoine.categorie,name:transport_patrimoine.cat_materiel_transport
 msgid "Matériel de transport"
-msgstr "معدات النقل"
+msgstr "Transport Equipment"
 
 #. module: transport_patrimoine
 #: model:patrimoine.categorie,name:transport_patrimoine.cat_materiel_informatique
 msgid "Matériel informatique"
-msgstr "معدات الإعلامية"
+msgstr "IT Equipment"
 
 #. module: transport_patrimoine
 #: model:patrimoine.categorie,name:transport_patrimoine.cat_materiel_roulant
 msgid "Matériel roulant (bus / autocars)"
-msgstr "عربات متنقلة (حافلات)"
+msgstr "Rolling Stock (Buses / Coaches)"
 
 #. module: transport_patrimoine
 #: model:ir.model.fields,field_description:transport_patrimoine.field_patrimoine_affectation__message_has_error
@@ -2042,7 +2047,7 @@ msgstr "عربات متنقلة (حافلات)"
 #: model:ir.model.fields,field_description:transport_patrimoine.field_patrimoine_inventaire__message_has_error
 #: model:ir.model.fields,field_description:transport_patrimoine.field_patrimoine_mouvement__message_has_error
 msgid "Message Delivery error"
-msgstr "خطأ في إرسال الرسالة"
+msgstr "Message Delivery error"
 
 #. module: transport_patrimoine
 #: model:ir.model.fields,field_description:transport_patrimoine.field_patrimoine_affectation__message_ids
@@ -2053,69 +2058,69 @@ msgstr "خطأ في إرسال الرسالة"
 #: model:ir.model.fields,field_description:transport_patrimoine.field_patrimoine_inventaire__message_ids
 #: model:ir.model.fields,field_description:transport_patrimoine.field_patrimoine_mouvement__message_ids
 msgid "Messages"
-msgstr "الرسائل"
+msgstr "Messages"
 
 #. module: transport_patrimoine
 #: model_terms:ir.ui.view,arch_db:transport_patrimoine.rapport_bordereau_ecarts_template
 msgid "Mesure proposée"
-msgstr "الإجراء المقترح"
+msgstr "Proposed Action"
 
 #. module: transport_patrimoine
 #: model_terms:ir.ui.view,arch_db:transport_patrimoine.view_patrimoine_immobilisation_form
 msgid "Mettre en service"
-msgstr "إدراج في الخدمة"
+msgstr "Put into Service"
 
 #. module: transport_patrimoine
 #: model_terms:ir.ui.view,arch_db:transport_patrimoine.view_patrimoine_immobilisation_form
 msgid "Mettre hors service"
-msgstr "إخراج من الخدمة"
+msgstr "Take out of Service"
 
 #. module: transport_patrimoine
 #: model:ir.model.fields.selection,name:transport_patrimoine.selection__patrimoine_immobilisation__statut__rebut
 #: model:ir.model.fields.selection,name:transport_patrimoine.selection__patrimoine_wizard_rapport__statut_filtre__rebut
 #: model_terms:ir.ui.view,arch_db:transport_patrimoine.view_patrimoine_immobilisation_search
 msgid "Mis en rebut"
-msgstr "مُهمَل / خردة"
+msgstr "Scrapped"
 
 #. module: transport_patrimoine
 #: model:ir.model.fields.selection,name:transport_patrimoine.selection__patrimoine_cession__type_sortie__rebut
 msgid "Mise en rebut / Destruction"
-msgstr "إهمال / تخريد"
+msgstr "Scrapping / Write-off"
 
 #. module: transport_patrimoine
 #: model:patrimoine.categorie,name:transport_patrimoine.cat_materiel_bureau
 msgid "Mobilier et matériel de bureau"
-msgstr "أثاث ومعدات مكتبية"
+msgstr "Furniture & Office Equipment"
 
 #. module: transport_patrimoine
 #: model:ir.model.fields,field_description:transport_patrimoine.field_patrimoine_wizard_calcul_amortissement__mode
 msgid "Mode"
-msgstr "النمط"
+msgstr "Mode"
 
 #. module: transport_patrimoine
 #: model:ir.model.fields,field_description:transport_patrimoine.field_patrimoine_immobilisation__type_entree
 msgid "Mode d'entrée"
-msgstr "طريقة الإدخال"
+msgstr "Entry Mode"
 
 #. module: transport_patrimoine
 #: model_terms:ir.ui.view,arch_db:transport_patrimoine.rapport_acquisitions_template
 msgid "Mode entrée"
-msgstr "طريقة الإدخال"
+msgstr "Entry Mode"
 
 #. module: transport_patrimoine
 #: model:ir.model.fields.selection,name:transport_patrimoine.selection__patrimoine_cession__type_resultat__perte
 msgid "Moins-value / Perte"
-msgstr "ناقص قيمة / خسارة"
+msgstr "Capital Loss"
 
 #. module: transport_patrimoine
 #: model:ir.model.fields,field_description:transport_patrimoine.field_patrimoine_depense_posterieure__montant
 msgid "Montant (DT)"
-msgstr "المبلغ (د.ت)"
+msgstr "Amount (TND)"
 
 #. module: transport_patrimoine
 #: model:ir.model.fields,field_description:transport_patrimoine.field_patrimoine_depreciation__montant
 msgid "Montant dépréciation (DT)"
-msgstr "مبلغ انخفاض القيمة (د.ت)"
+msgstr "Impairment Amount (TND)"
 
 #. module: transport_patrimoine
 #: model:ir.model.fields,field_description:transport_patrimoine.field_patrimoine_cession__motif
@@ -2123,39 +2128,39 @@ msgstr "مبلغ انخفاض القيمة (د.ت)"
 #: model_terms:ir.ui.view,arch_db:transport_patrimoine.rapport_rebuts_template
 #: model_terms:ir.ui.view,arch_db:transport_patrimoine.rapport_transferts_template
 msgid "Motif"
-msgstr "السبب"
+msgstr "Reason"
 
 #. module: transport_patrimoine
 #: model:ir.model.fields,field_description:transport_patrimoine.field_patrimoine_depreciation__motif
 msgid "Motif de dépréciation"
-msgstr "سبب انخفاض القيمة"
+msgstr "Impairment Reason"
 
 #. module: transport_patrimoine
 #: model:ir.model.fields,field_description:transport_patrimoine.field_patrimoine_affectation__motif_retour
 msgid "Motif de retour"
-msgstr "سبب الإرجاع"
+msgstr "Return Reason"
 
 #. module: transport_patrimoine
 #: model:ir.model.fields,field_description:transport_patrimoine.field_patrimoine_mouvement__motif
 msgid "Motif du transfert"
-msgstr "سبب التحويل"
+msgstr "Transfer Reason"
 
 #. module: transport_patrimoine
 #: model:ir.model.fields,field_description:transport_patrimoine.field_patrimoine_immobilisation__motif_hors_service
 msgid "Motif hors exploitation"
-msgstr "سبب التوقف عن الاستغلال"
+msgstr "Out-of-Service Reason"
 
 #. module: transport_patrimoine
 #: model:ir.ui.menu,name:transport_patrimoine.menu_patrimoine_mouvements
 msgid "Mouvements"
-msgstr "التحويلات"
+msgstr "Movements"
 
 #. module: transport_patrimoine
 #: model:ir.model.fields,field_description:transport_patrimoine.field_patrimoine_cession__my_activity_date_deadline
 #: model:ir.model.fields,field_description:transport_patrimoine.field_patrimoine_immobilisation__my_activity_date_deadline
 #: model:ir.model.fields,field_description:transport_patrimoine.field_patrimoine_inventaire__my_activity_date_deadline
 msgid "My Activity Deadline"
-msgstr "موعد نشاطي"
+msgstr "My Activity Deadline"
 
 #. module: transport_patrimoine
 #: model:ir.model.fields,field_description:transport_patrimoine.field_patrimoine_wizard_calcul_amortissement__methode_filtre
@@ -2163,132 +2168,132 @@ msgstr "موعد نشاطي"
 #: model_terms:ir.ui.view,arch_db:transport_patrimoine.rapport_amort_par_sous_categorie_template
 #: model_terms:ir.ui.view,arch_db:transport_patrimoine.rapport_tableau_amortissement_template
 msgid "Méthode"
-msgstr "الطريقة"
+msgstr "Method"
 
 #. module: transport_patrimoine
 #: model:ir.model.fields,field_description:transport_patrimoine.field_patrimoine_sous_categorie__methode_amortissement
 msgid "Méthode (surcharge)"
-msgstr "الطريقة (تجاوز)"
+msgstr "Method (override)"
 
 #. module: transport_patrimoine
 #: model_terms:ir.ui.view,arch_db:transport_patrimoine.view_patrimoine_immobilisation_search
 msgid "Méthode amort."
-msgstr "طريقة الإهلاك"
+msgstr "Deprec. Method"
 
 #. module: transport_patrimoine
 #: model:ir.model.fields,field_description:transport_patrimoine.field_patrimoine_wizard_rapport__methode_amort_filtre
 msgid "Méthode d'amort."
-msgstr "طريقة الإهلاك"
+msgstr "Deprec. Method"
 
 #. module: transport_patrimoine
 #: model:ir.model.fields,field_description:transport_patrimoine.field_patrimoine_immobilisation__methode_amortissement
 #: model:ir.model.fields.selection,name:transport_patrimoine.selection__patrimoine_wizard_rapport__grouper_par__methode
 msgid "Méthode d'amortissement"
-msgstr "طريقة الإهلاك"
+msgstr "Depreciation Method"
 
 #. module: transport_patrimoine
 #: model:ir.model.fields,field_description:transport_patrimoine.field_patrimoine_categorie__methode_amortissement
 msgid "Méthode par défaut"
-msgstr "الطريقة الافتراضية"
+msgstr "Default Method"
 
 #. module: transport_patrimoine
 #: model:ir.model.fields,field_description:transport_patrimoine.field_patrimoine_depense_posterieure__nature
 msgid "Nature"
-msgstr "الطبيعة"
+msgstr "Nature"
 
 #. module: transport_patrimoine
 #: model_terms:ir.ui.view,arch_db:transport_patrimoine.rapport_recap_ventile_template
 #: model_terms:ir.ui.view,arch_db:transport_patrimoine.rapport_resume_categorie_template
 msgid "Nb immo."
-msgstr "عدد الأصول"
+msgstr "No. Assets"
 
 #. module: transport_patrimoine
 #: model:ir.model.fields,field_description:transport_patrimoine.field_patrimoine_categorie__nb_immobilisations
 msgid "Nb immobilisations"
-msgstr "عدد الأصول الثابتة"
+msgstr "No. of Assets"
 
 #. module: transport_patrimoine
 #: model_terms:ir.ui.view,arch_db:transport_patrimoine.rapport_entierement_amortis_template
 msgid "Nb immobilisations entièrement amorties encore en service :"
-msgstr "عدد الأصول الثابتة المستهلَكة كلياً ولا تزال في الخدمة:"
+msgstr "No. of fully depreciated assets still in service:"
 
 #. module: transport_patrimoine
 #: model:ir.model.fields,field_description:transport_patrimoine.field_patrimoine_inventaire__nb_immobilisations
 msgid "Nb immobilisations recensées"
-msgstr "عدد الأصول الثابتة المُحصاة"
+msgstr "No. of Assets Counted"
 
 #. module: transport_patrimoine
 #: model:ir.model.fields.selection,name:transport_patrimoine.selection__patrimoine_cession__type_resultat__neutre
 msgid "Neutre"
-msgstr "محايد"
+msgstr "Neutral"
 
 #. module: transport_patrimoine
 #: model:ir.model.fields,field_description:transport_patrimoine.field_patrimoine_cession__activity_calendar_event_id
 #: model:ir.model.fields,field_description:transport_patrimoine.field_patrimoine_immobilisation__activity_calendar_event_id
 #: model:ir.model.fields,field_description:transport_patrimoine.field_patrimoine_inventaire__activity_calendar_event_id
 msgid "Next Activity Calendar Event"
-msgstr "حدث تقويم النشاط التالي"
+msgstr "Next Activity Calendar Event"
 
 #. module: transport_patrimoine
 #: model:ir.model.fields,field_description:transport_patrimoine.field_patrimoine_cession__activity_date_deadline
 #: model:ir.model.fields,field_description:transport_patrimoine.field_patrimoine_immobilisation__activity_date_deadline
 #: model:ir.model.fields,field_description:transport_patrimoine.field_patrimoine_inventaire__activity_date_deadline
 msgid "Next Activity Deadline"
-msgstr "موعد النشاط التالي"
+msgstr "Next Activity Deadline"
 
 #. module: transport_patrimoine
 #: model:ir.model.fields,field_description:transport_patrimoine.field_patrimoine_cession__activity_summary
 #: model:ir.model.fields,field_description:transport_patrimoine.field_patrimoine_immobilisation__activity_summary
 #: model:ir.model.fields,field_description:transport_patrimoine.field_patrimoine_inventaire__activity_summary
 msgid "Next Activity Summary"
-msgstr "ملخص النشاط التالي"
+msgstr "Next Activity Summary"
 
 #. module: transport_patrimoine
 #: model:ir.model.fields,field_description:transport_patrimoine.field_patrimoine_cession__activity_type_id
 #: model:ir.model.fields,field_description:transport_patrimoine.field_patrimoine_immobilisation__activity_type_id
 #: model:ir.model.fields,field_description:transport_patrimoine.field_patrimoine_inventaire__activity_type_id
 msgid "Next Activity Type"
-msgstr "نوع النشاط التالي"
+msgstr "Next Activity Type"
 
 #. module: transport_patrimoine
 #: model_terms:ir.ui.view,arch_db:transport_patrimoine.rapport_distribution_template
 msgid "Nombre d'affectations actives :"
-msgstr "عدد التخصيصات النشطة:"
+msgstr "Number of active assignments:"
 
 #. module: transport_patrimoine
 #: model_terms:ir.ui.view,arch_db:transport_patrimoine.rapport_acquisitions_template
 msgid "Nombre d'immobilisations acquises :"
-msgstr "عدد الأصول الثابتة المقتناة:"
+msgstr "Number of assets acquired:"
 
 #. module: transport_patrimoine
 #: model:ir.model.fields,help:transport_patrimoine.field_patrimoine_immobilisation__quantite
 msgid "Nombre d'unités pour cet actif"
-msgstr "عدد الوحدات لهذا الأصل"
+msgstr "Number of units for this asset"
 
 #. module: transport_patrimoine
 #: model_terms:ir.ui.view,arch_db:transport_patrimoine.rapport_bordereau_ecarts_template
 msgid "Nombre d'écarts :"
-msgstr "عدد الفوارق:"
+msgstr "Number of discrepancies:"
 
 #. module: transport_patrimoine
 #: model_terms:ir.ui.view,arch_db:transport_patrimoine.rapport_rebuts_template
 msgid "Nombre de mises en rebut :"
-msgstr "عدد الإهمالات:"
+msgstr "Number of scrappings:"
 
 #. module: transport_patrimoine
 #: model_terms:ir.ui.view,arch_db:transport_patrimoine.rapport_transferts_template
 msgid "Nombre de transferts :"
-msgstr "عدد التحويلات:"
+msgstr "Number of transfers:"
 
 #. module: transport_patrimoine
 #: model_terms:ir.ui.view,arch_db:transport_patrimoine.view_patrimoine_immobilisation_search
 msgid "Non distribués"
-msgstr "غير موزَّعة"
+msgstr "Unassigned"
 
 #. module: transport_patrimoine
 #: model:ir.model.fields.selection,name:transport_patrimoine.selection__patrimoine_inventaire_ligne__etat_constate__non_inventorie
 msgid "Non inventorié"
-msgstr "غير مجرود"
+msgstr "Not Inventoried"
 
 #. module: transport_patrimoine
 #: model:ir.model.fields,field_description:transport_patrimoine.field_patrimoine_categorie__notes
@@ -2296,12 +2301,12 @@ msgstr "غير مجرود"
 #: model:ir.model.fields,field_description:transport_patrimoine.field_patrimoine_sous_categorie__notes
 #: model_terms:ir.ui.view,arch_db:transport_patrimoine.view_patrimoine_immobilisation_form
 msgid "Notes"
-msgstr "ملاحظات"
+msgstr "Notes"
 
 #. module: transport_patrimoine
 #: model_terms:ir.ui.view,arch_db:transport_patrimoine.view_patrimoine_categorie_form
 msgid "Notes…"
-msgstr "ملاحظات…"
+msgstr "Notes…"
 
 #. module: transport_patrimoine
 #: model:ir.model.fields,field_description:transport_patrimoine.field_patrimoine_affectation__message_needaction_counter
@@ -2312,7 +2317,7 @@ msgstr "ملاحظات…"
 #: model:ir.model.fields,field_description:transport_patrimoine.field_patrimoine_inventaire__message_needaction_counter
 #: model:ir.model.fields,field_description:transport_patrimoine.field_patrimoine_mouvement__message_needaction_counter
 msgid "Number of Actions"
-msgstr "عدد الإجراءات"
+msgstr "Number of Actions"
 
 #. module: transport_patrimoine
 #: model:ir.model.fields,field_description:transport_patrimoine.field_patrimoine_affectation__message_has_error_counter
@@ -2323,7 +2328,7 @@ msgstr "عدد الإجراءات"
 #: model:ir.model.fields,field_description:transport_patrimoine.field_patrimoine_inventaire__message_has_error_counter
 #: model:ir.model.fields,field_description:transport_patrimoine.field_patrimoine_mouvement__message_has_error_counter
 msgid "Number of errors"
-msgstr "عدد الأخطاء"
+msgstr "Number of errors"
 
 #. module: transport_patrimoine
 #: model:ir.model.fields,help:transport_patrimoine.field_patrimoine_affectation__message_needaction_counter
@@ -2334,7 +2339,7 @@ msgstr "عدد الأخطاء"
 #: model:ir.model.fields,help:transport_patrimoine.field_patrimoine_inventaire__message_needaction_counter
 #: model:ir.model.fields,help:transport_patrimoine.field_patrimoine_mouvement__message_needaction_counter
 msgid "Number of messages requiring action"
-msgstr "عدد الرسائل التي تتطلب إجراءً"
+msgstr "Number of messages requiring action"
 
 #. module: transport_patrimoine
 #: model:ir.model.fields,help:transport_patrimoine.field_patrimoine_affectation__message_has_error_counter
@@ -2345,23 +2350,23 @@ msgstr "عدد الرسائل التي تتطلب إجراءً"
 #: model:ir.model.fields,help:transport_patrimoine.field_patrimoine_inventaire__message_has_error_counter
 #: model:ir.model.fields,help:transport_patrimoine.field_patrimoine_mouvement__message_has_error_counter
 msgid "Number of messages with delivery error"
-msgstr "عدد الرسائل ذات خطأ في الإرسال"
+msgstr "Number of messages with delivery error"
 
 #. module: transport_patrimoine
 #: model:ir.model.fields,field_description:transport_patrimoine.field_patrimoine_affectation__name
 #: model_terms:ir.ui.view,arch_db:transport_patrimoine.rapport_distribution_template
 msgid "N° Affectation"
-msgstr "رقم التخصيص"
+msgstr "Assignment No."
 
 #. module: transport_patrimoine
 #: model:ir.model.fields,field_description:transport_patrimoine.field_patrimoine_immobilisation__bon_commande_ref
 msgid "N° Bon de commande"
-msgstr "رقم أمر الشراء"
+msgstr "Purchase Order No."
 
 #. module: transport_patrimoine
 #: model:ir.model.fields,field_description:transport_patrimoine.field_patrimoine_immobilisation__facture_ref
 msgid "N° Facture d'achat"
-msgstr "رقم فاتورة الشراء"
+msgstr "Purchase Invoice No."
 
 #. module: transport_patrimoine
 #: model_terms:ir.ui.view,arch_db:transport_patrimoine.rapport_acquisitions_template
@@ -2377,7 +2382,7 @@ msgstr "رقم فاتورة الشراء"
 #: model_terms:ir.ui.view,arch_db:transport_patrimoine.rapport_tableau_par_type_template
 #: model_terms:ir.ui.view,arch_db:transport_patrimoine.rapport_transferts_template
 msgid "N° Inv."
-msgstr "رقم الجرد"
+msgstr "Inv. No."
 
 #. module: transport_patrimoine
 #: model:ir.model.fields,field_description:transport_patrimoine.field_patrimoine_affectation__numero_inventaire
@@ -2388,438 +2393,438 @@ msgstr "رقم الجرد"
 #: model:ir.model.fields,field_description:transport_patrimoine.field_patrimoine_mouvement__numero_inventaire
 #: model_terms:ir.ui.view,arch_db:transport_patrimoine.rapport_rebuts_template
 msgid "N° Inventaire"
-msgstr "رقم الجرد"
+msgstr "Inventory No."
 
 #. module: transport_patrimoine
 #: model_terms:ir.ui.view,arch_db:transport_patrimoine.view_patrimoine_immobilisation_form
 msgid "N° Inventaire :"
-msgstr "رقم الجرد:"
+msgstr "Inventory No.:"
 
 #. module: transport_patrimoine
 #: model:ir.model.fields,field_description:transport_patrimoine.field_patrimoine_cession__name
 #: model_terms:ir.ui.view,arch_db:transport_patrimoine.rapport_cessions_template
 #: model_terms:ir.ui.view,arch_db:transport_patrimoine.rapport_rebuts_template
 msgid "N° Sortie"
-msgstr "رقم الإخراج"
+msgstr "Disposal No."
 
 #. module: transport_patrimoine
 #: model:ir.model.fields,field_description:transport_patrimoine.field_patrimoine_immobilisation__numero_serie
 msgid "N° Série / Immatriculation"
-msgstr "الرقم التسلسلي / الترقيم"
+msgstr "Serial No. / Registration"
 
 #. module: transport_patrimoine
 #: model:ir.model.fields,field_description:transport_patrimoine.field_patrimoine_mouvement__name
 #: model_terms:ir.ui.view,arch_db:transport_patrimoine.rapport_transferts_template
 msgid "N° Transfert"
-msgstr "رقم التحويل"
+msgstr "Transfer No."
 
 #. module: transport_patrimoine
 #: model:ir.model.fields,field_description:transport_patrimoine.field_patrimoine_inventaire_ligne__observateurs
 msgid "Observateurs / Signataires"
-msgstr "المراقبون / الموقِّعون"
+msgstr "Observers / Signatories"
 
 #. module: transport_patrimoine
 #: model:ir.model.fields,field_description:transport_patrimoine.field_patrimoine_affectation__notes
 #: model:ir.model.fields,field_description:transport_patrimoine.field_patrimoine_cession__notes
 #: model:ir.model.fields,field_description:transport_patrimoine.field_patrimoine_mouvement__notes
 msgid "Observations"
-msgstr "ملاحظات"
+msgstr "Observations"
 
 #. module: transport_patrimoine
 #: model:ir.model.fields,field_description:transport_patrimoine.field_patrimoine_inventaire__notes
 msgid "Observations générales"
-msgstr "ملاحظات عامة"
+msgstr "General Observations"
 
 #. module: transport_patrimoine
 #: model_terms:ir.ui.view,arch_db:transport_patrimoine.view_patrimoine_inventaire_form
 msgid "Observations générales…"
-msgstr "ملاحظات عامة…"
+msgstr "General observations…"
 
 #. module: transport_patrimoine
 #: model_terms:ir.ui.view,arch_db:transport_patrimoine.view_patrimoine_cession_form
 msgid "Observations…"
-msgstr "ملاحظات…"
+msgstr "Observations…"
 
 #. module: transport_patrimoine
 #: model_terms:ir.ui.view,arch_db:transport_patrimoine.view_wizard_rapport_patrimoine_form
 msgid "Options avancées"
-msgstr "خيارات متقدمة"
+msgstr "Advanced Options"
 
 #. module: transport_patrimoine
 #: model_terms:ir.ui.view,arch_db:transport_patrimoine.rapport_transferts_template
 #: model_terms:ir.ui.view,arch_db:transport_patrimoine.view_patrimoine_immobilisation_form
 #: model_terms:ir.ui.view,arch_db:transport_patrimoine.view_patrimoine_mouvement_list
 msgid "Origine"
-msgstr "الأصل"
+msgstr "Origin"
 
 #. module: transport_patrimoine
 #: model:ir.model.fields.selection,name:transport_patrimoine.selection__patrimoine_inventaire__state__ouvert
 msgid "Ouvert"
-msgstr "مفتوح"
+msgstr "Open"
 
 #. module: transport_patrimoine
 #: model_terms:ir.ui.view,arch_db:transport_patrimoine.view_patrimoine_immobilisation_form
 #: model_terms:ir.ui.view,arch_db:transport_patrimoine.view_patrimoine_inventaire_form
 #: model_terms:ir.ui.view,arch_db:transport_patrimoine.view_wizard_calcul_amortissement_form
 msgid "Paramètres"
-msgstr "المعاملات"
+msgstr "Parameters"
 
 #. module: transport_patrimoine
 #: model:ir.ui.menu,name:transport_patrimoine.menu_patrimoine_root
 msgid "Patrimoine"
-msgstr "الأصول الثابتة"
+msgstr "Assets"
 
 #. module: transport_patrimoine
 #: model:res.groups.privilege,name:transport_patrimoine.privilege_transport_patrimoine
 msgid "Patrimoine & Immobilisations"
-msgstr "الأصول الثابتة والمعدات"
+msgstr "Assets & Fixed Assets"
 
 #. module: transport_patrimoine
 #: model:ir.actions.server,name:transport_patrimoine.cron_alerte_amortis_ir_actions_server
 msgid "Patrimoine — Alerte immobilisations entièrement amorties"
-msgstr "الأصول الثابتة — تنبيه: أصول مستهلَكة كلياً"
+msgstr "Assets — Fully Depreciated Assets Alert"
 
 #. module: transport_patrimoine
 #: model:ir.actions.server,name:transport_patrimoine.cron_comptabiliser_dotations_periode_ir_actions_server
 msgid ""
 "Patrimoine — Comptabiliser automatiquement les dotations aux amortissements"
-msgstr "الأصول الثابتة — التسجيل التلقائي لمخصصات الإهلاك"
+msgstr "Assets — Automatically Post Depreciation Charges"
 
 #. module: transport_patrimoine
 #: model:ir.actions.server,name:transport_patrimoine.cron_generer_tableaux_amortissement_ir_actions_server
 msgid "Patrimoine — Générer les tableaux d'amortissement"
-msgstr "الأصول الثابتة — توليد جداول الإهلاك"
+msgstr "Assets — Generate Depreciation Schedules"
 
 #. module: transport_patrimoine
 #: model:ir.actions.server,name:transport_patrimoine.cron_alerte_inventaire_ir_actions_server
 msgid "Patrimoine — Rappel inventaire annuel obligatoire"
-msgstr "الأصول الثابتة — تذكير بالجرد السنوي الإلزامي"
+msgstr "Assets — Mandatory Annual Inventory Reminder"
 
 #. module: transport_patrimoine
 #: model_terms:ir.ui.view,arch_db:transport_patrimoine.rapport_rebuts_template
 msgid "Perte (DT)"
-msgstr "الخسارة (د.ت)"
+msgstr "Loss (TND)"
 
 #. module: transport_patrimoine
 #: model_terms:ir.ui.view,arch_db:transport_patrimoine.view_patrimoine_cession_form
 msgid "Perte sur sortie :"
-msgstr "الخسارة عند الإخراج:"
+msgstr "Loss on disposal:"
 
 #. module: transport_patrimoine
 #: model:res.groups,comment:transport_patrimoine.patrimoine_group_gestionnaire
 msgid ""
 "Peut créer et gérer les immobilisations, amortissements, inventaires et "
 "cessions."
-msgstr "يمكنه إنشاء وإدارة الأصول الثابتة والاستهلاكات والجرودات والتفويتات."
+msgstr "Can create and manage fixed assets, depreciation, inventories and disposals."
 
 #. module: transport_patrimoine
 #: model:ir.model.fields.selection,name:transport_patrimoine.selection__patrimoine_cession__type_resultat__gain
 msgid "Plus-value"
-msgstr "فائض قيمة"
+msgstr "Capital Gain"
 
 #. module: transport_patrimoine
 #: model_terms:ir.ui.view,arch_db:transport_patrimoine.view_patrimoine_cession_form
 msgid "Plus-value :"
-msgstr "فائض القيمة:"
+msgstr "Capital Gain:"
 
 #. module: transport_patrimoine
 #: model_terms:ir.ui.view,arch_db:transport_patrimoine.rapport_cession_standalone_template
 msgid "Plus/Moins-value"
-msgstr "فائض / خسارة القيمة"
+msgstr "Gain / Loss"
 
 #. module: transport_patrimoine
 #: model:ir.model.fields,field_description:transport_patrimoine.field_patrimoine_cession__plus_moins_value
 msgid "Plus/Moins-value (DT)"
-msgstr "فائض / خسارة القيمة (د.ت)"
+msgstr "Gain / Loss (TND)"
 
 #. module: transport_patrimoine
 #: model:patrimoine.sous.categorie,name:transport_patrimoine.sous_cat_postes_travail
 msgid "Postes de travail (PC / tablettes)"
-msgstr "محطات العمل (حواسيب / أجهزة لوحية)"
+msgstr "Workstations (PCs / Tablets)"
 
 #. module: transport_patrimoine
 #: model:ir.model.fields,field_description:transport_patrimoine.field_patrimoine_affectation__est_premiere_affectation
 msgid "Première affectation"
-msgstr "التخصيص الأول"
+msgstr "First Assignment"
 
 #. module: transport_patrimoine
 #: model_terms:ir.ui.view,arch_db:transport_patrimoine.rapport_cessions_template
 msgid "Prix cession"
-msgstr "سعر التفويت"
+msgstr "Sale Price"
 
 #. module: transport_patrimoine
 #: model_terms:ir.ui.view,arch_db:transport_patrimoine.rapport_cession_standalone_template
 msgid "Prix de cession"
-msgstr "سعر التفويت"
+msgstr "Sale Price"
 
 #. module: transport_patrimoine
 #: model:ir.model.fields,field_description:transport_patrimoine.field_patrimoine_cession__prix_cession
 msgid "Prix de cession (DT)"
-msgstr "سعر التفويت (د.ت)"
+msgstr "Sale Price (TND)"
 
 #. module: transport_patrimoine
 #: model_terms:ir.ui.view,arch_db:transport_patrimoine.view_patrimoine_immobilisation_search
 msgid "Projet"
-msgstr "المشروع"
+msgstr "Project"
 
 #. module: transport_patrimoine
 #: model:ir.model.fields,field_description:transport_patrimoine.field_patrimoine_immobilisation__projet
 #: model:ir.model.fields,field_description:transport_patrimoine.field_patrimoine_wizard_rapport__projet_filtre
 msgid "Projet / Programme"
-msgstr "المشروع / البرنامج"
+msgstr "Project / Programme"
 
 #. module: transport_patrimoine
 #: model_terms:ir.ui.view,arch_db:transport_patrimoine.rapport_amort_par_projet_template
 msgid "Projet :"
-msgstr "المشروع:"
+msgstr "Project:"
 
 #. module: transport_patrimoine
 #: model:ir.model.fields.selection,name:transport_patrimoine.selection__patrimoine_amortissement_ligne__state__brouillon
 msgid "Prévisionnel"
-msgstr "تقديري"
+msgstr "Forecasted"
 
 #. module: transport_patrimoine
 #: model_terms:ir.ui.view,arch_db:transport_patrimoine.view_patrimoine_amortissement_search
 msgid "Prévisionnels"
-msgstr "تقديرية"
+msgstr "Forecasted"
 
 #. module: transport_patrimoine
 #: model_terms:ir.ui.view,arch_db:transport_patrimoine.rapport_variation_template
 msgid "Période : du"
-msgstr "الفترة: من"
+msgstr "Period: from"
 
 #. module: transport_patrimoine
 #: model_terms:ir.ui.view,arch_db:transport_patrimoine.view_wizard_rapport_patrimoine_form
 msgid "Période et filtres"
-msgstr "الفترة والمرشِّحات"
+msgstr "Period & Filters"
 
 #. module: transport_patrimoine
 #: model_terms:ir.ui.view,arch_db:transport_patrimoine.rapport_distribution_template
 msgid "Qté"
-msgstr "الكمية"
+msgstr "Qty"
 
 #. module: transport_patrimoine
 #: model:ir.model.fields,field_description:transport_patrimoine.field_patrimoine_inventaire_ligne__quantite_constatee
 #: model_terms:ir.ui.view,arch_db:transport_patrimoine.rapport_bordereau_ecarts_template
 #: model_terms:ir.ui.view,arch_db:transport_patrimoine.rapport_bordereau_inventaire_template
 msgid "Qté constatée"
-msgstr "الكمية المُلاحَظة"
+msgstr "Actual Qty"
 
 #. module: transport_patrimoine
 #: model_terms:ir.ui.view,arch_db:transport_patrimoine.rapport_bordereau_ecarts_template
 #: model_terms:ir.ui.view,arch_db:transport_patrimoine.rapport_bordereau_inventaire_template
 msgid "Qté théor."
-msgstr "الكمية النظرية"
+msgstr "Theor. Qty"
 
 #. module: transport_patrimoine
 #: model:ir.model.fields,field_description:transport_patrimoine.field_patrimoine_inventaire_ligne__quantite_theorique
 msgid "Qté théorique"
-msgstr "الكمية النظرية"
+msgstr "Theoretical Qty"
 
 #. module: transport_patrimoine
 #: model:ir.model.fields,field_description:transport_patrimoine.field_patrimoine_immobilisation__quantite
 msgid "Quantité"
-msgstr "الكمية"
+msgstr "Quantity"
 
 #. module: transport_patrimoine
 #: model:ir.model.fields,field_description:transport_patrimoine.field_patrimoine_affectation__quantite
 #: model:ir.model.fields,field_description:transport_patrimoine.field_patrimoine_immobilisation__quantite_distribuee
 msgid "Quantité distribuée"
-msgstr "الكمية الموزَّعة"
+msgstr "Assigned Quantity"
 
 #. module: transport_patrimoine
 #: model:ir.model.fields,field_description:transport_patrimoine.field_patrimoine_immobilisation__quantite_non_distribuee
 msgid "Quantité non distribuée"
-msgstr "الكمية غير الموزَّعة"
+msgstr "Unassigned Quantity"
 
 #. module: transport_patrimoine
 #: model:ir.model,name:transport_patrimoine.model_patrimoine_wizard_rapport
 msgid "Rapport Patrimoine / Immobilisations"
-msgstr "تقرير الأصول الثابتة"
+msgstr "Assets / Fixed Assets Report"
 
 #. module: transport_patrimoine
 #: model:ir.ui.menu,name:transport_patrimoine.menu_patrimoine_rapports
 msgid "Rapports"
-msgstr "التقارير"
+msgstr "Reports"
 
 #. module: transport_patrimoine
 #: model:ir.actions.act_window,name:transport_patrimoine.action_wizard_rapport_patrimoine
 msgid "Rapports Patrimoine"
-msgstr "تقارير الأصول الثابتة"
+msgstr "Asset Reports"
 
 #. module: transport_patrimoine
 #: model_terms:ir.ui.view,arch_db:transport_patrimoine.view_wizard_rapport_patrimoine_form
 msgid "Rapports Patrimoine / Immobilisations"
-msgstr "تقارير الأصول الثابتة / الأصول الثابتة"
+msgstr "Assets / Fixed Assets Reports"
 
 #. module: transport_patrimoine
 #: model_terms:ir.ui.view,arch_db:transport_patrimoine.view_patrimoine_immobilisation_form
 msgid "Recalculer amortissement"
-msgstr "إعادة حساب الإهلاك"
+msgstr "Recompute Depreciation"
 
 #. module: transport_patrimoine
 #: model_terms:ir.ui.view,arch_db:transport_patrimoine.view_patrimoine_immobilisation_search
 msgid "Rechercher une immobilisation"
-msgstr "البحث عن أصل ثابت"
+msgstr "Search for a fixed asset"
 
 #. module: transport_patrimoine
 #: model:ir.model.fields,field_description:transport_patrimoine.field_patrimoine_amortissement_ligne__notes
 #: model:ir.model.fields,field_description:transport_patrimoine.field_patrimoine_inventaire_ligne__remarques
 #: model_terms:ir.ui.view,arch_db:transport_patrimoine.rapport_bordereau_inventaire_template
 msgid "Remarques"
-msgstr "ملاحظات"
+msgstr "Remarks"
 
 #. module: transport_patrimoine
 #: model_terms:ir.ui.view,arch_db:transport_patrimoine.view_patrimoine_immobilisation_form
 msgid "Remettre en service"
-msgstr "إعادة إدراج في الخدمة"
+msgstr "Put Back into Service"
 
 #. module: transport_patrimoine
 #: model_terms:ir.ui.view,arch_db:transport_patrimoine.rapport_bon_sortie_template
 msgid "Remis par"
-msgstr "سلَّمه"
+msgstr "Issued by"
 
 #. module: transport_patrimoine
 #: model_terms:ir.ui.view,arch_db:transport_patrimoine.rapport_bon_sortie_affectation_template
 msgid "Remis par (magasinier)"
-msgstr "سلَّمه (أمين المستودع)"
+msgstr "Issued by (storekeeper)"
 
 #. module: transport_patrimoine
 #: model:ir.model.fields.selection,name:transport_patrimoine.selection__patrimoine_depense_posterieure__nature__remplacement
 msgid "Remplacement de composant"
-msgstr "استبدال مكوّن"
+msgstr "Component Replacement"
 
 #. module: transport_patrimoine
 #: model_terms:ir.ui.view,arch_db:transport_patrimoine.view_patrimoine_emplacement_form
 msgid "Responsabilité"
-msgstr "المسؤولية"
+msgstr "Responsibility"
 
 #. module: transport_patrimoine
 #: model:res.groups,name:transport_patrimoine.patrimoine_group_manager
 #: model_terms:ir.ui.view,arch_db:transport_patrimoine.rapport_transferts_template
 #: model_terms:ir.ui.view,arch_db:transport_patrimoine.view_patrimoine_immobilisation_form
 msgid "Responsable"
-msgstr "المسؤول"
+msgstr "Responsible"
 
 #. module: transport_patrimoine
 #: model:ir.model.fields,field_description:transport_patrimoine.field_patrimoine_immobilisation__responsable_id
 msgid "Responsable / Affectataire"
-msgstr "المسؤول / المستفيد"
+msgstr "Responsible / Assignee"
 
 #. module: transport_patrimoine
 #: model:ir.model.fields,field_description:transport_patrimoine.field_patrimoine_mouvement__responsable_destination_id
 msgid "Responsable entrant"
-msgstr "المسؤول الجديد"
+msgstr "Incoming Responsible"
 
 #. module: transport_patrimoine
 #: model:ir.model.fields,field_description:transport_patrimoine.field_patrimoine_inventaire__responsable_id
 #: model_terms:ir.ui.view,arch_db:transport_patrimoine.rapport_bordereau_inventaire_template
 msgid "Responsable inventaire"
-msgstr "مسؤول الجرد"
+msgstr "Inventory Responsible"
 
 #. module: transport_patrimoine
 #: model_terms:ir.ui.view,arch_db:transport_patrimoine.rapport_cession_standalone_template
 msgid "Responsable patrimoine"
-msgstr "مسؤول الأصول الثابتة"
+msgstr "Asset Manager"
 
 #. module: transport_patrimoine
 #: model:ir.model.fields,field_description:transport_patrimoine.field_patrimoine_emplacement__responsable_id
 msgid "Responsable site"
-msgstr "مسؤول الموقع"
+msgstr "Site Responsible"
 
 #. module: transport_patrimoine
 #: model:ir.model.fields,field_description:transport_patrimoine.field_patrimoine_mouvement__responsable_origine_id
 msgid "Responsable sortant"
-msgstr "المسؤول السابق"
+msgstr "Outgoing Responsible"
 
 #. module: transport_patrimoine
 #: model:ir.model.fields,field_description:transport_patrimoine.field_patrimoine_cession__activity_user_id
 #: model:ir.model.fields,field_description:transport_patrimoine.field_patrimoine_immobilisation__activity_user_id
 #: model:ir.model.fields,field_description:transport_patrimoine.field_patrimoine_inventaire__activity_user_id
 msgid "Responsible User"
-msgstr "المستخدم المسؤول"
+msgstr "Responsible User"
 
 #. module: transport_patrimoine
 #: model_terms:ir.ui.view,arch_db:transport_patrimoine.view_patrimoine_immobilisation_form
 msgid "Retirer"
-msgstr "سحب"
+msgstr "Remove"
 
 #. module: transport_patrimoine
 #: model_terms:ir.ui.view,arch_db:transport_patrimoine.view_patrimoine_affectation_form
 msgid "Retirer l'affectation"
-msgstr "سحب التخصيص"
+msgstr "Remove Assignment"
 
 #. module: transport_patrimoine
 #: model:ir.model.fields.selection,name:transport_patrimoine.selection__patrimoine_affectation__state__retiree
 msgid "Retirée"
-msgstr "مسحوبة"
+msgstr "Removed"
 
 #. module: transport_patrimoine
 #: model:ir.model.fields.selection,name:transport_patrimoine.selection__patrimoine_inventaire_ligne__etat_constate__retrouve
 msgid "Retrouvé"
-msgstr "تم العثور عليه"
+msgstr "Found"
 
 #. module: transport_patrimoine
 #: model:ir.model.fields,field_description:transport_patrimoine.field_patrimoine_inventaire__nb_retrouvees
 msgid "Retrouvées"
-msgstr "تم العثور عليها"
+msgstr "Found"
 
 #. module: transport_patrimoine
 #: model_terms:ir.ui.view,arch_db:transport_patrimoine.rapport_bon_sortie_template
 msgid "Reçu par"
-msgstr "استلمه"
+msgstr "Received by"
 
 #. module: transport_patrimoine
 #: model_terms:ir.ui.view,arch_db:transport_patrimoine.rapport_bon_sortie_affectation_template
 msgid "Reçu par (bénéficiaire)"
-msgstr "استلمه (المستفيد)"
+msgstr "Received by (recipient)"
 
 #. module: transport_patrimoine
 #: model_terms:ir.ui.view,arch_db:transport_patrimoine.rapport_resume_categorie_template
 msgid "RÉSUMÉ DES AMORTISSEMENTS PAR CATÉGORIE"
-msgstr "ملخص الاستهلاكات حسب الصنف"
+msgstr "DEPRECIATION SUMMARY BY CATEGORY"
 
 #. module: transport_patrimoine
 #: model:ir.model.fields,field_description:transport_patrimoine.field_patrimoine_immobilisation__reference
 msgid "Référence interne"
-msgstr "المرجع الداخلي"
+msgstr "Internal Reference"
 
 #. module: transport_patrimoine
 #: model_terms:ir.ui.view,arch_db:transport_patrimoine.rapport_bordereau_ecarts_template
 msgid "Régularisation stock"
-msgstr "تسوية المخزون"
+msgstr "Stock Adjustment"
 
 #. module: transport_patrimoine
 #: model_terms:ir.ui.view,arch_db:transport_patrimoine.view_patrimoine_immobilisation_graph
 msgid "Répartition du patrimoine"
-msgstr "توزيع الأصول الثابتة"
+msgstr "Asset Distribution"
 
 #. module: transport_patrimoine
 #: model:ir.model.fields,field_description:transport_patrimoine.field_patrimoine_cession__type_resultat
 #: model_terms:ir.ui.view,arch_db:transport_patrimoine.rapport_cessions_template
 msgid "Résultat"
-msgstr "النتيجة"
+msgstr "Result"
 
 #. module: transport_patrimoine
 #: model_terms:ir.ui.view,arch_db:transport_patrimoine.view_wizard_calcul_amortissement_form
 msgid "Résultat simulation"
-msgstr "نتيجة المحاكاة"
+msgstr "Simulation Result"
 
 #. module: transport_patrimoine
 #: model:ir.actions.report,name:transport_patrimoine.action_rapport_resume_categorie
 msgid "Résumé amortissements par catégorie"
-msgstr "ملخص الاستهلاكات حسب الصنف"
+msgstr "Depreciation Summary by Category"
 
 #. module: transport_patrimoine
 #: model:ir.model.fields.selection,name:transport_patrimoine.selection__patrimoine_wizard_rapport__type_rapport__tableau_resume_cat
 msgid "Résumé par catégorie"
-msgstr "ملخص حسب الصنف"
+msgstr "Summary by Category"
 
 #. module: transport_patrimoine
 #: model:ir.actions.report,name:transport_patrimoine.action_rapport_resume_groupe
 #: model:ir.model.fields.selection,name:transport_patrimoine.selection__patrimoine_wizard_rapport__type_rapport__tableau_resume_groupe
 msgid "Résumé par groupe"
-msgstr "ملخص حسب المجموعة"
+msgstr "Summary by Group"
 
 #. module: transport_patrimoine
 #: model:ir.model.fields,field_description:transport_patrimoine.field_patrimoine_affectation__message_has_sms_error
@@ -2830,96 +2835,96 @@ msgstr "ملخص حسب المجموعة"
 #: model:ir.model.fields,field_description:transport_patrimoine.field_patrimoine_inventaire__message_has_sms_error
 #: model:ir.model.fields,field_description:transport_patrimoine.field_patrimoine_mouvement__message_has_sms_error
 msgid "SMS Delivery error"
-msgstr "خطأ في إرسال الرسالة النصية"
+msgstr "SMS Delivery error"
 
 #. module: transport_patrimoine
 #: model:patrimoine.sous.categorie,name:transport_patrimoine.sous_cat_serveurs
 msgid "Serveurs et équipements réseau"
-msgstr "خوادم ومعدات الشبكة"
+msgstr "Servers & Network Equipment"
 
 #. module: transport_patrimoine
 #: model:ir.ui.menu,name:transport_patrimoine.menu_patrimoine_inventaires
 msgid "Sessions d'inventaire"
-msgstr "جلسات الجرد"
+msgstr "Inventory Sessions"
 
 #. module: transport_patrimoine
 #: model:ir.model.fields,help:transport_patrimoine.field_patrimoine_affectation__est_premiere_affectation
 msgid "Si coché, un bon de sortie du magasin sera édité"
-msgstr "إذا كان محدداً، سيُطبع وصل خروج من المستودع"
+msgstr "If checked, a warehouse issue slip will be generated"
 
 #. module: transport_patrimoine
 #: model:ir.model.fields.selection,name:transport_patrimoine.selection__patrimoine_wizard_calcul_amortissement__mode__simulation
 msgid "Simulation (sans comptabilisation)"
-msgstr "محاكاة (بدون تسجيل محاسبي)"
+msgstr "Simulation (without posting)"
 
 #. module: transport_patrimoine
 #: model:ir.model.fields,field_description:transport_patrimoine.field_patrimoine_wizard_calcul_amortissement__simulation_faite
 msgid "Simulation Faite"
-msgstr "المحاكاة مُنجَزة"
+msgstr "Simulation Done"
 
 #. module: transport_patrimoine
 #: model_terms:ir.ui.view,arch_db:transport_patrimoine.view_wizard_calcul_amortissement_form
 msgid "Simuler"
-msgstr "محاكاة"
+msgstr "Simulate"
 
 #. module: transport_patrimoine
 #: model:ir.model.fields,field_description:transport_patrimoine.field_patrimoine_emplacement__site
 msgid "Site / Agence"
-msgstr "الموقع / الوكالة"
+msgstr "Site / Branch"
 
 #. module: transport_patrimoine
 #: model:ir.model.fields,field_description:transport_patrimoine.field_patrimoine_inventaire__site_filtre
 msgid "Site filtré"
-msgstr "الموقع المصفَّى"
+msgstr "Filtered Site"
 
 #. module: transport_patrimoine
 #: model_terms:ir.ui.view,arch_db:transport_patrimoine.view_patrimoine_immobilisation_form
 msgid "Situation comptable"
-msgstr "الوضعية المحاسبية"
+msgstr "Accounting Position"
 
 #. module: transport_patrimoine
 #: model_terms:ir.ui.view,arch_db:transport_patrimoine.view_patrimoine_cession_form
 msgid "Sortie d'immobilisation"
-msgstr "إخراج الأصل الثابت"
+msgstr "Asset Disposal"
 
 #. module: transport_patrimoine
 #: model_terms:ir.ui.view,arch_db:transport_patrimoine.rapport_bordereau_ecarts_template
 msgid "Sortie pour perte"
-msgstr "إخراج بسبب خسارة"
+msgstr "Write-off for Loss"
 
 #. module: transport_patrimoine
 #: model:ir.model.fields,field_description:transport_patrimoine.field_patrimoine_immobilisation__sous_categorie_id
 #: model:ir.model.fields.selection,name:transport_patrimoine.selection__patrimoine_wizard_rapport__grouper_par__sous_categorie
 #: model_terms:ir.ui.view,arch_db:transport_patrimoine.view_patrimoine_immobilisation_search
 msgid "Sous-catégorie"
-msgstr "الصنف الفرعي"
+msgstr "Sub-category"
 
 #. module: transport_patrimoine
 #: model:ir.model.fields,field_description:transport_patrimoine.field_patrimoine_wizard_rapport__sous_categorie_id
 msgid "Sous-catégorie (optionnel)"
-msgstr "الصنف الفرعي (اختياري)"
+msgstr "Sub-category (optional)"
 
 #. module: transport_patrimoine
 #: model:ir.model,name:transport_patrimoine.model_patrimoine_sous_categorie
 msgid "Sous-catégorie d'immobilisation"
-msgstr "الصنف الفرعي للأصل الثابت"
+msgstr "Fixed Asset Sub-category"
 
 #. module: transport_patrimoine
 #: model:ir.model.fields,field_description:transport_patrimoine.field_patrimoine_categorie__sous_categorie_ids
 #: model_terms:ir.ui.view,arch_db:transport_patrimoine.view_patrimoine_categorie_form
 msgid "Sous-catégories"
-msgstr "الأصناف الفرعية"
+msgstr "Sub-categories"
 
 #. module: transport_patrimoine
 #: model_terms:ir.ui.view,arch_db:transport_patrimoine.rapport_amort_par_sous_categorie_template
 #: model_terms:ir.ui.view,arch_db:transport_patrimoine.rapport_tableau_par_type_template
 msgid "Sous-total"
-msgstr "المجموع الجزئي"
+msgstr "Subtotal"
 
 #. module: transport_patrimoine
 #: model_terms:ir.ui.view,arch_db:transport_patrimoine.rapport_amort_par_projet_template
 msgid "Sous-total projet «"
-msgstr "المجموع الجزئي للمشروع «"
+msgstr "Project subtotal «"
 
 #. module: transport_patrimoine
 #: model:ir.model.fields,help:transport_patrimoine.field_patrimoine_cession__activity_state
@@ -2931,94 +2936,94 @@ msgid ""
 "Today: Activity date is today\n"
 "Planned: Future activities."
 msgstr ""
-"الحالة بناءً على الأنشطة\n"
-"متأخر: تجاوز الموعد النهائي\n"
-"اليوم: النشاط مجدوَل اليوم\n"
-"مخطط: أنشطة مستقبلية."
+"Status based on activities\n"
+"Overdue: Due date is already passed\n"
+"Today: Activity date is today\n"
+"Planned: Future activities."
 
 #. module: transport_patrimoine
 #: model:ir.model.fields,field_description:transport_patrimoine.field_patrimoine_immobilisation__statut
 #: model:ir.model.fields,field_description:transport_patrimoine.field_patrimoine_wizard_rapport__statut_filtre
 #: model_terms:ir.ui.view,arch_db:transport_patrimoine.view_patrimoine_immobilisation_search
 msgid "Statut"
-msgstr "الحالة"
+msgstr "Status"
 
 #. module: transport_patrimoine
 #: model_terms:ir.ui.view,arch_db:transport_patrimoine.rapport_tableau_amortissement_template
 msgid "TABLEAU D'AMORTISSEMENT DES IMMOBILISATIONS"
-msgstr "جدول استهلاك الأصول الثابتة"
+msgstr "FIXED ASSET DEPRECIATION SCHEDULE"
 
 #. module: transport_patrimoine
 #: model_terms:ir.ui.view,arch_db:transport_patrimoine.rapport_amort_par_sous_categorie_template
 msgid "TABLEAU D'AMORTISSEMENT PAR CATÉGORIE ET SOUS-CATÉGORIE"
-msgstr "جدول الاستهلاك حسب الصنف والصنف الفرعي"
+msgstr "DEPRECIATION SCHEDULE BY CATEGORY AND SUB-CATEGORY"
 
 #. module: transport_patrimoine
 #: model_terms:ir.ui.view,arch_db:transport_patrimoine.rapport_amort_par_projet_template
 msgid "TABLEAU D'AMORTISSEMENT PAR PROJET / PROGRAMME"
-msgstr "جدول الاستهلاك حسب المشروع / البرنامج"
+msgstr "DEPRECIATION SCHEDULE BY PROJECT / PROGRAMME"
 
 #. module: transport_patrimoine
 #: model_terms:ir.ui.view,arch_db:transport_patrimoine.rapport_tableau_par_type_template
 msgid "TABLEAU D'AMORTISSEMENT PAR TYPE"
-msgstr "جدول الاستهلاك حسب النوع"
+msgstr "DEPRECIATION SCHEDULE BY TYPE"
 
 #. module: transport_patrimoine
 #: model_terms:ir.ui.view,arch_db:transport_patrimoine.rapport_variation_template
 msgid "TABLEAU DE VARIATION DES IMMOBILISATIONS"
-msgstr "جدول تغيرات الأصول الثابتة"
+msgstr "FIXED ASSET MOVEMENT SCHEDULE"
 
 #. module: transport_patrimoine
 #: model_terms:ir.ui.view,arch_db:transport_patrimoine.rapport_entierement_amortis_template
 msgid "TOTAL (valeur brute encore en service) :"
-msgstr "الإجمالي (القيمة الإجمالية لا تزال في الخدمة):"
+msgstr "TOTAL (gross value still in service):"
 
 #. module: transport_patrimoine
 #: model_terms:ir.ui.view,arch_db:transport_patrimoine.rapport_variation_template
 msgid "TOTAL :"
-msgstr "الإجمالي:"
+msgstr "TOTAL:"
 
 #. module: transport_patrimoine
 #: model_terms:ir.ui.view,arch_db:transport_patrimoine.rapport_acquisitions_template
 msgid "TOTAL ACQUISITIONS :"
-msgstr "إجمالي الاقتناءات:"
+msgstr "TOTAL ACQUISITIONS:"
 
 #. module: transport_patrimoine
 #: model_terms:ir.ui.view,arch_db:transport_patrimoine.rapport_tableau_amortissement_template
 msgid "TOTAL DOTATIONS EXERCICE"
-msgstr "إجمالي مخصصات الدورة"
+msgstr "TOTAL DEPRECIATION CHARGES FOR THE PERIOD"
 
 #. module: transport_patrimoine
 #: model_terms:ir.ui.view,arch_db:transport_patrimoine.rapport_recap_ventile_template
 msgid "TOTAL GÉNÉRAL"
-msgstr "الإجمالي العام"
+msgstr "GRAND TOTAL"
 
 #. module: transport_patrimoine
 #: model_terms:ir.ui.view,arch_db:transport_patrimoine.rapport_amort_par_projet_template
 msgid "TOTAL GÉNÉRAL ("
-msgstr "الإجمالي العام ("
+msgstr "GRAND TOTAL ("
 
 #. module: transport_patrimoine
 #: model_terms:ir.ui.view,arch_db:transport_patrimoine.rapport_amort_par_sous_categorie_template
 #: model_terms:ir.ui.view,arch_db:transport_patrimoine.rapport_resume_categorie_template
 msgid "TOTAL GÉNÉRAL :"
-msgstr "الإجمالي العام:"
+msgstr "GRAND TOTAL:"
 
 #. module: transport_patrimoine
 #: model_terms:ir.ui.view,arch_db:transport_patrimoine.rapport_cessions_template
 #: model_terms:ir.ui.view,arch_db:transport_patrimoine.rapport_rebuts_template
 msgid "TOTAUX :"
-msgstr "المجاميع:"
+msgstr "TOTALS:"
 
 #. module: transport_patrimoine
 #: model:ir.actions.report,name:transport_patrimoine.action_rapport_amort_par_sous_categorie
 msgid "Tableau amortissement par catégorie et sous-catégorie"
-msgstr "جدول الاستهلاك حسب الصنف والصنف الفرعي"
+msgstr "Depreciation Schedule by Category and Sub-category"
 
 #. module: transport_patrimoine
 #: model:ir.actions.report,name:transport_patrimoine.action_rapport_amort_par_projet
 msgid "Tableau amortissement par projet / programme"
-msgstr "جدول الاستهلاك حسب المشروع / البرنامج"
+msgstr "Depreciation Schedule by Project / Programme"
 
 #. module: transport_patrimoine
 #: model:ir.actions.act_window,name:transport_patrimoine.action_patrimoine_amortissement
@@ -3028,130 +3033,130 @@ msgstr "جدول الاستهلاك حسب المشروع / البرنامج"
 #: model_terms:ir.ui.view,arch_db:transport_patrimoine.view_patrimoine_amortissement_liste
 #: model_terms:ir.ui.view,arch_db:transport_patrimoine.view_patrimoine_immobilisation_form
 msgid "Tableau d'amortissement"
-msgstr "جدول الاستهلاك"
+msgstr "Depreciation Schedule"
 
 #. module: transport_patrimoine
 #: model:ir.model.fields.selection,name:transport_patrimoine.selection__patrimoine_wizard_rapport__type_rapport__tableau_amort
 msgid "Tableau d'amortissement (toutes immo)"
-msgstr "جدول الاستهلاك (جميع الأصول)"
+msgstr "Depreciation Schedule (all assets)"
 
 #. module: transport_patrimoine
 #: model:ir.actions.report,name:transport_patrimoine.action_rapport_tableau_par_categorie
 #: model:ir.model.fields.selection,name:transport_patrimoine.selection__patrimoine_wizard_rapport__type_rapport__tableau_par_categorie
 msgid "Tableau d'amortissement par catégorie"
-msgstr "جدول الاستهلاك حسب الصنف"
+msgstr "Depreciation Schedule by Category"
 
 #. module: transport_patrimoine
 #: model:ir.actions.report,name:transport_patrimoine.action_rapport_tableau_par_projet
 #: model:ir.model.fields.selection,name:transport_patrimoine.selection__patrimoine_wizard_rapport__type_rapport__tableau_par_projet
 msgid "Tableau d'amortissement par projet"
-msgstr "جدول الاستهلاك حسب المشروع"
+msgstr "Depreciation Schedule by Project"
 
 #. module: transport_patrimoine
 #: model:ir.actions.report,name:transport_patrimoine.action_rapport_tableau_par_type
 #: model:ir.model.fields.selection,name:transport_patrimoine.selection__patrimoine_wizard_rapport__type_rapport__tableau_par_type
 msgid "Tableau d'amortissement par type"
-msgstr "جدول الاستهلاك حسب النوع"
+msgstr "Depreciation Schedule by Type"
 
 #. module: transport_patrimoine
 #: model_terms:ir.ui.view,arch_db:transport_patrimoine.view_patrimoine_immobilisation_form
 msgid "Tableau d'amortissement prévisionnel"
-msgstr "جدول الاستهلاك التقديري"
+msgstr "Forecasted Depreciation Schedule"
 
 #. module: transport_patrimoine
 #: model_terms:ir.ui.view,arch_db:transport_patrimoine.view_patrimoine_amortissement_pivot
 msgid "Tableau de bord amortissements"
-msgstr "لوحة متابعة الاستهلاكات"
+msgstr "Depreciation Dashboard"
 
 #. module: transport_patrimoine
 #: model:ir.actions.report,name:transport_patrimoine.action_rapport_variation
 #: model:ir.model.fields.selection,name:transport_patrimoine.selection__patrimoine_wizard_rapport__type_rapport__variation_immo
 msgid "Tableau de variation des immobilisations"
-msgstr "جدول تغيرات الأصول الثابتة"
+msgstr "Fixed Asset Movement Schedule"
 
 #. module: transport_patrimoine
 #: model_terms:ir.ui.view,arch_db:transport_patrimoine.rapport_tableau_amortissement_template
 #: model_terms:ir.ui.view,arch_db:transport_patrimoine.view_patrimoine_amortissement_liste
 #: model_terms:ir.ui.view,arch_db:transport_patrimoine.view_patrimoine_immobilisation_form
 msgid "Taux (%)"
-msgstr "النسبة (%)"
+msgstr "Rate (%)"
 
 #. module: transport_patrimoine
 #: model_terms:ir.ui.view,arch_db:transport_patrimoine.rapport_recap_ventile_template
 msgid "Taux amort."
-msgstr "نسبة الإهلاك"
+msgstr "Deprec. Rate"
 
 #. module: transport_patrimoine
 #: model:ir.model.fields,field_description:transport_patrimoine.field_patrimoine_amortissement_ligne__taux_applique
 msgid "Taux appliqué (%)"
-msgstr "النسبة المطبَّقة (%)"
+msgstr "Applied Rate (%)"
 
 #. module: transport_patrimoine
 #: model:ir.model.fields,field_description:transport_patrimoine.field_patrimoine_wizard_rapport__taux_filtre
 msgid "Taux d'amort. (%)"
-msgstr "نسبة الإهلاك (%)"
+msgstr "Deprec. Rate (%)"
 
 #. module: transport_patrimoine
 #: model:ir.model.fields,field_description:transport_patrimoine.field_patrimoine_immobilisation__taux_amortissement
 msgid "Taux d'amortissement (%)"
-msgstr "نسبة الإهلاك (%)"
+msgstr "Depreciation Rate (%)"
 
 #. module: transport_patrimoine
 #: model_terms:ir.ui.view,arch_db:transport_patrimoine.rapport_recap_ventile_template
 msgid "Taux moy. (%)"
-msgstr "متوسط النسبة (%)"
+msgstr "Avg. Rate (%)"
 
 #. module: transport_patrimoine
 #: model_terms:ir.ui.view,arch_db:transport_patrimoine.rapport_amort_par_projet_template
 #: model_terms:ir.ui.view,arch_db:transport_patrimoine.rapport_amort_par_sous_categorie_template
 msgid "Taux%"
-msgstr "النسبة%"
+msgstr "Rate%"
 
 #. module: transport_patrimoine
 #: model:patrimoine.categorie,name:transport_patrimoine.cat_terrains
 msgid "Terrains"
-msgstr "أراضٍ"
+msgstr "Land"
 
 #. module: transport_patrimoine
 #: model_terms:ir.ui.view,arch_db:transport_patrimoine.rapport_amort_par_sous_categorie_template
 msgid "Total"
-msgstr "المجموع"
+msgstr "Total"
 
 #. module: transport_patrimoine
 #: model:ir.model.fields,help:transport_patrimoine.field_patrimoine_immobilisation__depenses_posterieures
 msgid "Total des dépenses postérieures activées"
-msgstr "إجمالي النفقات اللاحقة المُفعَّلة"
+msgstr "Total capitalized subsequent expenditures"
 
 #. module: transport_patrimoine
 #: model:ir.model.fields,field_description:transport_patrimoine.field_patrimoine_wizard_calcul_amortissement__montant_total
 msgid "Total dotations (DT)"
-msgstr "إجمالي المخصصات (د.ت)"
+msgstr "Total Depreciation Charges (TND)"
 
 #. module: transport_patrimoine
 #: model:ir.model.fields.selection,name:transport_patrimoine.selection__patrimoine_wizard_rapport__statut_filtre__tous
 msgid "Tous statuts"
-msgstr "جميع الحالات"
+msgstr "All Statuses"
 
 #. module: transport_patrimoine
 #: model:ir.model.fields.selection,name:transport_patrimoine.selection__patrimoine_wizard_rapport__methode_amort_filtre__tous
 msgid "Toutes"
-msgstr "الجميع"
+msgstr "All"
 
 #. module: transport_patrimoine
 #: model:ir.ui.menu,name:transport_patrimoine.menu_patrimoine_immo_list
 msgid "Toutes les immobilisations"
-msgstr "جميع الأصول الثابتة"
+msgstr "All Fixed Assets"
 
 #. module: transport_patrimoine
 #: model:ir.model.fields.selection,name:transport_patrimoine.selection__patrimoine_wizard_calcul_amortissement__methode_filtre__tous
 msgid "Toutes les méthodes"
-msgstr "جميع الطرق"
+msgstr "All Methods"
 
 #. module: transport_patrimoine
 #: model:ir.model,name:transport_patrimoine.model_patrimoine_mouvement
 #: model_terms:ir.ui.view,arch_db:transport_patrimoine.view_patrimoine_mouvement_form
 msgid "Transfert d'immobilisation"
-msgstr "تحويل الأصل الثابت"
+msgstr "Fixed Asset Transfer"
 
 #. module: transport_patrimoine
 #: model:ir.actions.act_window,name:transport_patrimoine.action_patrimoine_mouvement
@@ -3159,30 +3164,30 @@ msgstr "تحويل الأصل الثابت"
 #: model_terms:ir.ui.view,arch_db:transport_patrimoine.view_patrimoine_immobilisation_form
 #: model_terms:ir.ui.view,arch_db:transport_patrimoine.view_patrimoine_mouvement_list
 msgid "Transferts"
-msgstr "التحويلات"
+msgstr "Transfers"
 
 #. module: transport_patrimoine
 #: model:ir.model.fields,field_description:transport_patrimoine.field_patrimoine_wizard_rapport__type_rapport
 #: model_terms:ir.ui.view,arch_db:transport_patrimoine.view_wizard_rapport_patrimoine_form
 msgid "Type de rapport"
-msgstr "نوع التقرير"
+msgstr "Report Type"
 
 #. module: transport_patrimoine
 #: model:ir.model.fields,field_description:transport_patrimoine.field_patrimoine_cession__type_sortie
 msgid "Type de sortie"
-msgstr "نوع الإخراج"
+msgstr "Disposal Type"
 
 #. module: transport_patrimoine
 #: model:ir.model.fields,help:transport_patrimoine.field_patrimoine_cession__activity_exception_decoration
 #: model:ir.model.fields,help:transport_patrimoine.field_patrimoine_immobilisation__activity_exception_decoration
 #: model:ir.model.fields,help:transport_patrimoine.field_patrimoine_inventaire__activity_exception_decoration
 msgid "Type of the exception activity on record."
-msgstr "نوع النشاط الاستثنائي في السجل."
+msgstr "Type of the exception activity on record."
 
 #. module: transport_patrimoine
 #: model:res.groups,name:transport_patrimoine.patrimoine_group_user
 msgid "Utilisateur"
-msgstr "المستخدم"
+msgstr "User"
 
 #. module: transport_patrimoine
 #: model_terms:ir.ui.view,arch_db:transport_patrimoine.rapport_entierement_amortis_template
@@ -3192,7 +3197,7 @@ msgstr "المستخدم"
 #: model_terms:ir.ui.view,arch_db:transport_patrimoine.view_patrimoine_immobilisation_list
 #: model_terms:ir.ui.view,arch_db:transport_patrimoine.view_patrimoine_immobilisation_pivot
 msgid "VNC"
-msgstr "ق.د.ص"
+msgstr "NBV"
 
 #. module: transport_patrimoine
 #: model:ir.model.fields,field_description:transport_patrimoine.field_patrimoine_amortissement_ligne__valeur_nette
@@ -3205,105 +3210,105 @@ msgstr "ق.د.ص"
 #: model_terms:ir.ui.view,arch_db:transport_patrimoine.view_patrimoine_amortissement_liste
 #: model_terms:ir.ui.view,arch_db:transport_patrimoine.view_patrimoine_immobilisation_form
 msgid "VNC (DT)"
-msgstr "القيمة الدفترية الصافية (د.ت)"
+msgstr "NBV (TND)"
 
 #. module: transport_patrimoine
 #: model_terms:ir.ui.view,arch_db:transport_patrimoine.rapport_hors_usage_template
 msgid "VNC TOTAL HORS SERVICE :"
-msgstr "إجمالي القيمة الدفترية الصافية خارج الخدمة:"
+msgstr "TOTAL NBV OUT OF SERVICE:"
 
 #. module: transport_patrimoine
 #: model_terms:ir.ui.view,arch_db:transport_patrimoine.rapport_cessions_template
 #: model_terms:ir.ui.view,arch_db:transport_patrimoine.view_patrimoine_cession_list
 msgid "VNC sortie"
-msgstr "ق.د.ص عند الإخراج"
+msgstr "NBV at Disposal"
 
 #. module: transport_patrimoine
 #: model_terms:ir.ui.view,arch_db:transport_patrimoine.rapport_rebuts_template
 msgid "VNC sortie (DT)"
-msgstr "ق.د.ص عند الإخراج (د.ت)"
+msgstr "NBV at Disposal (TND)"
 
 #. module: transport_patrimoine
 #: model_terms:ir.ui.view,arch_db:transport_patrimoine.rapport_resume_categorie_template
 msgid "VNC total"
-msgstr "إجمالي ق.د.ص"
+msgstr "Total NBV"
 
 #. module: transport_patrimoine
 #: model_terms:ir.ui.view,arch_db:transport_patrimoine.rapport_cession_standalone_template
 msgid "VNC à la date de sortie"
-msgstr "ق.د.ص في تاريخ الإخراج"
+msgstr "NBV at Disposal Date"
 
 #. module: transport_patrimoine
 #: model:ir.model.fields,field_description:transport_patrimoine.field_patrimoine_cession__vnc_sortie
 msgid "VNC à la date de sortie (DT)"
-msgstr "القيمة الدفترية الصافية عند الإخراج (د.ت)"
+msgstr "NBV at Disposal Date (TND)"
 
 #. module: transport_patrimoine
 #: model_terms:ir.ui.view,arch_db:transport_patrimoine.rapport_variation_template
 msgid "Val. début"
-msgstr "قيمة البداية"
+msgstr "Opening Value"
 
 #. module: transport_patrimoine
 #: model_terms:ir.ui.view,arch_db:transport_patrimoine.rapport_variation_template
 msgid "Val. fin"
-msgstr "قيمة النهاية"
+msgstr "Closing Value"
 
 #. module: transport_patrimoine
 #: model_terms:ir.ui.view,arch_db:transport_patrimoine.rapport_recap_ventile_template
 msgid "Valeur brute (DT)"
-msgstr "القيمة الإجمالية (د.ت)"
+msgstr "Gross Value (TND)"
 
 #. module: transport_patrimoine
 #: model:ir.model.fields,field_description:transport_patrimoine.field_patrimoine_immobilisation__valeur_residuelle
 msgid "Valeur résiduelle (DT)"
-msgstr "القيمة المتبقية (د.ت)"
+msgstr "Residual Value (TND)"
 
 #. module: transport_patrimoine
 #: model_terms:ir.ui.view,arch_db:transport_patrimoine.view_patrimoine_immobilisation_form
 msgid "Valeurs financières"
-msgstr "القيم المالية"
+msgstr "Financial Values"
 
 #. module: transport_patrimoine
 #: model:ir.model.fields.selection,name:transport_patrimoine.selection__patrimoine_wizard_calcul_amortissement__mode__validation
 msgid "Validation avec comptabilisation"
-msgstr "تحقق مع تسجيل محاسبي"
+msgstr "Validation with Posting"
 
 #. module: transport_patrimoine
 #: model_terms:ir.ui.view,arch_db:transport_patrimoine.view_patrimoine_immobilisation_form
 msgid "Valider"
-msgstr "تحقق"
+msgstr "Validate"
 
 #. module: transport_patrimoine
 #: model_terms:ir.ui.view,arch_db:transport_patrimoine.view_patrimoine_inventaire_form
 msgid "Valider et appliquer les écarts"
-msgstr "تحقق وتطبيق الفوارق"
+msgstr "Validate and Apply Discrepancies"
 
 #. module: transport_patrimoine
 #: model:ir.model.fields.selection,name:transport_patrimoine.selection__patrimoine_depense_posterieure__state__valide
 #: model:ir.model.fields.selection,name:transport_patrimoine.selection__patrimoine_depreciation__state__valide
 #: model:ir.model.fields.selection,name:transport_patrimoine.selection__patrimoine_inventaire__state__valide
 msgid "Validé"
-msgstr "مُتحقَّق منه"
+msgstr "Validated"
 
 #. module: transport_patrimoine
 #: model_terms:ir.ui.view,arch_db:transport_patrimoine.rapport_recap_ventile_template
 msgid "Ventilation par :"
-msgstr "التوزيع حسب:"
+msgstr "Breakdown by:"
 
 #. module: transport_patrimoine
 #: model_terms:ir.ui.view,arch_db:transport_patrimoine.rapport_bon_sortie_template
 msgid "Visa responsable"
-msgstr "توقيع المسؤول"
+msgstr "Responsible's Signature"
 
 #. module: transport_patrimoine
 #: model:patrimoine.sous.categorie,name:transport_patrimoine.sous_cat_voitures_service
 msgid "Voitures de service"
-msgstr "سيارات الخدمة"
+msgstr "Service Vehicles"
 
 #. module: transport_patrimoine
 #: model:ir.model.fields,field_description:transport_patrimoine.field_patrimoine_immobilisation__vehicle_id
 msgid "Véhicule associé (Flotte)"
-msgstr "المركبة المرتبطة (الأسطول)"
+msgstr "Associated Vehicle (Fleet)"
 
 #. module: transport_patrimoine
 #: model:ir.model.fields,field_description:transport_patrimoine.field_patrimoine_affectation__website_message_ids
@@ -3314,7 +3319,7 @@ msgstr "المركبة المرتبطة (الأسطول)"
 #: model:ir.model.fields,field_description:transport_patrimoine.field_patrimoine_inventaire__website_message_ids
 #: model:ir.model.fields,field_description:transport_patrimoine.field_patrimoine_mouvement__website_message_ids
 msgid "Website Messages"
-msgstr "رسائل الموقع الإلكتروني"
+msgstr "Website Messages"
 
 #. module: transport_patrimoine
 #: model:ir.model.fields,help:transport_patrimoine.field_patrimoine_affectation__website_message_ids
@@ -3325,13 +3330,13 @@ msgstr "رسائل الموقع الإلكتروني"
 #: model:ir.model.fields,help:transport_patrimoine.field_patrimoine_inventaire__website_message_ids
 #: model:ir.model.fields,help:transport_patrimoine.field_patrimoine_mouvement__website_message_ids
 msgid "Website communication history"
-msgstr "سجل اتصالات الموقع الإلكتروني"
+msgstr "Website communication history"
 
 #. module: transport_patrimoine
 #: model_terms:ir.ui.view,arch_db:transport_patrimoine.rapport_acquisitions_template
 #: model_terms:ir.ui.view,arch_db:transport_patrimoine.rapport_tableau_amortissement_template
 msgid "ans"
-msgstr "سنوات"
+msgstr "yrs"
 
 #. module: transport_patrimoine
 #: model_terms:ir.ui.view,arch_db:transport_patrimoine.rapport_acquisitions_template
@@ -3340,92 +3345,92 @@ msgstr "سنوات"
 #: model_terms:ir.ui.view,arch_db:transport_patrimoine.rapport_transferts_template
 #: model_terms:ir.ui.view,arch_db:transport_patrimoine.rapport_variation_template
 msgid "au"
-msgstr "إلى"
+msgstr "to"
 
 #. module: transport_patrimoine
 #: model_terms:ir.ui.view,arch_db:transport_patrimoine.rapport_amort_par_projet_template
 msgid "immobilisation(s)"
-msgstr "أصل(أصول) ثابت(ة)"
+msgstr "asset(s)"
 
 #. module: transport_patrimoine
 #: model_terms:ir.ui.view,arch_db:transport_patrimoine.rapport_amort_par_projet_template
 msgid "immobilisations) :"
-msgstr "أصول ثابتة):"
+msgstr "assets):"
 
 #. module: transport_patrimoine
 #: model_terms:ir.ui.view,arch_db:transport_patrimoine.view_patrimoine_immobilisation_form
 msgid "unité(s) en attente d'affectation."
-msgstr "وحدة(وحدات) في انتظار التخصيص."
+msgstr "unit(s) pending assignment."
 
 #. module: transport_patrimoine
 #: model_terms:ir.ui.view,arch_db:transport_patrimoine.rapport_bordereau_ecarts_template
 msgid "À régulariser"
-msgstr "يتعين تسويته"
+msgstr "To be adjusted"
 
 #. module: transport_patrimoine
 #: model_terms:ir.ui.view,arch_db:transport_patrimoine.rapport_acquisitions_template
 msgid "ÉTAT DES ACQUISITIONS DE LA PÉRIODE"
-msgstr "قائمة اقتناءات الفترة"
+msgstr "ACQUISITIONS REPORT FOR THE PERIOD"
 
 #. module: transport_patrimoine
 #: model_terms:ir.ui.view,arch_db:transport_patrimoine.rapport_cessions_template
 msgid "ÉTAT DES CESSIONS DE LA PÉRIODE"
-msgstr "قائمة تفويتات الفترة"
+msgstr "DISPOSALS REPORT FOR THE PERIOD"
 
 #. module: transport_patrimoine
 #: model_terms:ir.ui.view,arch_db:transport_patrimoine.rapport_rebuts_template
 msgid "ÉTAT DES MISES EN REBUT DE LA PÉRIODE"
-msgstr "قائمة إهمالات الفترة"
+msgstr "SCRAPPINGS REPORT FOR THE PERIOD"
 
 #. module: transport_patrimoine
 #: model_terms:ir.ui.view,arch_db:transport_patrimoine.rapport_recap_ventile_template
 msgid "ÉTAT RÉCAPITULATIF DES IMMOBILISATIONS"
-msgstr "القائمة الملخَّصة للأصول الثابتة"
+msgstr "FIXED ASSET SUMMARY REPORT"
 
 #. module: transport_patrimoine
 #: model:ir.model.fields,field_description:transport_patrimoine.field_patrimoine_inventaire_ligne__ecart_quantite
 #: model_terms:ir.ui.view,arch_db:transport_patrimoine.rapport_bordereau_ecarts_template
 #: model_terms:ir.ui.view,arch_db:transport_patrimoine.rapport_bordereau_inventaire_template
 msgid "Écart"
-msgstr "الفارق"
+msgstr "Discrepancy"
 
 #. module: transport_patrimoine
 #: model:ir.model.fields.selection,name:transport_patrimoine.selection__patrimoine_cession__type_sortie__echange
 #: model:ir.model.fields.selection,name:transport_patrimoine.selection__patrimoine_immobilisation__type_entree__echange
 msgid "Échange"
-msgstr "مبادلة"
+msgstr "Exchange"
 
 #. module: transport_patrimoine
 #: model:ir.model.fields,field_description:transport_patrimoine.field_patrimoine_depreciation__move_id
 #: model_terms:ir.ui.view,arch_db:transport_patrimoine.view_patrimoine_amortissement_liste
 #: model_terms:ir.ui.view,arch_db:transport_patrimoine.view_patrimoine_immobilisation_form
 msgid "Écriture"
-msgstr "قيد محاسبي"
+msgstr "Journal Entry"
 
 #. module: transport_patrimoine
 #: model:ir.model.fields,field_description:transport_patrimoine.field_patrimoine_amortissement_ligne__move_id
 msgid "Écriture comptable"
-msgstr "قيد محاسبي"
+msgstr "Accounting Entry"
 
 #. module: transport_patrimoine
 #: model:ir.model.fields,field_description:transport_patrimoine.field_patrimoine_immobilisation__move_entree_id
 msgid "Écriture d'entrée"
-msgstr "قيد الدخول"
+msgstr "Entry Journal Entry"
 
 #. module: transport_patrimoine
 #: model:ir.model.fields,field_description:transport_patrimoine.field_patrimoine_cession__move_dotation_id
 msgid "Écriture dotation complémentaire"
-msgstr "قيد المخصص التكميلي"
+msgstr "Additional Depreciation Charge Entry"
 
 #. module: transport_patrimoine
 #: model:ir.model.fields,field_description:transport_patrimoine.field_patrimoine_cession__move_sortie_id
 msgid "Écriture sortie actif"
-msgstr "قيد إخراج الأصل"
+msgstr "Asset Disposal Entry"
 
 #. module: transport_patrimoine
 #: model_terms:ir.ui.view,arch_db:transport_patrimoine.view_patrimoine_cession_form
 msgid "Écritures générées"
-msgstr "قيود محاسبية مُولَّدة"
+msgstr "Generated Journal Entries"
 
 #. module: transport_patrimoine
 #: model_terms:ir.ui.view,arch_db:transport_patrimoine.rapport_amort_par_projet_template
@@ -3434,12 +3439,12 @@ msgstr "قيود محاسبية مُولَّدة"
 #: model_terms:ir.ui.view,arch_db:transport_patrimoine.rapport_recap_ventile_template
 #: model_terms:ir.ui.view,arch_db:transport_patrimoine.rapport_tableau_amortissement_template
 msgid "Édité le :"
-msgstr "طُبع في:"
+msgstr "Printed on:"
 
 #. module: transport_patrimoine
 #: model:ir.model.fields,field_description:transport_patrimoine.field_patrimoine_emplacement__etage
 msgid "Étage / Niveau"
-msgstr "الطابق / المستوى"
+msgstr "Floor / Level"
 
 #. module: transport_patrimoine
 #: model:ir.model.fields,field_description:transport_patrimoine.field_patrimoine_affectation__state
@@ -3453,64 +3458,64 @@ msgstr "الطابق / المستوى"
 #: model_terms:ir.ui.view,arch_db:transport_patrimoine.rapport_tableau_amortissement_template
 #: model_terms:ir.ui.view,arch_db:transport_patrimoine.view_patrimoine_immobilisation_form
 msgid "État"
-msgstr "الحالة"
+msgstr "State"
 
 #. module: transport_patrimoine
 #: model:ir.model.fields,field_description:transport_patrimoine.field_patrimoine_inventaire_ligne__etat_constate
 #: model_terms:ir.ui.view,arch_db:transport_patrimoine.rapport_bordereau_ecarts_template
 msgid "État constaté"
-msgstr "الحالة المُلاحَظة"
+msgstr "Observed Condition"
 
 #. module: transport_patrimoine
 #: model:ir.actions.report,name:transport_patrimoine.action_rapport_acquisitions
 msgid "État des acquisitions"
-msgstr "قائمة اقتناء الأصول"
+msgstr "Acquisitions Report"
 
 #. module: transport_patrimoine
 #: model:ir.model.fields.selection,name:transport_patrimoine.selection__patrimoine_wizard_rapport__type_rapport__liste_acquisitions
 msgid "État des acquisitions de la période"
-msgstr "قائمة الاقتناءات للفترة"
+msgstr "Acquisitions Report for the Period"
 
 #. module: transport_patrimoine
 #: model:ir.actions.report,name:transport_patrimoine.action_rapport_cessions
 msgid "État des cessions"
-msgstr "قائمة التفويت في الأصول"
+msgstr "Disposals Report"
 
 #. module: transport_patrimoine
 #: model:ir.model.fields.selection,name:transport_patrimoine.selection__patrimoine_wizard_rapport__type_rapport__liste_cessions
 msgid "État des cessions de la période"
-msgstr "قائمة التفويتات للفترة"
+msgstr "Disposals Report for the Period"
 
 #. module: transport_patrimoine
 #: model:ir.actions.report,name:transport_patrimoine.action_rapport_rebuts
 msgid "État des mises en rebut"
-msgstr "قائمة الإهمالات"
+msgstr "Scrappings Report"
 
 #. module: transport_patrimoine
 #: model:ir.actions.report,name:transport_patrimoine.action_rapport_rebuts_periode
 #: model:ir.model.fields.selection,name:transport_patrimoine.selection__patrimoine_wizard_rapport__type_rapport__liste_rebuts
 msgid "État des mises en rebut de la période"
-msgstr "قائمة الإهمالات للفترة"
+msgstr "Scrappings Report for the Period"
 
 #. module: transport_patrimoine
 #: model:ir.actions.report,name:transport_patrimoine.action_rapport_recap_ventile
 msgid "État récapitulatif ventilé"
-msgstr "القائمة الملخَّصة الموزَّعة"
+msgstr "Detailed Summary Report"
 
 #. module: transport_patrimoine
 #: model_terms:ir.ui.view,arch_db:transport_patrimoine.rapport_bordereau_ecarts_template
 msgid "Évaluation dépréciation"
-msgstr "تقييم انخفاض القيمة"
+msgstr "Impairment Assessment"
 
 #. module: transport_patrimoine
 #: model_terms:ir.ui.view,arch_db:transport_patrimoine.rapport_amort_par_sous_categorie_template
 msgid "تلخيص جدول الإستهلاكات حسب الأصناف"
-msgstr "تلخيص جدول الاستهلاكات حسب الأصناف"
+msgstr "Depreciation Schedule Summary by Category"
 
 #. module: transport_patrimoine
 #: model_terms:ir.ui.view,arch_db:transport_patrimoine.rapport_amort_par_projet_template
 msgid "طبع جدول الإستهلاكات حسب المشاريع"
-msgstr "طباعة جدول الاستهلاكات حسب المشاريع"
+msgstr "Print Depreciation Schedule by Project"
 
 #. module: transport_patrimoine
 #: model_terms:ir.ui.view,arch_db:transport_patrimoine.rapport_tableau_amortissement_template
@@ -3519,7 +3524,7 @@ msgid ""
 "                            Catégorie :"
 msgstr ""
 "—\n"
-"                            الصنف :"
+"                            Category:"
 
 #. module: transport_patrimoine
 #: model_terms:ir.ui.view,arch_db:transport_patrimoine.rapport_tableau_amortissement_template
@@ -3528,36 +3533,36 @@ msgid ""
 "                            Méthode :"
 msgstr ""
 "—\n"
-"                            الطريقة :"
+"                            Method:"
 
 #. module: transport_patrimoine
 #: model_terms:ir.ui.view,arch_db:transport_patrimoine.rapport_amort_par_sous_categorie_template
 #: model_terms:ir.ui.view,arch_db:transport_patrimoine.rapport_rebuts_template
 #: model_terms:ir.ui.view,arch_db:transport_patrimoine.rapport_recap_ventile_template
 msgid "— Catégorie :"
-msgstr "— الصنف:"
+msgstr "— Category:"
 
 #. module: transport_patrimoine
 #: model_terms:ir.ui.view,arch_db:transport_patrimoine.rapport_recap_ventile_template
 msgid "— Emplacement :"
-msgstr "— الموقع:"
+msgstr "— Location:"
 
 #. module: transport_patrimoine
 #: model_terms:ir.ui.view,arch_db:transport_patrimoine.rapport_amort_par_projet_template
 msgid "— Projet :"
-msgstr "— المشروع:"
+msgstr "— Project:"
 
 #. module: transport_patrimoine
 #: model_terms:ir.ui.view,arch_db:transport_patrimoine.rapport_recap_ventile_template
 msgid "— Taux :"
-msgstr "— النسبة:"
+msgstr "— Rate:"
 
 #. module: transport_patrimoine
 #: model_terms:ir.ui.view,arch_db:transport_patrimoine.view_patrimoine_inventaire_form
 msgid "✓ Retrouvé"
-msgstr "✓ تم العثور عليه"
+msgstr "✓ Found"
 
 #. module: transport_patrimoine
 #: model_terms:ir.ui.view,arch_db:transport_patrimoine.view_patrimoine_inventaire_form
 msgid "✗ Manquant"
-msgstr "✗ مفقود"
+msgstr "✗ Missing"

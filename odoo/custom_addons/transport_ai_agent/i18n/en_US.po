@@ -1,0 +1,379 @@
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: Odoo Server 19.0\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2026-05-22 09:51+0000\n"
+"PO-Revision-Date: 2026-05-22 09:51+0000\n"
+"Last-Translator: \n"
+"Language-Team: English\n"
+"Language: en_US\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+
+#. module: transport_ai_agent
+#: model:ir.model.fields,field_description:transport_ai_agent.field_transport_ai_conversation__active
+msgid "Active"
+msgstr "Active"
+
+#. module: transport_ai_agent
+#. odoo-javascript
+#: code:addons/transport_ai_agent/static/src/xml/ai_chat.xml:0
+#: model:ir.model.fields.selection,name:transport_ai_agent.selection__transport_ai_message__message_type__agent
+#: model:ir.ui.menu,name:transport_ai_agent.menu_ai_root
+#: model_terms:ir.ui.view,arch_db:transport_ai_agent.view_ai_conversation_form
+msgid "Agent IA"
+msgstr "AI Agent"
+
+#. module: transport_ai_agent
+#: model:ir.actions.act_window,name:transport_ai_agent.action_ai_conversation
+msgid "Agent IA Transport"
+msgstr "Transport AI Agent"
+
+#. module: transport_ai_agent
+#. odoo-javascript
+#: code:addons/transport_ai_agent/static/src/xml/ai_chat.xml:0
+msgid "Analyse en cours..."
+msgstr "Analysing..."
+
+#. module: transport_ai_agent
+#. odoo-javascript
+#: code:addons/transport_ai_agent/static/src/xml/ai_chat.xml:0
+msgid "Assurances à renouveler"
+msgstr "Insurances to renew"
+
+#. module: transport_ai_agent
+#. odoo-javascript
+#: code:addons/transport_ai_agent/static/src/xml/ai_chat.xml:0
+msgid "Aucune statistique récente"
+msgstr "No recent statistics"
+
+#. module: transport_ai_agent
+#. odoo-javascript
+#: code:addons/transport_ai_agent/static/src/xml/ai_chat.xml:0
+msgid "Carburant du mois"
+msgstr "Fuel this month"
+
+#. module: transport_ai_agent
+#. odoo-javascript
+#: code:addons/transport_ai_agent/static/src/xml/ai_chat.xml:0
+msgid "Choisir un rapport"
+msgstr "Choose a report"
+
+#. module: transport_ai_agent
+#. odoo-javascript
+#: code:addons/transport_ai_agent/static/src/xml/ai_chat.xml:0
+msgid "Comment puis-je vous aider ?"
+msgstr "How can I help you?"
+
+#. module: transport_ai_agent
+#: model:ir.model.fields,field_description:transport_ai_agent.field_transport_ai_message__content
+msgid "Contenu"
+msgstr "Content"
+
+#. module: transport_ai_agent
+#: model:ir.model.fields,field_description:transport_ai_agent.field_transport_ai_message__conversation_id
+msgid "Conversation"
+msgstr "Conversation"
+
+#. module: transport_ai_agent
+#: model:ir.model,name:transport_ai_agent.model_transport_ai_conversation
+msgid "Conversation Agent IA Transport"
+msgstr "Transport AI Agent Conversation"
+
+#. module: transport_ai_agent
+#: model_terms:ir.ui.view,arch_db:transport_ai_agent.view_ai_conversation_list
+msgid "Conversations IA"
+msgstr "AI Conversations"
+
+#. module: transport_ai_agent
+#. odoo-javascript
+#: code:addons/transport_ai_agent/static/src/xml/ai_chat.xml:0
+msgid "Conversations récentes"
+msgstr "Recent conversations"
+
+#. module: transport_ai_agent
+#. odoo-javascript
+#: code:addons/transport_ai_agent/static/src/xml/ai_chat.xml:0
+msgid "Courriers en retard"
+msgstr "Late mail"
+
+#. module: transport_ai_agent
+#: model:ir.model.fields,field_description:transport_ai_agent.field_transport_ai_conversation__create_uid
+#: model:ir.model.fields,field_description:transport_ai_agent.field_transport_ai_message__create_uid
+msgid "Created by"
+msgstr "Created by"
+
+#. module: transport_ai_agent
+#: model:ir.model.fields,field_description:transport_ai_agent.field_transport_ai_message__create_date
+msgid "Date"
+msgstr "Date"
+
+#. module: transport_ai_agent
+#: model:ir.model.fields,field_description:transport_ai_agent.field_transport_ai_conversation__create_date
+msgid "Date création"
+msgstr "Creation date"
+
+#. module: transport_ai_agent
+#: model:ir.model.fields,field_description:transport_ai_agent.field_transport_ai_conversation__display_name
+#: model:ir.model.fields,field_description:transport_ai_agent.field_transport_ai_message__display_name
+msgid "Display Name"
+msgstr "Display Name"
+
+#. module: transport_ai_agent
+#. odoo-javascript
+#: code:addons/transport_ai_agent/static/src/xml/ai_chat.xml:0
+msgid "Décrivez le rapport souhaité ou choisissez dans la liste."
+msgstr "Describe the desired report or choose from the list."
+
+#. module: transport_ai_agent
+#. odoo-javascript
+#: code:addons/transport_ai_agent/static/src/xml/ai_chat.xml:0
+msgid "ERP Transport"
+msgstr "Transport ERP"
+
+#. module: transport_ai_agent
+#. odoo-javascript
+#: code:addons/transport_ai_agent/static/src/xml/ai_chat.xml:0
+msgid "Entrée pour envoyer · Shift+Entrée pour nouvelle ligne"
+msgstr "Enter to send · Shift+Enter for new line"
+
+#. module: transport_ai_agent
+#. odoo-javascript
+#: code:addons/transport_ai_agent/static/src/xml/ai_chat.xml:0
+msgid "Ex: données sur les bus, polices assurance, consommation carburant..."
+msgstr "E.g.: bus data, insurance policies, fuel consumption..."
+
+#. module: transport_ai_agent
+#. odoo-javascript
+#: code:addons/transport_ai_agent/static/src/xml/ai_chat.xml:0
+msgid "Ex: tournées par ligne ce mois, répartition des bus par état..."
+msgstr "E.g.: trips per line this month, bus distribution by status..."
+
+#. module: transport_ai_agent
+#. odoo-javascript
+#: code:addons/transport_ai_agent/static/src/xml/ai_chat.xml:0
+msgid "Génération de rapports PDF"
+msgstr "PDF report generation"
+
+#. module: transport_ai_agent
+#. odoo-javascript
+#: code:addons/transport_ai_agent/static/src/xml/ai_chat.xml:0
+msgid "Génération..."
+msgstr "Generating..."
+
+#. module: transport_ai_agent
+#. odoo-javascript
+#: code:addons/transport_ai_agent/static/src/xml/ai_chat.xml:0
+msgid "Généré le"
+msgstr "Generated on"
+
+#. module: transport_ai_agent
+#: model:ir.ui.menu,name:transport_ai_agent.menu_ai_history
+msgid "Historique"
+msgstr "History"
+
+#. module: transport_ai_agent
+#. odoo-javascript
+#: code:addons/transport_ai_agent/static/src/xml/ai_chat.xml:0
+msgid "Historique statistiques"
+msgstr "Statistics history"
+
+#. module: transport_ai_agent
+#: model:ir.model.fields,field_description:transport_ai_agent.field_transport_ai_conversation__id
+#: model:ir.model.fields,field_description:transport_ai_agent.field_transport_ai_message__id
+msgid "ID"
+msgstr "ID"
+
+#. module: transport_ai_agent
+#. odoo-javascript
+#: code:addons/transport_ai_agent/static/src/xml/ai_chat.xml:0
+msgid ""
+"L'agent analyse votre question et choisit automatiquement le meilleur "
+"visuel."
+msgstr ""
+"The agent analyses your question and automatically picks the best visual."
+
+#. module: transport_ai_agent
+#: model:ir.model.fields,field_description:transport_ai_agent.field_transport_ai_conversation__write_uid
+#: model:ir.model.fields,field_description:transport_ai_agent.field_transport_ai_message__write_uid
+msgid "Last Updated by"
+msgstr "Last Updated by"
+
+#. module: transport_ai_agent
+#: model:ir.model.fields,field_description:transport_ai_agent.field_transport_ai_conversation__write_date
+#: model:ir.model.fields,field_description:transport_ai_agent.field_transport_ai_message__write_date
+msgid "Last Updated on"
+msgstr "Last Updated on"
+
+#. module: transport_ai_agent
+#: model:ir.model,name:transport_ai_agent.model_transport_ai_message
+msgid "Message conversation IA"
+msgstr "AI conversation message"
+
+#. module: transport_ai_agent
+#: model:ir.model.fields,field_description:transport_ai_agent.field_transport_ai_conversation__message_ids
+msgid "Messages"
+msgstr "Messages"
+
+#. module: transport_ai_agent
+#: model:ir.ui.menu,name:transport_ai_agent.menu_ai_new_chat
+msgid "Nouvelle conversation"
+msgstr "New conversation"
+
+#. module: transport_ai_agent
+#: model:ir.actions.act_window,name:transport_ai_agent.action_ai_new_conversation
+msgid "Nouvelle conversation IA"
+msgstr "New AI conversation"
+
+#. module: transport_ai_agent
+#. odoo-javascript
+#: code:addons/transport_ai_agent/static/src/xml/ai_chat.xml:0
+msgid "Posez une question — l'agent génère le graphique le plus adapté."
+msgstr "Ask a question — the agent generates the most suitable chart."
+
+#. module: transport_ai_agent
+#. odoo-javascript
+#: code:addons/transport_ai_agent/static/src/xml/ai_chat.xml:0
+msgid ""
+"Posez vos questions sur les tournées, le carburant, les assurances ou le "
+"courrier BOC."
+msgstr "Ask your questions about trips, fuel, insurance or BOC mail."
+
+#. module: transport_ai_agent
+#. odoo-javascript
+#: code:addons/transport_ai_agent/static/src/xml/ai_chat.xml:0
+msgid "Posez votre question en français..."
+msgstr "Type your question in French..."
+
+#. module: transport_ai_agent
+#. odoo-javascript
+#: code:addons/transport_ai_agent/static/src/xml/ai_chat.xml:0
+msgid "Raccourcis"
+msgstr "Shortcuts"
+
+#. module: transport_ai_agent
+#. odoo-javascript
+#: code:addons/transport_ai_agent/static/src/xml/ai_chat.xml:0
+msgid "Rapport prêt :"
+msgstr "Report ready:"
+
+#. module: transport_ai_agent
+#: model:ir.model.fields,field_description:transport_ai_agent.field_transport_ai_conversation__name
+msgid "Référence"
+msgstr "Reference"
+
+#. module: transport_ai_agent
+#. odoo-javascript
+#: code:addons/transport_ai_agent/static/src/xml/ai_chat.xml:0
+msgid ""
+"Saisissez votre demande ou choisissez un rapport dans le menu de gauche"
+msgstr "Enter your request or choose a report from the left menu"
+
+#. module: transport_ai_agent
+#. odoo-javascript
+#: code:addons/transport_ai_agent/static/src/xml/ai_chat.xml:0
+msgid "Statistiques & Visualisations"
+msgstr "Statistics & Visualisations"
+
+#. module: transport_ai_agent
+#: model:ir.model,name:transport_ai_agent.model_transport_ai_chroma_sync
+msgid "Synchronisation ChromaDB via FastAPI"
+msgstr "ChromaDB sync via FastAPI"
+
+#. module: transport_ai_agent
+#. odoo-javascript
+#: code:addons/transport_ai_agent/static/src/xml/ai_chat.xml:0
+msgid "Top chauffeurs"
+msgstr "Top drivers"
+
+#. module: transport_ai_agent
+#. odoo-javascript
+#: code:addons/transport_ai_agent/static/src/xml/ai_chat.xml:0
+msgid "Tournées annulées"
+msgstr "Cancelled trips"
+
+#. module: transport_ai_agent
+#. odoo-javascript
+#: code:addons/transport_ai_agent/static/src/xml/ai_chat.xml:0
+msgid "Tous les rapports disponibles"
+msgstr "All available reports"
+
+#. module: transport_ai_agent
+#: model:ir.model.fields,field_description:transport_ai_agent.field_transport_ai_message__message_type
+msgid "Type"
+msgstr "Type"
+
+#. module: transport_ai_agent
+#: model:ir.model.fields,field_description:transport_ai_agent.field_transport_ai_conversation__user_id
+#: model:ir.model.fields.selection,name:transport_ai_agent.selection__transport_ai_message__message_type__user
+msgid "Utilisateur"
+msgstr "User"
+
+#. module: transport_ai_agent
+#. odoo-javascript
+#: code:addons/transport_ai_agent/static/src/xml/ai_chat.xml:0
+msgid "Utilisateur ERP"
+msgstr "ERP User"
+
+#. module: transport_ai_agent
+#. odoo-javascript
+#: code:addons/transport_ai_agent/static/src/xml/ai_chat.xml:0
+msgid "Visualisations automatiques"
+msgstr "Automatic visualisations"
+
+#. module: transport_ai_agent
+#. odoo-javascript
+#: code:addons/transport_ai_agent/static/src/xml/ai_chat.xml:0
+msgid "État du parc bus"
+msgstr "Bus fleet status"
+
+#. module: transport_ai_agent
+#. odoo-javascript
+#: code:addons/transport_ai_agent/static/src/xml/ai_chat.xml:0
+msgid "⚡ Générer le rapport PDF"
+msgstr "⚡ Generate PDF report"
+
+#. module: transport_ai_agent
+#. odoo-javascript
+#: code:addons/transport_ai_agent/static/src/xml/ai_chat.xml:0
+msgid "✏️ Nouvelle conversation"
+msgstr "✏️ New conversation"
+
+#. module: transport_ai_agent
+#. odoo-javascript
+#: code:addons/transport_ai_agent/static/src/xml/ai_chat.xml:0
+msgid "✏️ Nouvelle statistique"
+msgstr "✏️ New statistic"
+
+#. module: transport_ai_agent
+#. odoo-javascript
+#: code:addons/transport_ai_agent/static/src/xml/ai_chat.xml:0
+msgid "⬇ Télécharger"
+msgstr "⬇ Download"
+
+#. module: transport_ai_agent
+#. odoo-javascript
+#: code:addons/transport_ai_agent/static/src/xml/ai_chat.xml:0
+msgid "💬 Chat"
+msgstr "💬 Chat"
+
+#. module: transport_ai_agent
+#. odoo-javascript
+#: code:addons/transport_ai_agent/static/src/xml/ai_chat.xml:0
+msgid "📈 Stats"
+msgstr "📈 Stats"
+
+#. module: transport_ai_agent
+#. odoo-javascript
+#: code:addons/transport_ai_agent/static/src/xml/ai_chat.xml:0
+msgid "📊 Rapports"
+msgstr "📊 Reports"
+
+#. module: transport_ai_agent
+#. odoo-javascript
+#: code:addons/transport_ai_agent/static/src/xml/ai_chat.xml:0
+msgid "🔍 Ouvrir"
+msgstr "🔍 Open"

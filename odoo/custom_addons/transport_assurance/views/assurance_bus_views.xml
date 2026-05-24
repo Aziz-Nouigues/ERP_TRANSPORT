@@ -12,7 +12,7 @@
                             invisible="state != 'brouillon'"/>
                     <button name="action_renouveler" string="Renouveler" type="object"
                             class="oe_highlight"
-                            invisible="state not in ('active','alerte','expirée')"/>
+                            invisible="state not in ('active','alerte','expiree')"/>
                     <button name="action_resilier" string="Résilier" type="object"
                             invisible="state not in ('active','alerte')"/>
                     <button name="action_voir_sinistres" string="Voir sinistres" type="object"
@@ -21,12 +21,14 @@
                            statusbar_visible="brouillon,active,alerte,expirée"/>
                 </header>
                 <div class="alert alert-danger" role="alert"
-                     invisible="not is_obligatoire or state not in ('expirée','résiliée')">
-                    <p><strong translate="True">Police obligatoire expirée</strong> — <span translate="True">Ce bus ne peut plus être affecté à des tournées (règle Tunisie).</span></p>
+                     invisible="not is_obligatoire or state not in ('expiree','resiliee')">
+                    <strong>Police obligatoire expirée</strong> — Ce bus ne peut plus
+                    être affecté à des tournées (règle Tunisie).
                 </div>
                 <div class="alert alert-warning" role="alert"
                      invisible="visite_technique_valide or not type_police_id">
-                    <p><strong translate="True">Visite technique</strong> — <span translate="True">Absente ou expirée. Le renouvellement RC sera bloqué.</span></p>
+                    <strong>Visite technique</strong> — Absente ou expirée.
+                    Le renouvellement RC sera bloqué.
                 </div>
                 <sheet>
                     <div class="oe_title">
@@ -93,7 +95,7 @@
         <field name="model">transport.assurance.bus</field>
         <field name="arch" type="xml">
             <list string="Polices assurance bus"
-                  decoration-danger="state in ('expirée','résiliée')"
+                  decoration-danger="state in ('expiree','resiliee')"
                   decoration-warning="state == 'alerte'"
                   decoration-success="state == 'active'">
                 <field name="numero_police"/>
@@ -110,7 +112,7 @@
                 <field name="state" widget="badge"
                        decoration-success="state == 'active'"
                        decoration-warning="state == 'alerte'"
-                       decoration-danger="state in ('expirée','résiliée')"
+                       decoration-danger="state in ('expiree','resiliee')"
                        decoration-muted="state == 'brouillon'"/>
             </list>
         </field>
@@ -127,7 +129,7 @@
                 <field name="numero_police"/>
                 <filter string="Actives" name="actives" domain="[('state','=','active')]"/>
                 <filter string="En alerte" name="alerte" domain="[('state','=','alerte')]"/>
-                <filter string="Expirées" name="expirees" domain="[('state','=','expirée')]"/>
+                <filter string="Expirées" name="expirees" domain="[('state','=','expiree')]"/>
                 <filter string="Obligatoires" name="obligatoires" domain="[('is_obligatoire','=',True)]"/>
                 <separator/>
                 <filter string="RC" name="rc" domain="[('type_police_id.code','=','RC')]"/>
