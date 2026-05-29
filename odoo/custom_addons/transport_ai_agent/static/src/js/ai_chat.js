@@ -5,45 +5,100 @@ import { standardFieldProps } from "@web/views/fields/standard_field_props";
 
 const AGENT_URL = "http://localhost:8000";
 
-// ── Rapports prédéfinis ──────────────────────────────────────────────────────
-const RAPPORTS = [
-    { id: "rapport_journalier",   label: "📋 Rapport journalier d'exploitation",  description: "Tournées du jour, km, écarts, annulations",         categorie: "Exploitation" },
-    { id: "rapport_hebdomadaire", label: "📋 Rapport hebdomadaire d'exploitation", description: "Bilan 7 jours : tournées, chauffeurs, lignes",       categorie: "Exploitation" },
-    { id: "rapport_mensuel",      label: "📋 Rapport mensuel d'exploitation",      description: "Bilan du mois : km, recettes, top chauffeurs",       categorie: "Exploitation" },
-    { id: "bilan_parc",           label: "🚌 Synthèse état du parc bus",           description: "État de chaque bus, assurances, km du mois",        categorie: "Parc"         },
-    { id: "bilan_assurance",      label: "🛡️ Bilan mensuel assurance et sinistres", description: "Polices actives, sinistres, expirations à 30j",    categorie: "Assurance"    },
-    { id: "bilan_carburant",      label: "⛽ Rapport mensuel consommation carburant", description: "BGI/BGE, litres par bus, coût total",             categorie: "Carburant"    },
-    { id: "bilan_boc",            label: "📬 Synthèse courrier BOC",               description: "Courriers reçus, en attente, en retard",            categorie: "BOC"          },
-];
+// ── Rapports prédéfinis — multilingue ───────────────────────────────────────
+const RAPPORTS_I18N = {
+    rapport_journalier: {
+        fr: { label: "📋 Rapport journalier d'exploitation", description: "Tournées du jour, km, écarts, annulations",       categorie: "Exploitation" },
+        en: { label: "📋 Daily operations report",           description: "Today's trips, km, deviations, cancellations",    categorie: "Operations"   },
+        ar: { label: "📋 تقرير التشغيل اليومي",              description: "رحلات اليوم، الكم، الانحرافات، الإلغاءات",       categorie: "التشغيل"      },
+    },
+    rapport_hebdomadaire: {
+        fr: { label: "📋 Rapport hebdomadaire d'exploitation", description: "Bilan 7 jours : tournées, chauffeurs, lignes",  categorie: "Exploitation" },
+        en: { label: "📋 Weekly operations report",            description: "7-day summary: trips, drivers, lines",          categorie: "Operations"   },
+        ar: { label: "📋 تقرير التشغيل الأسبوعي",             description: "ملخص 7 أيام: الرحلات، السائقين، الخطوط",       categorie: "التشغيل"      },
+    },
+    rapport_mensuel: {
+        fr: { label: "📋 Rapport mensuel d'exploitation",      description: "Bilan du mois : km, recettes, top chauffeurs",  categorie: "Exploitation" },
+        en: { label: "📋 Monthly operations report",           description: "Monthly summary: km, revenue, top drivers",     categorie: "Operations"   },
+        ar: { label: "📋 تقرير التشغيل الشهري",               description: "ملخص الشهر: الكم، الإيرادات، أفضل السائقين",   categorie: "التشغيل"      },
+    },
+    bilan_parc: {
+        fr: { label: "🚌 Synthèse état du parc bus",           description: "État de chaque bus, assurances, km du mois",   categorie: "Parc"         },
+        en: { label: "🚌 Fleet status report",                 description: "Each bus status, insurance, monthly km",        categorie: "Fleet"        },
+        ar: { label: "🚌 تقرير حالة الأسطول",                 description: "حالة كل حافلة، التأمين، الكم الشهري",          categorie: "الأسطول"      },
+    },
+    bilan_assurance: {
+        fr: { label: "🛡️ Bilan mensuel assurance et sinistres", description: "Polices actives, sinistres, expirations à 30j", categorie: "Assurance" },
+        en: { label: "🛡️ Monthly insurance report",            description: "Active policies, claims, 30-day expirations",   categorie: "Insurance"    },
+        ar: { label: "🛡️ تقرير التأمين الشهري",               description: "البوليصات النشطة، الحوادث، انتهاءات 30 يوم",  categorie: "التأمين"      },
+    },
+    bilan_carburant: {
+        fr: { label: "⛽ Rapport mensuel consommation carburant", description: "BGI/BGE, litres par bus, coût total",        categorie: "Carburant"    },
+        en: { label: "⛽ Monthly fuel consumption report",      description: "BGI/BGE, liters per bus, total cost",          categorie: "Fuel"         },
+        ar: { label: "⛽ تقرير استهلاك الوقود الشهري",          description: "BGI/BGE، اللترات لكل حافلة، التكلفة الإجمالية", categorie: "الوقود"     },
+    },
+    bilan_boc: {
+        fr: { label: "📬 Synthèse courrier BOC",               description: "Courriers reçus, en attente, en retard",       categorie: "BOC"          },
+        en: { label: "📬 Mail management report",              description: "Received mail, pending, overdue",               categorie: "Mail"         },
+        ar: { label: "📬 تقرير البريد",                        description: "البريد الوارد، قيد الانتظار، المتأخر",         categorie: "البريد"       },
+    },
+};
 
-// ── Raccourcis statistiques par module ──────────────────────────────────────
-const STATS_RACCOURCIS = [
-    { module: "🚌 Parc bus",    couleur: "#2196F3", questions: [
-        "Combien de bus disponibles ?",
-        "Répartition des bus par état",
-        "Bus sans tournée ce mois",
-    ]},
-    { module: "⛽ Carburant",   couleur: "#FF9800", questions: [
-        "Consommation par bus",
-        "Litres BGI vs BGE",
-        "Évolution du coût carburant",
-    ]},
-    { module: "📋 Tournées",    couleur: "#4CAF50", questions: [
-        "Tournées par ligne ce mois",
-        "Taux de réalisation",
-        "Évolution sur 6 mois",
-    ]},
-    { module: "🛡️ Assurances",  couleur: "#9C27B0", questions: [
-        "Polices expirant dans 30 jours",
-        "Répartition par type",
-        "Sinistres ce trimestre",
-    ]},
-    { module: "📬 BOC",         couleur: "#F44336", questions: [
-        "Courriers en attente",
-        "Répartition arrivée/départ",
-        "Courriers par statut",
-    ]},
-];
+// Langue UI (détectée depuis le navigateur ou défaut ar car ERP tunisien)
+function detecterLangueUI() {
+    // Priorité 1 : langue de session Odoo (fiable)
+    try {
+        const odooLang = (
+            odoo?.session_info?.user_context?.lang ||
+            document.documentElement.lang ||
+            ""
+        ).toLowerCase();
+        if (odooLang.startsWith("ar")) return "ar";
+        if (odooLang.startsWith("en")) return "en";
+        if (odooLang.startsWith("fr")) return "fr";
+    } catch(e) {}
+    // Priorité 2 : attribut lang du document HTML
+    const htmlLang = (document.documentElement.lang || "").toLowerCase();
+    if (htmlLang.startsWith("ar")) return "ar";
+    if (htmlLang.startsWith("en")) return "en";
+    // Priorité 3 : direction du texte (RTL = arabe)
+    if (document.documentElement.dir === "rtl") return "ar";
+    // Défaut
+    return "fr";
+}
+const UI_LANG = detecterLangueUI();
+
+// RAPPORTS dans la langue de l'UI
+const RAPPORTS = Object.entries(RAPPORTS_I18N).map(([id, trs]) => ({
+    id,
+    ...(trs[UI_LANG] || trs["fr"]),
+}));
+
+// ── Raccourcis statistiques — multilingue ───────────────────────────────────
+const STATS_RACCOURCIS_I18N = {
+    fr: [
+        { module: "🚌 Parc bus",    couleur: "#2196F3", questions: ["Combien de bus disponibles ?", "Répartition des bus par état", "Bus sans tournée ce mois"] },
+        { module: "⛽ Carburant",   couleur: "#FF9800", questions: ["Consommation par bus", "Litres BGI vs BGE", "Évolution du coût carburant"] },
+        { module: "📋 Tournées",    couleur: "#4CAF50", questions: ["Tournées par ligne ce mois", "Taux de réalisation", "Évolution sur 6 mois"] },
+        { module: "🛡️ Assurances",  couleur: "#9C27B0", questions: ["Polices expirant dans 30 jours", "Répartition par type", "Sinistres ce trimestre"] },
+        { module: "📬 BOC",         couleur: "#F44336", questions: ["Courriers en attente", "Répartition arrivée/départ", "Courriers par statut"] },
+    ],
+    en: [
+        { module: "🚌 Fleet",       couleur: "#2196F3", questions: ["How many buses available?", "Bus distribution by status", "Buses with no trip this month"] },
+        { module: "⛽ Fuel",        couleur: "#FF9800", questions: ["Consumption per bus", "BGI vs BGE liters", "Fuel cost trend"] },
+        { module: "📋 Trips",       couleur: "#4CAF50", questions: ["Trips per line this month", "Completion rate", "6-month trend"] },
+        { module: "🛡️ Insurance",   couleur: "#9C27B0", questions: ["Policies expiring in 30 days", "Distribution by type", "Claims this quarter"] },
+        { module: "📬 Mail",        couleur: "#F44336", questions: ["Pending mail", "Incoming vs outgoing", "Mail by status"] },
+    ],
+    ar: [
+        { module: "🚌 الأسطول",     couleur: "#2196F3", questions: ["كم عدد الحافلات المتاحة؟", "توزيع الحافلات حسب الحالة", "حافلات بدون رحلة هذا الشهر"] },
+        { module: "⛽ الوقود",       couleur: "#FF9800", questions: ["الاستهلاك لكل حافلة", "لترات BGI مقابل BGE", "تطور تكلفة الوقود"] },
+        { module: "📋 الرحلات",     couleur: "#4CAF50", questions: ["الرحلات حسب الخط هذا الشهر", "معدل الإنجاز", "التطور على 6 أشهر"] },
+        { module: "🛡️ التأمين",     couleur: "#9C27B0", questions: ["البوليصات المنتهية خلال 30 يوم", "التوزيع حسب النوع", "الحوادث هذا الفصل"] },
+        { module: "📬 البريد",      couleur: "#F44336", questions: ["البريد قيد الانتظار", "الوارد مقابل الصادر", "البريد حسب الحالة"] },
+    ],
+};
+const STATS_RACCOURCIS = STATS_RACCOURCIS_I18N[UI_LANG] || STATS_RACCOURCIS_I18N["fr"];
 
 class AiChatInterface extends Component {
     static template = "transport_ai_agent.ChatInterface";
@@ -52,12 +107,16 @@ class AiChatInterface extends Component {
     setup() {
         this.orm          = useService("orm");
         this.notification = useService("notification");
-        this.RAPPORTS          = RAPPORTS;
-        this.STATS_RACCOURCIS  = STATS_RACCOURCIS;
+        // Recalculer la langue au moment du montage (Odoo est prêt)
+        const lang = detecterLangueUI();
+        this.STATS_RACCOURCIS = STATS_RACCOURCIS_I18N[lang] || STATS_RACCOURCIS_I18N["fr"];
         this._chartInstance    = null;
 
         this.state = useState({
             mode: "chat",  // "chat" | "rapport" | "stats"
+
+            // ── Rapports (reactive pour re-render quand langue change) ──────
+            rapports: Object.entries(RAPPORTS_I18N).map(([id, trs]) => ({id, ...(trs["fr"])})),
 
             // ── Chat ──────────────────────────────────────────────────────────
             messages: [],
@@ -90,6 +149,9 @@ class AiChatInterface extends Component {
             userInitials: "??",
             userName: "Chargement...",
             userId: null,
+
+            // ── UI langue ─────────────────────────────────────────────────────
+            uiLang: detecterLangueUI(),
         });
 
         onWillStart(async () => {
@@ -115,6 +177,13 @@ class AiChatInterface extends Component {
     }
 
     // ── Mode switch ──────────────────────────────────────────────────────────
+    getDateFormatted() {
+        const locale = this.state.uiLang === 'ar' ? 'ar-TN'
+                     : this.state.uiLang === 'en' ? 'en-GB'
+                     : 'fr-FR';
+        return new Date().toLocaleDateString(locale, {day:'2-digit', month:'long', year:'numeric'});
+    }
+
     setMode(mode) {
         this.state.mode = mode;
     }
@@ -529,13 +598,13 @@ class AiChatInterface extends Component {
                 const nom = m2 ? m2[1] : null;
                 const rpt = tid ? RAPPORTS.find(r => r.id === tid) : null;
                 this.state.rapportResultat = {
-                    label: rpt ? rpt.label : "Rapport personnalisé",
+                    label: rpt ? rpt.label : (UI_LANG === "ar" ? "تقرير مخصص" : UI_LANG === "en" ? "Custom report" : "Rapport personnalisé"),
                     pdf_url, texte: raw,
                     nom_fichier: nom || (tid ? `${tid}_${this._dateStr()}.pdf` : "rapport.pdf"),
                 };
                 if (tid) this.state.rapportSelectionne = tid;
                 this.state.rapportDetectionMsg = "";
-                this.notification.add("Rapport généré !", { type: "success" });
+                this.notification.add(this.state.uiLang === "ar" ? "تم إنشاء التقرير!" : this.state.uiLang === "en" ? "Report generated!" : "Rapport généré !", { type: "success" });
             } else {
                 this.state.rapportDetectionMsg = "";
                 this.state.rapportErreur = raw || "Aucun rapport trouvé. Essayez une formulation différente.";
@@ -557,50 +626,19 @@ class AiChatInterface extends Component {
         this.state.rapportErreur   = null;
 
         try {
-            // Passer par ask_question pour vérification des accès Odoo
-            if (!this.state.currentId) await this.newConversation();
-
-            const result = await this.orm.call(
-                "transport.ai.conversation",
-                "ask_question",
-                [[this.state.currentId]],
-                { question: `genere le ${id}`, mode_rapport: true }
+            // Appel direct FastAPI avec la langue correcte — bypass ask_question
+            const lang     = this.state.uiLang || "fr";
+            const pdf_url  = `${AGENT_URL}/rapport/${id}/pdf?langue=${lang}`;
+            const label    = this.getRapportLabel(id);
+            this.state.rapportResultat = {
+                label, pdf_url,
+                nom_fichier: `${id}_${this._dateStr()}.pdf`,
+            };
+            this.notification.add(
+                this.state.uiLang === "ar" ? "تم إنشاء التقرير!" :
+                this.state.uiLang === "en" ? "Report generated!" : "Rapport généré !",
+                { type: "success" }
             );
-
-            let raw = "", pdf_url = null;
-            if (result && typeof result === "object") {
-                raw     = result.reponse || result.content || result.texte || "";
-                pdf_url = result.pdf_url || null;
-            } else if (typeof result === "string") {
-                raw = result;
-            }
-
-            // Vérifier si accès refusé
-            if (raw && raw.includes("Acces refuse")) {
-                this.state.rapportErreur   = raw;
-                this.state.rapportLoading  = false;
-                return;
-            }
-
-            const parsed = this._parseContent(raw);
-            if (!pdf_url && parsed.pdf_url) { pdf_url = parsed.pdf_url; raw = parsed.content; }
-
-            if (pdf_url) {
-                const label = this.getRapportLabel(id);
-                this.state.rapportResultat = {
-                    label, pdf_url,
-                    nom_fichier: `${id}_${this._dateStr()}.pdf`,
-                };
-                this.notification.add("Rapport généré !", { type: "success" });
-            } else {
-                // Fallback direct FastAPI si ask_question ne retourne pas l'URL
-                const pdf_url_direct = `${AGENT_URL}/rapport/${id}/pdf`;
-                const label = this.getRapportLabel(id);
-                this.state.rapportResultat = {
-                    label, pdf_url: pdf_url_direct,
-                    nom_fichier: `${id}_${this._dateStr()}.pdf`,
-                };
-            }
         } catch (e) {
             console.error("Erreur rapport:", e);
             this.state.rapportErreur = "Erreur de connexion à l'agent IA.";
@@ -627,23 +665,23 @@ class AiChatInterface extends Component {
 
     async loadUserInfo() {
         try {
-            const res  = await fetch("/web/session/get_session_info", {
-                method: "POST",
-                headers: { "Content-Type": "application/json" },
-                body: JSON.stringify({ jsonrpc: "2.0", method: "call", params: {} }),
-            });
-            const data = await res.json();
-            if (data.result) {
-                const name   = data.result.name || "Utilisateur";
-                const parts  = name.trim().split(" ");
-                this.state.userName     = name;
-                this.state.userInitials = parts.length >= 2
-                    ? (parts[0][0] + parts[1][0]).toUpperCase()
-                    : name.substring(0, 2).toUpperCase();
-                this.state.userId = data.result.uid || null;
-            }
+            const info = await this.orm.call(
+                "transport.ai.conversation", "get_current_user_info", [], {}
+            );
+            this.state.userName     = info.name     || "Utilisateur";
+            this.state.userInitials = info.initials || "UT";
+            this.state.userId       = info.id       || null;
+
+            // Langue Odoo de l'utilisateur — fiable car vient du serveur
+            const lang = info.ui_lang || "fr";
+            this.state.uiLang   = lang;
+            this.state.rapports = Object.entries(RAPPORTS_I18N).map(([id, trs]) => ({
+                id, ...(trs[lang] || trs["fr"]),
+            }));
+            this.RAPPORTS         = this.state.rapports;
+            this.STATS_RACCOURCIS = STATS_RACCOURCIS_I18N[lang] || STATS_RACCOURCIS_I18N["fr"];
         } catch (e) {
-            this.state.userName = "Utilisateur";
+            this.state.userName     = "Utilisateur";
             this.state.userInitials = "UT";
         }
     }

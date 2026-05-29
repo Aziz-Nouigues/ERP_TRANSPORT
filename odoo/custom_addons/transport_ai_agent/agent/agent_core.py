@@ -14,6 +14,11 @@ from agent.tools.sql_tool import sql_tool, get_pg_connection
 from agent.tools.rpc_tool import rpc_tool
 from agent.tools.rag_tool import rag_tool
 from agent.prompts import SYSTEM_PROMPT
+from agent.language_detector import (
+    detecter_langue, msg, get_system_prompt,
+    TABLES_METIER_EN, TABLES_METIER_AR,
+    LABELS_COLONNES, STATUTS_TRADUITS, GABARITS_COUNT,
+)
 
 # Chercher .env dans plusieurs emplacements (robuste Windows/Linux, uvicorn/direct)
 def _find_and_load_dotenv():
@@ -499,7 +504,7 @@ def verifier_acces_question(question: str, allowed_tables: list, is_admin: bool)
                 autorise = any(t in (allowed_tables or [])
                                for t in tables_domaine.get(domaine, []))
                 if not autorise:
-                    return "Vous n'avez pas les droits d'accès pour consulter ces données."
+                    return msg("access_denied", langue)
     return None
 
 # ---------------------------------------------------------------------------
@@ -601,13 +606,24 @@ def detecter_outil(question: str, llm=None) -> str:
 # PIPELINE UNIFIÉ : 1 seul appel LLM (outil + tables + SQL en une fois)
 # ---------------------------------------------------------------------------
 
-def _tables_par_mots_cles(question: str) -> list:
-    """Détection des tables 100% Python via TABLES_METIER."""
+def _tables_par_mots_cles(question: str, langue: str = "fr") -> list:
+    """Détection des tables 100% Python via TABLES_METIER (multilingue)."""
     q = question.lower()
     tables = set()
+    # Mots-clés français (base)
     for mot, tables_liees in TABLES_METIER.items():
         if mot in q:
             tables.update(tables_liees)
+    # Mots-clés anglais
+    if langue == "en":
+        for mot, tables_liees in TABLES_METIER_EN.items():
+            if mot in q:
+                tables.update(tables_liees)
+    # Mots-clés arabes
+    elif langue == "ar":
+        for mot, tables_liees in TABLES_METIER_AR.items():
+            if mot in q:
+                tables.update(tables_liees)
 
     # Cas spéciaux : référence de tournée → toujours charger bus + chauffeur
     if re.search(r"tourn/\d{4}/\d+", q) or (
@@ -812,7 +828,7 @@ def _regles_metier_pour(question: str) -> str:
     if any(w in q for w in ["bus", "véhicul", "vehicul", "parc", "immatricul"]):
         regles.append("BUS: state jsonb COALESCE(s.name->>'fr_FR',s.name->>'en_US'). No type_vehicule col.")
     if any(w in q for w in ["assurance", "police", "sinistre"]):
-        regles.append("ASSURANCE: colonne=numero_police (PAS name). state VALEURS EXACTES: 'active','résiliée','expirée','brouillon','alerte'. JOIN compagnie: LEFT JOIN transport_assurance_compagnie c ON a.compagnie_id=c.id")
+        regles.append("ASSURANCE: colonne=numero_police (PAS name). state VALEURS EXACTES: 'active','résiliée','expirée','brouillon','alerte'. JOIN compagnie: LEFT JOIN transport_assurance_compagnie c ON a.compagnie_id=c.id. IMPORTANT: compagnie.name=VARCHAR pas jsonb, utiliser c.name SANS ->>.")
     if any(w in q for w in ["tournee", "tournée", "tourn/"]):
         regles.append("TOURNEE state: brouillon,planifie,en_cours,realise,annule. km_realise=actual,km_prevu=planned.")
     if any(w in q for w in ["chauffeur", "conducteur", "employe", "employé"]):
@@ -863,7 +879,7 @@ def generer_sql(question: str, llm: OllamaLLM,
         "NEVER use @> operator on state. Use state_id IN(47,48,5,6) to filter if needed. "
         "COUNT(*) FROM fleet_vehicle needs no WHERE. "
         "No cols: type_vehicule,activity_type,vehicle_type. NEVER select raw id columns.\n"
-        "  [ASSURANCE] colonne ref=numero_police (jamais name). state valeurs EXACTES: 'active','resiliee','expiree','brouillon','alerte'. JOIN compagnie: LEFT JOIN transport_assurance_compagnie c ON a.compagnie_id=c.id.\n"
+        "  [ASSURANCE] colonne ref=numero_police (jamais name). state valeurs EXACTES: 'active','resiliee','expiree','brouillon','alerte'. JOIN compagnie: LEFT JOIN transport_assurance_compagnie c ON a.compagnie_id=c.id. CRITICAL: transport_assurance_compagnie.name est VARCHAR (pas jsonb) — utiliser c.name directement SANS ->> operator.\n"
         "  [TOURNEES] state: brouillon,planifie,en_cours,realise,annule. "
         "km_realise=actual, km_prevu=planned, ecart_km=diff.\n"
         "  [EMPLOYES] table=hr_employee. JOIN: hr_employee e ON t.chauffeur_id=e.id\n"
@@ -1310,89 +1326,55 @@ _GABARITS_COUNT = [
 ]
 
 
-def _formuler_count(question: str, valeur: str) -> str:
+def _formuler_count(question: str, valeur: str, langue: str = "fr") -> str:
     q = question.lower()
-    for pattern, gabarit in _GABARITS_COUNT:
+    # Utiliser les gabarits de la langue détectée
+    gabarits = GABARITS_COUNT.get(langue, GABARITS_COUNT["fr"])
+    for pattern, gabarit in gabarits:
         if re.search(pattern, q):
             return gabarit.format(v=valeur)
-    return f"Résultat : **{valeur}**"
+    # Fallback : français si non trouvé dans la langue
+    if langue != "fr":
+        for pattern, gabarit in GABARITS_COUNT["fr"]:
+            if re.search(pattern, question.lower()):
+                return gabarit.format(v=valeur)
+    labels = {"fr": "Résultat", "en": "Result", "ar": "النتيجة"}
+    return f"{labels.get(langue, 'Résultat')} : **{valeur}**"
 
 
-def formuler_reponse(question: str, donnees: str, llm: OllamaLLM) -> str:
+def formuler_reponse(question: str, donnees: str, llm: OllamaLLM, langue: str = "fr") -> str:
     if re.search(r'\[[A-Za-zÀ-ÿ ]+\]', donnees):
-        return "Les données sont incomplètes. Veuillez reformuler votre question."
-    if any(msg in donnees for msg in ["Acces refuse", "Requete non valide", "Placeholder detecte"]):
-        return "Vous n'avez pas les droits d'accès pour consulter ces données."
+        return msg("placeholder_incomplete", langue)
+    if any(x in donnees for x in ["Acces refuse", "Requete non valide", "Placeholder detecte"]):
+        return msg("access_denied", langue)
     if not donnees.strip() or "Aucun résultat" in donnees or "Aucun resultat" in donnees:
-        return "Aucune donnée trouvée pour cette question."
+        return msg("no_data", langue)
 
     lignes = [l for l in donnees.strip().split("\n") if l.strip()]
     if not lignes:
-        return "Aucune donnée trouvée."
+        return msg("no_data", langue)
 
     entete = lignes[0] if lignes else ""
     colonnes = [c.strip() for c in entete.split("|") if c.strip()]
     lignes_data = [l for l in lignes[1:] if "----" not in l and "====" not in l]
 
     if not lignes_data:
-        return f"Résultat :\n{donnees}"
+        _res_label = {"fr": "Résultat", "en": "Result", "ar": "النتيجة"}
+        return f"{_res_label.get(langue, 'Résultat')} :\n{donnees}"
 
     nb = len(lignes_data)
 
     # ── COUNT/SUM (1 colonne) → Python pur, 0 LLM ──
     if len(colonnes) == 1:
         valeur = lignes_data[0].strip() if lignes_data else "?"
-        return _formuler_count(question, valeur)
+        return _formuler_count(question, valeur, langue)
 
     # ── Listes (≥2 lignes) et détail unique → voir après définition de _formater_valeur ──
-    LABELS = {
-        # Identité
-        "id": "ID", "name": "Référence", "nom": "Nom",
-        "code": "Code", "reference": "Référence", "ref": "Référence",
-        # Véhicules / Bus
-        "license_plate": "Immatriculation", "license_pla": "Immatriculation",
-        "nom_bus": "Bus", "nom_vehicule": "Véhicule", "vehicle_name": "Bus",
-        "etat": "État", "state": "État", "statut": "Statut",
-        # Tournées
-        "tournee_name": "Tournée", "date": "Date",
-        "direction": "Direction",
-        "heure_depart_prevu": "Départ prévu (h)",
-        "heure_arrivee_prevu": "Arrivée prévue (h)",
-        "heure_depart_reel": "Départ réel (h)",
-        "heure_arrivee_reel": "Arrivée réelle (h)",
-        "km_realise": "KM réalisés", "km_prevu": "KM prévus",
-        "ecart_km": "Écart KM", "total_km": "Total KM",
-        "driver_name": "Chauffeur", "nom_chauffeur": "Chauffeur",
-        "chauffeur": "Chauffeur", "ligne": "Ligne", "bus": "Bus",
-        "compteur_depart": "Compteur départ", "compteur_arrivee": "Compteur arrivée",
-        # Assurance / Police
-        "numero_police": "N° Police",
-        "date_debut": "Date début", "date_fin": "Date fin",
-        # Énergie / Factures
-        "site": "Site / Agence",
-        "type_facture": "Type", "type_energie": "Type énergie",
-        "numero_compteur": "N° Compteur",
-        "unite_mesure": "Unité",
-        "date_debut_periode": "Début période",
-        "date_fin_periode": "Fin période",
-        "date_reception": "Date réception",
-        "date_facture": "Date",
-        "quantite_consommee": "Quantité consommée",
-        "montant": "Montant (TND)", "montant_ttc": "Montant TTC",
-        # Carburant
-        "total_quantity": "Quantité (L)", "voucher_type": "Type bon",
-        # Stations / Lignes
-        "nom_station": "Station", "type_station": "Type station",
-        "ville": "Ville", "agence_id": "Agence",
-        # Patrimoine
-        "cout_acquisition": "Coût acquisition",
-        "valeur_nette_comptable": "Valeur nette",
-        "amortissements_cumules": "Amort. cumulés",
-        # Courrier
-        "sujet": "Sujet", "expediteur": "Expéditeur",
-        # Employés
-        "job_title": "Poste", "active": "Actif",
-    }
+    # Labels localisés selon la langue détectée
+    LABELS = LABELS_COLONNES.get(langue, LABELS_COLONNES["fr"])
+
+    # Utiliser les statuts dans la langue détectée
+    _statuts_langue = STATUTS_TRADUITS.get(langue, STATUTS_TRADUITS["fr"])
 
     STATUTS = {
         # Factures / Paiements
@@ -1500,11 +1482,11 @@ def formuler_reponse(question: str, donnees: str, llm: OllamaLLM) -> str:
             return None
 
         label = LABELS.get(col_lower, col.replace("_", " ").title())
-        affiche = STATUTS.get(v.lower(), v)
+        affiche = _statuts_langue.get(v.lower(), STATUTS.get(v.lower(), v))
         return f"{label} : {affiche}"
 
     if nb == 1:
-        # ── Détail unique : données pré-formatées → LLM pour mise en phrases ──
+        # ── Détail unique : affichage direct, 0 LLM ──────────────────────────
         valeurs = [v.strip() for v in lignes_data[0].split("|")]
         parties = []
         for j, col in enumerate(colonnes):
@@ -1513,28 +1495,17 @@ def formuler_reponse(question: str, donnees: str, llm: OllamaLLM) -> str:
             ligne_fmt = _formater_valeur(col, valeurs[j])
             if ligne_fmt:
                 parties.append(ligne_fmt)
-        donnees_propres = "\n".join(parties)
-        try:
-            prompt = (
-                f"Tu es un assistant ERP transport tunisien. "
-                f"Réponds en français, style professionnel, 3-5 phrases.\n"
-                f"Question : {question}\n"
-                f"Données :\n{donnees_propres}\n"
-                f"Présente ces informations naturellement. "
-                f"N'invente rien. Commence par 'Voici les détails'."
-            )
-            rep = llm.invoke(prompt).strip()
-            if rep and len(rep) > 20:
-                return rep
-        except Exception:
-            pass
-        # Fallback : affichage bullet si LLM échoue
         if parties:
             return "\n".join(f"• {p}" for p in parties)
         return donnees
 
     # ── Listes (≥2 lignes) : tableau numéroté ──
-    reponse = f"**{nb} résultat(s) trouvé(s)** :\n\n"
+    _headers = {
+        "fr": f"**{nb} résultat(s) trouvé(s)** :\n\n",
+        "en": f"**{nb} result(s) found** :\n\n",
+        "ar": f"**{nb} نتيجة (نتائج) موجودة** :\n\n",
+    }
+    reponse = _headers.get(langue, _headers["fr"])
     for i, ligne in enumerate(lignes_data, 1):
         valeurs = [v.strip() for v in ligne.split("|")]
         parties = []
@@ -1738,7 +1709,7 @@ def _executer_rpc(question: str, llm, allowed_tables: list, is_admin: bool, sess
     if not methode_cible:
         requete = generer_sql(question, llm, allowed_tables, is_admin)
         donnees = sql_tool.invoke(requete)
-        return formuler_reponse(question, donnees, llm)
+        return formuler_reponse(question, donnees, llm, "fr")
 
     # CREATE
     if methode_cible == "create":
@@ -1881,7 +1852,7 @@ def _executer_rpc(question: str, llm, allowed_tables: list, is_admin: bool, sess
         _logger.warning(f"RPC bouton échoué: {donnees[:100]}")
         requete = generer_sql(question, llm, allowed_tables, is_admin)
         donnees = sql_tool.invoke(requete)
-        return formuler_reponse(question, donnees, llm)
+        return formuler_reponse(question, donnees, llm, "fr")
     return donnees
 
 
@@ -2036,6 +2007,7 @@ TEMPLATES_RAPPORTS = {
     # ─────────────────────────────────────────────────────────────────────────
     "rapport_journalier": {
         "label": "Rapport journalier d'exploitation",
+        "labels": {"fr": "Rapport journalier d'exploitation", "en": "Daily Operations Report", "ar": "التقرير اليومي للاستغلال"},
         "requetes": {
             "tournees_planifiees": "SELECT COUNT(*) FROM transport_exploitation_tournee WHERE date = CURRENT_DATE AND state = 'planifie'",
             "tournees_en_cours":   "SELECT COUNT(*) FROM transport_exploitation_tournee WHERE date = CURRENT_DATE AND state = 'en_cours'",
@@ -2078,6 +2050,7 @@ TEMPLATES_RAPPORTS = {
     # ─────────────────────────────────────────────────────────────────────────
     "rapport_hebdomadaire": {
         "label": "Rapport hebdomadaire d'exploitation",
+        "labels": {"fr": "Rapport hebdomadaire d'exploitation", "en": "Weekly Operations Report", "ar": "التقرير الأسبوعي للاستغلال"},
         "requetes": {
             "tournees_realisees": "SELECT COUNT(*) FROM transport_exploitation_tournee WHERE date >= CURRENT_DATE - INTERVAL '7 days' AND state = 'realise'",
             "tournees_annulees":  "SELECT COUNT(*) FROM transport_exploitation_tournee WHERE date >= CURRENT_DATE - INTERVAL '7 days' AND state = 'annule'",
@@ -2124,6 +2097,7 @@ TEMPLATES_RAPPORTS = {
     # ─────────────────────────────────────────────────────────────────────────
     "rapport_mensuel": {
         "label": "Rapport mensuel d'exploitation",
+        "labels": {"fr": "Rapport mensuel d'exploitation", "en": "Monthly Operations Report", "ar": "التقرير الشهري للاستغلال"},
         "requetes": {
             "tournees_realisees": "SELECT COUNT(*) FROM transport_exploitation_tournee WHERE EXTRACT(MONTH FROM date)=EXTRACT(MONTH FROM CURRENT_DATE) AND EXTRACT(YEAR FROM date)=EXTRACT(YEAR FROM CURRENT_DATE) AND state='realise'",
             "tournees_annulees":  "SELECT COUNT(*) FROM transport_exploitation_tournee WHERE EXTRACT(MONTH FROM date)=EXTRACT(MONTH FROM CURRENT_DATE) AND EXTRACT(YEAR FROM date)=EXTRACT(YEAR FROM CURRENT_DATE) AND state='annule'",
@@ -2194,6 +2168,7 @@ TEMPLATES_RAPPORTS = {
     # ─────────────────────────────────────────────────────────────────────────
     "bilan_parc": {
         "label": "Synthese etat du parc bus",
+        "labels": {"fr": "Synthese etat du parc bus", "en": "Fleet Status Summary", "ar": "ملخص حالة الأسطول"},
         "requetes": {
             "total_bus":        "SELECT COUNT(*) FROM fleet_vehicle WHERE active = True",
             "en_service":       "SELECT COUNT(*) FROM fleet_vehicle WHERE state_id = 47",
@@ -2244,6 +2219,7 @@ TEMPLATES_RAPPORTS = {
     # ─────────────────────────────────────────────────────────────────────────
     "bilan_assurance": {
         "label": "Bilan mensuel assurance et sinistres",
+        "labels": {"fr": "Bilan mensuel assurance et sinistres", "en": "Monthly Insurance & Claims Report", "ar": "بيان التأمين والحوادث الشهري"},
         "requetes": {
             "polices_actives":   "SELECT COUNT(*) FROM transport_assurance_bus WHERE state='active'",
             "polices_alerte":    "SELECT COUNT(*) FROM transport_assurance_bus WHERE state='alerte'",
@@ -2336,6 +2312,7 @@ TEMPLATES_RAPPORTS = {
     # ─────────────────────────────────────────────────────────────────────────
     "bilan_carburant": {
         "label": "Rapport mensuel consommation carburant",
+        "labels": {"fr": "Rapport mensuel consommation carburant", "en": "Monthly Fuel Consumption Report", "ar": "تقرير استهلاك الوقود الشهري"},
         "requetes": {
             "bons_valides": "SELECT COUNT(*) FROM transport_fuel_voucher WHERE state='done' AND EXTRACT(MONTH FROM date)=EXTRACT(MONTH FROM CURRENT_DATE) AND EXTRACT(YEAR FROM date)=EXTRACT(YEAR FROM CURRENT_DATE)",
             "litres_total": "SELECT COALESCE(SUM(total_quantity),0) FROM transport_fuel_voucher WHERE state='done' AND EXTRACT(MONTH FROM date)=EXTRACT(MONTH FROM CURRENT_DATE) AND EXTRACT(YEAR FROM date)=EXTRACT(YEAR FROM CURRENT_DATE)",
@@ -2383,6 +2360,7 @@ TEMPLATES_RAPPORTS = {
     # ─────────────────────────────────────────────────────────────────────────
     "bilan_boc": {
         "label": "Synthese courrier BOC",
+        "labels": {"fr": "Synthese courrier BOC", "en": "BOC Mail Summary", "ar": "ملخص بريد مكتب الضبط"},
         "requetes": {
             "total_arrivee": "SELECT COUNT(*) FROM boc_courrier_arrivee WHERE EXTRACT(MONTH FROM date_arrivee)=EXTRACT(MONTH FROM CURRENT_DATE) AND EXTRACT(YEAR FROM date_arrivee)=EXTRACT(YEAR FROM CURRENT_DATE)",
             "en_attente":    "SELECT COUNT(*) FROM boc_courrier_arrivee WHERE state IN ('enregistre','diffuse') AND EXTRACT(MONTH FROM date_arrivee)=EXTRACT(MONTH FROM CURRENT_DATE) AND EXTRACT(YEAR FROM date_arrivee)=EXTRACT(YEAR FROM CURRENT_DATE)",
@@ -2457,31 +2435,49 @@ def _detecter_rapport(question: str) -> str | None:
 
     # ── Ordre IMPORTANT : plus spécifique d'abord ─────────────────────────────
     patterns = [
-        # BOC — avant rapport_mensuel pour éviter "courriers ce mois" → mensuel
+        # BOC
         ("bilan_boc", [
             "bilan courrier", "rapport courrier", "synthese courrier",
             "bilan boc", "etat courriers", "courriers mois",
             "courrier boc", "arrivee courrier", "depart courrier",
             "courriers en attente", "courriers en retard", "boite ordre",
+            # AR
+            "تقرير البريد", "ملخص البريد", "البريد الوارد", "البريد الصادر",
+            # EN
+            "mail report", "mail summary", "incoming mail", "outgoing mail",
         ]),
-        # ASSURANCE — avant rapport_mensuel pour "bilan mensuel assurance"
+        # ASSURANCE
         ("bilan_assurance", [
             "bilan assurance", "rapport assurance", "synthese assurance",
             "bilan sinistres", "rapport sinistres", "etat assurance",
             "polices assurance", "assurance bus", "sinistres bus",
             "bilan mensuel assurance",
+            # AR
+            "تقرير التامين", "تقرير التأمين", "ملخص التأمين",
+            "بوليصات التأمين", "الحوادث",
+            # EN
+            "insurance report", "insurance summary", "claims report",
         ]),
         # CARBURANT
         ("bilan_carburant", [
             "bilan carburant", "rapport carburant", "consommation carburant",
             "synthese carburant", "bons carburant", "rapport fuel",
             "consommation mensuelle carburant", "bgi bge",
+            # AR
+            "تقرير الوقود", "استهلاك الوقود", "ملخص الوقود",
+            # EN
+            "fuel report", "fuel consumption", "fuel summary",
         ]),
         # PARC BUS
         ("bilan_parc", [
             "etat du parc", "bilan parc", "synthese parc",
             "etat des bus", "parc bus", "flotte bus",
             "disponibilite bus", "etat flotte",
+            # AR
+            "حالة الأسطول", "تقرير الأسطول", "ملخص الحافلات",
+            "حالة الحافلات",
+            # EN
+            "fleet report", "fleet status", "bus fleet",
         ]),
         # JOURNALIER
         ("rapport_journalier", [
@@ -2489,14 +2485,24 @@ def _detecter_rapport(question: str) -> str | None:
             "rapport du jour", "journee exploitation",
             "resume du jour", "synthese du jour",
             "rapport exploitation journalier", "tournees du jour",
+            # AR
+            "تقرير يومي", "تقرير التشغيل اليومي", "ملخص اليوم",
+            "الرحلات اليومية",
+            # EN
+            "daily report", "daily summary", "today report",
+            "daily operations",
         ]),
         # HEBDOMADAIRE
         ("rapport_hebdomadaire", [
             "rapport hebdomadaire", "bilan semaine", "resume semaine",
             "rapport semaine", "synthese semaine", "bilan hebdomadaire",
             "cette semaine exploitation", "semaine exploitation",
+            # AR
+            "تقرير أسبوعي", "تقرير اسبوعي", "ملخص الأسبوع",
+            # EN
+            "weekly report", "weekly summary", "this week",
         ]),
-        # MENSUEL — en dernier car "ce mois" est très générique
+        # MENSUEL
         ("rapport_mensuel", [
             "rapport mensuel exploitation", "bilan mensuel exploitation",
             "rapport mensuel tournees", "bilan mensuel tournees",
@@ -2504,8 +2510,13 @@ def _detecter_rapport(question: str) -> str | None:
             "bilan du mois exploitation", "mois exploitation",
             "genere le rapport mensuel", "rapport mensuel",
             "rapport_mensuel",
+            # AR
+            "تقرير شهري", "تقرير التشغيل الشهري", "ملخص الشهر",
+            "الرحلات الشهرية",
+            # EN
+            "monthly report", "monthly summary", "this month report",
         ]),
-        # IDs directs envoyés par le JS via genererRapport()
+        # IDs directs JS
         ("rapport_journalier",   ["rapport_journalier"]),
         ("rapport_hebdomadaire", ["rapport_hebdomadaire"]),
         ("bilan_parc",           ["genere le bilan_parc"]),
@@ -2521,7 +2532,7 @@ def _detecter_rapport(question: str) -> str | None:
     return None
 
 
-def generer_rapport(type_rapport: str, llm) -> str:
+def generer_rapport(type_rapport: str, llm, langue: str = "fr") -> str:
     """
     Génère un rapport complet en français pour le type demandé.
     Exécute les requêtes SQL puis demande au LLM de rédiger la synthèse.
@@ -2555,16 +2566,34 @@ def generer_rapport(type_rapport: str, llm) -> str:
         else:
             contexte_str += f"  {cle} : {valeur}\n"
 
-    # Prompt LLM pour rédiger la synthèse
-    prompt = (
-        f"Tu es l'assistant IA d'un ERP de transport terrestre tunisien.\n"
-        f"Rédige un {label} professionnel et concis en français.\n"
-        f"Utilise les données suivantes :\n\n"
-        f"{contexte_str}\n"
-        f"Format : paragraphes courts, chiffres en gras, "
-        f"points positifs et points d'attention. "
-        f"Maximum 250 mots. Commence directement par le rapport."
-    )
+    # Prompt LLM localisé selon la langue
+    _rapport_prompts = {
+        "fr": (
+            f"Tu es l'assistant IA d'un ERP de transport terrestre tunisien.\n"
+            f"Rédige un {label} professionnel et concis en français.\n"
+            f"Utilise les données suivantes :\n\n{contexte_str}\n"
+            f"Format : paragraphes courts, chiffres en gras, "
+            f"points positifs et points d'attention. "
+            f"Maximum 250 mots. Commence directement par le rapport."
+        ),
+        "en": (
+            f"You are an AI assistant for a Tunisian transport ERP.\n"
+            f"Write a professional and concise {label} in English.\n"
+            f"Use the following data:\n\n{contexte_str}\n"
+            f"Format: short paragraphs, bold numbers, "
+            f"highlights and attention points. "
+            f"Maximum 250 words. Start directly with the report."
+        ),
+        "ar": (
+            f"أنت مساعد ذكاء اصطناعي لنظام ERP لنقل بري تونسي.\n"
+            f"اكتب {label} مهنياً وموجزاً باللغة العربية.\n"
+            f"استخدم البيانات التالية:\n\n{contexte_str}\n"
+            f"التنسيق: فقرات قصيرة، أرقام بالخط العريض، "
+            f"نقاط إيجابية ونقاط تحتاج انتباه. "
+            f"250 كلمة كحد أقصى. ابدأ مباشرة بالتقرير."
+        ),
+    }
+    prompt = _rapport_prompts.get(langue, _rapport_prompts["fr"])
 
     if llm is None:
         _logger.warning("LLM non disponible pour rapport — retour brut")
@@ -2640,7 +2669,7 @@ def generer_rapport(type_rapport: str, llm) -> str:
 
 
 def generer_rapport_libre(question: str, llm, allowed_tables: list = None,
-                          is_admin: bool = False) -> dict:
+                          is_admin: bool = False, langue: str = "fr") -> dict:
     """
     Génère un rapport PDF à partir d'une question libre.
     1. Génère le SQL via le LLM
@@ -2690,7 +2719,7 @@ def generer_rapport_libre(question: str, llm, allowed_tables: list = None,
         return {"erreur": f"Erreur lors de l'exécution de la requête : {e}"}
 
     if not rows:
-        return {"erreur": "Aucune donnée trouvée pour cette question."}
+        return {"erreur": msg("no_data", langue if langue else "fr")}
 
     # ── Étape 3 : construire le label et le nom de fichier ───────────────────
     # Normaliser la question en slug pour le nom de fichier
@@ -2734,6 +2763,7 @@ def generer_rapport_libre(question: str, llm, allowed_tables: list = None,
             rows=rows,
             chemin=chemin,
             llm=llm,
+            langue=langue,
         )
 
         _logger.info(f"Rapport libre généré: {chemin}")
@@ -2750,8 +2780,20 @@ def ask_agent(question: str, llm: OllamaLLM,
               is_admin: bool = False,
               session_id: str = "default",
               mode_rapport: bool = False,
-              mode_stats: bool = False) -> str:
+              mode_stats: bool = False,
+              langue: str = None) -> str:
     try:
+        # ── Détection automatique de langue (0 LLM) ──────────────────────────
+        if not langue:
+            # Détection robuste : arabe d'abord par ratio de caractères
+            _chars_ar = sum(1 for c in question if '\u0600' <= c <= '\u06FF')
+            _chars_tot = sum(1 for c in question if c.strip())
+            if _chars_tot > 0 and _chars_ar / _chars_tot > 0.10:
+                langue = "ar"
+            else:
+                langue = detecter_langue(question)
+        _logger.info(f"Langue détectée: {langue} pour: {question[:50]}")
+
         # Enrichir la question avec le contexte conversationnel si nécessaire
         question = _enrichir_question(question, session_id)
 
@@ -2762,11 +2804,19 @@ def ask_agent(question: str, llm: OllamaLLM,
                 import json as _json
 
                 # ── Étape 1 : générer le SQL avec contexte métier + retry ────
+                # Labels BOC selon la langue
+                _BOC_LABELS = {
+                    "fr": ("Arrivée", "Départ"),
+                    "en": ("Incoming", "Outgoing"),
+                    "ar": ("وارد", "صادر"),
+                }
+                _lbl_arr, _lbl_dep = _BOC_LABELS.get(langue, _BOC_LABELS["fr"])
+
                 HINT_STATS = (
-                    "\nRÈGLES SQL STATISTIQUES:\n"
-                    "- Pour répartition arrivée/départ BOC : "
-                    "SELECT 'Arrivée' AS type, COUNT(*) FROM boc_courrier_arrivee "
-                    "UNION ALL SELECT 'Départ', COUNT(*) FROM boc_courrier_depart\n"
+                    f"\nRÈGLES SQL STATISTIQUES:\n"
+                    f"- Pour répartition arrivée/départ BOC : "
+                    f"SELECT \'{_lbl_arr}\' AS type, COUNT(*) FROM boc_courrier_arrivee "
+                    f"UNION ALL SELECT \'{_lbl_dep}\' FROM boc_courrier_depart\n"
                     "- Pour répartition état bus : "
                     "SELECT s.name->>'en_US' AS etat, COUNT(*) FROM fleet_vehicle v "
                     "JOIN fleet_vehicle_state s ON v.state_id=s.id GROUP BY s.name\n"
@@ -2775,6 +2825,23 @@ def ask_agent(question: str, llm: OllamaLLM,
                     "FROM transport_fuel_voucher WHERE state='done' GROUP BY voucher_type\n"
                     "- Pour répartition état polices : "
                     "SELECT state, COUNT(*) FROM transport_assurance_bus GROUP BY state\n"
+                    "- Pour tendance/évolution sur N mois (courriers arrivée) : "
+                    "SELECT TO_CHAR(date_reception, 'YYYY-MM') AS mois, COUNT(*) "
+                    "FROM boc_courrier_arrivee "
+                    "WHERE date_reception >= CURRENT_DATE - INTERVAL '6 months' "
+                    "GROUP BY mois ORDER BY mois\n"
+                    "- Pour tendance/évolution sur N mois (courriers départ) : "
+                    "SELECT TO_CHAR(date_envoi, 'YYYY-MM') AS mois, COUNT(*) "
+                    "FROM boc_courrier_depart "
+                    "WHERE date_envoi >= CURRENT_DATE - INTERVAL '6 months' "
+                    "GROUP BY mois ORDER BY mois\n"
+                    "- Pour tendance tournées par mois : "
+                    "SELECT TO_CHAR(date, 'YYYY-MM') AS mois, COUNT(*) "
+                    "FROM transport_exploitation_tournee "
+                    "WHERE date >= CURRENT_DATE - INTERVAL '6 months' "
+                    "GROUP BY mois ORDER BY mois\n"
+                    "- IMPORTANT: Toujours utiliser CURRENT_DATE pour les dates récentes\n"
+                    "- IMPORTANT: NE JAMAIS utiliser des dates hardcodées comme '2030-05'\n"
                     "- NE JAMAIS joindre boc_courrier_arrivee et boc_courrier_depart pour les compter\n"
                     "- Toujours utiliser GROUP BY pour les répartitions\n"
                 )
@@ -2811,7 +2878,7 @@ def ask_agent(question: str, llm: OllamaLLM,
                         donnees = sql_tool.invoke(requete2)
 
                 if not donnees or not donnees.strip():
-                    donnees = "Aucune donnée trouvée."
+                    donnees = msg("no_data", langue)
 
                 # ── Étape 2 : générer le JSON stats avec le LLM ──────────────
                 # Contexte métier pour guider le SQL et l'interprétation
@@ -2826,34 +2893,58 @@ def ask_agent(question: str, llm: OllamaLLM,
                     "NE PAS faire de jointure entre arrivee et depart — les compter séparément.\n"
                 )
 
-                prompt_stats = (
-                    f"Tu es l'assistant IA d'un ERP transport terrestre tunisien.\n"
-                    f"{CONTEXTE_METIER}\n"
-                    f"Question : {question}\n"
-                    f"Données SQL :\n{donnees[:800]}\n\n"
-                    f"Génère UNIQUEMENT un JSON valide (sans markdown) avec cette structure exacte :\n"
-                    f"{{\n"
-                    f"  \"texte\": \"phrase résumé en français avec les chiffres clés\",\n"
-                    f"  \"kpis\": [\n"
-                    f"    {{\"label\": \"nom de l'indicateur\", \"valeur\": \"valeur formatée\", \"tendance\": \"↑|↓|=\"}}\n"
-                    f"  ],\n"
-                    f"  \"visualisation\": {{\n"
-                    f"    \"type\": \"bar|line|donut|pie|kpi\",\n"
-                    f"    \"title\": \"titre\",\n"
-                    f"    \"labels\": [],\n"
-                    f"    \"data\": []\n"
-                    f"  }}\n"
-                    f"}}\n"
-                    f"RÈGLES IMPORTANTES :\n"
-                    f"1. TOUJOURS remplir kpis avec AU MOINS 1 entrée contenant la valeur principale.\n"
-                    f"   Exemple scalaire: kpis=[{{label:\"Montant total\",valeur:\"3 500 TND\",tendance:\"=\"}}]\n"
-                    f"2. Si 1 seule valeur: type=\"kpi\", labels=[], data=[valeur_numerique]\n"
-                    f"3. Si plusieurs valeurs: type=\"bar\" ou \"donut\", remplir labels et data.\n"
-                    f"4. donut/pie=répartition, bar=comparaison, line=évolution temporelle.\n"
-                    f"5. Valeurs dans data = nombres uniquement (pas de strings).\n"
-                    f"6. Formate les valeurs dans kpis.valeur lisiblement: 3500 → \"3 500 TND\".\n"
-                    f"Réponds UNIQUEMENT avec le JSON."
-                )
+                # Prompt stats entièrement localisé selon la langue
+                if langue == "ar":
+                    prompt_stats = (
+                        "CRITICAL INSTRUCTION: You MUST respond with Arabic text only for all string values.\n"
+                        "You are an AI assistant for a Tunisian land transport ERP.\n"
+                        f"{CONTEXTE_METIER}\n"
+                        f"Question (Arabic): {question}\n"
+                        f"SQL Data:\n{donnees[:800]}\n\n"
+                        "Generate ONLY valid JSON (no markdown). ALL text values MUST be in Arabic:\n"
+                        "{\n"
+                        "  \"texte\": \"[Arabic summary sentence with key numbers]\",\n"
+                        "  \"kpis\": [{\"label\": \"[Arabic indicator name]\", \"valeur\": \"[formatted value]\", \"tendance\": \"↑|↓|=\"}],\n"
+                        "  \"visualisation\": {\"type\": \"bar|line|donut|pie|kpi\", \"title\": \"[Arabic title]\", \"labels\": [\"[Arabic label 1]\", \"[Arabic label 2]\"], \"data\": []}\n"
+                        "}\n"
+                        "RULES:\n"
+                        "1. ALL labels, texte, title MUST be in Arabic script. NO French or English text.\n"
+                        "2. For incoming vs outgoing mail: labels=[\"وارد\", \"صادر\"] NOT [\"Arrivée\", \"Départ\"]\n"
+                        "3. For bus status: labels=[\"في الخدمة\", \"خارج الخدمة\"]\n"
+                        "4. data = numbers only. tendance = ↑ or ↓ or =\n"
+                        "5. If 1 value: type=\"kpi\". If multiple: type=\"bar\" or \"donut\".\n"
+                        "Respond ONLY with the JSON object."
+                    )
+                elif langue == "en":
+                    prompt_stats = (
+                        "You are an AI assistant for a Tunisian land transport ERP.\n"
+                        f"{CONTEXTE_METIER}\n"
+                        f"Question: {question}\n"
+                        f"SQL Data:\n{donnees[:800]}\n\n"
+                        "Generate ONLY valid JSON (no markdown). ALL text values MUST be in English:\n"
+                        "{\n"
+                        "  \"texte\": \"[English summary sentence with key numbers]\",\n"
+                        "  \"kpis\": [{\"label\": \"[English indicator name]\", \"valeur\": \"[formatted value]\", \"tendance\": \"↑|↓|=\"}],\n"
+                        "  \"visualisation\": {\"type\": \"bar|line|donut|pie|kpi\", \"title\": \"[English title]\", \"labels\": [], \"data\": []}\n"
+                        "}\n"
+                        "RULES: data = numbers only. tendance = ↑ or ↓ or =. If 1 value: type=\"kpi\".\n"
+                        "Respond ONLY with the JSON object."
+                    )
+                else:
+                    prompt_stats = (
+                        f"Tu es l'assistant IA d'un ERP transport terrestre tunisien.\n"
+                        f"{CONTEXTE_METIER}\n"
+                        f"Question : {question}\n"
+                        f"Données SQL :\n{donnees[:800]}\n\n"
+                        "Génère UNIQUEMENT un JSON valide (sans markdown) :\n"
+                        "{\n"
+                        "  \"texte\": \"phrase résumé en français avec les chiffres clés\",\n"
+                        "  \"kpis\": [{\"label\": \"nom indicateur\", \"valeur\": \"valeur formatée\", \"tendance\": \"↑|↓|=\"}],\n"
+                        "  \"visualisation\": {\"type\": \"bar|line|donut|pie|kpi\", \"title\": \"titre\", \"labels\": [], \"data\": []}\n"
+                        "}\n"
+                        "RÈGLES: data=nombres. Si 1 valeur: type=\"kpi\". Si plusieurs: type=\"bar\" ou \"donut\".\n"
+                        "Réponds UNIQUEMENT avec le JSON."
+                    )
 
                 raw_stats = llm.invoke(prompt_stats).strip()
                 raw_stats = raw_stats.replace("```json","").replace("```","").strip()
@@ -2872,7 +2963,7 @@ def ask_agent(question: str, llm: OllamaLLM,
                 # Fallback : retourner une réponse texte simple
                 try:
                     donnees_fb = sql_tool.invoke(generer_sql(question, llm, allowed_tables, is_admin))
-                    reponse_fb = formuler_reponse(question, donnees_fb, llm)
+                    reponse_fb = formuler_reponse(question, donnees_fb, llm, langue)
                     fallback = {"texte": reponse_fb, "kpis": [], "visualisation": None}
                     return _json.dumps(fallback, ensure_ascii=False)
                 except Exception as e2:
@@ -2882,36 +2973,22 @@ def ask_agent(question: str, llm: OllamaLLM,
 
         # ── MODE RAPPORT LIBRE : générer un PDF pour n'importe quelle question ──
         if mode_rapport:
-            _logger.info(f"Mode rapport libre activé pour: {question}")
-            # En mode rapport, TOUJOURS générer un rapport SQL ciblé sur la question
-            # On ne redirige vers les rapports prédéfinis QUE si la demande est explicite
-            # ex: "génère le bilan assurance", "rapport mensuel", etc.
-            DEMANDES_PREDEFINIES = [
-                "bilan assurance", "bilan parc", "bilan carburant", "bilan boc",
-                "rapport mensuel exploitation", "rapport hebdomadaire", "rapport journalier",
-                "genere le bilan", "genere le rapport", "rapport complet",
-                "synthese parc", "synthese carburant", "synthese courrier",
-            ]
-            import unicodedata as _ud
-            q_norm = _ud.normalize("NFD", question.lower())
-            q_norm = "".join(c for c in q_norm if _ud.category(c) != "Mn")
-
-            utiliser_predefini = any(p in q_norm for p in DEMANDES_PREDEFINIES)
-
-            if utiliser_predefini:
-                type_rapport = _detecter_rapport(question)
-                if type_rapport:
-                    agent_url = _AGENT_URL
-                    lien_pdf  = f"{agent_url}/rapport/{type_rapport}/pdf"
-                    label     = TEMPLATES_RAPPORTS[type_rapport]["label"]
-                    from datetime import date as _date
-                    return (
-                        f"✅ Rapport prêt : **{label}**\n"
-                        f"Généré le {_date.today().strftime('%d/%m/%Y')}\n"
-                        f"PDF_URL:{lien_pdf}"
-                    )
-            # Toujours → rapport libre SQL ciblé sur la question exacte
-            resultat = generer_rapport_libre(question, llm, allowed_tables, is_admin)
+            _logger.info(f"Mode rapport activé pour: {question} | langue={langue}")
+            # _detecter_rapport gère fr/en/ar — on l'appelle EN PREMIER
+            type_rapport = _detecter_rapport(question)
+            if type_rapport:
+                agent_url = _AGENT_URL
+                lien_pdf  = f"{agent_url}/rapport/{type_rapport}/pdf?langue={langue}"
+                label     = TEMPLATES_RAPPORTS[type_rapport].get("labels", {}).get(langue, TEMPLATES_RAPPORTS[type_rapport]["label"])
+                from datetime import date as _date
+                return (
+                    f"✅ Rapport prêt : **{label}**\n"
+                    f"Généré le {_date.today().strftime('%d/%m/%Y')}\n"
+                    f"PDF_URL:{lien_pdf}"
+                )
+            # Aucun rapport prédéfini → rapport libre SQL
+            _logger.info(f"Rapport libre: {question}")
+            resultat = generer_rapport_libre(question, llm, allowed_tables, is_admin, langue)
             if "erreur" in resultat:
                 return f"❌ {resultat['erreur']}"
             agent_url = _AGENT_URL
@@ -2937,11 +3014,10 @@ def ask_agent(question: str, llm: OllamaLLM,
             _logger.info(f"Rapport détecté: {type_rapport}")
             print(f"  -> Rapport: {type_rapport}")
             agent_url  = _AGENT_URL
-            lien_pdf   = f"{agent_url}/rapport/{type_rapport}/pdf"
-            label      = TEMPLATES_RAPPORTS[type_rapport]["label"]
+            lien_pdf   = f"{agent_url}/rapport/{type_rapport}/pdf?langue={langue}"
+            _tpl2      = TEMPLATES_RAPPORTS[type_rapport]
+            label      = _tpl2.get("labels", {}).get(langue, _tpl2["label"])
             from datetime import date as _date
-            # Retourner un message court avec le lien PDF
-            # Le frontend détectera PDF_URL: pour afficher le bouton
             return (
                 f"✅ Rapport prêt : **{label}**\n"
                 f"Généré le {_date.today().strftime('%d/%m/%Y')}\n"
@@ -2991,12 +3067,12 @@ def ask_agent(question: str, llm: OllamaLLM,
                     donnees = sql_tool.invoke(requete2)
                     if "Erreur SQL" in donnees:
                         _logger.error(f"Erreur persistante: {donnees[:200]}")
-                        return "Je n'ai pas pu récupérer ces données. Veuillez reformuler votre question."
+                        return msg("error_retry", langue)
 
             if not donnees.strip():
-                return "Aucune donnée trouvée."
+                return msg("no_data", langue)
 
-            reponse = formuler_reponse(question, donnees, llm)
+            reponse = formuler_reponse(question, donnees, llm, langue)
 
         # -----------------------------------------------------------------
         # FIX 1 + FIX 4 — RPC dynamique avec timeout et fallback SQL
@@ -3031,7 +3107,7 @@ def ask_agent(question: str, llm: OllamaLLM,
                 try:
                     requete = generer_sql(question, llm, allowed_tables, is_admin)
                     donnees = sql_tool.invoke(requete)
-                    reponse = formuler_reponse(question, donnees, llm)
+                    reponse = formuler_reponse(question, donnees, llm, langue)
                 except Exception as e_sql:
                     _logger.error(f"Fallback SQL aussi échoué: {e_sql}")
                     reponse = "Impossible de récupérer ces informations. Veuillez réessayer."
@@ -3062,10 +3138,10 @@ def ask_agent(question: str, llm: OllamaLLM,
                             f"Info: {donnees[:500]}\nQ: {question}"
                         ).strip()
                     else:
-                        reponse = _RAG_DEFAUT
+                        reponse = msg("no_answer_found", langue)
                 except Exception as e_rag:
                     _logger.warning(f"RAG exception: {e_rag}")
-                    reponse = _RAG_DEFAUT
+                    reponse = msg("no_answer_found", langue)
 
         # FIX 3 — Persistance SQLite
         sauvegarder_historique(session_id, question, reponse)
@@ -3075,8 +3151,5 @@ def ask_agent(question: str, llm: OllamaLLM,
         msg = str(e)
         _logger.error(f"Erreur ask_agent: {msg}")
         if "system memory" in msg or "memory" in msg.lower():
-            return (
-                "⚠️ Mémoire insuffisante pour traiter cette requête. "
-                "Essayez une question plus simple ou redémarrez Ollama : `ollama stop` puis relancez."
-            )
+            return msg('error_memory', langue)
         return f"Erreur : {msg}"

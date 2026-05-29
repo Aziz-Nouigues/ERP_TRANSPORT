@@ -17,11 +17,23 @@
     <!-- Onglets de mode -->
     <div class="ai_mode_tabs">
       <button t-attf-class="ai_mode_tab {{ state.mode === 'chat' ? 'active' : '' }}"
-              t-on-click="() => this.setMode('chat')">💬 Chat</button>
+              t-on-click="() => this.setMode('chat')">
+              <t t-if="state.uiLang === 'ar'">💬 محادثة</t>
+              <t t-elif="state.uiLang === 'en'">💬 Chat</t>
+              <t t-else="">💬 Chat</t>
+            </button>
       <button t-attf-class="ai_mode_tab {{ state.mode === 'rapport' ? 'active' : '' }}"
-              t-on-click="() => this.setMode('rapport')">📊 Rapports</button>
+              t-on-click="() => this.setMode('rapport')">
+              <t t-if="state.uiLang === 'ar'">📊 التقارير</t>
+              <t t-elif="state.uiLang === 'en'">📊 Reports</t>
+              <t t-else="">📊 Rapports</t>
+            </button>
       <button t-attf-class="ai_mode_tab {{ state.mode === 'stats' ? 'active' : '' }}"
-              t-on-click="() => this.setMode('stats')">📈 Stats</button>
+              t-on-click="() => this.setMode('stats')">
+              <t t-if="state.uiLang === 'ar'">📈 إحصاءات</t>
+              <t t-elif="state.uiLang === 'en'">📈 Stats</t>
+              <t t-else="">📈 Stats</t>
+            </button>
     </div>
 
     <!-- Sidebar Chat -->
@@ -43,7 +55,7 @@
     <t t-if="state.mode === 'rapport'">
       <div class="ai_sidebar_section">Choisir un rapport</div>
       <div class="ai_rapport_list">
-        <t t-foreach="RAPPORTS" t-as="rpt" t-key="rpt.id">
+        <t t-foreach="state.rapports" t-as="rpt" t-key="rpt.id">
           <div t-attf-class="ai_rapport_item {{ state.rapportSelectionne === rpt.id ? 'active' : '' }}"
                t-on-click="() => this.selectRapport(rpt.id)">
             <div class="ai_rapport_item_label"><t t-esc="rpt.label"/></div>
@@ -55,7 +67,11 @@
 
     <!-- Sidebar Stats -->
     <t t-if="state.mode === 'stats'">
-      <button class="ai_new_chat_btn" t-on-click="nouvelleStatsConversation">✏️ Nouvelle statistique</button>
+      <button class="ai_new_chat_btn" t-on-click="nouvelleStatsConversation">
+              <t t-if="state.uiLang === 'ar'">✏️ إحصاء جديد</t>
+              <t t-elif="state.uiLang === 'en'">✏️ New statistic</t>
+              <t t-else="">✏️ Nouvelle statistique</t>
+            </button>
       <div class="ai_sidebar_section">Historique statistiques</div>
       <div class="ai_history_list">
         <t t-if="state.statsHistory.length === 0">
@@ -155,7 +171,7 @@
       <div class="ai_input_area">
         <div class="ai_input_inner">
           <div class="ai_input_box">
-            <textarea class="ai_textarea" placeholder="Posez votre question en français..."
+            <textarea class="ai_textarea" t-att-placeholder="state.uiLang === 'ar' ? 'اكتب سؤالك...' : state.uiLang === 'en' ? 'Ask your question...' : 'Posez votre question...'"
               t-att-value="state.question" t-on-input="onInput" t-on-keydown="onKeyDown"
               t-att-disabled="state.loading" rows="1"/>
             <button class="ai_send_button" t-on-click="sendQuestion"
@@ -163,7 +179,11 @@
               <t t-if="state.loading">…</t><t t-else="">➤</t>
             </button>
           </div>
-          <p class="ai_input_hint">Entrée pour envoyer · Shift+Entrée pour nouvelle ligne</p>
+          <p class="ai_input_hint">
+            <t t-if="state.uiLang === 'ar'">Enter للإرسال · Shift+Enter لسطر جديد</t>
+            <t t-elif="state.uiLang === 'en'">Enter to send · Shift+Enter for new line</t>
+            <t t-else="">Entrée pour envoyer · Shift+Entrée pour nouvelle ligne</t>
+          </p>
         </div>
       </div>
     </t>
@@ -174,15 +194,23 @@
         <div class="ai_rapport_header">
           <div class="ai_rapport_header_icon">📊</div>
           <div>
-            <h2 class="ai_rapport_header_title">Génération de rapports PDF</h2>
-            <p class="ai_rapport_header_sub">Décrivez le rapport souhaité ou choisissez dans la liste.</p>
+            <h2 class="ai_rapport_header_title">
+              <t t-if="state.uiLang === 'ar'">إنشاء تقارير PDF</t>
+              <t t-elif="state.uiLang === 'en'">Generate PDF reports</t>
+              <t t-else="">Génération de rapports PDF</t>
+            </h2>
+            <p class="ai_rapport_header_sub">
+              <t t-if="state.uiLang === 'ar'">صف التقرير المطلوب أو اختر من القائمة.</t>
+              <t t-elif="state.uiLang === 'en'">Describe the report or choose from the list.</t>
+              <t t-else="">Décrivez le rapport souhaité ou choisissez dans la liste.</t>
+            </p>
           </div>
         </div>
         <div class="ai_rapport_input_zone">
           <div class="ai_rapport_input_box">
             <span class="ai_rapport_input_icon">🔍</span>
             <input type="text" class="ai_rapport_input"
-              placeholder="Ex: données sur les bus, polices assurance, consommation carburant..."
+              t-att-placeholder="state.uiLang === 'ar' ? 'مثال: بيانات الحافلات، وثائق التأمين، استهلاك الوقود...' : state.uiLang === 'en' ? 'E.g.: bus data, insurance policies, fuel consumption...' : 'Ex: données sur les bus, polices assurance, consommation carburant...'"
               t-att-value="state.rapportTexte"
               t-on-input="onRapportTexteInput"
               t-on-keydown="onRapportTexteKeyDown"
@@ -207,12 +235,16 @@
         <t t-if="!state.rapportSelectionne and !state.rapportResultat and !state.rapportErreur">
           <div class="ai_rapport_placeholder">
             <div class="ai_rapport_placeholder_icon">👈</div>
-            <p>Saisissez votre demande ou choisissez un rapport dans le menu de gauche</p>
+            <p>
+              <t t-if="state.uiLang === 'ar'">اكتب طلبك أو اختر تقريراً من القائمة</t>
+              <t t-elif="state.uiLang === 'en'">Enter your request or choose a report from the list</t>
+              <t t-else="">Saisissez votre demande ou choisissez un rapport dans le menu de gauche</t>
+            </p>
           </div>
         </t>
         <t t-if="state.rapportSelectionne">
           <div class="ai_rapport_card">
-            <t t-foreach="RAPPORTS" t-as="rpt" t-key="rpt.id">
+            <t t-foreach="state.rapports" t-as="rpt" t-key="rpt.id">
               <t t-if="rpt.id === state.rapportSelectionne">
                 <div class="ai_rapport_card_top">
                   <div class="ai_rapport_card_label"><t t-esc="rpt.label"/></div>
@@ -223,8 +255,16 @@
             </t>
             <button class="ai_rapport_generate_btn" t-on-click="genererRapport"
               t-att-disabled="state.rapportLoading or !state.rapportSelectionne">
-              <t t-if="state.rapportLoading"><span class="ai_rapport_spinner"/>Génération...</t>
-              <t t-else="">⚡ Générer le rapport PDF</t>
+              <t t-if="state.rapportLoading"><span class="ai_rapport_spinner"/>
+                <t t-if="state.uiLang === 'ar'">جارٍ الإنشاء...</t>
+                <t t-elif="state.uiLang === 'en'">Generating...</t>
+                <t t-else="">Génération...</t>
+              </t>
+              <t t-else="">
+                <t t-if="state.uiLang === 'ar'">⚡ إنشاء تقرير PDF</t>
+                <t t-elif="state.uiLang === 'en'">⚡ Generate PDF report</t>
+                <t t-else="">⚡ Générer le rapport PDF</t>
+              </t>
             </button>
           </div>
         </t>
@@ -232,13 +272,29 @@
           <div class="ai_rapport_result">
             <div class="ai_rapport_result_icon">✅</div>
             <div class="ai_rapport_result_content">
-              <div class="ai_rapport_result_title">Rapport prêt : <t t-esc="state.rapportResultat.label"/></div>
+              <div class="ai_rapport_result_title">
+                <t t-if="state.uiLang === 'ar'">التقرير جاهز: </t>
+                <t t-elif="state.uiLang === 'en'">Report ready: </t>
+                <t t-else="">Rapport prêt : </t>
+                <t t-esc="state.rapportResultat.label"/>
+              </div>
               <div class="ai_rapport_result_date">
-                Généré le <t t-esc="new Date().toLocaleDateString('fr-FR', {day:'2-digit',month:'long',year:'numeric'})"/>
+                <t t-if="state.uiLang === 'ar'">تم الإنشاء في </t>
+                <t t-elif="state.uiLang === 'en'">Generated on </t>
+                <t t-else="">Généré le </t>
+                <t t-esc="getDateFormatted()"/>
               </div>
               <div class="ai_rapport_result_actions">
-                <button class="ai_pdf_btn_open ai_rapport_btn" t-on-click="ouvrirRapportPDF">🔍 Ouvrir</button>
-                <button class="ai_pdf_btn_dl ai_rapport_btn" t-on-click="telechargerRapportPDF">⬇ Télécharger</button>
+                <button class="ai_pdf_btn_open ai_rapport_btn" t-on-click="ouvrirRapportPDF">
+                  <t t-if="state.uiLang === 'ar'">🔍 فتح</t>
+                  <t t-elif="state.uiLang === 'en'">🔍 Open</t>
+                  <t t-else="">🔍 Ouvrir</t>
+                </button>
+                <button class="ai_pdf_btn_dl ai_rapport_btn" t-on-click="telechargerRapportPDF">
+                  <t t-if="state.uiLang === 'ar'">⬇ تنزيل</t>
+                  <t t-elif="state.uiLang === 'en'">⬇ Download</t>
+                  <t t-else="">⬇ Télécharger</t>
+                </button>
               </div>
             </div>
           </div>
@@ -247,9 +303,13 @@
           <div class="ai_rapport_error">❌ <t t-esc="state.rapportErreur"/></div>
         </t>
 
-        <div class="ai_rapport_grid_title">Tous les rapports disponibles</div>
+        <div class="ai_rapport_grid_title">
+          <t t-if="state.uiLang === 'ar'">جميع التقارير المتاحة</t>
+          <t t-elif="state.uiLang === 'en'">All available reports</t>
+          <t t-else="">Tous les rapports disponibles</t>
+        </div>
         <div class="ai_rapport_grid">
-          <t t-foreach="RAPPORTS" t-as="rpt" t-key="rpt.id">
+          <t t-foreach="state.rapports" t-as="rpt" t-key="rpt.id">
             <div t-attf-class="ai_rapport_grid_item {{ state.rapportSelectionne === rpt.id ? 'selected' : '' }}"
                  t-on-click="() => this.selectRapport(rpt.id)">
               <div class="ai_rapport_grid_label"><t t-esc="rpt.label"/></div>
@@ -269,8 +329,16 @@
         <div class="ai_stats_header">
           <div class="ai_stats_header_icon">📈</div>
           <div>
-            <h2 class="ai_stats_header_title">Statistiques &amp; Visualisations</h2>
-            <p class="ai_stats_header_sub">Posez une question — l'agent génère le graphique le plus adapté.</p>
+            <h2 class="ai_stats_header_title">
+              <t t-if="state.uiLang === 'ar'">الإحصاءات والمخططات</t>
+              <t t-elif="state.uiLang === 'en'">Statistics &amp; Charts</t>
+              <t t-else="">Statistiques &amp; Visualisations</t>
+            </h2>
+            <p class="ai_stats_header_sub">
+              <t t-if="state.uiLang === 'ar'">اطرح سؤالاً — سيُنشئ الوكيل المخطط الأنسب.</t>
+              <t t-elif="state.uiLang === 'en'">Ask a question — the agent generates the best chart.</t>
+              <t t-else="">Posez une question — l'agent génère le graphique le plus adapté.</t>
+            </p>
           </div>
         </div>
 
@@ -279,7 +347,7 @@
           <div class="ai_stats_input_box">
             <span class="ai_stats_input_icon">📊</span>
             <input type="text" class="ai_stats_input"
-              placeholder="Ex: tournées par ligne ce mois, répartition des bus par état..."
+              t-att-placeholder="state.uiLang === 'ar' ? 'مثال: الرحلات حسب الخط هذا الشهر، توزيع الحافلات حسب الحالة...' : state.uiLang === 'en' ? 'E.g.: trips per line this month, bus distribution by status...' : 'Ex: tournées par ligne ce mois, répartition des bus par état...'"
               t-att-value="state.statsQuestion"
               t-on-input="onStatsInput"
               t-on-keydown="onStatsKeyDown"
@@ -301,7 +369,11 @@
         <t t-if="!state.statsHasResult and !state.statsLoading and !state.statsErreur">
           <div class="ai_stats_welcome">
             <div class="ai_stats_welcome_icon">📈</div>
-            <p class="ai_stats_welcome_title">Visualisations automatiques</p>
+            <p class="ai_stats_welcome_title">
+              <t t-if="state.uiLang === 'ar'">مخططات تلقائية</t>
+              <t t-elif="state.uiLang === 'en'">Automatic charts</t>
+              <t t-else="">Visualisations automatiques</t>
+            </p>
             <p class="ai_stats_welcome_sub">L'agent analyse votre question et choisit automatiquement le meilleur visuel.</p>
             <div class="ai_stats_chips_grid">
               <t t-foreach="STATS_RACCOURCIS" t-as="module" t-key="module.module">

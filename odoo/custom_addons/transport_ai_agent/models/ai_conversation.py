@@ -3,8 +3,45 @@ from odoo import models, fields, api
 import requests
 import logging
 import re
+import unicodedata
 
 _logger = logging.getLogger(__name__)
+
+
+def _detecter_langue_odoo(texte: str) -> str:
+    """Détection de langue légère (pas d'import externe requis dans Odoo)."""
+    if not texte:
+        return "fr"
+    # Arabe — détection par ratio de caractères
+    chars_ar = sum(1 for c in texte if '\u0600' <= c <= '\u06FF')
+    chars_total = sum(1 for c in texte if c.strip())
+    if chars_total > 0 and chars_ar / chars_total > 0.15:
+        return "ar"
+    # Mots anglais typiques
+    mots_en = {"how", "what", "which", "list", "show", "get", "the", "and",
+               "many", "vehicle", "driver", "trip", "fuel", "status", "bus",
+               "please", "give", "display", "create", "validate", "cancel",
+               "incoming", "outgoing", "vs", "versus", "between", "compare",
+               "total", "count", "number", "of", "in", "by", "per", "all",
+               "active", "expired", "pending", "done", "sent", "received",
+               "mail", "letter", "fleet", "maintenance", "breakdown",
+               "service", "out", "monthly", "weekly", "daily", "is", "are",
+               "consumption", "accident", "claim", "policy", "contract",
+               "trend", "month", "evolution", "over", "time", "chart",
+               "graph", "plot", "analysis", "analyze", "week", "year",
+               "quarter", "history", "historical", "growth", "increase",
+               "decrease", "average", "avg", "report", "summary", "data"}
+    mots_fr = {"combien", "liste", "quels", "quelle", "les", "des", "une",
+               "quel", "comment", "tournée", "chauffeur", "véhicule", "état",
+               "rapport", "bilan", "pour", "avec", "dans", "sur", "du"}
+    q = texte.lower()
+    q_norm = unicodedata.normalize("NFD", q)
+    q_norm = "".join(c for c in q_norm if unicodedata.category(c) != "Mn")
+    mots = set(q_norm.split())
+    score_en = len(mots & mots_en)
+    score_fr = len(mots & mots_fr)
+    return "en" if score_en > score_fr else "fr"
+
 
 FASTAPI_URL = "http://localhost:8000/chat"
 FASTAPI_SYNC_URL = "http://localhost:8000/sync"
@@ -118,7 +155,16 @@ class AiConversation(models.Model):
         parts = name.strip().split(" ")
         initials = ((parts[0][0] + parts[1][0]).upper()
                     if len(parts) >= 2 else name[:2].upper())
-        return {"id": user.id, "name": name, "initials": initials, "login": user.login}
+        # Langue Odoo de l'utilisateur (ex: ar_TN, fr_FR, en_US)
+        lang_code = user.lang or self.env.context.get('lang', 'fr_FR')
+        if lang_code.startswith('ar'):
+            ui_lang = 'ar'
+        elif lang_code.startswith('en'):
+            ui_lang = 'en'
+        else:
+            ui_lang = 'fr'
+        return {"id": user.id, "name": name, "initials": initials,
+                "login": user.login, "ui_lang": ui_lang, "lang_code": lang_code}
 
     def _get_user_permissions(self):
         user = self.env.user
@@ -204,7 +250,16 @@ class AiConversation(models.Model):
             return texte_propre, pdf_url
         return reponse_text, None
 
-    def ask_question(self, question=False, mode_rapport=False, mode_stats=False, **kwargs):
+    @api.model
+    def get_supported_languages(self):
+        """Retourne les langues supportées par l'agent IA."""
+        return [
+            {"code": "fr", "name": "Français", "flag": "🇫🇷", "dir": "ltr"},
+            {"code": "en", "name": "English",  "flag": "🇬🇧", "dir": "ltr"},
+            {"code": "ar", "name": "العربية",  "flag": "🇹🇳", "dir": "rtl"},
+        ]
+
+    def ask_question(self, question=False, mode_rapport=False, mode_stats=False, langue=None, **kwargs):
         self.ensure_one()
 
         if not question:
@@ -280,6 +335,7 @@ class AiConversation(models.Model):
         # Appel FastAPI
         pdf_url = None
         try:
+            _langue = _detecter_langue_odoo(question)
             payload = {
                 "question": question,
                 "session_id": session_id,
@@ -289,6 +345,7 @@ class AiConversation(models.Model):
                 "is_admin": is_admin_user,
                 "mode_rapport": _mode_rapport,
                 "mode_stats": _mode_stats,
+                "langue": langue or _langue,
             }
             response = requests.post(FASTAPI_URL, json=payload, timeout=120)
             response.raise_for_status()

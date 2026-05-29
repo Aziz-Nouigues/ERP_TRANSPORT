@@ -10,6 +10,7 @@ from pydantic import BaseModel
 import json
 from pathlib import Path
 
+from agent.language_detector import detecter_langue
 from agent.agent_core import (
     create_agent, ask_agent,
     charger_historique, effacer_historique,
@@ -84,6 +85,7 @@ class QuestionRequest(BaseModel):
     is_admin: bool = False
     mode_rapport: bool = False
     mode_stats: bool = False
+    langue: str = None
 
 
 class ReponseModel(BaseModel):
@@ -136,7 +138,8 @@ async def chat(request: QuestionRequest):
                     is_admin=request.is_admin,
                     session_id=request.session_id,
                     mode_rapport=request.mode_rapport,
-                    mode_stats=request.mode_stats
+                    mode_stats=request.mode_stats,
+                    langue=(lambda l: (print(f"  [MAIN] request.langue={request.langue!r} detecte={detecter_langue(request.question)!r} final={l!r}", flush=True), l)[1])(request.langue or detecter_langue(request.question))
                 )
             ),
             timeout=CHAT_TIMEOUT
@@ -217,7 +220,7 @@ def liste_rapports():
 
 
 @app.get("/rapport/{type_rapport}/pdf")
-async def telecharger_rapport_pdf(type_rapport: str):
+async def telecharger_rapport_pdf(type_rapport: str, langue: str = "fr"):
     """
     Génère et retourne un rapport PDF à la demande.
     Utilisé par le bouton de téléchargement dans l'interface chatbot.
@@ -245,19 +248,20 @@ async def telecharger_rapport_pdf(type_rapport: str):
             from agent.agent_core import _executer_requetes_rapport, TEMPLATES_RAPPORTS
             from rapport_pdf import generer_pdf_rapport
 
-            # Collecter les données via les requêtes SQL du template
             template = TEMPLATES_RAPPORTS[type_rapport]
-            data = _executer_requetes_rapport(template["requetes"])
+            data     = _executer_requetes_rapport(template["requetes"])
 
-            # Chemin du fichier
-            nom = f"{type_rapport}_{date.today().strftime('%Y%m%d_%H%M')}.pdf"
+            nom    = f"{type_rapport}_{date.today().strftime('%Y%m%d_%H%M%S')}.pdf"
             chemin = RAPPORTS_DIR / nom
-            generer_pdf_rapport(type_rapport, template["label"], data, chemin)
+            labels = template.get("labels", {})
+            label_final = labels.get(langue, template["label"])
+            generer_pdf_rapport(type_rapport, label_final, data, chemin,
+                                langue=langue)
             return str(chemin)
 
         chemin_pdf = await asyncio.wait_for(
             loop.run_in_executor(executor, _generer),
-            timeout=60
+            timeout=120
         )
 
         nom_fichier = Path(chemin_pdf).name
