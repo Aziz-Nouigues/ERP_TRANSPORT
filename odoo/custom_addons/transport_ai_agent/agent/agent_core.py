@@ -514,9 +514,11 @@ def verifier_acces_question(question: str, allowed_tables: list, is_admin: bool)
 # Mots-clés qui indiquent une procédure/définition (rag)
 _MOTS_RAG = {
     "comment", "procédure", "procedure", "définition", "definition",
-    "qu'est-ce", "qu est ce", "c'est quoi", "expliquer", "expliquez",
-    "comment faire", "règle", "regle", "workflow", "étapes", "etapes",
-    "feuille de route", "manuel", "guide",
+    "qu'est-ce", "qu est ce", "c'est quoi", "c est quoi", "cest quoi",
+    "expliquer", "expliquez", "comment faire", "règle", "regle",
+    "workflow", "étapes", "etapes", "feuille de route", "manuel", "guide",
+    "kesquoi", "koi", "ca veut dire", "ça veut dire", "signifie",
+    "c'est quoi le", "c'est quoi la", "c'est quoi un", "c'est quoi une",
 }
 
 # Mots-clés qui indiquent une action Odoo (rpc)
@@ -584,18 +586,19 @@ def detecter_outil(question: str, llm=None) -> str:
     MOTS_LECTURE = {
         "quel", "quelle", "quels", "quelles", "combien", "liste",
         "afficher", "montrer", "voir", "donner", "donne",
-        "quoi", "lequel", "laquelle", "qui a", "qui est",
+        "lequel", "laquelle", "qui a", "qui est",
         "meilleur", "maximum", "minimum", "grand nombre",
         "top", "rang", "statistique", "analyse", "rapport", "bilan",
         "etat actuel", "etat de", "situation", "evolution",
     }
-    for mot in MOTS_LECTURE:
-        if mot in q or mot in q_norm:
-            return "sql"
-
+    # RAG d'abord — questions définitionnelles prioritaires sur lecture SQL
     for mot in _MOTS_RAG:
         if mot in q or mot in q_norm:
             return "rag"
+
+    for mot in MOTS_LECTURE:
+        if mot in q or mot in q_norm:
+            return "sql"
     for mot in _MOTS_RPC:
         if mot in q or mot in q_norm:
             return "rpc"
@@ -894,7 +897,13 @@ def generer_sql(question: str, llm: OllamaLLM,
         "  [BOC] boc_courrier_depart.state: enregistre,classe.\n"
         "CRITICAL: only real columns. ->> only on jsonb. LEFT JOIN for nullable FK. "
         "ILIKE for text. LIMIT 50 for lists. No accents in table names. "
-        "No bracket placeholders.\n\n"
+        "No bracket placeholders.\n"
+        "NOT IN subquery: ALWAYS add AND vehicle_id IS NOT NULL inside NOT IN() to avoid NULL poisoning.\n"
+        "INTERVAL current month: use DATE_TRUNC('month', CURRENT_DATE), not CURRENT_DATE - INTERVAL '1 month'.\n"
+        "LICENSE PLATE: ALWAYS use ILIKE for license_plate search. "
+        "CORRECT: WHERE v.license_plate ILIKE '%158%tu%2026%' "
+        "WRONG: WHERE v.license_plate = '158 TU 2026' "
+        "Split the plate into parts with % between each.\n\n"
         f"Question: {question}\n\nSQL:"
     )
 
@@ -1065,9 +1074,17 @@ INTENTIONS_ECRITURE = [
 
     # ── Bus ──────────────────────────────────────────────────────────
     # code : action_changer_etat → ouvre wizard (géré en write simplifié)
-    (["mettre le bus en service", "remettre en service", "remettre le bus"],
+    (["mettre le bus en service", "remettre en service", "remettre le bus", "remet en service", "remets en service", "remet le bus", "remets le bus",
+      "mets le bus en service", "mets bus", "met le bus en service"],
      "write", "fleet.vehicle"),
-    (["mettre le bus hors service", "immobiliser le bus", "hors service"],
+    (["mettre le bus hors service", "immobiliser le bus", "hors service",
+      "mets le bus hors service", "mets hors service"],
+     "write", "fleet.vehicle"),
+    (["mettre le bus en maintenance", "en maintenance", "mets en maintenance",
+      "mets le bus en maintenance", "met en maintenance", "maintenance"],
+     "write", "fleet.vehicle"),
+    (["mettre le bus en panne", "en panne", "mets en panne",
+      "mets le bus en panne", "met en panne"],
      "write", "fleet.vehicle"),
 
     # ── Assurance bus ────────────────────────────────────────────────
@@ -1740,12 +1757,31 @@ def _executer_rpc(question: str, llm, allowed_tables: list, is_admin: bool, sess
         else:
             etat_id = 47
         ids = ids_bruts[:]
+
+        # Résolution par immatriculation si pas d'IDs numériques
+        if not ids:
+            import re as _re_immat
+            m_immat = _re_immat.search(
+                r'(?<![a-zA-Z])(\d{1,4}\s+[a-zA-Z]{1,3}\s+\d{2,4})',
+                question, _re_immat.IGNORECASE
+            )
+            if m_immat:
+                plaque = m_immat.group(0).strip()
+                action_search = 'fleet.vehicle|search_read|[["license_plate","ilike","' + plaque + '"]]|["id","name","license_plate"]'
+                res_search = rpc_tool.invoke(action_search)
+                id_matches = _re_immat.findall(r'\[(\d+)\]', res_search)
+                ids = [int(i) for i in id_matches] if id_matches else []
+
+        # Ajouter "remet en service" dans les mots clés détectés
+        if any(w in question.lower() for w in ["remet en service", "remets en service"]) and etat_id != 47:
+            etat_id = 47
+
         if ids:
             etat_val = '{"state_id":' + str(etat_id) + "}"
             action   = "fleet.vehicle|write|" + _json.dumps(ids) + "|" + etat_val
             donnees  = rpc_tool.invoke(action)
             return donnees if donnees and "Erreur" not in donnees else "État du bus modifié."
-        return "Précise l'ID du bus (ex: 'Mets le bus id 3 hors service')."
+        return "Bus introuvable. Précise l'immatriculation exacte (ex: 'Mets le bus 158 tu 2026 en service')."
 
     # WRITE affecter chauffeur/bus sur une tournée
     if methode_cible == "write" and modele_cible == "transport.exploitation.tournee":
@@ -2685,6 +2721,19 @@ def generer_rapport_libre(question: str, llm, allowed_tables: list = None,
     # ── Étape 1 : générer le SQL ──────────────────────────────────────────────
     try:
         requete = generer_sql(question, llm, allowed_tables, is_admin)
+        # Post-traitement : forcer ILIKE pour license_plate
+        import re as _re_lp
+        def _fix_lp(m):
+            val = _re_lp.search(r"['\"]([^'\"]+)['\"]", m.group(0))
+            if not val:
+                return m.group(0)
+            parties = _re_lp.split(r"\s+", val.group(1).strip().lower())
+            pattern = "%" + "%".join(parties) + "%"
+            return f"license_plate ILIKE '{pattern}'"
+        requete = _re_lp.sub(
+            r"license_plate\s*=\s*['\"][^'\"]+['\"]",
+            _fix_lp, requete, flags=_re_lp.IGNORECASE
+        )
         print(f"  -> SQL rapport libre: {requete}")
     except Exception as e:
         _logger.error(f"Erreur génération SQL rapport libre: {e}")

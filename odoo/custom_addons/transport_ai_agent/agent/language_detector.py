@@ -16,6 +16,7 @@ _MOTS_FR = {
     "rapport", "bilan", "synthèse", "bonjour", "merci", "s'il", "voici",
     "de", "du", "des", "les", "une", "par", "sur", "avec", "dans",
     "pour", "tout", "tous", "état", "états",
+    "remet", "remets", "mets", "mettre", "bus", "service", "le", "la", "en",
 }
 
 _MOTS_EN = {
@@ -23,13 +24,13 @@ _MOTS_EN = {
     "display", "create", "validate", "cancel", "plan", "assign",
     "vehicle", "driver", "insurance", "fuel", "report", "summary",
     "the", "and", "for", "with", "from", "that", "this", "are", "is",
-    "hello", "please", "thank", "status", "trip", "bus",
+    "hello", "please", "thank", "status", "trip",
     # Mots courants anglais manquants
     "incoming", "outgoing", "vs", "versus", "between", "compare",
     "total", "count", "number", "of", "in", "by", "per", "all",
     "active", "expired", "pending", "done", "my", "me", "can", "do",
     "sent", "received", "mail", "letter", "fleet", "maintenance",
-    "breakdown", "service", "out", "monthly", "weekly", "daily",
+    "breakdown", "out", "monthly", "weekly", "daily",
     "consumption", "accident", "claim", "policy", "contract",
     "trend", "month", "evolution", "over", "time", "chart",
     "graph", "plot", "analysis", "analyze", "week", "year",
@@ -181,6 +182,21 @@ MODULES ERP :
 6. transport_boc          — Bureau d'ordre : courrier arrivée/départ
 
 ÉTATS TOURNÉES : brouillon → planifie → en_cours → realise / annule
+
+RÈGLE CRITIQUE — ÉTAT D'UN BUS (fleet.vehicle) :
+- Pour LIRE l'état : rpc_tool avec search_read sur fleet.vehicle, champ state_id
+- Pour MODIFIER l'état : NE JAMAIS utiliser SQL. Toujours RPC en 2 étapes :
+  1. Trouver l'ID du bus : fleet.vehicle|search_read|[["license_plate","ilike","IMMAT"]]|["id","name","state_id"]
+  2. Trouver l'ID de l'état cible : fleet.vehicle.state|search_read|[["name","ilike","En service"]]|["id","name"]
+  3. Écrire : fleet.vehicle|write|[ID_BUS]|{"state_id": ID_ETAT}
+- Ne JAMAIS faire de jointure SQL sur state_id (colonne JSONB interne Odoo)
+
+RÈGLE CRITIQUE — IMMATRICULATION BUS (license_plate) :
+- TOUJOURS utiliser ILIKE au lieu de = pour chercher une immatriculation
+- TOUJOURS utiliser LOWER() ou ILIKE pour ignorer la casse
+- CORRECT   : WHERE v.license_plate ILIKE '%158%tu%2026%'
+- INCORRECT : WHERE v.license_plate = '158 TU 2026'
+- Si l'immatriculation contient des espaces, utiliser % entre chaque partie
 """,
     "en": """
 You are an AI assistant integrated in a Tunisian terrestrial transport ERP built on Odoo 19.

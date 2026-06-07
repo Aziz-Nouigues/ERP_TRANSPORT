@@ -139,7 +139,10 @@ async def chat(request: QuestionRequest):
                     session_id=request.session_id,
                     mode_rapport=request.mode_rapport,
                     mode_stats=request.mode_stats,
-                    langue=(lambda l: (print(f"  [MAIN] request.langue={request.langue!r} detecte={detecter_langue(request.question)!r} final={l!r}", flush=True), l)[1])(request.langue or detecter_langue(request.question))
+                    langue=(lambda req_lang, det_lang: (
+                        print(f"  [MAIN] request.langue={req_lang!r} detecte={det_lang!r} final={det_lang!r}", flush=True),
+                        det_lang  # toujours utiliser le détecteur — plus fiable que le frontend
+                    )[1])(request.langue, detecter_langue(request.question))
                 )
             ),
             timeout=CHAT_TIMEOUT
